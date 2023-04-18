@@ -6,8 +6,7 @@
     "remoteUser": "root",
     "postCreateCommand": "script/setup.sh",
     "containerEnv": {
-      "DEVCONTAINER": "1",
-      "ENVIRONMENT_MODE": "DEV"
+      "DEVCONTAINER": "1"
     },
     "customizations": {
       "vscode": {
@@ -31,10 +30,7 @@
           "terminal.integrated.defaultProfile.linux": "zsh",
           "python.terminal.activateEnvInCurrentTerminal": true,
           "python.analysis.extraPaths": [
-            "/workspaces/service-compliance"
-          ],
-          "python.linting.ignorePatterns": [
-            "/opt/.venv/**/*.py"
+            "/workspaces/pypmanager"
           ],
           "[python]": {
             "editor.codeActionsOnSave": {
@@ -54,13 +50,7 @@
         },
         "extensions": [
           "ms-python.python",
-          "ms-python.vscode-pylance",
-          "grapecity.gc-excelviewer",
-          "visualstudioexptteam.vscodeintellicode",
-          "redhat.vscode-yaml",
-          "matangover.mypy",
-          "graykode.ai-docstring",
-          "ryanluker.vscode-coverage-gutters"
+          "ms-python.vscode-pylance"
         ]
       }
     }
