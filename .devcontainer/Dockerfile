@@ -1,0 +1,39 @@
+FROM mcr.microsoft.com/vscode/devcontainers/python:0-3.311-bullseye
+LABEL author="NCR"
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+ENV PYTHONPATH "${PYTHONPATH}:/usr/src/app/pyfindata"
+
+ENV FILE_LOCATION "/usr/src/app"
+ENV LOG_FILE_LOCATION "/usr/logs"
+
+ENV TZ=Europe/Stockholm
+
+# Set timezone
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+COPY requirements_system_dev.txt /tmp/requirements_system_dev.txt
+
+# Install base requirements
+RUN apt-get update && \
+    xargs apt-get install -y  </tmp/requirements_system_dev.txt \
+    && rm -rf /var/cache/apt && \
+    apt-get clean && \
+    apt-get autoremove && \
+    rm /tmp/requirements_system_dev.txt
+
+# Disable host checking
+RUN mkdir -p /root/.ssh && \
+    echo "Host *" >> /root/.ssh/config && \
+    echo "StrictHostKeyChecking no" >> /root/.ssh/config
+
+# Folder to store JSON logs
+RUN sudo mkdir -p /usr/logs
+
+COPY . $FILE_LOCATION
+
+WORKDIR $FILE_LOCATION/
+
+# Set the default shell to bash instead of sh
+ENV SHELL /bin/bash
