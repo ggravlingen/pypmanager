@@ -44,8 +44,8 @@ for security_data in sorted_security_list:
 
 portfolio = Portfolio(securities=calc_security_list)
 
-print(f"Realized PnL: {portfolio.realized_pnl / 1e6}")
-print(f"Unrealized PnL: {portfolio.unrealized_pnl / 1e6}")
+print(f"Realized PnL:    {round(portfolio.realized_pnl / 1e6, 2)}")
+print(f"Unrealized PnL:  {round(portfolio.unrealized_pnl / 1e6, 2)}")
 print(f"Invested amount: {round(portfolio.invested_amount / 1e6, 2)}")
 
 all_isin = all_data.isin_code.unique()

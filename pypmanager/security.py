@@ -6,14 +6,9 @@ import numpy as np
 import pandas as pd
 
 from pypmanager.data_loader import TransactionTypeValues
+from pypmanager.market_price import MarketPrice
 
-
-PRICES = {
-    "LU0055631609": 385.05,
-    "SE0014453221": 116.80,
-    "SE0014956850": 80.65,
-    "SE0005965662": 394.40,
-}
+market_price = MarketPrice()
 
 
 @dataclass
@@ -84,7 +79,7 @@ class Security:
     def current_price(self) -> float | None:
         """Return current price."""
         try:
-            return PRICES[self.isin_code]
+            return market_price.lookup_table[self.isin_code]
         except KeyError:
             return None
 

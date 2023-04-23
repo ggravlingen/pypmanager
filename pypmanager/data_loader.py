@@ -179,6 +179,4 @@ class MiscLoader(DataLoader):
         for field in ["commission", "amount"]:
             df[field] = df[field].str.replace(",", "")
 
-        print(df)
-
         self.df = df

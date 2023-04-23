@@ -1,22 +1,15 @@
 """Market price."""
-import csv
-from dataclasses import dataclass
+import pandas as pd
 
 
-@dataclass
 class MarketPrice:
     """Represent a security's market price."""
 
-    symbol: str
-    price: float
+    def __init__(self) -> None:
+        """Init class."""
+        df = pd.read_csv("data/market_data.csv", sep=";")
+        output_dict: dict[str, float] = {}
+        for _, row in df.iterrows():
+            output_dict[row.loc['isin_code']] = row.loc['price']
 
-    @classmethod
-    def from_csv(cls, filename, symbol):
-        """Load value from csv file."""
-        with open(filename, encoding="UTF-8") as _f:
-            reader = csv.DictReader(_f)
-            for row in reader:
-                if row["Symbol"] == symbol:
-                    return cls(symbol, float(row["Price"]))
-
-        raise ValueError(f"No data found for symbol {symbol}")
+        self.lookup_table = output_dict
