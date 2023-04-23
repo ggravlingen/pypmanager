@@ -1,1 +1,2 @@
 pandas==2.0.0
+prettytable==3.7.0

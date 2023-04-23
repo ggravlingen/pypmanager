@@ -12,7 +12,7 @@ market_price = MarketPrice()
 
 
 @dataclass
-class Security:
+class Holding:
     """Represent a security."""
 
     name: str
@@ -133,7 +133,7 @@ class Security:
         pnl = self.calculated_data.realized_pnl.iloc[-1]
 
         if pd.isna(pnl):
-            return None
+            return 0.0
 
         return pnl
 
@@ -141,7 +141,7 @@ class Security:
     def unrealized_pnl(self) -> float | None:
         """Return unrealized PnL."""
         if self.average_price is None or self.current_price is None:
-            return None
+            return 0.0
 
         return (self.current_price - self.average_price) * self.current_holdings
 
