@@ -1,7 +1,7 @@
 """Data loaders."""
 from abc import abstractmethod
 from enum import StrEnum
-
+import numpy as np
 import pandas as pd
 
 NORMALISED_COL_NAMES_AVANZA = {
@@ -39,6 +39,16 @@ DTYPES_MAP = {
     "isin_code": str,
     "pnl": float,
 }
+
+
+def _return_amount_if_empty(row: pd.DataFrame) -> pd.DataFrame:
+    """Calculate amount if nan."""
+    if np.isnan(row["amount"]):
+        amount = row["no_traded"] * row["price"]
+    else:
+        amount = row["amount"]
+
+    return abs(amount)
 
 
 class TransactionTypeValues(StrEnum):
@@ -108,6 +118,9 @@ class DataLoader:
     def finalize_data_load(self) -> None:
         """Post-process."""
         df = self.df.copy()
+
+        df['amount'] = df.apply(_return_amount_if_empty, axis=1)
+
         df["amount"] = abs(df["amount"])
 
         self.df = df
