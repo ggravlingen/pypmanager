@@ -79,7 +79,15 @@ class Holding:
     def current_price(self) -> float | None:
         """Return current price."""
         try:
-            return market_price.lookup_table[self.isin_code]
+            return market_price.lookup_table[self.isin_code]["price"]
+        except KeyError:
+            return None
+
+    @property
+    def date_market_value(self) -> date | None:
+        """Return current price."""
+        try:
+            return market_price.lookup_table[self.isin_code]["report_date"]
         except KeyError:
             return None
 

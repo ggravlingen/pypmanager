@@ -10,6 +10,12 @@ class MarketPrice:
         df = pd.read_csv("data/market_data.csv", sep=";")
         output_dict: dict[str, float] = {}
         for _, row in df.iterrows():
-            output_dict[row.loc['isin_code']] = row.loc['price']
+            if row.loc['isin_code'] not in output_dict:
+                output_dict[row.loc['isin_code']] = {}
+
+            output_dict[row.loc['isin_code']] = {
+                "price": row.loc['price'],
+                "report_date": row.loc['report_date'],
+            }
 
         self.lookup_table = output_dict
