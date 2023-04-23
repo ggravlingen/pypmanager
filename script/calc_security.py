@@ -12,7 +12,6 @@ df_c = MiscLoader().df
 all_data = pd.concat([df_a, df_b, df_c])
 
 all_securities = all_data.name.unique()
-# all_securities = ["BGF World Gold A2"]
 
 
 calc_security_list: list[Security] = []
