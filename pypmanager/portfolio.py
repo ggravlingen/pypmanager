@@ -2,6 +2,7 @@
 
 
 from dataclasses import dataclass
+
 from pypmanager.security import Security
 
 
@@ -11,15 +12,30 @@ class Portfolio:
 
     securities: list[Security]
 
-    def total_market_value(self, price: float) -> float:
+    @property
+    def mtm(self) -> float:
         """Return total market value."""
-        return sum(s.market_value(price) for s in self.securities)
+        return sum(
+            s.market_value for s in self.securities if s.market_value is not None
+        )
 
     @property
-    def total_cost_basis(self) -> float:
-        """Return total cost basis."""
-        return sum(s.cost_basis() for s in self.securities)
+    def invested_amount(self) -> float:
+        """Return invested amount."""
+        return sum(
+            s.invested_amount for s in self.securities if s.invested_amount is not None
+        )
 
-    def total_unrealized_pnl(self, price: float) -> float:
-        """Return total unrealized PnL."""
-        return sum(s.unrealized_pnl(price) for s in self.securities)
+    @property
+    def realized_pnl(self) -> float:
+        """Return realized PnL."""
+        return sum(
+            s.realized_pnl for s in self.securities if s.realized_pnl is not None
+        )
+
+    @property
+    def unrealized_pnl(self) -> float:
+        """Return unrealized PnL."""
+        return sum(
+            s.unrealized_pnl for s in self.securities if s.unrealized_pnl is not None
+        )

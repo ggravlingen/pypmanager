@@ -1,16 +1,18 @@
 """Handle securities."""
 from dataclasses import dataclass
-import pandas as pd
-import numpy as np
 from datetime import date
 
-pd.set_option('display.max_columns', None)
+import numpy as np
+import pandas as pd
+
+from pypmanager.data_loader import TransactionTypeValues
 
 
 PRICES = {
     "LU0055631609": 385.05,
     "SE0014453221": 116.80,
     "SE0014956850": 80.65,
+    "SE0005965662": 394.40,
 }
 
 
@@ -18,7 +20,7 @@ PRICES = {
 class Security:
     """Represent a security."""
 
-    isin: str
+    name: str
     all_data: pd.DataFrame
     calculated_data: pd.DataFrame | None = None
 
@@ -28,7 +30,7 @@ class Security:
 
     def calculate_values(self) -> None:
         """Calculate all values in the dataframe."""
-        df = self.all_data.query(f"isin_code == '{self.isin}'").sort_index()
+        df = self.all_data.query(f"name == '{self.name}'").sort_index()
 
         df["current_holdings"] = 0.0
         df["cumulative_buy_amount"] = 0.0
@@ -47,15 +49,16 @@ class Security:
         for index, row in df.iterrows():
             current_holdings += row["no_traded"]
 
-            if row["amount"] < 0:
-                cumulative_buy_amount += row["amount"] * -1
+            if row["transaction_type"] == TransactionTypeValues.BUY.value:
+                cumulative_buy_amount += row["amount"]
                 cumulative_buy_volume += row["no_traded"]
-                cumulative_invested_amount += row["amount"] * -1 + row["commission"]
+                cumulative_invested_amount += row["amount"] + row["commission"]
                 average_price = cumulative_buy_amount / cumulative_buy_volume
-            else:  # sell
+                realized_pnl = None
+            else:
                 realized_pnl = (row["price"] - average_price) * row[
                     "no_traded"
-                ] * -1 - row["commission"]
+                ] * -1 - abs(row["commission"])
 
             if current_holdings == 0:
                 average_price = None
@@ -63,32 +66,35 @@ class Security:
             df.at[index, "cumulative_buy_amount"] = cumulative_buy_amount
             df.at[index, "cumulative_buy_volume"] = cumulative_buy_volume
             df.at[index, "average_price"] = average_price
-            df.at[index, "realized_pnl"] = realized_pnl if row["amount"] > 0 else 0
+            df.at[index, "realized_pnl"] = realized_pnl
             df.at[index, "cumulative_invested_amount"] = cumulative_invested_amount
             df.at[index, "current_holdings"] = current_holdings
 
         self.calculated_data = df
 
     @property
-    def name(self) -> str:
-        """Return the security's name."""
+    def isin_code(self) -> str:
+        """Return the security's ISIN code."""
         try:
-            return self.calculated_data.name.unique()[0]
-        except IndexError:
-            return "No name"
+            return self.calculated_data.isin_code.unique()[0]
+        except (IndexError, AttributeError):
+            return "No ISIN"
 
     @property
     def current_price(self) -> float | None:
         """Return current price."""
         try:
-            return PRICES[self.isin]
+            return PRICES[self.isin_code]
         except KeyError:
             return None
 
     @property
-    def current_holdings(self) -> float:
+    def current_holdings(self) -> float | None:
         """Return the number of securities currently held."""
-        return self.calculated_data.current_holdings.iloc[-1]
+        if (current := self.calculated_data.current_holdings.iloc[-1]) == 0:
+            return None
+
+        return current
 
     @property
     def total_transactions(self) -> int:
@@ -96,9 +102,14 @@ class Security:
         return len(self.calculated_data)
 
     @property
-    def last_transaction_date(self) -> date:
+    def date_last_transaction(self) -> date:
         """Return last transaction date."""
         return max(self.calculated_data.index)
+
+    @property
+    def date_first_transaction(self) -> date:
+        """Return last transaction date."""
+        return min(self.calculated_data.index)
 
     @property
     def average_price(self) -> float | None:
@@ -113,7 +124,7 @@ class Security:
     @property
     def market_value(self) -> float | None:
         """Return current market value."""
-        if self.current_price is None:
+        if self.current_price is None or self.current_holdings is None:
             return None
 
         if (market_value := self.current_price * self.current_holdings) == 0:
@@ -124,7 +135,12 @@ class Security:
     @property
     def realized_pnl(self) -> float | None:
         """Return realized PnL."""
-        return self.calculated_data.realized_pnl.iloc[-1]
+        pnl = self.calculated_data.realized_pnl.iloc[-1]
+
+        if pd.isna(pnl):
+            return None
+
+        return pnl
 
     @property
     def unrealized_pnl(self) -> float | None:
@@ -141,3 +157,11 @@ class Security:
             return None
 
         return self.realized_pnl + self.unrealized_pnl
+
+    @property
+    def invested_amount(self) -> float | None:
+        """Return total invested amount."""
+        if self.average_price is None or self.current_holdings is None:
+            return None
+
+        return self.average_price * self.current_holdings

@@ -13,7 +13,7 @@ class MarketPrice:
     @classmethod
     def from_csv(cls, filename, symbol):
         """Load value from csv file."""
-        with open(filename, "r", encoding="UTF-8") as _f:
+        with open(filename, encoding="UTF-8") as _f:
             reader = csv.DictReader(_f)
             for row in reader:
                 if row["Symbol"] == symbol:
