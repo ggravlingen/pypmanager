@@ -65,4 +65,5 @@ import pytest
     ],
 )
 def test_normalize_amount(row, expected):
+    """Test function _normalize_amount."""
     assert _normalize_amount(row) == expected
