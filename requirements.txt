@@ -1,2 +1,2 @@
-pandas==2.0.0
+pandas==2.0.1
 prettytable==3.7.0
