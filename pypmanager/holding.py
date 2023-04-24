@@ -6,9 +6,7 @@ import numpy as np
 import pandas as pd
 
 from pypmanager.data_loader import TransactionTypeValues
-from pypmanager.market_price import MarketPrice
-
-market_price = MarketPrice()
+from pypmanager.security import MutualFund
 
 
 @dataclass
@@ -23,14 +21,17 @@ class Holding:
         """Run after class has been instantiate."""
         self.calculate_values()
 
+    @property
+    def security_info(self) -> MutualFund:
+        """Return information on the security."""
+        return MutualFund(isin_code=self.isin_code, name=self.name)
+
     def calculate_values(self) -> None:
         """Calculate all values in the dataframe."""
         df = self.all_data.query(f"name == '{self.name}'").sort_index()
 
-        df["current_holdings"] = 0.0
         df["cumulative_buy_amount"] = 0.0
         df["cumulative_buy_volume"] = 0.0
-        df["average_cost_basis"] = 0.0
         df["realized_pnl"] = 0.0
         df["cumulative_invested_amount"] = 0.0
 
@@ -42,20 +43,27 @@ class Holding:
         average_price = 0.0
 
         for index, row in df.iterrows():
-            current_holdings += row["no_traded"]
+            amount = abs(row["amount"])
+            no_traded = row["no_traded"]
+
+            current_holdings += no_traded
+            cumulative_buy_volume += no_traded
 
             if row["transaction_type"] == TransactionTypeValues.BUY.value:
-                cumulative_buy_amount += row["amount"]
-                cumulative_buy_volume += row["no_traded"]
-                cumulative_invested_amount += row["amount"] + row["commission"]
+                cumulative_buy_amount += amount
+                cumulative_invested_amount += amount + row["commission"]
                 average_price = cumulative_buy_amount / cumulative_buy_volume
                 realized_pnl = None
             else:
                 realized_pnl = (row["price"] - average_price) * row[
                     "no_traded"
                 ] * -1 - abs(row["commission"])
+                cumulative_invested_amount -= amount
 
-            if current_holdings == 0:
+            if cumulative_invested_amount < 0:
+                cumulative_invested_amount = None
+
+            if cumulative_buy_volume == 0:
                 average_price = None
 
             df.at[index, "cumulative_buy_amount"] = cumulative_buy_amount
@@ -78,18 +86,12 @@ class Holding:
     @property
     def current_price(self) -> float | None:
         """Return current price."""
-        try:
-            return market_price.lookup_table[self.isin_code]["price"]
-        except KeyError:
-            return None
+        return self.security_info.nav
 
     @property
     def date_market_value(self) -> date | None:
-        """Return current price."""
-        try:
-            return market_price.lookup_table[self.isin_code]["report_date"]
-        except KeyError:
-            return None
+        """Return date of valuation."""
+        return self.security_info.nav_date
 
     @property
     def current_holdings(self) -> float | None:

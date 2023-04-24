@@ -1,18 +1,10 @@
-"""Example loader."""
-import pandas as pd
+"""Main."""
 
-from pypmanager.data_loader import AvanzaLoader, LysaLoader, MiscLoader
+from pypmanager.data_loader import load_data
 from pypmanager.holding import Holding
 from pypmanager.reports.cmd_line import print_pretty_table
 
-df_a = AvanzaLoader().df
-df_b = LysaLoader().df
-df_c = MiscLoader().df
-
-all_data = pd.concat([df_a, df_b, df_c])
-
-all_securities = all_data.name.unique()
-
+all_data, all_securities = load_data()
 
 calc_security_list: list[Holding] = []
 for security_name in all_securities:
