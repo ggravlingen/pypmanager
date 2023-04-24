@@ -1,8 +1,9 @@
 """Tests."""
-from pypmanager.data_loader import TransactionTypeValues, _normalize_amount
 import numpy as np
 import pandas as pd
 import pytest
+
+from pypmanager.data_loader import TransactionTypeValues, _normalize_amount
 
 
 @pytest.mark.parametrize(
