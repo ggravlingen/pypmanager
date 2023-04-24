@@ -1,8 +1,8 @@
 """Output portfolio data in the command line."""
 
 from prettytable import PrettyTable
-from pypmanager.holding import Holding
 
+from pypmanager.holding import Holding
 from pypmanager.portfolio import Portfolio
 
 NUMBER_FORMATTER = ",.0f"

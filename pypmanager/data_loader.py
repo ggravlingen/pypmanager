@@ -2,6 +2,7 @@
 from abc import abstractmethod
 from enum import StrEnum
 from typing import cast
+
 import numpy as np
 import pandas as pd
 

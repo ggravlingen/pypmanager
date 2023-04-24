@@ -1,5 +1,6 @@
 """Representation of a security."""
 from datetime import date
+
 import pandas as pd
 
 
