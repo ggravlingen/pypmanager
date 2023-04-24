@@ -34,14 +34,23 @@ def print_pretty_table(holdings: list[Holding]) -> None:
     table.align["Name"] = "l"
 
     for security_data in sorted_holdings:
-        if security_data.current_holdings is None:
-            continue
+        invested_amount = (
+            f"{security_data.invested_amount:{NUMBER_FORMATTER}}"
+            if security_data.invested_amount
+            else None
+        )
+
+        current_holdings = (
+            f"{security_data.current_holdings:{NUMBER_FORMATTER}}"
+            if security_data.current_holdings
+            else None
+        )
 
         table.add_row(
             [
                 security_data.name,
-                f"{security_data.invested_amount:{NUMBER_FORMATTER}}",
-                f"{security_data.current_holdings:{NUMBER_FORMATTER}}",
+                invested_amount,
+                current_holdings,
                 f"{security_data.current_price}",
                 f"{security_data.date_market_value}",
                 f"{security_data.total_pnl:{NUMBER_FORMATTER}}",

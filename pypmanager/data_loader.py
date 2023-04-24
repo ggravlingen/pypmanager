@@ -1,6 +1,7 @@
 """Data loaders."""
 from abc import abstractmethod
 from enum import StrEnum
+from typing import cast
 import numpy as np
 import pandas as pd
 
@@ -41,14 +42,30 @@ DTYPES_MAP = {
 }
 
 
-def _return_amount_if_empty(row: pd.DataFrame) -> pd.DataFrame:
+def _normalize_amount(row: pd.DataFrame) -> float:
     """Calculate amount if nan."""
     if np.isnan(row["amount"]):
         amount = row["no_traded"] * row["price"]
     else:
         amount = row["amount"]
 
-    return abs(amount)
+    # Buy is a negative cash flow for us
+    if row.transaction_type == TransactionTypeValues.BUY:
+        amount = abs(amount) * -1
+    else:
+        amount = abs(amount)
+
+    return amount
+
+
+def _normalize_no_traded(row: pd.DataFrame) -> float:
+    """Calculate number of units traded."""
+    if row.transaction_type == TransactionTypeValues.BUY:
+        no_traded = row["no_traded"]
+    else:
+        no_traded = abs(row["no_traded"]) * -1
+
+    return no_traded
 
 
 class TransactionTypeValues(StrEnum):
@@ -119,9 +136,8 @@ class DataLoader:
         """Post-process."""
         df = self.df.copy()
 
-        df['amount'] = df.apply(_return_amount_if_empty, axis=1)
-
-        df["amount"] = abs(df["amount"])
+        df["no_traded"] = df.apply(_normalize_no_traded, axis=1)
+        df["amount"] = df.apply(_normalize_amount, axis=1)
 
         self.df = df
 
@@ -193,3 +209,18 @@ class MiscLoader(DataLoader):
             df[field] = df[field].str.replace(",", "")
 
         self.df = df
+
+
+def load_data() -> tuple[pd.DataFrame, list[str]]:
+    """Load all data."""
+    df_a = AvanzaLoader().df
+    df_b = LysaLoader().df
+    df_c = MiscLoader().df
+
+    all_data = cast(pd.DataFrame, pd.concat([df_a, df_b, df_c]))
+    all_securities = cast(list[str], all_data.name.unique())
+
+    return (
+        all_data,
+        all_securities,
+    )
