@@ -9,6 +9,56 @@ from pypmanager.data_loader import TransactionTypeValues
 from pypmanager.security import MutualFund
 
 
+def _calculate_aggregates(data: pd.DataFrame, security_name: str) -> pd.DataFrame:
+    """Calculate aggregate values for a holding."""
+    df = data.query(f"name == '{security_name}'").sort_index()
+
+    df["cumulative_buy_amount"] = 0.0
+    df["cumulative_buy_volume"] = 0.0
+    df["realized_pnl"] = 0.0
+    df["cumulative_invested_amount"] = 0.0
+
+    cumulative_buy_amount = 0.0
+    cumulative_buy_volume = 0.0
+    cumulative_invested_amount = 0.0
+    average_price = 0.0
+
+    for index, row in df.iterrows():
+        amount = abs(row["amount"])
+        no_traded = abs(row["no_traded"])
+        commission = abs(row["commission"])
+
+        if row["transaction_type"] == TransactionTypeValues.BUY.value:
+            cumulative_buy_volume += no_traded
+            cumulative_buy_amount += amount
+            cumulative_invested_amount += amount + commission
+            average_price = cumulative_invested_amount / cumulative_buy_volume
+            realized_pnl = None
+        else:
+            realized_pnl = (row["price"] - average_price) * no_traded - commission
+            cumulative_invested_amount -= amount
+            cumulative_buy_amount -= amount
+            cumulative_buy_volume -= no_traded
+
+        if cumulative_invested_amount < 0:
+            cumulative_invested_amount = None
+
+        if cumulative_buy_volume == 0:
+            cumulative_buy_volume = None
+            average_price = None
+
+        if cumulative_buy_amount < 0:
+            cumulative_buy_amount = None
+
+        df.at[index, "cumulative_buy_amount"] = cumulative_buy_amount
+        df.at[index, "cumulative_buy_volume"] = cumulative_buy_volume
+        df.at[index, "average_price"] = average_price
+        df.at[index, "realized_pnl"] = realized_pnl
+        df.at[index, "cumulative_invested_amount"] = cumulative_invested_amount
+
+    return df
+
+
 @dataclass
 class Holding:
     """Represent a security."""
@@ -28,52 +78,9 @@ class Holding:
 
     def calculate_values(self) -> None:
         """Calculate all values in the dataframe."""
-        df = self.all_data.query(f"name == '{self.name}'").sort_index()
-
-        df["cumulative_buy_amount"] = 0.0
-        df["cumulative_buy_volume"] = 0.0
-        df["realized_pnl"] = 0.0
-        df["cumulative_invested_amount"] = 0.0
-
-        # Iterate through the rows and update the new columns
-        current_holdings = 0.0
-        cumulative_buy_amount = 0.0
-        cumulative_buy_volume = 0.0
-        cumulative_invested_amount = 0.0
-        average_price = 0.0
-
-        for index, row in df.iterrows():
-            amount = abs(row["amount"])
-            no_traded = row["no_traded"]
-
-            current_holdings += no_traded
-            cumulative_buy_volume += no_traded
-
-            if row["transaction_type"] == TransactionTypeValues.BUY.value:
-                cumulative_buy_amount += amount
-                cumulative_invested_amount += amount + row["commission"]
-                average_price = cumulative_buy_amount / cumulative_buy_volume
-                realized_pnl = None
-            else:
-                realized_pnl = (row["price"] - average_price) * row[
-                    "no_traded"
-                ] * -1 - abs(row["commission"])
-                cumulative_invested_amount -= amount
-
-            if cumulative_invested_amount < 0:
-                cumulative_invested_amount = None
-
-            if cumulative_buy_volume == 0:
-                average_price = None
-
-            df.at[index, "cumulative_buy_amount"] = cumulative_buy_amount
-            df.at[index, "cumulative_buy_volume"] = cumulative_buy_volume
-            df.at[index, "average_price"] = average_price
-            df.at[index, "realized_pnl"] = realized_pnl
-            df.at[index, "cumulative_invested_amount"] = cumulative_invested_amount
-            df.at[index, "current_holdings"] = current_holdings
-
-        self.calculated_data = df
+        self.calculated_data = _calculate_aggregates(
+            data=self.all_data, security_name=self.name
+        )
 
     @property
     def isin_code(self) -> str:
@@ -96,7 +103,7 @@ class Holding:
     @property
     def current_holdings(self) -> float | None:
         """Return the number of securities currently held."""
-        if (current := self.calculated_data.current_holdings.iloc[-1]) == 0:
+        if (current := self.calculated_data.cumulative_buy_volume.iloc[-1]) == 0:
             return None
 
         return current
