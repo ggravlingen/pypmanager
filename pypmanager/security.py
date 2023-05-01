@@ -1,5 +1,6 @@
 """Representation of a security."""
 from datetime import date
+from typing import cast
 
 import pandas as pd
 
@@ -30,22 +31,30 @@ class MutualFund:
     def nav(self) -> float | None:
         """Return net asset value."""
         try:
+            if self.filtered_df is None:
+                return None
+
             val = self.filtered_df["price"].values[0]
+
             if pd.isna(val):
                 return None
 
-            return val
+            return cast(float, val)
         except IndexError:
             return None
 
     @property
     def nav_date(self) -> date | None:
         """Return date of net asset value."""
+        if self.filtered_df is None:
+            return None
+
         try:
             val = self.filtered_df["report_date"].values[0]
+
             if pd.isna(val):
                 return None
 
-            return val
+            return cast(date, val)
         except IndexError:
             return None

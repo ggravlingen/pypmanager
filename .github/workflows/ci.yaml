@@ -96,10 +96,12 @@ jobs:
       - name: Run ruff (fully)
         run: |
           pre-commit run --hook-stage manual ruff --all-files --show-diff-on-failure
+      - name: Run Pylint
+        run: pylint pypmanager tests
       - name: Run Black
         run: black --check --fast --quiet --diff pypmanager tests
-#      - name: Run mypy
-#        run: mypy pypmanager
+      - name: Run mypy
+        run: mypy pypmanager
 
   pytest:
     name: Run test suite

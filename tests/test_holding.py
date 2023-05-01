@@ -5,8 +5,6 @@ import pytest
 from pypmanager.data_loader import TransactionTypeValues
 from pypmanager.holding import _calculate_aggregates
 
-pd.set_option("display.max_columns", None)
-
 TEST_DATA = [
     {
         "name": "AAPL",

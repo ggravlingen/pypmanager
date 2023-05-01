@@ -20,12 +20,22 @@ def _calculate_aggregates(data: pd.DataFrame, security_name: str) -> pd.DataFram
     df["realized_pnl"] = 0.0
     df["cumulative_invested_amount"] = 0.0
 
-    cumulative_buy_amount: float = 0.0
+    cumulative_buy_amount: float | None = 0.0
     cumulative_buy_volume: float | None = 0.0
-    cumulative_invested_amount: float = 0.0
+    cumulative_invested_amount: float | None = 0.0
     average_price: float | None = 0.0
 
     for index, row in df.iterrows():
+        # Reset values to 0
+        if cumulative_buy_volume is None:
+            cumulative_buy_volume = 0.0
+
+        if cumulative_buy_amount is None:
+            cumulative_buy_amount = 0.0
+
+        if cumulative_invested_amount is None:
+            cumulative_invested_amount = 0.0
+
         amount = cast(float, abs(row["amount"]))
         no_traded = cast(float, abs(row["no_traded"]))
         commission = cast(float, abs(row["commission"]))
@@ -69,7 +79,7 @@ class Holding:
     all_data: pd.DataFrame
     calculated_data: pd.DataFrame | None = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Run after class has been instantiate."""
         self.calculate_values()
 
@@ -87,8 +97,11 @@ class Holding:
     @property
     def isin_code(self) -> str:
         """Return the security's ISIN code."""
+        if self.calculated_data is None:
+            return "No ISIN"
+
         try:
-            return self.calculated_data.isin_code.unique()[0]
+            return f"{self.calculated_data.isin_code.unique()[0]}"
         except (IndexError, AttributeError):
             return "No ISIN"
 
@@ -105,35 +118,50 @@ class Holding:
     @property
     def current_holdings(self) -> float | None:
         """Return the number of securities currently held."""
+        if self.calculated_data is None:
+            return None
+
         if (current := self.calculated_data.cumulative_buy_volume.iloc[-1]) == 0:
             return None
 
-        return current
+        return cast(float, current)
 
     @property
     def total_transactions(self) -> int:
         """Return the total number of transactions made."""
+        if self.calculated_data is None:
+            return 0
+
         return len(self.calculated_data)
 
     @property
-    def date_last_transaction(self) -> date:
+    def date_last_transaction(self) -> date | None:
         """Return last transaction date."""
-        return max(self.calculated_data.index)
+        if self.calculated_data is None:
+            return None
+
+        return cast(date, max(self.calculated_data.index))
 
     @property
-    def date_first_transaction(self) -> date:
+    def date_first_transaction(self) -> date | None:
         """Return last transaction date."""
-        return min(self.calculated_data.index)
+        if self.calculated_data is None:
+            return None
+
+        return cast(date, min(self.calculated_data.index))
 
     @property
     def average_price(self) -> float | None:
         """Return average price."""
+        if self.calculated_data is None:
+            return 0.0
+
         avg_price = self.calculated_data.average_price.iloc[-1]
 
         if np.isnan(avg_price):
             return None
 
-        return avg_price
+        return cast(float, avg_price)
 
     @property
     def market_value(self) -> float | None:
@@ -147,25 +175,32 @@ class Holding:
         return market_value
 
     @property
-    def realized_pnl(self) -> float | None:
+    def realized_pnl(self) -> float:
         """Return realized PnL."""
+        if self.calculated_data is None:
+            return 0.0
+
         pnl = self.calculated_data.realized_pnl.iloc[-1]
 
         if pd.isna(pnl):
             return 0.0
 
-        return pnl
+        return cast(float, pnl)
 
     @property
     def unrealized_pnl(self) -> float | None:
         """Return unrealized PnL."""
-        if self.average_price is None or self.current_price is None:
+        if (
+            self.average_price is None
+            or self.current_price is None
+            or self.current_holdings is None
+        ):
             return 0.0
 
         return (self.current_price - self.average_price) * self.current_holdings
 
     @property
-    def total_pnl(self) -> float:
+    def total_pnl(self) -> float | None:
         """Return PnL."""
         if self.unrealized_pnl is None or self.realized_pnl is None:
             return None
@@ -181,7 +216,7 @@ class Holding:
         return self.average_price * self.current_holdings
 
     @property
-    def cli_table_row(self) -> list[str]:
+    def cli_table_row(self) -> list[str | None]:
         """Represent the holding for CLI reports."""
         invested_amount = (
             f"{self.invested_amount:{NUMBER_FORMATTER}}"

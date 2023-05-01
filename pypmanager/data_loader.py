@@ -6,6 +6,8 @@ from typing import cast
 import numpy as np
 import pandas as pd
 
+from pypmanager.error import DataError
+
 NORMALISED_COL_NAMES_AVANZA = {
     "Datum": "transaction_date",
     "Konto": "account",
@@ -56,7 +58,7 @@ def _normalize_amount(row: pd.DataFrame) -> float:
     else:
         amount = abs(amount)
 
-    return amount
+    return cast(float, amount)
 
 
 def _normalize_no_traded(row: pd.DataFrame) -> float:
@@ -66,7 +68,7 @@ def _normalize_no_traded(row: pd.DataFrame) -> float:
     else:
         no_traded = abs(row["no_traded"]) * -1
 
-    return no_traded
+    return cast(float, no_traded)
 
 
 class TransactionTypeValues(StrEnum):
@@ -96,6 +98,9 @@ class DataLoader:
 
     def filter_transactions(self) -> None:
         """Filter transactions."""
+        if self.df is None:
+            raise DataError("No data")
+
         self.df = self.df.query(
             f"transaction_type == '{TransactionTypeValues.BUY}' or "
             f"transaction_type == '{TransactionTypeValues.SELL}'"
@@ -103,6 +108,9 @@ class DataLoader:
 
     def ensure_dot(self) -> None:
         """Make sure values have dot as decimal separator."""
+        if self.df is None:
+            raise DataError("No data")
+
         df = self.df.copy()
 
         for col in ("no_traded", "price", "amount", "commission", "pnl"):
@@ -113,6 +121,9 @@ class DataLoader:
 
     def convert_data_types(self) -> None:
         """Convert data types."""
+        if self.df is None:
+            raise DataError("No data")
+
         df = self.df.copy()
         for key, val in DTYPES_MAP.items():
             if key in df.columns:
@@ -122,6 +133,9 @@ class DataLoader:
 
     def cleanup_df(self) -> None:
         """Cleanup dataframe."""
+        if self.df is None:
+            raise DataError("No data")
+
         df = self.df.copy()
 
         for col in ("commission", "pnl", "isin_code"):  # Replace dashes with 0
@@ -135,6 +149,9 @@ class DataLoader:
 
     def finalize_data_load(self) -> None:
         """Post-process."""
+        if self.df is None:
+            raise DataError("No data")
+
         df = self.df.copy()
 
         df["no_traded"] = df.apply(_normalize_no_traded, axis=1)
@@ -206,7 +223,7 @@ class MiscLoader(DataLoader):
         df = pd.read_csv("data/other-a.csv", sep=";")
         df.set_index("transaction_date", inplace=True)
 
-        for field in ["commission", "amount"]:
+        for field in ("commission", "amount"):
             df[field] = df[field].str.replace(",", "")
 
         self.df = df
