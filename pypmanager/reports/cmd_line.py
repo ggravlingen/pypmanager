@@ -5,8 +5,6 @@ from prettytable import PrettyTable
 from pypmanager.holding import Holding
 from pypmanager.portfolio import Portfolio
 
-NUMBER_FORMATTER = ",.0f"
-
 TABLE_HEADER = [
     "Name",
     "Invested",
@@ -34,46 +32,10 @@ def print_pretty_table(holdings: list[Holding]) -> None:
     table.align["Name"] = "l"
 
     for security_data in sorted_holdings:
-        invested_amount = (
-            f"{security_data.invested_amount:{NUMBER_FORMATTER}}"
-            if security_data.invested_amount
-            else None
-        )
-
-        current_holdings = (
-            f"{security_data.current_holdings:{NUMBER_FORMATTER}}"
-            if security_data.current_holdings
-            else None
-        )
-
-        table.add_row(
-            [
-                security_data.name,
-                invested_amount,
-                current_holdings,
-                f"{security_data.current_price}",
-                f"{security_data.date_market_value}",
-                f"{security_data.total_pnl:{NUMBER_FORMATTER}}",
-                f"{security_data.realized_pnl:{NUMBER_FORMATTER}}",
-                f"{security_data.unrealized_pnl:{NUMBER_FORMATTER}}",
-                f"{security_data.total_transactions}",
-            ],
-        )
+        table.add_row(security_data.cli_table_row)
 
     portfolio = Portfolio(holdings=holdings)
 
-    table.add_row(
-        [
-            "Total",
-            f"{portfolio.invested_amount:{NUMBER_FORMATTER}}",
-            "",
-            "",
-            "",
-            f"{portfolio.total_pnl:{NUMBER_FORMATTER}}",
-            f"{portfolio.unrealized_pnl:{NUMBER_FORMATTER}}",
-            f"{portfolio.realized_pnl:{NUMBER_FORMATTER}}",
-            "",
-        ],
-    )
+    table.add_row(portfolio.cli_table_row_total)
 
     print(table)

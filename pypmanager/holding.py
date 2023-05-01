@@ -1,10 +1,12 @@
 """Handle securities."""
 from dataclasses import dataclass
 from datetime import date
+from typing import cast
 
 import numpy as np
 import pandas as pd
 
+from pypmanager.const import NUMBER_FORMATTER
 from pypmanager.data_loader import TransactionTypeValues
 from pypmanager.security import MutualFund
 
@@ -18,15 +20,15 @@ def _calculate_aggregates(data: pd.DataFrame, security_name: str) -> pd.DataFram
     df["realized_pnl"] = 0.0
     df["cumulative_invested_amount"] = 0.0
 
-    cumulative_buy_amount = 0.0
-    cumulative_buy_volume = 0.0
-    cumulative_invested_amount = 0.0
-    average_price = 0.0
+    cumulative_buy_amount: float = 0.0
+    cumulative_buy_volume: float | None = 0.0
+    cumulative_invested_amount: float = 0.0
+    average_price: float | None = 0.0
 
     for index, row in df.iterrows():
-        amount = abs(row["amount"])
-        no_traded = abs(row["no_traded"])
-        commission = abs(row["commission"])
+        amount = cast(float, abs(row["amount"]))
+        no_traded = cast(float, abs(row["no_traded"]))
+        commission = cast(float, abs(row["commission"]))
 
         if row["transaction_type"] == TransactionTypeValues.BUY.value:
             cumulative_buy_volume += no_traded
@@ -177,3 +179,30 @@ class Holding:
             return None
 
         return self.average_price * self.current_holdings
+
+    @property
+    def cli_table_row(self) -> list[str]:
+        """Represent the holding for CLI reports."""
+        invested_amount = (
+            f"{self.invested_amount:{NUMBER_FORMATTER}}"
+            if self.invested_amount
+            else None
+        )
+
+        current_holdings = (
+            f"{self.current_holdings:{NUMBER_FORMATTER}}"
+            if self.current_holdings
+            else None
+        )
+
+        return [
+            self.name,
+            invested_amount,
+            current_holdings,
+            f"{self.current_price}",
+            f"{self.date_market_value}",
+            f"{self.total_pnl:{NUMBER_FORMATTER}}",
+            f"{self.realized_pnl:{NUMBER_FORMATTER}}",
+            f"{self.unrealized_pnl:{NUMBER_FORMATTER}}",
+            f"{self.total_transactions}",
+        ]
