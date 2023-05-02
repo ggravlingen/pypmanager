@@ -33,6 +33,9 @@ class MutualFund:
     @property
     def _last_row(self) -> pd.DataFrame:
         """Return last row."""
+        if self.nav_date is None or self.filtered_df is None:
+            return pd.DataFrame()
+
         return self.filtered_df.query(f"report_date == '{self.nav_date}'")
 
     @property

@@ -101,7 +101,7 @@ def _upsert_df(data: SourceData) -> None:
     merged_df.to_csv(Settings.FILE_MARKET_DATA, index=False, sep=";")
 
 
-def market_data_loader():
+def market_data_loader() -> None:
     """Load JSON-data from a source."""
     sources = _load_sources()
 
