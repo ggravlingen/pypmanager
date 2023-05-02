@@ -95,15 +95,20 @@ class Holding:
         )
 
     @property
-    def isin_code(self) -> str:
+    def isin_code(self) -> str | None:
         """Return the security's ISIN code."""
         if self.calculated_data is None:
-            return "No ISIN"
+            return None
 
         try:
-            return f"{self.calculated_data.isin_code.unique()[0]}"
-        except (IndexError, AttributeError):
-            return "No ISIN"
+            val = self.calculated_data.isin_code.unique()[0]
+
+            if pd.isna(val):
+                return None
+
+            return f"{val}"
+        except (IndexError, AttributeError, TypeError):
+            return None
 
     @property
     def current_price(self) -> float | None:
@@ -122,6 +127,9 @@ class Holding:
             return None
 
         if (current := self.calculated_data.cumulative_buy_volume.iloc[-1]) == 0:
+            return None
+
+        if pd.isna(current):
             return None
 
         return cast(float, current)
@@ -224,20 +232,17 @@ class Holding:
             else None
         )
 
-        current_holdings = (
-            f"{self.current_holdings:{NUMBER_FORMATTER}}"
-            if self.current_holdings
-            else None
+        market_value = (
+            f"{self.market_value:{NUMBER_FORMATTER}}" if self.market_value else None
         )
 
         return [
             self.name,
             invested_amount,
-            current_holdings,
-            f"{self.current_price}",
-            f"{self.date_market_value}",
+            market_value,
             f"{self.total_pnl:{NUMBER_FORMATTER}}",
             f"{self.realized_pnl:{NUMBER_FORMATTER}}",
             f"{self.unrealized_pnl:{NUMBER_FORMATTER}}",
+            f"{self.date_market_value}",
             f"{self.total_transactions}",
         ]

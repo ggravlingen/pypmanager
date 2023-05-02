@@ -4,6 +4,8 @@ from typing import cast
 
 import pandas as pd
 
+from pypmanager.settings import Settings
+
 
 class MutualFund:
     """A mutual fund."""
@@ -19,22 +21,28 @@ class MutualFund:
 
     def _load_data(self) -> None:
         """Load market data."""
-        df = pd.read_csv("data/market_data.csv", sep=";")
-        if not pd.isna(self.isin_code):
+        df = pd.read_csv(Settings.FILE_MARKET_DATA, sep=";")
+
+        if self.isin_code:
             df_filtered = df.query(f"isin_code == '{self.isin_code}'")
         else:
             df_filtered = df.query(f"name == '{self.name}'")
 
-        self.filtered_df = df_filtered
+        self.filtered_df = df_filtered.sort_values("report_date")
+
+    @property
+    def _last_row(self) -> pd.DataFrame:
+        """Return last row."""
+        return self.filtered_df.query(f"report_date == '{self.nav_date}'")
 
     @property
     def nav(self) -> float | None:
         """Return net asset value."""
         try:
-            if self.filtered_df is None:
+            if self.filtered_df is None or self.nav_date is None:
                 return None
 
-            val = self.filtered_df["price"].values[0]
+            val = self._last_row["price"].values[0]
 
             if pd.isna(val):
                 return None
@@ -50,7 +58,7 @@ class MutualFund:
             return None
 
         try:
-            val = self.filtered_df["report_date"].values[0]
+            val = self.filtered_df["report_date"].max()
 
             if pd.isna(val):
                 return None

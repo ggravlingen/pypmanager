@@ -26,6 +26,11 @@ class Portfolio:
         )
 
     @property
+    def market_value(self) -> float:
+        """Return market value of portfolio."""
+        return sum(s.market_value for s in self.holdings if s.market_value is not None)
+
+    @property
     def total_pnl(self) -> float:
         """Return total PnL."""
         return sum(s.total_pnl for s in self.holdings if s.total_pnl is not None)
@@ -48,11 +53,10 @@ class Portfolio:
         return [
             "Total",
             f"{self.invested_amount:{NUMBER_FORMATTER}}",
-            "",
-            "",
-            "",
+            f"{self.market_value:{NUMBER_FORMATTER}}",
             f"{self.total_pnl:{NUMBER_FORMATTER}}",
-            f"{self.unrealized_pnl:{NUMBER_FORMATTER}}",
             f"{self.realized_pnl:{NUMBER_FORMATTER}}",
+            f"{self.unrealized_pnl:{NUMBER_FORMATTER}}",
+            "",
             "",
         ]
