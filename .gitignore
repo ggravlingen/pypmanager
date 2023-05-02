@@ -130,3 +130,5 @@ dmypy.json
 
 *.csv
 *.xlsx
+
+data/market_data.yaml

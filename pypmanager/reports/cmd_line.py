@@ -8,12 +8,11 @@ from pypmanager.portfolio import Portfolio
 TABLE_HEADER = [
     "Name",
     "Invested",
-    "Holdings",
-    "Current price",
-    "Value date",
+    "Market value",
     "PnL",
     "...realized",
     "...unrealized",
+    "Value date",
     "# trades",
 ]
 
@@ -32,6 +31,9 @@ def print_pretty_table(holdings: list[Holding]) -> None:
     table.align["Name"] = "l"
 
     for security_data in sorted_holdings:
+        if security_data.current_holdings is None:
+            continue
+
         table.add_row(security_data.cli_table_row)
 
     portfolio = Portfolio(holdings=holdings)
