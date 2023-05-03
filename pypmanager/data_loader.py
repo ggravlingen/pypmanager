@@ -54,7 +54,7 @@ def _replace_name(row: pd.DataFrame) -> str:
     ]:
         return CASH_AND_EQUIVALENTS
 
-    return row["name"]
+    return cast(str, row["name"])
 
 
 def _normalize_amount(row: pd.DataFrame) -> float:
@@ -96,7 +96,7 @@ class DataLoader:
     """Base data loader."""
 
     df: pd.DataFrame | None = None
-    df_raw: pd.DataFrame | None = None
+    df_raw: pd.DataFrame
     files: list[str]
     csv_separator: str = ";"
 
