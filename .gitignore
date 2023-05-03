@@ -133,3 +133,5 @@ data/*.csv
 data/*.yaml
 
 *.xlsx
+
+*.DS_Store
