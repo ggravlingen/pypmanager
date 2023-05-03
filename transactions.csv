@@ -1,6 +1,0 @@
-Name,Symbol,Transaction Type,Quantity,Price,Commission,Cost Basis,Date
-Apple Inc.,AAPL,Buy,100,120.50,5.00,12055.00,2022-01-01
-Apple Inc.,AAPL,Buy,50,125.00,2.50,6252.50,2022-02-01
-Apple Inc.,AAPL,Sell,25,130.00,1.25,3223.75,2022-03-01
-Microsoft Corporation,MSFT,Buy,75,200.00,7.50,15007.50,2022-01-01
-Microsoft Corporation,MSFT,Buy,25,205.00,1.25,5126.25,2022-02-01
