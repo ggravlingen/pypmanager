@@ -6,6 +6,7 @@ from typing import cast
 import numpy as np
 import pandas as pd
 
+from pypmanager.const import CASH_AND_EQUIVALENTS
 from pypmanager.error import DataError
 
 NORMALISED_COL_NAMES_AVANZA = {
@@ -45,6 +46,17 @@ DTYPES_MAP = {
 }
 
 
+def _replace_name(row: pd.DataFrame) -> str:
+    """Replace interest flows with cash and equivalemts."""
+    if row["transaction_type"] in [
+        TransactionTypeValues.INTEREST,
+        TransactionTypeValues.TAX,
+    ]:
+        return CASH_AND_EQUIVALENTS
+
+    return row["name"]
+
+
 def _normalize_amount(row: pd.DataFrame) -> float:
     """Calculate amount if nan."""
     if np.isnan(row["amount"]):
@@ -76,24 +88,35 @@ class TransactionTypeValues(StrEnum):
 
     BUY = "buy"
     SELL = "sell"
+    INTEREST = "interest"
+    TAX = "tax"
 
 
 class DataLoader:
     """Base data loader."""
 
     df: pd.DataFrame | None = None
+    df_raw: pd.DataFrame | None = None
+    files: list[str]
+    csv_separator: str = ";"
 
     def __init__(self) -> None:
         """Init class."""
-        self.load_csv()
+        self.parse_csv()
+        self.pre_process_df()
         self.filter_transactions()
         self.ensure_dot()
         self.cleanup_df()
         self.convert_data_types()
         self.finalize_data_load()
 
+    def parse_csv(self) -> pd.DataFrame:
+        """Parse CSV-files."""
+        dfs = [pd.read_csv(file, sep=self.csv_separator) for file in self.files]
+        self.df_raw = pd.concat(dfs, ignore_index=True)
+
     @abstractmethod
-    def load_csv(self) -> None:
+    def pre_process_df(self) -> None:
         """Load CSV."""
 
     def filter_transactions(self) -> None:
@@ -103,7 +126,9 @@ class DataLoader:
 
         self.df = self.df.query(
             f"transaction_type == '{TransactionTypeValues.BUY}' or "
-            f"transaction_type == '{TransactionTypeValues.SELL}'"
+            f"transaction_type == '{TransactionTypeValues.SELL}' or "
+            f"transaction_type == '{TransactionTypeValues.INTEREST}' or "
+            f"transaction_type == '{TransactionTypeValues.TAX}'"
         )
 
     def ensure_dot(self) -> None:
@@ -127,7 +152,10 @@ class DataLoader:
         df = self.df.copy()
         for key, val in DTYPES_MAP.items():
             if key in df.columns:
-                df[key] = df[key].astype(val)
+                try:
+                    df[key] = df[key].astype(val)
+                except ValueError as err:
+                    raise ValueError(f"Unable to parse {key}") from err
 
         self.df = df
 
@@ -137,6 +165,14 @@ class DataLoader:
             raise DataError("No data")
 
         df = self.df.copy()
+
+        for col in (
+            "amount",
+            "no_traded",
+            "price",
+        ):
+            if col in df.columns:
+                df[col].replace(r"^-$", None, regex=True, inplace=True)
 
         for col in ("commission", "pnl", "isin_code"):  # Replace dashes with 0
             if col in df.columns:
@@ -156,6 +192,7 @@ class DataLoader:
 
         df["no_traded"] = df.apply(_normalize_no_traded, axis=1)
         df["amount"] = df.apply(_normalize_amount, axis=1)
+        df["name"] = df.apply(_replace_name, axis=1)
 
         self.df = df
 
@@ -163,13 +200,12 @@ class DataLoader:
 class LysaLoader(DataLoader):
     """Data loader for Lysa."""
 
-    def load_csv(self) -> None:
-        """Load CSV."""
-        files = ["data/lysa-a.csv", "data/lysa-b.csv"]
-        dfs = [pd.read_csv(file, sep=",") for file in files]
-        df = pd.concat(dfs, ignore_index=True)
+    csv_separator = ","
+    files = ["data/lysa-a.csv", "data/lysa-b.csv"]
 
-        df = df.rename(columns=NORMALISED_COL_NAMES_LYSA)
+    def pre_process_df(self) -> None:
+        """Load CSV."""
+        df = self.df_raw.rename(columns=NORMALISED_COL_NAMES_LYSA)
         df.set_index("transaction_date", inplace=True)
 
         df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
@@ -194,10 +230,11 @@ class LysaLoader(DataLoader):
 class AvanzaLoader(DataLoader):
     """Data loader for Avanza."""
 
-    def load_csv(self) -> None:
+    files = ["data/avanza.csv"]
+
+    def pre_process_df(self) -> None:
         """Load CSV."""
-        df = pd.read_csv("data/avanza.csv", sep=";")
-        df = df.rename(columns=NORMALISED_COL_NAMES_AVANZA)
+        df = self.df_raw.rename(columns=NORMALISED_COL_NAMES_AVANZA)
         df.set_index("transaction_date", inplace=True)
 
         # Replace buy
@@ -212,15 +249,27 @@ class AvanzaLoader(DataLoader):
                 event, TransactionTypeValues.SELL.value
             )
 
+        for event in ("Räntor",):
+            df["transaction_type"] = df["transaction_type"].replace(
+                event, TransactionTypeValues.INTEREST.value
+            )
+
+        for event in ("Preliminärskatt",):
+            df["transaction_type"] = df["transaction_type"].replace(
+                event, TransactionTypeValues.TAX.value
+            )
+
         self.df = df
 
 
 class MiscLoader(DataLoader):
     """Data loader for misc data."""
 
-    def load_csv(self) -> None:
+    files = ["data/other-a.csv"]
+
+    def pre_process_df(self) -> None:
         """Load CSV."""
-        df = pd.read_csv("data/other-a.csv", sep=";")
+        df = self.df_raw
         df.set_index("transaction_date", inplace=True)
 
         for field in ("commission", "amount"):
@@ -236,6 +285,7 @@ def load_data() -> tuple[pd.DataFrame, list[str]]:
     df_c = MiscLoader().df
 
     all_data = cast(pd.DataFrame, pd.concat([df_a, df_b, df_c]))
+
     all_securities = cast(list[str], all_data.name.unique())
 
     return (

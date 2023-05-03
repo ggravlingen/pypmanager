@@ -7,7 +7,34 @@ from pypmanager.data_loader import (
     TransactionTypeValues,
     _normalize_amount,
     _normalize_no_traded,
+    _replace_name,
+    AvanzaLoader,
 )
+
+from unittest.mock import patch
+
+
+@pytest.mark.parametrize(
+    "data, expected",
+    [
+        (
+            pd.Series(
+                {"name": "Foo", "transaction_type": TransactionTypeValues.INTEREST},
+            ),
+            "Cash and equivalents",
+        ),
+        (
+            pd.Series(
+                {"name": "Foo", "transaction_type": TransactionTypeValues.BUY},
+            ),
+            "Foo",
+        ),
+    ],
+)
+def test_replace_name(data, expected) -> None:
+    """Test function _replace_name."""
+    result = _replace_name(data)
+    assert result == expected
 
 
 @pytest.mark.parametrize(
@@ -95,3 +122,11 @@ def test__normalize_no_traded(trans_type, no_traded, expected):
     result = _normalize_no_traded(test_data.iloc[0])
 
     assert result == expected
+
+
+@patch.object(AvanzaLoader, "files", ["tests/fixtures/avanza.csv"])
+def test_avanza_loder() -> None:
+    """Test AvanzaLoader."""
+    df = AvanzaLoader().df
+
+    assert len(df) > 0
