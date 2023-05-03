@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from datetime import date
 from typing import cast
 
-import numpy as np
 import pandas as pd
 
 from pypmanager.const import NUMBER_FORMATTER
@@ -11,7 +10,9 @@ from pypmanager.data_loader import TransactionTypeValues
 from pypmanager.security import MutualFund
 
 
-def _calculate_aggregates(data: pd.DataFrame, security_name: str) -> pd.DataFrame:
+def _calculate_aggregates(  # noqa: C901
+    data: pd.DataFrame, security_name: str
+) -> pd.DataFrame:
     """Calculate aggregate values for a holding."""
     df = data.query(f"name == '{security_name}'").sort_index()
 
@@ -19,6 +20,7 @@ def _calculate_aggregates(data: pd.DataFrame, security_name: str) -> pd.DataFram
     df["cumulative_buy_volume"] = 0.0
     df["realized_pnl"] = 0.0
     df["cumulative_invested_amount"] = 0.0
+    df["average_price"] = None
 
     cumulative_buy_amount: float | None = 0.0
     cumulative_buy_volume: float | None = 0.0
@@ -39,18 +41,26 @@ def _calculate_aggregates(data: pd.DataFrame, security_name: str) -> pd.DataFram
         amount = cast(float, abs(row["amount"]))
         no_traded = cast(float, abs(row["no_traded"]))
         commission = cast(float, abs(row["commission"]))
+        transaction_type = row["transaction_type"]
 
-        if row["transaction_type"] == TransactionTypeValues.BUY.value:
+        if transaction_type == TransactionTypeValues.BUY.value:
             cumulative_buy_volume += no_traded
             cumulative_buy_amount += amount
             cumulative_invested_amount += amount + commission
             average_price = cumulative_invested_amount / cumulative_buy_volume
             realized_pnl = None
-        else:
+
+        if transaction_type == TransactionTypeValues.SELL.value:
             realized_pnl = (row["price"] - average_price) * no_traded - commission
             cumulative_invested_amount -= amount
             cumulative_buy_amount -= amount
             cumulative_buy_volume -= no_traded
+
+        if transaction_type == TransactionTypeValues.INTEREST.value:
+            realized_pnl = amount
+
+        if transaction_type == TransactionTypeValues.TAX.value:
+            realized_pnl = -amount
 
         if cumulative_invested_amount < 0:
             cumulative_invested_amount = None
@@ -103,7 +113,7 @@ class Holding:
         try:
             val = self.calculated_data.isin_code.unique()[0]
 
-            if pd.isna(val):
+            if pd.isna(val) or val == "0":
                 return None
 
             return f"{val}"
@@ -123,7 +133,10 @@ class Holding:
     @property
     def current_holdings(self) -> float | None:
         """Return the number of securities currently held."""
-        if self.calculated_data is None:
+        if (
+            self.calculated_data is None
+            or self.calculated_data.cumulative_buy_volume.empty
+        ):
             return None
 
         if (current := self.calculated_data.cumulative_buy_volume.iloc[-1]) == 0:
@@ -161,12 +174,10 @@ class Holding:
     @property
     def average_price(self) -> float | None:
         """Return average price."""
-        if self.calculated_data is None:
+        if self.calculated_data is None or self.calculated_data.average_price.empty:
             return 0.0
 
-        avg_price = self.calculated_data.average_price.iloc[-1]
-
-        if np.isnan(avg_price):
+        if (avg_price := self.calculated_data.average_price.iloc[-1]) is None:
             return None
 
         return cast(float, avg_price)
@@ -185,10 +196,10 @@ class Holding:
     @property
     def realized_pnl(self) -> float:
         """Return realized PnL."""
-        if self.calculated_data is None:
+        if self.calculated_data is None or self.calculated_data.realized_pnl.empty:
             return 0.0
 
-        pnl = self.calculated_data.realized_pnl.iloc[-1]
+        pnl = self.calculated_data.realized_pnl.sum()
 
         if pd.isna(pnl):
             return 0.0
