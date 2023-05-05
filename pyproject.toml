@@ -12,9 +12,6 @@ dynamic = ['version']
 platforms = ["any"]
 zip-safe = false
 
-[tool.setuptools.package_data]
-pypmanager = ["py.typed"]
-
 [tool.setuptools.dynamic]
 version = {file = "pypmanager/VERSION"}
 
@@ -85,7 +82,8 @@ ignore-long-lines = '^\s*(# )?<?https?://\S+>?$'
 
 [tool.pylint."MESSAGES CONTROL"]
 disable = [
-  "too-few-public-methods"
+  "too-few-public-methods",
+  "logging-fstring-interpolation",
 ]
 
 [tool.mypy]
