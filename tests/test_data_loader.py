@@ -1,17 +1,21 @@
 """Tests."""
+from unittest.mock import patch
+
 import numpy as np
 import pandas as pd
 import pytest
 
 from pypmanager.data_loader import (
+    AvanzaLoader,
+    LysaLoader,
+    MiscLoader,
     TransactionTypeValues,
+    _cleanup_number,
     _normalize_amount,
     _normalize_no_traded,
     _replace_name,
-    AvanzaLoader,
 )
-
-from unittest.mock import patch
+from pypmanager.settings import Settings
 
 
 @pytest.mark.parametrize(
@@ -124,9 +128,40 @@ def test__normalize_no_traded(trans_type, no_traded, expected):
     assert result == expected
 
 
-@patch.object(AvanzaLoader, "files", ["tests/fixtures/avanza.csv"])
+@pytest.mark.parametrize(
+    "number, expected_result",
+    [
+        ("-", 0),  # ok
+        ("500 000 000.0", 500000000.0),  # ok
+        ("500,0", 500.0),
+    ],
+)
+def test_cleanup_number(number, expected_result) -> None:
+    """Test function _cleanup_number."""
+    result = _cleanup_number(number)
+
+    assert result == expected_result
+
+
+@patch.object(Settings, "DIR_DATA", "tests/fixtures/")
 def test_avanza_loder() -> None:
     """Test AvanzaLoader."""
     df = AvanzaLoader().df
+
+    assert len(df) > 0
+
+
+@patch.object(Settings, "DIR_DATA", "tests/fixtures/")
+def test_lysa_loader() -> None:
+    """Test LysaLoader."""
+    df = LysaLoader().df
+
+    assert len(df) > 0
+
+
+@patch.object(Settings, "DIR_DATA", "tests/fixtures/")
+def test_misc_loader() -> None:
+    """Test MiscLoader."""
+    df = MiscLoader().df
 
     assert len(df) > 0

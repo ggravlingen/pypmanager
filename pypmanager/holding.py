@@ -16,6 +16,8 @@ def _calculate_aggregates(  # noqa: C901
     """Calculate aggregate values for a holding."""
     df = data.query(f"name == '{security_name}'").sort_index()
 
+    print(df)
+
     df["cumulative_buy_amount"] = 0.0
     df["cumulative_buy_volume"] = 0.0
     df["realized_pnl"] = 0.0

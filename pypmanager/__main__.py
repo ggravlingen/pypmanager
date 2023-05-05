@@ -32,6 +32,8 @@ if __name__ == "__main__":
 
         calc_security_list: list[Holding] = []
         for security_name in all_securities:
+            if security_name != "Nordic Credit Rating AS Ord Shs":
+                continue
             calc_security_list.append(
                 Holding(
                     name=security_name,
