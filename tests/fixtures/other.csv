@@ -1,0 +1,2 @@
+transaction_date;transaction_type;name;isin_code;no_traded;price;amount;commission;currency
+2022-01-11;buy;Länsförsäkringar Global Index;SE0005188836;1,909738;4 345,60;;0;SEK

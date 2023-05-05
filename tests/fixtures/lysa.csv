@@ -1,0 +1,4 @@
+Date,Type,Amount,Counterpart/Fund,Volume,Price
+"2021-02-23T10:50:36.161647Z",Deposit,"100000,00",Autogiro,,
+"2021-02-24T10:55:29.596712Z",Buy,"100000,00","Lysa Aktier C","42,9386","149,43"
+"2021-02-24T10:55:29.596712Z",Sell,"6416,31","Lysa Aktier C","42,9386","160,00"
