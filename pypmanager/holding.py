@@ -7,8 +7,8 @@ from typing import cast
 import pandas as pd
 
 from pypmanager.const import NUMBER_FORMATTER
+from pypmanager.loader_transaction.const import TransactionTypeValues
 from pypmanager.security import MutualFund
-from pypmanager.transaction_loader import TransactionTypeValues
 
 
 def _calculate_aggregates(  # noqa: C901

@@ -5,9 +5,9 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 
 from pypmanager.holding import Holding
+from pypmanager.loader_transaction import load_data
 from pypmanager.portfolio import Portfolio
 from pypmanager.server.templates import load_template
-from pypmanager.transaction_loader import load_data
 
 app = FastAPI()
 

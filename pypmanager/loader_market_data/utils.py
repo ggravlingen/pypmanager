@@ -9,10 +9,10 @@ import pandas as pd
 import yaml
 
 from pypmanager.error import DataError
-from pypmanager.loaders.models import Source, SourceData, Sources
 from pypmanager.settings import Settings
 
 from .const import LOGGER
+from .models import Source, SourceData, Sources
 
 CONFIG_FILE = os.path.abspath(os.path.join(Settings.DIR_CONFIG, "market_data.yaml"))
 
