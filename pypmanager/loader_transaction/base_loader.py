@@ -35,8 +35,8 @@ def _normalize_amount(row: pd.DataFrame) -> float:
     else:
         amount = row["amount"]
 
-    # Buy is a negative cash flow for us
-    if row.transaction_type == TransactionTypeValues.BUY:
+    # Buy and tax is a negative cash flow for us
+    if row.transaction_type in [TransactionTypeValues.BUY, TransactionTypeValues.TAX]:
         amount = abs(amount) * -1
     else:
         amount = abs(amount)
@@ -73,24 +73,32 @@ class TransactionLoader:
 
     csv_separator: str = ";"
     col_map: dict[str, str] | None = None
-    df: pd.DataFrame | None = None
     df_raw: pd.DataFrame
+    df_final: pd.DataFrame
     file_pattern: str
 
     def __init__(self, report_date: datetime | None = None) -> None:
         """Init class."""
         self.report_date = report_date
 
-        self.parse_csv()
-        self.pre_process_df()
+        self.load_data_files()
+        self.rename_set_index_filter()
         self.filter_transactions()
+        self.pre_process_df()
         self.cleanup_df()
         self.convert_data_types()
         self.finalize_data_load()
 
+    def load_data_files(self) -> None:
+        """Parse CSV-files and load them into a data frame."""
+        files = glob.glob(os.path.join(Settings.DIR_DATA, self.file_pattern))
+
+        dfs = [pd.read_csv(file, sep=self.csv_separator) for file in files]
+        self.df_raw = pd.concat(dfs, ignore_index=True)
+
     def rename_set_index_filter(self) -> None:
         """Set index."""
-        df = self.df_raw
+        df = self.df_raw.copy()
 
         if self.col_map is not None:
             df.rename(columns=self.col_map, inplace=True)
@@ -100,53 +108,38 @@ class TransactionLoader:
         if self.report_date is not None:
             df = df.query(f"index <= '{self.report_date}'")
 
+        # Sort by transaction date
+        df = df.sort_index()
+
         self.df_raw = df
-
-    def parse_csv(self) -> pd.DataFrame:
-        """Parse CSV-files."""
-        files = glob.glob(os.path.join(Settings.DIR_DATA, self.file_pattern))
-
-        dfs = [pd.read_csv(file, sep=self.csv_separator) for file in files]
-        self.df_raw = pd.concat(dfs, ignore_index=True)
 
     @abstractmethod
     def pre_process_df(self) -> None:
-        """Load CSV."""
+        """Broker specific manipulation of the data frame."""
 
     def filter_transactions(self) -> None:
         """Filter transactions."""
-        if self.df is None:
+        if self.df_raw is None:
             raise DataError("No data")
 
-        self.df = self.df.query(
+        df = self.df_raw.copy()
+
+        df.query(
+            f"transaction_type == '{TransactionTypeValues.DIVIDEND}' or "
             f"transaction_type == '{TransactionTypeValues.BUY}' or "
             f"transaction_type == '{TransactionTypeValues.SELL}' or "
             f"transaction_type == '{TransactionTypeValues.INTEREST}' or "
             f"transaction_type == '{TransactionTypeValues.TAX}'"
         )
 
-    def convert_data_types(self) -> None:
-        """Convert data types."""
-        if self.df is None:
-            raise DataError("No data")
-
-        df = self.df.copy()
-
-        for key, val in DTYPES_MAP.items():
-            if key in df.columns:
-                try:
-                    df[key] = df[key].astype(val)
-                except ValueError as err:
-                    raise ValueError(f"Unable to parse {key}") from err
-
-        self.df = df
+        self.df_raw = df
 
     def cleanup_df(self) -> None:
         """Cleanup dataframe."""
-        if self.df is None:
+        if self.df_raw is None:
             raise DataError("No data")
 
-        df = self.df.copy()
+        df = self.df_raw.copy()
 
         for col in NUMBER_COLS:
             if col in df.columns:
@@ -159,17 +152,33 @@ class TransactionLoader:
                 except AttributeError:
                     pass
 
-        self.df = df
+        self.df_raw = df
+
+    def convert_data_types(self) -> None:
+        """Convert data types."""
+        if self.df_raw is None:
+            raise DataError("No data")
+
+        df = self.df_raw.copy()
+
+        for key, val in DTYPES_MAP.items():
+            if key in df.columns:
+                try:
+                    df[key] = df[key].astype(val)
+                except ValueError as err:
+                    raise ValueError(f"Unable to parse {key}") from err
+
+        self.df_raw = df
 
     def finalize_data_load(self) -> None:
         """Post-process."""
-        if self.df is None:
+        if self.df_raw is None:
             raise DataError("No data")
 
-        df = self.df.copy()
+        df = self.df_raw.copy()
 
         df["no_traded"] = df.apply(_normalize_no_traded, axis=1)
         df["amount"] = df.apply(_normalize_amount, axis=1)
         df["name"] = df.apply(_replace_name, axis=1)
 
-        self.df = df
+        self.df_final = df

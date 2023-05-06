@@ -36,7 +36,7 @@ TEST_DATA = [
 def test_calculate_aggregates() -> None:
     """Test _calculate_aggregates."""
     data = pd.DataFrame(TEST_DATA)
-    result = _calculate_aggregates(data, "AAPL")
+    result = _calculate_aggregates(data)
 
     assert result.name.to_list() == ["AAPL"] * 3
     assert result.transaction_type.to_list() == ["buy", "buy", "sell"]

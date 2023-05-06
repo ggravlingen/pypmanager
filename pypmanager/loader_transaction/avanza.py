@@ -24,8 +24,7 @@ class AvanzaLoader(TransactionLoader):
     file_pattern = "avanza*.csv"
 
     def pre_process_df(self) -> None:
-        """Load CSV."""
-        self.rename_set_index_filter()
+        """Broker specific manipulation of the data frame."""
         df = self.df_raw
 
         # Replace buy
@@ -48,6 +47,11 @@ class AvanzaLoader(TransactionLoader):
         for event in ("Preliminärskatt",):
             df["transaction_type"] = df["transaction_type"].replace(
                 event, TransactionTypeValues.TAX.value
+            )
+
+        for event in ("Utdelning",):
+            df["transaction_type"] = df["transaction_type"].replace(
+                event, TransactionTypeValues.DIVIDEND.value
             )
 
         self.df = df

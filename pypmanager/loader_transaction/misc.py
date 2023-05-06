@@ -11,7 +11,3 @@ class MiscLoader(TransactionLoader):
 
     def pre_process_df(self) -> None:
         """Load CSV."""
-        self.rename_set_index_filter()
-        df = self.df_raw
-
-        self.df = df

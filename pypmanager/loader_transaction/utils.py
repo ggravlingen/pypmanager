@@ -13,9 +13,9 @@ from .misc import MiscLoader
 
 def load_data(report_date: datetime | None = None) -> tuple[pd.DataFrame, list[str]]:
     """Load all data."""
-    df_a = AvanzaLoader(report_date).df
-    df_b = LysaLoader(report_date).df
-    df_c = MiscLoader(report_date).df
+    df_a = AvanzaLoader(report_date).df_final
+    df_b = LysaLoader(report_date).df_final
+    df_c = MiscLoader(report_date).df_final
 
     all_data = cast(pd.DataFrame, pd.concat([df_a, df_b, df_c]))
 
