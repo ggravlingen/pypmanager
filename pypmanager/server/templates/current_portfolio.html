@@ -100,6 +100,17 @@
             .navigation a:hover {
                 color: #f00;
             }
+
+            .bodyText {
+                color: #000000;
+                font-family: var(--primary-font);
+                font-size: var(--font-size);
+            }
+
+            .leftBorder {
+                border-left: 1px solid black;
+            }
+
         </style>
     </head>
     <body>
@@ -109,18 +120,23 @@
         <table>
             <thead>
               <tr>
+                <th colspan="9">&nbsp;</th>
+                <th colspan="4" align="center">Profit and loss</th>
+              </tr>
+              <tr>
                 <th align="left">Name</th>
                 <th align="right">Value date</th>
                 <th align="right">Invested</th>
                 <th align="right">Market value</th>
-                <th align="right">Profit/loss</th>
-                <th align="right">...realized</th>
-                <th align="right">......dividends</th>
-                <th align="right">...unrealized</th>
                 <th align="right"># held</th>
                 <th align="right">Current price</th>
                 <th align="right">Avg cost</th>
                 <th align="right"># trades</th>
+                <th>&nbsp;</th>
+                <th align="right">Total (a) + (b)</th>
+                <th align="right">(a) realized</th>
+                <th align="right">(b) unrealized</th>
+                <th align="right">of which dividends</th>
               </tr>
             </thead>
             <tbody>
@@ -128,33 +144,39 @@
               <tr>
                 <td data-name="{{ row.name }}"></td>
                 <td data-date-value="{{ row.date_market_value|format_none }}"></td>
-                <td data-monetary-value="{{ row.invested_amount|format_decimals(1) }}"></td>
-                <td data-monetary-value="{{ row.market_value|format_decimals(1) }}"></td>
-                <td data-monetary-value="{{ row.total_pnl|format_decimals(1) }}"></td>
-                <td data-monetary-value="{{ row.realized_pnl|format_decimals(1) }}"></td>
-                <td data-monetary-value="{{ row.dividends|format_decimals(1) }}"></td>
-                <td data-monetary-value="{{ row.unrealized_pnl|format_decimals(1) }}"></td>
-                <td data-monetary-value="{{ row.current_holdings|format_decimals(1) }}"></td>
+                <td data-monetary-value="{{ row.invested_amount|format_decimals(0) }}"></td>
+                <td data-monetary-value="{{ row.market_value|format_decimals(0) }}"></td>
+                <td data-monetary-value="{{ row.current_holdings|format_decimals(0) }}"></td>
                 <td data-monetary-value="{{ row.current_price|format_decimals(1) }}"></td>
                 <td data-monetary-value="{{ row.average_price|format_decimals(1) }}"></td>
                 <td data-int-value="{{ row.total_transactions }}"></td>
+                <td>&nbsp;</td>
+                <td class="leftBorder" data-monetary-value="{{ row.total_pnl|format_decimals(1) }}"></td>
+                <td data-monetary-value="{{ row.realized_pnl|format_decimals(1) }}"></td>
+                <td data-monetary-value="{{ row.unrealized_pnl|format_decimals(1) }}"></td>
+                <td data-monetary-value="{{ row.dividends|format_decimals(1) }}"></td>
               </tr>
               {% endfor %}
               <tr class="total">
                 <td>Total</td>
                 <td>&nbsp;</td>
-                <td data-monetary-value="{{ portfolio.invested_amount|format_decimals(1) }}"></td>
-                <td data-monetary-value="{{ portfolio.market_value|format_decimals(1) }}"></td>
-                <td data-monetary-value="{{ portfolio.total_pnl|format_decimals(1) }}"></td>
-                <td data-monetary-value="{{ portfolio.realized_pnl|format_decimals(1) }}"></td>
-                <td data-monetary-value="{{ portfolio.dividends|format_decimals(1) }}"></td>
-                <td data-monetary-value="{{ portfolio.unrealized_pnl|format_decimals(1) }}"></td>
+                <td data-monetary-value="{{ portfolio.invested_amount|format_decimals(0) }}"></td>
+                <td data-monetary-value="{{ portfolio.market_value|format_decimals(0) }}"></td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td data-int-value="{{ portfolio.total_transactions }}"></td>
+                <td>&nbsp;</td>
+                <td class="leftBorder" data-monetary-value="{{ portfolio.total_pnl|format_decimals(1) }}"></td>
+                <td data-monetary-value="{{ portfolio.realized_pnl|format_decimals(1) }}"></td>
+                <td data-monetary-value="{{ portfolio.unrealized_pnl|format_decimals(1) }}"></td>
+                <td data-monetary-value="{{ portfolio.dividends|format_decimals(1) }}"></td>
               </tr>
             </tbody>
           </table>
+          <br/>
+          <div>
+              Comments to profit and loss: dividends are included in the realized column and also specified separately.
+        </div>
     </body>
 </html>
