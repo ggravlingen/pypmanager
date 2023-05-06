@@ -20,7 +20,7 @@ class Source(BaseModel):
 
     isin_code: str
     loader_class: str
-    lookup_key: int
+    lookup_key: str
 
 
 class Sources(BaseModel):
