@@ -31,7 +31,7 @@ Save the data as `other.csv` in the `data` folder.
 
 #### Transaction format
 
-`transaction_format` may be any of `buy`, `sell`, `interest` and `tax`.
+`transaction_format` may be any of `buy`, `sell`, `interest`, `dividend` and `tax`.
 
 ### Running the library
 

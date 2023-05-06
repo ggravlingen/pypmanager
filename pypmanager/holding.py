@@ -1,6 +1,7 @@
 """Handle securities."""
 from dataclasses import dataclass
 from datetime import date, datetime
+import logging
 import math
 from typing import cast
 
@@ -9,6 +10,8 @@ import pandas as pd
 from pypmanager.const import NUMBER_FORMATTER
 from pypmanager.loader_transaction.const import TransactionTypeValues
 from pypmanager.security import MutualFund
+
+LOGGER = logging.Logger(__name__)
 
 
 def _calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
@@ -22,24 +25,14 @@ def _calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
     df["cumulative_invested_amount"] = 0.0
     df["average_price"] = None
 
-    cumulative_buy_amount: float | None = 0.0
-    cumulative_buy_volume: float | None = 0.0
+    cumulative_buy_amount: float = 0.0
+    cumulative_buy_volume: float = 0.0
     cumulative_dividends: float = 0.0
-    cumulative_invested_amount: float | None = 0.0
+    cumulative_invested_amount: float = 0.0
     average_price: float | None = 0.0
     realized_pnl: float | None = 0.0
 
     for index, row in df.iterrows():
-        # Reset values to 0
-        if cumulative_buy_volume is None:
-            cumulative_buy_volume = 0.0
-
-        if cumulative_buy_amount is None:
-            cumulative_buy_amount = 0.0
-
-        if cumulative_invested_amount is None:
-            cumulative_invested_amount = 0.0
-
         amount = cast(float, row["amount"])
         no_traded = cast(float, abs(row["no_traded"]))
         commission = cast(float, abs(row["commission"]))
@@ -57,27 +50,26 @@ def _calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
 
         if transaction_type == TransactionTypeValues.BUY.value:
             cumulative_buy_volume += no_traded
-            cumulative_buy_amount += amount
+            # Amounts have a negative sign due to being cash outflows so we need to
+            # adjust for that here
+            cumulative_buy_amount += -amount
             # Amount will be negative here due to it being a negative cash flow
-            cumulative_invested_amount += amount + commission
+            cumulative_invested_amount += -amount + commission
             average_price = cumulative_invested_amount / cumulative_buy_volume
             realized_pnl = None
 
         if transaction_type == TransactionTypeValues.SELL.value:
-            cumulative_buy_volume -= no_traded
-            cumulative_invested_amount -= amount
+            cumulative_invested_amount += -amount
+            cumulative_buy_volume += -no_traded
             realized_pnl = (row["price"] - average_price) * no_traded - commission
 
-        if cumulative_invested_amount < 0:
-            cumulative_invested_amount = None
-
         if cumulative_buy_volume == 0:
-            cumulative_buy_volume = None
+            cumulative_buy_volume = 0.0
             average_price = None
+            cumulative_invested_amount = 0.0
+            cumulative_buy_amount = 0.0
 
-        if cumulative_buy_amount < 0:
-            cumulative_buy_amount = None
-
+        # Save the correct state
         df.at[index, "cumulative_buy_amount"] = cumulative_buy_amount
         df.at[index, "cumulative_buy_volume"] = cumulative_buy_volume
         df.at[index, "cumulative_dividends"] = cumulative_dividends
