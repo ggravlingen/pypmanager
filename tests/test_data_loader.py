@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from pypmanager.loader_market_data.avanza import AvanzaLoader
+from pypmanager.loader_transaction.avanza import AvanzaLoader
 from pypmanager.loader_transaction.base_loader import (
     _cleanup_number,
     _normalize_amount,
