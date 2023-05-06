@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from pypmanager.data_loader import (
+from pypmanager.transaction_loader import (
     AvanzaLoader,
     LysaLoader,
     MiscLoader,

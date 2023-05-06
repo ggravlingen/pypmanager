@@ -1,10 +1,10 @@
 """Main."""
 import argparse
 
-from pypmanager.data_loader import load_data
 from pypmanager.holding import Holding
 from pypmanager.loaders import market_data_loader
 from pypmanager.reports import print_pretty_table
+from pypmanager.transaction_loader import load_data
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Analyse portfolio data.")
