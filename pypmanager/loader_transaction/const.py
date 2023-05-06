@@ -1,0 +1,34 @@
+"""Constants."""
+
+
+from enum import StrEnum
+
+DTYPES_MAP = {
+    "account": str,
+    "transaction_type": str,
+    "name": str,
+    "no_traded": float,
+    "price": float,
+    "amount": float,
+    "commission": float,
+    "currency": str,
+    "isin_code": str,
+    "pnl": float,
+}
+
+NUMBER_COLS = [
+    "no_traded",
+    "price",
+    "amount",
+    "commission",
+    "pnl",
+]
+
+
+class TransactionTypeValues(StrEnum):
+    """Represent transaction types."""
+
+    BUY = "buy"
+    SELL = "sell"
+    INTEREST = "interest"
+    TAX = "tax"

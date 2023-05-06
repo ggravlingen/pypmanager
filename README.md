@@ -35,7 +35,7 @@ Save the data as `other.csv` in the `data` folder.
 
 ### Running the library
 
-In `VSCode`, click the `Run and debug` option. Press play next to `Python: FastAPI`. Navigate to http://localhost in your browser.
+In `VSCode`, click the `Run and debug` option. Press play next to `Python: FastAPI`. Navigate to http://localhost:8001/ in your browser.
 
 ### Some unimplemented ideas
 - <s>Output the result as well-formatted HTML instead of in a CLI table.</s>
@@ -44,3 +44,4 @@ In `VSCode`, click the `Run and debug` option. Press play next to `Python: FastA
 - <s>Allow setting an arbitrary date to calculate the value of the portfolio.</s>
 - Calculate IRR per security and on a total.
 - Split the overview by account or maybe tag.
+- Investments made in other currencies

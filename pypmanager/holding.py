@@ -1,13 +1,14 @@
 """Handle securities."""
 from dataclasses import dataclass
 from datetime import date, datetime
+import math
 from typing import cast
 
 import pandas as pd
 
 from pypmanager.const import NUMBER_FORMATTER
+from pypmanager.loader_transaction.const import TransactionTypeValues
 from pypmanager.security import MutualFund
-from pypmanager.transaction_loader import TransactionTypeValues
 
 
 def _calculate_aggregates(  # noqa: C901
@@ -149,7 +150,10 @@ class Holding:
         ):
             return None
 
-        if (current := self.calculated_data.cumulative_buy_volume.iloc[-1]) == 0:
+        current = self.calculated_data.cumulative_buy_volume.iloc[-1]
+
+        # We use round here as no sold/bought may not sum to exactly 0 when divesting
+        if math.isclose(current, 0, rel_tol=1e-9, abs_tol=1e-12):
             return None
 
         if pd.isna(current):

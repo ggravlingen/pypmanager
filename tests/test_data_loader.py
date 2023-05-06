@@ -5,16 +5,16 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from pypmanager.transaction_loader import (
-    AvanzaLoader,
-    LysaLoader,
-    MiscLoader,
-    TransactionTypeValues,
+from pypmanager.loader_transaction.avanza import AvanzaLoader
+from pypmanager.loader_transaction.base_loader import (
     _cleanup_number,
     _normalize_amount,
     _normalize_no_traded,
     _replace_name,
 )
+from pypmanager.loader_transaction.const import TransactionTypeValues
+from pypmanager.loader_transaction.lysa import LysaLoader
+from pypmanager.loader_transaction.misc import MiscLoader
 from pypmanager.settings import Settings
 
 

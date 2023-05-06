@@ -1,7 +1,8 @@
-"""Data loaders."""
+"""Base loader."""
+from __future__ import annotations
+
 from abc import abstractmethod
 from datetime import datetime
-from enum import StrEnum
 import glob
 import os
 from typing import cast
@@ -13,35 +14,7 @@ from pypmanager.const import CASH_AND_EQUIVALENTS
 from pypmanager.error import DataError
 from pypmanager.settings import Settings
 
-DTYPES_MAP = {
-    "account": str,
-    "transaction_type": str,
-    "name": str,
-    "no_traded": float,
-    "price": float,
-    "amount": float,
-    "commission": float,
-    "currency": str,
-    "isin_code": str,
-    "pnl": float,
-}
-
-NUMBER_COLS = [
-    "no_traded",
-    "price",
-    "amount",
-    "commission",
-    "pnl",
-]
-
-
-class TransactionTypeValues(StrEnum):
-    """Represent transaction types."""
-
-    BUY = "buy"
-    SELL = "sell"
-    INTEREST = "interest"
-    TAX = "tax"
+from .const import DTYPES_MAP, NUMBER_COLS, TransactionTypeValues
 
 
 def _replace_name(row: pd.DataFrame) -> str:
@@ -200,120 +173,3 @@ class TransactionLoader:
         df["name"] = df.apply(_replace_name, axis=1)
 
         self.df = df
-
-
-class LysaLoader(TransactionLoader):
-    """Data loader for Lysa."""
-
-    col_map = {
-        "Date": "transaction_date",
-        "Type": "transaction_type",
-        "Amount": "amount",
-        "Counterpart/Fund": "name",
-        "Volume": "no_traded",
-        "Price": "price",
-    }
-
-    csv_separator = ","
-    file_pattern = "lysa*.csv"
-
-    def pre_process_df(self) -> None:
-        """Load CSV."""
-        self.rename_set_index_filter()
-        df = self.df_raw
-
-        df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
-
-        # Replace buy
-        for event in ("Switch buy", "Buy"):
-            df["transaction_type"] = df["transaction_type"].replace(
-                event, TransactionTypeValues.BUY.value
-            )
-
-        # Replace sell
-        for event in ("Switch sell", "Sell"):
-            df["transaction_type"] = df["transaction_type"].replace(
-                event, TransactionTypeValues.SELL.value
-            )
-
-        df["commission"] = 0.0
-
-        self.df = df
-
-
-class AvanzaLoader(TransactionLoader):
-    """Data loader for Avanza."""
-
-    col_map = {
-        "Datum": "transaction_date",
-        "Konto": "account",
-        "Typ av transaktion": "transaction_type",
-        "Värdepapper/beskrivning": "name",
-        "Antal": "no_traded",
-        "Kurs": "price",
-        "Belopp": "amount",
-        "Courtage": "commission",
-        "Valuta": "currency",
-        "ISIN": "isin_code",
-        "Resultat": "pnl",
-    }
-
-    file_pattern = "avanza*.csv"
-
-    def pre_process_df(self) -> None:
-        """Load CSV."""
-        self.rename_set_index_filter()
-        df = self.df_raw
-
-        # Replace buy
-        for event in ("Köp",):
-            df["transaction_type"] = df["transaction_type"].replace(
-                event, TransactionTypeValues.BUY.value
-            )
-
-        # Replace sell
-        for event in ("Sälj",):
-            df["transaction_type"] = df["transaction_type"].replace(
-                event, TransactionTypeValues.SELL.value
-            )
-
-        for event in ("Räntor",):
-            df["transaction_type"] = df["transaction_type"].replace(
-                event, TransactionTypeValues.INTEREST.value
-            )
-
-        for event in ("Preliminärskatt",):
-            df["transaction_type"] = df["transaction_type"].replace(
-                event, TransactionTypeValues.TAX.value
-            )
-
-        self.df = df
-
-
-class MiscLoader(TransactionLoader):
-    """Data loader for misc data."""
-
-    file_pattern = "other*.csv"
-
-    def pre_process_df(self) -> None:
-        """Load CSV."""
-        self.rename_set_index_filter()
-        df = self.df_raw
-
-        self.df = df
-
-
-def load_data(report_date: datetime | None = None) -> tuple[pd.DataFrame, list[str]]:
-    """Load all data."""
-    df_a = AvanzaLoader(report_date).df
-    df_b = LysaLoader(report_date).df
-    df_c = MiscLoader(report_date).df
-
-    all_data = cast(pd.DataFrame, pd.concat([df_a, df_b, df_c]))
-
-    all_securities = cast(list[str], all_data.name.unique())
-
-    return (
-        all_data,
-        all_securities,
-    )

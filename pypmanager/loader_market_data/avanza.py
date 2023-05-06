@@ -5,10 +5,9 @@ import json
 
 import requests
 
-from pypmanager.loaders.models import SourceData
-
 from .base_loader import BaseMarketDataLoader
 from .const import LOGGER
+from .models import SourceData
 
 
 class AvanzaLoader(BaseMarketDataLoader):

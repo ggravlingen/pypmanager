@@ -3,9 +3,9 @@ import argparse
 from datetime import datetime
 
 from pypmanager.holding import Holding
-from pypmanager.loaders import market_data_loader
+from pypmanager.loader_market_data import market_data_loader
+from pypmanager.loader_transaction import load_data
 from pypmanager.reports import print_pretty_table
-from pypmanager.transaction_loader import load_data
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Analyse portfolio data.")
