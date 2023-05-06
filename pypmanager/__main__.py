@@ -1,5 +1,6 @@
 """Main."""
 import argparse
+from datetime import datetime
 
 from pypmanager.holding import Holding
 from pypmanager.loaders import market_data_loader
@@ -21,6 +22,12 @@ if __name__ == "__main__":
         action="store_true",
         help="Analyze portfolio",
     )
+    parser.add_argument(
+        "--report_date",
+        "-r",
+        type=str,
+        help="Report date for analysis in yyyy-mm-dd format",
+    )
 
     all_args = parser.parse_args()
 
@@ -28,7 +35,13 @@ if __name__ == "__main__":
         market_data_loader()
 
     if all_args.analyze:
-        all_data, all_securities = load_data()
+        report_date = (
+            datetime.strptime(all_args.report_date, "%Y-%m-%d")
+            if all_args.report_date
+            else None
+        )
+
+        all_data, all_securities = load_data(report_date=report_date)
 
         calc_security_list: list[Holding] = []
         for security_name in all_securities:
@@ -36,6 +49,7 @@ if __name__ == "__main__":
                 Holding(
                     name=security_name,
                     all_data=all_data,
+                    report_date=report_date,
                 )
             )
 

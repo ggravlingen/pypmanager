@@ -1,5 +1,6 @@
 """Data loaders."""
 from abc import abstractmethod
+from datetime import datetime
 from enum import StrEnum
 import glob
 import os
@@ -11,29 +12,6 @@ import pandas as pd
 from pypmanager.const import CASH_AND_EQUIVALENTS
 from pypmanager.error import DataError
 from pypmanager.settings import Settings
-
-NORMALISED_COL_NAMES_AVANZA = {
-    "Datum": "transaction_date",
-    "Konto": "account",
-    "Typ av transaktion": "transaction_type",
-    "Värdepapper/beskrivning": "name",
-    "Antal": "no_traded",
-    "Kurs": "price",
-    "Belopp": "amount",
-    "Courtage": "commission",
-    "Valuta": "currency",
-    "ISIN": "isin_code",
-    "Resultat": "pnl",
-}
-
-NORMALISED_COL_NAMES_LYSA = {
-    "Date": "transaction_date",
-    "Type": "transaction_type",
-    "Amount": "amount",
-    "Counterpart/Fund": "name",
-    "Volume": "no_traded",
-    "Price": "price",
-}
 
 DTYPES_MAP = {
     "account": str,
@@ -120,19 +98,36 @@ def _cleanup_number(value: str) -> float | None:
 class TransactionLoader:
     """Base data loader."""
 
+    csv_separator: str = ";"
+    col_map: dict[str, str] | None = None
     df: pd.DataFrame | None = None
     df_raw: pd.DataFrame
     file_pattern: str
-    csv_separator: str = ";"
 
-    def __init__(self) -> None:
+    def __init__(self, report_date: datetime | None = None) -> None:
         """Init class."""
+        self.report_date = report_date
+
         self.parse_csv()
         self.pre_process_df()
         self.filter_transactions()
         self.cleanup_df()
         self.convert_data_types()
         self.finalize_data_load()
+
+    def rename_set_index_filter(self) -> None:
+        """Set index."""
+        df = self.df_raw
+
+        if self.col_map is not None:
+            df.rename(columns=self.col_map, inplace=True)
+
+        df.set_index("transaction_date", inplace=True)
+
+        if self.report_date is not None:
+            df = df.query(f"index <= '{self.report_date}'")
+
+        self.df_raw = df
 
     def parse_csv(self) -> pd.DataFrame:
         """Parse CSV-files."""
@@ -210,13 +205,22 @@ class TransactionLoader:
 class LysaLoader(TransactionLoader):
     """Data loader for Lysa."""
 
+    col_map = {
+        "Date": "transaction_date",
+        "Type": "transaction_type",
+        "Amount": "amount",
+        "Counterpart/Fund": "name",
+        "Volume": "no_traded",
+        "Price": "price",
+    }
+
     csv_separator = ","
     file_pattern = "lysa*.csv"
 
     def pre_process_df(self) -> None:
         """Load CSV."""
-        df = self.df_raw.rename(columns=NORMALISED_COL_NAMES_LYSA)
-        df.set_index("transaction_date", inplace=True)
+        self.rename_set_index_filter()
+        df = self.df_raw
 
         df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
 
@@ -240,12 +244,26 @@ class LysaLoader(TransactionLoader):
 class AvanzaLoader(TransactionLoader):
     """Data loader for Avanza."""
 
+    col_map = {
+        "Datum": "transaction_date",
+        "Konto": "account",
+        "Typ av transaktion": "transaction_type",
+        "Värdepapper/beskrivning": "name",
+        "Antal": "no_traded",
+        "Kurs": "price",
+        "Belopp": "amount",
+        "Courtage": "commission",
+        "Valuta": "currency",
+        "ISIN": "isin_code",
+        "Resultat": "pnl",
+    }
+
     file_pattern = "avanza*.csv"
 
     def pre_process_df(self) -> None:
         """Load CSV."""
-        df = self.df_raw.rename(columns=NORMALISED_COL_NAMES_AVANZA)
-        df.set_index("transaction_date", inplace=True)
+        self.rename_set_index_filter()
+        df = self.df_raw
 
         # Replace buy
         for event in ("Köp",):
@@ -279,17 +297,17 @@ class MiscLoader(TransactionLoader):
 
     def pre_process_df(self) -> None:
         """Load CSV."""
+        self.rename_set_index_filter()
         df = self.df_raw
-        df.set_index("transaction_date", inplace=True)
 
         self.df = df
 
 
-def load_data() -> tuple[pd.DataFrame, list[str]]:
+def load_data(report_date: datetime | None = None) -> tuple[pd.DataFrame, list[str]]:
     """Load all data."""
-    df_a = AvanzaLoader().df
-    df_b = LysaLoader().df
-    df_c = MiscLoader().df
+    df_a = AvanzaLoader(report_date).df
+    df_b = LysaLoader(report_date).df
+    df_c = MiscLoader(report_date).df
 
     all_data = cast(pd.DataFrame, pd.concat([df_a, df_b, df_c]))
 

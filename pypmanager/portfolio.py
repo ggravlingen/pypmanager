@@ -48,6 +48,15 @@ class Portfolio:
         )
 
     @property
+    def total_transactions(self) -> int:
+        """Return total number of transactions."""
+        return sum(
+            s.total_transactions
+            for s in self.holdings
+            if s.total_transactions is not None
+        )
+
+    @property
     def cli_table_row_total(self) -> list[str]:
         """Represent totals for CLI reports."""
         return [
@@ -58,5 +67,5 @@ class Portfolio:
             f"{self.realized_pnl:{NUMBER_FORMATTER}}",
             f"{self.unrealized_pnl:{NUMBER_FORMATTER}}",
             "",
-            "",
+            f"{self.total_transactions}",
         ]
