@@ -12,8 +12,9 @@ from pypmanager.transaction_loader import load_data
 app = FastAPI()
 
 
-async def generate_all_checks() -> str:
-    """Return data."""
+@app.get("/", response_class=HTMLResponse)
+async def all_checks() -> str:
+    """Present overview page."""
     all_data, all_securities = load_data()
 
     calc_security_list: list[Holding] = []
@@ -31,9 +32,3 @@ async def generate_all_checks() -> str:
         template_name="current_portfolio.html",
         context={"securities": calc_security_list, "portfolio": portfolio},
     )
-
-
-@app.get("/", response_class=HTMLResponse)
-async def all_checks() -> HTMLResponse:
-    """Return a PDF file."""
-    return await generate_all_checks()

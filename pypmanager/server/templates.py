@@ -44,7 +44,7 @@ def static_file2base64(file: str) -> markupsafe.Markup:
         return markupsafe.Markup(encoded_bytes.decode("utf-8"))
 
 
-def format_decimals(value: float | None, no_decimals: int = 2):
+def format_decimals(value: float | None, no_decimals: int = 2) -> str | None:
     """Format a value using n decimals."""
     if value is None:
         return None
@@ -53,6 +53,5 @@ def format_decimals(value: float | None, no_decimals: int = 2):
 
     try:
         return locale.format_string(f"%.{no_decimals}f", value, grouping=True)
-    except ValueError as err:
-        print(err)
+    except ValueError:
         return None
