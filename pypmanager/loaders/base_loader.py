@@ -1,5 +1,6 @@
 """Base loader."""
 from abc import abstractmethod
+from io import BytesIO
 from typing import Any
 
 from .models import SourceData
@@ -10,6 +11,7 @@ class BaseMarketDataLoader:
 
     url: str
     raw_response: dict[str, Any]
+    raw_response_io: BytesIO
 
     def __init__(self, isin_code: str, lookup_key: str) -> None:
         """Init class."""

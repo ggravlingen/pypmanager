@@ -1,12 +1,12 @@
 sources:
     # JPM China A (dist) USD
-  - loader_class: pypmanager.loaders.avanza.AvanzaLoader
+  - loader_class: pypmanager.loaders.shb_fonder.SHBFonderLoader
     isin_code: LU0051755006
-    lookup_key: 73
+    lookup_key: 0p000019da
     # Handelsbanken Sverige 100 Ind Cri A1 SEK
-  - loader_class: pypmanager.loaders.avanza.AvanzaLoader
+  - loader_class: pypmanager.loaders.shb_fonder.SHBFonderLoader
     isin_code: SE0003788587
-    lookup_key: 315116
+    lookup_key: shb0000025
     # Avanza World Tech by TIN
   - loader_class: pypmanager.loaders.ft.FTLoader
     isin_code: SE0014453221
