@@ -82,10 +82,11 @@ class TransactionLoader:
         """Init class."""
         self.report_date = report_date
 
+        # The order is important here
         self.load_data_files()
         self.rename_set_index_filter()
-        self.filter_transactions()
         self.pre_process_df()
+        self.filter_transactions()
         self.cleanup_df()
         self.convert_data_types()
         self.finalize_data_load()
@@ -136,12 +137,12 @@ class TransactionLoader:
 
         df = self.df_raw.copy()
 
-        df.query(
+        df = df.query(
             f"transaction_type == '{TransactionTypeValues.DIVIDEND}' or "
             f"transaction_type == '{TransactionTypeValues.BUY}' or "
             f"transaction_type == '{TransactionTypeValues.SELL}' or "
             f"transaction_type == '{TransactionTypeValues.INTEREST}' or "
-            f"transaction_type == '{TransactionTypeValues.TAX}'"
+            f"transaction_type == '{TransactionTypeValues.TAX}'",
         )
 
         self.df_raw = df
