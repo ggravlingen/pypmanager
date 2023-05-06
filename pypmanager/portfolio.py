@@ -48,6 +48,11 @@ class Portfolio:
         )
 
     @property
+    def dividends(self) -> float:
+        """Return dividends."""
+        return sum(s.dividends for s in self.holdings if s.dividends is not None)
+
+    @property
     def total_transactions(self) -> int:
         """Return total number of transactions."""
         return sum(

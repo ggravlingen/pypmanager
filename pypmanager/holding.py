@@ -11,25 +11,23 @@ from pypmanager.loader_transaction.const import TransactionTypeValues
 from pypmanager.security import MutualFund
 
 
-def _calculate_aggregates(  # noqa: C901
-    data: pd.DataFrame, security_name: str, report_date: datetime | None = None
-) -> pd.DataFrame:
+def _calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
     """Calculate aggregate values for a holding."""
-    df = data.query(f"name == '{security_name}'").sort_index()
-
-    if report_date is not None:
-        df = df.query(f"index <= '{report_date}'")
+    df = data.copy()
 
     df["cumulative_buy_amount"] = 0.0
     df["cumulative_buy_volume"] = 0.0
+    df["cumulative_dividends"] = 0.0
     df["realized_pnl"] = 0.0
     df["cumulative_invested_amount"] = 0.0
     df["average_price"] = None
 
     cumulative_buy_amount: float | None = 0.0
     cumulative_buy_volume: float | None = 0.0
+    cumulative_dividends: float = 0.0
     cumulative_invested_amount: float | None = 0.0
     average_price: float | None = 0.0
+    realized_pnl: float | None = 0.0
 
     for index, row in df.iterrows():
         # Reset values to 0
@@ -42,29 +40,33 @@ def _calculate_aggregates(  # noqa: C901
         if cumulative_invested_amount is None:
             cumulative_invested_amount = 0.0
 
-        amount = cast(float, abs(row["amount"]))
+        amount = cast(float, row["amount"])
         no_traded = cast(float, abs(row["no_traded"]))
         commission = cast(float, abs(row["commission"]))
         transaction_type = row["transaction_type"]
 
+        if transaction_type == TransactionTypeValues.INTEREST.value:
+            realized_pnl = amount
+
+        if transaction_type == TransactionTypeValues.DIVIDEND.value:
+            realized_pnl = amount
+            cumulative_dividends += amount
+
+        if transaction_type == TransactionTypeValues.TAX.value:
+            realized_pnl = +amount
+
         if transaction_type == TransactionTypeValues.BUY.value:
             cumulative_buy_volume += no_traded
             cumulative_buy_amount += amount
+            # Amount will be negative here due to it being a negative cash flow
             cumulative_invested_amount += amount + commission
             average_price = cumulative_invested_amount / cumulative_buy_volume
             realized_pnl = None
 
         if transaction_type == TransactionTypeValues.SELL.value:
-            realized_pnl = (row["price"] - average_price) * no_traded - commission
-            cumulative_invested_amount -= amount
-            cumulative_buy_amount -= amount
             cumulative_buy_volume -= no_traded
-
-        if transaction_type == TransactionTypeValues.INTEREST.value:
-            realized_pnl = amount
-
-        if transaction_type == TransactionTypeValues.TAX.value:
-            realized_pnl = -amount
+            cumulative_invested_amount -= amount
+            realized_pnl = (row["price"] - average_price) * no_traded - commission
 
         if cumulative_invested_amount < 0:
             cumulative_invested_amount = None
@@ -78,6 +80,7 @@ def _calculate_aggregates(  # noqa: C901
 
         df.at[index, "cumulative_buy_amount"] = cumulative_buy_amount
         df.at[index, "cumulative_buy_volume"] = cumulative_buy_volume
+        df.at[index, "cumulative_dividends"] = cumulative_dividends
         df.at[index, "average_price"] = average_price
         df.at[index, "realized_pnl"] = realized_pnl
         df.at[index, "cumulative_invested_amount"] = cumulative_invested_amount
@@ -95,7 +98,17 @@ class Holding:
     report_date: datetime | None = None
 
     def __post_init__(self) -> None:
-        """Run after class has been instantiate."""
+        """
+        Run after class has been instantiated.
+
+        Here, we filter the data on security name and, if applicable, report date.
+        """
+        df = self.all_data.query(f"name == '{self.name}'")
+
+        if self.report_date is not None:
+            df = df.query(f"index <= '{self.report_date}'")
+
+        self.all_data = df
         self.calculate_values()
 
     @property
@@ -111,8 +124,6 @@ class Holding:
         """Calculate all values in the dataframe."""
         self.calculated_data = _calculate_aggregates(
             data=self.all_data,
-            security_name=self.name,
-            report_date=self.report_date,
         )
 
     @property
@@ -195,6 +206,22 @@ class Holding:
             return None
 
         return cast(float, avg_price)
+
+    @property
+    def dividends(self) -> float | None:
+        """Return average price."""
+        if (
+            self.calculated_data is None
+            or self.calculated_data.cumulative_dividends.empty
+        ):
+            return None
+
+        if (
+            dividends := self.calculated_data.cumulative_dividends.iloc[-1]
+        ) is None or dividends == 0:
+            return None
+
+        return cast(float, dividends)
 
     @property
     def market_value(self) -> float | None:

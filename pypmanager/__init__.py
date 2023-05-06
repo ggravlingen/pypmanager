@@ -3,6 +3,8 @@ import logging
 import logging.config
 import sys
 
+import pandas as pd
+
 
 class VerboseFormatter(logging.Formatter):
     """Custom log formatter."""
@@ -40,3 +42,5 @@ LOGGING_CONFIG = {
 }
 
 logging.config.dictConfig(LOGGING_CONFIG)
+
+pd.set_option("display.max_columns", None)

@@ -146,7 +146,7 @@ def test_cleanup_number(number, expected_result) -> None:
 @patch.object(Settings, "DIR_DATA", "tests/fixtures/")
 def test_avanza_loder() -> None:
     """Test AvanzaLoader."""
-    df = AvanzaLoader().df
+    df = AvanzaLoader().df_final
 
     assert len(df) > 0
 
@@ -154,7 +154,7 @@ def test_avanza_loder() -> None:
 @patch.object(Settings, "DIR_DATA", "tests/fixtures/")
 def test_lysa_loader() -> None:
     """Test LysaLoader."""
-    df = LysaLoader().df
+    df = LysaLoader().df_final
 
     assert len(df) > 0
 
@@ -162,6 +162,6 @@ def test_lysa_loader() -> None:
 @patch.object(Settings, "DIR_DATA", "tests/fixtures/")
 def test_misc_loader() -> None:
     """Test MiscLoader."""
-    df = MiscLoader().df
+    df = MiscLoader().df_final
 
     assert len(df) > 0
