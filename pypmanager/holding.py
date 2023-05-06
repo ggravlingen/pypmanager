@@ -59,13 +59,12 @@ def _calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
             cumulative_buy_volume += no_traded
             cumulative_buy_amount += amount
             # Amount will be negative here due to it being a negative cash flow
-            cumulative_invested_amount += -amount + commission
+            cumulative_invested_amount += amount + commission
             average_price = cumulative_invested_amount / cumulative_buy_volume
             realized_pnl = None
 
         if transaction_type == TransactionTypeValues.SELL.value:
             cumulative_buy_volume -= no_traded
-            cumulative_buy_amount += amount
             cumulative_invested_amount -= amount
             realized_pnl = (row["price"] - average_price) * no_traded - commission
 

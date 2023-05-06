@@ -54,4 +54,4 @@ class AvanzaLoader(TransactionLoader):
                 event, TransactionTypeValues.DIVIDEND.value
             )
 
-        self.df = df
+        self.df_raw = df

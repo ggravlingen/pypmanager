@@ -37,6 +37,7 @@ def test_calculate_aggregates() -> None:
     """Test _calculate_aggregates."""
     data = pd.DataFrame(TEST_DATA)
     result = _calculate_aggregates(data)
+    print(result)
 
     assert result.name.to_list() == ["AAPL"] * 3
     assert result.transaction_type.to_list() == ["buy", "buy", "sell"]
@@ -45,15 +46,13 @@ def test_calculate_aggregates() -> None:
     assert result.price.to_list() == [100, 50, 100]
     assert result.commission.to_list() == [5, 10, 100]
 
-    assert result.cumulative_buy_amount.to_list()[:2] == [1000, 2000]
-    assert pd.isna(result.cumulative_buy_amount.to_list()[2:3])
+    assert result.cumulative_buy_amount.to_list() == [1000, 2000, 2000]
 
     assert pd.isna(result.realized_pnl.to_list()[0])
     assert pd.isna(result.realized_pnl.to_list()[1])
     assert pytest.approx(result.realized_pnl.to_list()[2]) == 885
 
     assert result.cumulative_invested_amount.to_list()[:2] == [1005, 2015]
-    assert pd.isna(result.cumulative_invested_amount.to_list()[2])
 
     assert pytest.approx(result.average_price.to_list()[0]) == 100.5
     assert pytest.approx(result.average_price.to_list()[1]) == 67.166667

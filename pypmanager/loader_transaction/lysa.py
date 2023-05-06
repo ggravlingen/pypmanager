@@ -40,4 +40,4 @@ class LysaLoader(TransactionLoader):
 
         df["commission"] = 0.0
 
-        self.df = df
+        self.df_raw = df
