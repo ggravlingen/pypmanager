@@ -9,7 +9,7 @@
             body {
                 margin: 0;
                 box-sizing: border-box;
-                max-width: 1200px;
+                max-width: 1440px;
             }
 
             :root {
@@ -121,7 +121,7 @@
             <thead>
               <tr>
                 <th colspan="9">&nbsp;</th>
-                <th colspan="4" align="center">Profit and loss</th>
+                <th colspan="5" align="center">Profit and loss</th>
               </tr>
               <tr>
                 <th align="left">Name</th>
@@ -137,6 +137,7 @@
                 <th align="right">(a) realized</th>
                 <th align="right">(b) unrealized</th>
                 <th align="right">of which dividends</th>
+                <th align="right">of which interest</th>
               </tr>
             </thead>
             <tbody>
@@ -155,6 +156,7 @@
                 <td data-monetary-value="{{ row.realized_pnl|format_decimals(1) }}"></td>
                 <td data-monetary-value="{{ row.unrealized_pnl|format_decimals(1) }}"></td>
                 <td data-monetary-value="{{ row.dividends|format_decimals(1) }}"></td>
+                <td data-monetary-value="{{ row.interest|format_decimals(1) }}"></td>
               </tr>
               {% endfor %}
               <tr class="total">
@@ -171,12 +173,13 @@
                 <td data-monetary-value="{{ portfolio.realized_pnl|format_decimals(1) }}"></td>
                 <td data-monetary-value="{{ portfolio.unrealized_pnl|format_decimals(1) }}"></td>
                 <td data-monetary-value="{{ portfolio.dividends|format_decimals(1) }}"></td>
+                <td data-monetary-value="{{ portfolio.interest|format_decimals(1) }}"></td>
               </tr>
             </tbody>
           </table>
           <br/>
           <div>
-              Comments to profit and loss: dividends are included in the realized column and also specified separately.
+              Comments to profit and loss: while specified separately, dividends and interest are included in the realized column.
         </div>
     </body>
 </html>
