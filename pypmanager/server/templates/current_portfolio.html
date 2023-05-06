@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Overview</title>
+
+        <style>
+            *,
+            html,
+            body {
+                margin: 0;
+                box-sizing: border-box;
+                max-width: 1200px;
+            }
+
+            :root {
+                --primary-color: #0d2e54;
+                --secondary-color: #d9d9d9;
+                --primary-font: Verdana, Geneva, Tahoma, sans-serif;
+                --font-size: 11px;
+            }
+
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            tr:nth-child(odd) {
+                background-color: var(--secondary-color);
+            }
+
+            th {
+                padding: 3px;
+                margin: 0px;
+                font-family: var(--primary-font);
+                font-size: var(--font-size);
+                background-color: #000000;
+                color: #FFFFFF;
+            }
+
+            td {
+                padding: 3px;
+                font-family: var(--primary-font);
+                font-size: var(--font-size);
+                vertical-align: top;
+            }
+
+            td[data-name]:after {
+                content: attr(data-name);
+            }
+
+            td[data-name] {
+                text-align: left;
+            }
+
+            td[data-monetary-value]:after {
+                content: attr(data-monetary-value);
+            }
+            td[data-monetary-value][data-monetary-value^="-"]:after {
+                color: red;
+            }
+            td[data-monetary-value] {
+                text-align: right;
+            }
+            td[data-date-value]:after {
+                content: attr(data-date-value);
+                white-space: nowrap;
+            }
+
+            td[data-date-value] {
+                text-align: right;
+                white-space: nowrap;
+            }
+
+            td[data-int-value]:after {
+                content: attr(data-int-value);
+            }
+
+            td[data-int-value] {
+                text-align: right;
+                white-space: nowrap;
+            }
+
+            /* Classes */
+            .total {
+                font-weight: bold;
+                border-top: 1px solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <table>
+            <thead>
+              <tr>
+                <th align="left">Name</th>
+                <th align="right">Invested</th>
+                <th align="right">Market value</th>
+                <th align="right">Profit/loss</th>
+                <th align="right">...realized</th>
+                <th align="right">...unrealized</th>
+                <th align="right">Value date</th>
+                <th align="right"># trades</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in securities %}
+              <tr>
+                <td data-name="{{ row.name }}"></td>
+                <td data-monetary-value="{{ row.invested_amount|format_decimals(1) }}"></td>
+                <td data-monetary-value="{{ row.market_value|format_decimals(1) }}"></td>
+                <td data-monetary-value="{{ row.total_pnl|format_decimals(1) }}"></td>
+                <td data-monetary-value="{{ row.realized_pnl|format_decimals(1) }}"></td>
+                <td data-monetary-value="{{ row.unrealized_pnl|format_decimals(1) }}"></td>
+                <td data-date-value="{{ row.date_market_value }}"></td>
+                <td data-int-value="{{ row.total_transactions }}"></td>
+              </tr>
+              {% endfor %}
+              <tr class="total">
+                <td>Total</td>
+                <td data-monetary-value="{{ portfolio.invested_amount|format_decimals(1) }}"></td>
+                <td data-monetary-value="{{ portfolio.market_value|format_decimals(1) }}"></td>
+                <td data-monetary-value="{{ portfolio.total_pnl|format_decimals(1) }}"></td>
+                <td data-monetary-value="{{ portfolio.realized_pnl|format_decimals(1) }}"></td>
+                <td data-monetary-value="{{ portfolio.unrealized_pnl|format_decimals(1) }}"></td>
+                <td>&nbsp;</td>
+                <td data-int-value="{{ portfolio.total_transactions }}"></td>
+              </tr>
+            </tbody>
+          </table>
+    </body>
+</html>

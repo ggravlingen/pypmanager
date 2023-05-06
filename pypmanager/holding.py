@@ -242,7 +242,12 @@ class Holding:
         if self.average_price is None or self.current_holdings is None:
             return None
 
-        return self.average_price * self.current_holdings
+        calc_val = self.average_price * self.current_holdings
+
+        if round(calc_val) == 0:
+            return None
+
+        return calc_val
 
     @property
     def cli_table_row(self) -> list[str | None]:
