@@ -3,31 +3,20 @@ from __future__ import annotations
 
 from datetime import datetime
 import json
-import logging
 from typing import Any
 
 import requests
 
+from pypmanager.loaders import BaseMarketDataLoader
 from pypmanager.market_data_loader import SourceData
 
-LOGGER = logging.getLogger(__name__)
 
-
-class FTLoader:
+class FTLoader(BaseMarketDataLoader):
     """Load data from Financial Times."""
 
     GET_DAYS = 365
 
     url = "https://markets.ft.com/data/chartapi/series"
-    raw_response: dict[str, Any]
-
-    def __init__(self, symbol: str, isin_code: str) -> None:
-        """Init class."""
-        self.symbol = symbol
-        self.isin_code = isin_code
-
-        self.get_response()
-        self.to_source_data()
 
     @property
     def headers(self) -> dict[str, str]:
@@ -52,7 +41,7 @@ class FTLoader:
             "elements": [
                 {
                     "Type": "price",
-                    "Symbol": self.symbol,
+                    "Symbol": self.lookup_key,
                     "OverlayIndicators": [],
                     "Params": {},
                 }
