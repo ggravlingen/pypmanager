@@ -1,6 +1,7 @@
 """Tests for template utils."""
-from pypmanager.server.templates import format_decimals
 import pytest
+
+from pypmanager.server.templates import format_decimals
 
 
 @pytest.mark.parametrize(
