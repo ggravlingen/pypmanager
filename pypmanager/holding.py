@@ -27,6 +27,7 @@ def _calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
     cumulative_dividends: float = 0.0
     cumulative_invested_amount: float | None = 0.0
     average_price: float | None = 0.0
+    realized_pnl: float | None = 0.0
 
     for index, row in df.iterrows():
         # Reset values to 0
