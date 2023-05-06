@@ -74,6 +74,9 @@ class MutualFund:
             else:
                 val = self.filtered_df.index.max()
 
+            if pd.isna(val):
+                return None
+
             return cast(date, val)
         except IndexError:
             return None

@@ -85,19 +85,40 @@
                 font-weight: bold;
                 border-top: 1px solid black;
             }
+
+            .navigation {
+                background-color: #000000;
+                font-size: var(--font-size);
+            }
+
+            .navigation a {
+                color: #FFFFFF;
+                font-weight: bold;
+                font-family: var(--primary-font);
+            }
+
+            .navigation a:hover {
+                color: #f00;
+            }
         </style>
     </head>
     <body>
+        <div class="navigation">
+            <a href="/">Current holdings</a> | <a href="/?view=old">Past holdings</a>
+        </div>
         <table>
             <thead>
               <tr>
                 <th align="left">Name</th>
+                <th align="right">Value date</th>
                 <th align="right">Invested</th>
                 <th align="right">Market value</th>
                 <th align="right">Profit/loss</th>
                 <th align="right">...realized</th>
                 <th align="right">...unrealized</th>
-                <th align="right">Value date</th>
+                <th align="right"># held</th>
+                <th align="right">Current price</th>
+                <th align="right">Avg cost</th>
                 <th align="right"># trades</th>
               </tr>
             </thead>
@@ -105,22 +126,28 @@
               {% for row in securities %}
               <tr>
                 <td data-name="{{ row.name }}"></td>
+                <td data-date-value="{{ row.date_market_value|format_none }}"></td>
                 <td data-monetary-value="{{ row.invested_amount|format_decimals(1) }}"></td>
                 <td data-monetary-value="{{ row.market_value|format_decimals(1) }}"></td>
                 <td data-monetary-value="{{ row.total_pnl|format_decimals(1) }}"></td>
                 <td data-monetary-value="{{ row.realized_pnl|format_decimals(1) }}"></td>
                 <td data-monetary-value="{{ row.unrealized_pnl|format_decimals(1) }}"></td>
-                <td data-date-value="{{ row.date_market_value }}"></td>
+                <td data-monetary-value="{{ row.current_holdings|format_decimals(1) }}"></td>
+                <td data-monetary-value="{{ row.current_price|format_decimals(1) }}"></td>
+                <td data-monetary-value="{{ row.average_price|format_decimals(1) }}"></td>
                 <td data-int-value="{{ row.total_transactions }}"></td>
               </tr>
               {% endfor %}
               <tr class="total">
                 <td>Total</td>
+                <td>&nbsp;</td>
                 <td data-monetary-value="{{ portfolio.invested_amount|format_decimals(1) }}"></td>
                 <td data-monetary-value="{{ portfolio.market_value|format_decimals(1) }}"></td>
                 <td data-monetary-value="{{ portfolio.total_pnl|format_decimals(1) }}"></td>
                 <td data-monetary-value="{{ portfolio.realized_pnl|format_decimals(1) }}"></td>
                 <td data-monetary-value="{{ portfolio.unrealized_pnl|format_decimals(1) }}"></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td data-int-value="{{ portfolio.total_transactions }}"></td>
               </tr>
