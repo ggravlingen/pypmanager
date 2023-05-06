@@ -5,6 +5,7 @@ from abc import abstractmethod
 from datetime import datetime
 import glob
 import os
+import random
 from typing import cast
 
 import numpy as np
@@ -107,6 +108,17 @@ class TransactionLoader:
 
         if self.report_date is not None:
             df = df.query(f"index <= '{self.report_date}'")
+
+        # Apply randomness to time in order to have unique indices
+        df.index = pd.to_datetime(df.index).map(
+            lambda x: x.replace(
+                hour=random.randint(0, 23),
+                minute=random.randint(0, 59),
+                microsecond=random.randint(0, 999999),
+            )
+            if x.strftime("%Y-%m-%d") == x.strftime("%Y-%m-%d")
+            else x
+        )
 
         # Sort by transaction date
         df = df.sort_index()

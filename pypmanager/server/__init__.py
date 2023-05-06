@@ -19,9 +19,6 @@ async def index(view: str | None = None) -> str:
 
     holdings: list[Holding] = []
     for security_name in all_securities:
-        if "Cash" not in security_name:
-            continue
-
         holding = Holding(
             name=security_name,
             all_data=all_data,
