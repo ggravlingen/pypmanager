@@ -30,9 +30,9 @@ Execute the following command to output a table of all current holdings: `python
 
 
 ### Some unimplemented ideas
+- Output the result as well-formatted HTML instead of in a CLI table.
 - Support other online brokers by extending the `DataLoader` class.
 - Adding scrapers to download historical closing data.
-- Allow setting an arbitrary date to calculate the value of the portfolio.
+- <s>Allow setting an arbitrary date to calculate the value of the portfolio.</s>
 - Calculate IRR per security and on a total.
 - Split the overview by account or maybe tag.
-- Output the result as well-formatted HTML instead of in a CLI table.
