@@ -13,21 +13,29 @@ from pypmanager.security import MutualFund
 
 LOGGER = logging.Logger(__name__)
 
+EMPTY_COLUMNS = [
+    "cumulative_buy_amount",
+    "cumulative_buy_volume",
+    "cumulative_dividends",
+    "cumulative_interest",
+    "realized_pnl",
+    "cumulative_invested_amount",
+]
+
 
 def _calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
     """Calculate aggregate values for a holding."""
     df = data.copy()
 
-    df["cumulative_buy_amount"] = 0.0
-    df["cumulative_buy_volume"] = 0.0
-    df["cumulative_dividends"] = 0.0
-    df["realized_pnl"] = 0.0
-    df["cumulative_invested_amount"] = 0.0
+    for col in EMPTY_COLUMNS:
+        df[col] = 0.0
+
     df["average_price"] = None
 
     cumulative_buy_amount: float = 0.0
     cumulative_buy_volume: float = 0.0
     cumulative_dividends: float = 0.0
+    cumulative_interest: float = 0.0
     cumulative_invested_amount: float = 0.0
     average_price: float | None = 0.0
     realized_pnl: float | None = 0.0
@@ -36,10 +44,11 @@ def _calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
         amount = cast(float, row["amount"])
         no_traded = cast(float, abs(row["no_traded"]))
         commission = cast(float, abs(row["commission"]))
-        transaction_type = row["transaction_type"]
+        transaction_type = cast(str, row["transaction_type"])
 
         if transaction_type == TransactionTypeValues.INTEREST.value:
             realized_pnl = amount
+            cumulative_interest += amount
 
         if transaction_type == TransactionTypeValues.DIVIDEND.value:
             realized_pnl = amount
@@ -63,7 +72,7 @@ def _calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
             cumulative_buy_volume += -no_traded
             realized_pnl = (row["price"] - average_price) * no_traded - commission
 
-        if cumulative_buy_volume == 0:
+        if math.isclose(cumulative_buy_volume, 0, rel_tol=1e-9, abs_tol=1e-12):
             cumulative_buy_volume = 0.0
             average_price = None
             cumulative_invested_amount = 0.0
@@ -72,6 +81,7 @@ def _calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
         # Save the correct state
         df.at[index, "cumulative_buy_amount"] = cumulative_buy_amount
         df.at[index, "cumulative_buy_volume"] = cumulative_buy_volume
+        df.at[index, "cumulative_interest"] = cumulative_interest
         df.at[index, "cumulative_dividends"] = cumulative_dividends
         df.at[index, "average_price"] = average_price
         df.at[index, "realized_pnl"] = realized_pnl
@@ -210,6 +220,22 @@ class Holding:
 
         if (
             dividends := self.calculated_data.cumulative_dividends.iloc[-1]
+        ) is None or dividends == 0:
+            return None
+
+        return cast(float, dividends)
+
+    @property
+    def interest(self) -> float | None:
+        """Return average price."""
+        if (
+            self.calculated_data is None
+            or self.calculated_data.cumulative_interest.empty
+        ):
+            return None
+
+        if (
+            dividends := self.calculated_data.cumulative_interest.iloc[-1]
         ) is None or dividends == 0:
             return None
 
