@@ -1,7 +1,6 @@
-"""Loader for market data from Avanza."""
+"""Util functions."""
 from __future__ import annotations
 
-import logging
 import os
 
 from numpy import datetime64
@@ -13,9 +12,9 @@ from pypmanager.loaders.models import Source, SourceData, Sources
 from pypmanager.settings import Settings
 from pypmanager.utils import class_importer
 
-CONFIG_FILE = os.path.abspath(os.path.join(Settings.DIR_CONFIG, "market_data.yaml"))
+from .const import LOGGER
 
-LOGGER = logging.getLogger(__name__)
+CONFIG_FILE = os.path.abspath(os.path.join(Settings.DIR_CONFIG, "market_data.yaml"))
 
 
 def _load_sources() -> list[Source]:
@@ -78,6 +77,7 @@ def market_data_loader() -> None:
             data_loader_klass = class_importer(source.loader_class)
         except AttributeError as err:
             raise DataError("Unable to load data", err) from err
+
         loader = data_loader_klass(
             lookup_key=source.lookup_key, isin_code=source.isin_code
         )

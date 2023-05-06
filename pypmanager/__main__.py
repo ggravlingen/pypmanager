@@ -3,8 +3,8 @@ import argparse
 
 from pypmanager.data_loader import load_data
 from pypmanager.holding import Holding
-from pypmanager.market_data_loader import market_data_loader
-from pypmanager.reports.cmd_line import print_pretty_table
+from pypmanager.loaders import market_data_loader
+from pypmanager.reports import print_pretty_table
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Analyse portfolio data.")
