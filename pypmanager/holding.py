@@ -1,6 +1,6 @@
 """Handle securities."""
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, datetime
 from typing import cast
 
 import pandas as pd
@@ -11,10 +11,13 @@ from pypmanager.transaction_loader import TransactionTypeValues
 
 
 def _calculate_aggregates(  # noqa: C901
-    data: pd.DataFrame, security_name: str
+    data: pd.DataFrame, security_name: str, report_date: datetime | None = None
 ) -> pd.DataFrame:
     """Calculate aggregate values for a holding."""
     df = data.query(f"name == '{security_name}'").sort_index()
+
+    if report_date is not None:
+        df = df.query(f"index <= '{report_date}'")
 
     df["cumulative_buy_amount"] = 0.0
     df["cumulative_buy_volume"] = 0.0
@@ -85,9 +88,10 @@ def _calculate_aggregates(  # noqa: C901
 class Holding:
     """Represent a security."""
 
-    name: str
     all_data: pd.DataFrame
+    name: str
     calculated_data: pd.DataFrame | None = None
+    report_date: datetime | None = None
 
     def __post_init__(self) -> None:
         """Run after class has been instantiate."""
@@ -96,12 +100,18 @@ class Holding:
     @property
     def security_info(self) -> MutualFund:
         """Return information on the security."""
-        return MutualFund(isin_code=self.isin_code, name=self.name)
+        return MutualFund(
+            isin_code=self.isin_code,
+            name=self.name,
+            report_date=self.report_date,
+        )
 
     def calculate_values(self) -> None:
         """Calculate all values in the dataframe."""
         self.calculated_data = _calculate_aggregates(
-            data=self.all_data, security_name=self.name
+            data=self.all_data,
+            security_name=self.name,
+            report_date=self.report_date,
         )
 
     @property

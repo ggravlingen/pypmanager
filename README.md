@@ -4,7 +4,7 @@ Summarize transactions in funds into a simple portfolio report.
 
 ### Why
 
-I have been looking for a library where I can download a set of transactions from my broker and pension fund manager and compile them into a report giving me an overview of all holdings.
+I have been looking for a library where I can download a set of transactions from my broker and pension fund manager and compile them into a report giving me an overview of all holdings. I have found some alternatives where I'm expected to store my data in the cloud. I don't want that, so I wrote this local-only library. The only thing cloud is that the library allows you to fetch market data from the Internet.
 
 ### Data format
 
@@ -17,6 +17,8 @@ transaction_date;transaction_type;name;isin_code;no_traded;price;amount;commissi
 2021-02-15;buy;Fund A;NO0010000000;1000;100;-100000;-2,200;NOK
 2021-02-15;sell;Fund A;NO0010000000;1000;100;100000;-2,200;NOK
 ```
+
+Save the data as `other.csv` in the `data` folder.
 
 #### Transaction format
 

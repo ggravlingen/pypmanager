@@ -1,5 +1,5 @@
 """Representation of a security."""
-from datetime import date
+from datetime import date, datetime
 from typing import cast
 
 import pandas as pd
@@ -12,16 +12,22 @@ class MutualFund:
 
     filtered_df: pd.DataFrame | None
 
-    def __init__(self, isin_code: str | None = None, name: str | None = None) -> None:
+    def __init__(
+        self,
+        isin_code: str | None = None,
+        name: str | None = None,
+        report_date: datetime | None = None,
+    ) -> None:
         """Init."""
         self.isin_code = isin_code
         self.name = name
+        self.report_date = report_date
 
         self._load_data()
 
     def _load_data(self) -> None:
         """Load market data."""
-        df = pd.read_csv(Settings.FILE_MARKET_DATA, sep=";")
+        df = pd.read_csv(Settings.FILE_MARKET_DATA, sep=";", index_col="report_date")
 
         if self.isin_code:
             df_filtered = df.query(f"isin_code == '{self.isin_code}'")
@@ -61,10 +67,12 @@ class MutualFund:
             return None
 
         try:
-            val = self.filtered_df["report_date"].max()
-
-            if pd.isna(val):
-                return None
+            if self.report_date is not None:
+                val = self.filtered_df.query(
+                    f"index <= '{self.report_date}'"
+                ).index.max()
+            else:
+                val = self.filtered_df.index.max()
 
             return cast(date, val)
         except IndexError:
