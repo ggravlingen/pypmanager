@@ -8,7 +8,7 @@ from typing import Any
 import requests
 
 from pypmanager.loaders import BaseMarketDataLoader
-from pypmanager.market_data_loader import SourceData
+from pypmanager.loaders.models import SourceData
 
 
 class FTLoader(BaseMarketDataLoader):
