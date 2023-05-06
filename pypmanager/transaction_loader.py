@@ -57,6 +57,15 @@ NUMBER_COLS = [
 ]
 
 
+class TransactionTypeValues(StrEnum):
+    """Represent transaction types."""
+
+    BUY = "buy"
+    SELL = "sell"
+    INTEREST = "interest"
+    TAX = "tax"
+
+
 def _replace_name(row: pd.DataFrame) -> str:
     """Replace interest flows with cash and equivalemts."""
     if row["transaction_type"] in [
@@ -108,16 +117,7 @@ def _cleanup_number(value: str) -> float | None:
         raise ValueError(f"Unable to parse {value}") from err
 
 
-class TransactionTypeValues(StrEnum):
-    """Represent transaction types."""
-
-    BUY = "buy"
-    SELL = "sell"
-    INTEREST = "interest"
-    TAX = "tax"
-
-
-class DataLoader:
+class TransactionLoader:
     """Base data loader."""
 
     df: pd.DataFrame | None = None
@@ -207,7 +207,7 @@ class DataLoader:
         self.df = df
 
 
-class LysaLoader(DataLoader):
+class LysaLoader(TransactionLoader):
     """Data loader for Lysa."""
 
     csv_separator = ","
@@ -237,7 +237,7 @@ class LysaLoader(DataLoader):
         self.df = df
 
 
-class AvanzaLoader(DataLoader):
+class AvanzaLoader(TransactionLoader):
     """Data loader for Avanza."""
 
     file_pattern = "avanza*.csv"
@@ -272,7 +272,7 @@ class AvanzaLoader(DataLoader):
         self.df = df
 
 
-class MiscLoader(DataLoader):
+class MiscLoader(TransactionLoader):
     """Data loader for misc data."""
 
     file_pattern = "other*.csv"

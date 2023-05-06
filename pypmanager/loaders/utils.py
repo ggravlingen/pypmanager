@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import os
+from typing import Any
 
 from numpy import datetime64
 import pandas as pd
@@ -10,11 +11,29 @@ import yaml
 from pypmanager.error import DataError
 from pypmanager.loaders.models import Source, SourceData, Sources
 from pypmanager.settings import Settings
-from pypmanager.utils import class_importer
 
 from .const import LOGGER
 
 CONFIG_FILE = os.path.abspath(os.path.join(Settings.DIR_CONFIG, "market_data.yaml"))
+
+
+def _class_importer(name: str) -> Any:
+    """
+    Load a class from a string representing a fully qualified class name.
+
+    :param class_path: The fully qualified name of the class to load and instantiate.
+    :return: An instance of the specified class.
+    """
+    # Split the class path into its individual components.
+    components = name.split(".")
+    class_name = components.pop()
+    module_name = ".".join(components)
+
+    # Dynamically load the module.
+    module = __import__(module_name, fromlist=[class_name])
+
+    # Get the class from the module.
+    return getattr(module, class_name)
 
 
 def _load_sources() -> list[Source]:
@@ -74,7 +93,7 @@ def market_data_loader() -> None:
         LOGGER.info(f"Parsing {source.isin_code} using {source.loader_class}")
 
         try:
-            data_loader_klass = class_importer(source.loader_class)
+            data_loader_klass = _class_importer(source.loader_class)
         except AttributeError as err:
             raise DataError("Unable to load data", err) from err
 
