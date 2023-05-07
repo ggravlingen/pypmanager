@@ -2,7 +2,7 @@
 import pandas as pd
 import pytest
 
-from pypmanager.holding import _calculate_aggregates
+from pypmanager.analytics.holding import _calculate_aggregates
 from pypmanager.loader_transaction.const import TransactionTypeValues
 
 TEST_DATA = [

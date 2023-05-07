@@ -3,7 +3,7 @@
 
 from dataclasses import dataclass
 
-from pypmanager.holding import Holding
+from pypmanager.analytics.holding import Holding
 
 
 @dataclass
