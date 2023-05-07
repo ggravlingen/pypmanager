@@ -3,7 +3,6 @@
 
 from dataclasses import dataclass
 
-from pypmanager.const import NUMBER_FORMATTER
 from pypmanager.holding import Holding
 
 
@@ -65,17 +64,3 @@ class Portfolio:
             for s in self.holdings
             if s.total_transactions is not None
         )
-
-    @property
-    def cli_table_row_total(self) -> list[str]:
-        """Represent totals for CLI reports."""
-        return [
-            "Total",
-            f"{self.invested_amount:{NUMBER_FORMATTER}}",
-            f"{self.market_value:{NUMBER_FORMATTER}}",
-            f"{self.total_pnl:{NUMBER_FORMATTER}}",
-            f"{self.realized_pnl:{NUMBER_FORMATTER}}",
-            f"{self.unrealized_pnl:{NUMBER_FORMATTER}}",
-            "",
-            f"{self.total_transactions}",
-        ]

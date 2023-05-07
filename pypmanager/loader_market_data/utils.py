@@ -66,7 +66,6 @@ def _upsert_df(data: list[SourceData]) -> None:
 
     # Merge the existing DataFrame and the upsert DataFrame
     merged_df = existing_df.merge(
-        existing_df,
         upsert_df,
         on=["isin_code", "report_date"],
         how="outer",
@@ -85,7 +84,7 @@ def _upsert_df(data: list[SourceData]) -> None:
     merged_df.to_csv(Settings.FILE_MARKET_DATA, index=False, sep=";")
 
 
-def market_data_loader() -> None:
+async def market_data_loader() -> None:
     """Load JSON-data from a source."""
     sources = _load_sources()
 

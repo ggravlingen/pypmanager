@@ -39,6 +39,8 @@ Save the data as `other.csv` in the `data` folder.
 
 I have provided a few data sources built-in. Configuration is done by appending `config/market_data.yaml` with the securities you want to download data for.
 
+When the configuration file is updated, you can simply type `python -m pypmanager -l` to download all data.
+
 ### Running the library
 
 In `VSCode`, click the `Run and debug` option. Press play next to `Python: FastAPI`. Navigate to http://localhost:8001/ in your browser.
