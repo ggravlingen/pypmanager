@@ -19,6 +19,7 @@ CASH_AND_EQUIVALENTS = "Cash and equivalents"
 
 FILTER_STATEMENT = (
     f"('{TransactionTypeValues.DIVIDEND}'"
+    f",'{TransactionTypeValues.FEE}'"
     f",'{TransactionTypeValues.INTEREST}'"
     f",'{TransactionTypeValues.TAX}'"
     f",'{TransactionTypeValues.BUY}'"
@@ -45,7 +46,11 @@ def _normalize_amount(row: pd.DataFrame) -> float:
         amount = row["amount"]
 
     # Buy and tax is a negative cash flow for us
-    if row.transaction_type in [TransactionTypeValues.BUY, TransactionTypeValues.TAX]:
+    if row.transaction_type in [
+        TransactionTypeValues.BUY,
+        TransactionTypeValues.TAX,
+        TransactionTypeValues.FEE,
+    ]:
         amount = abs(amount) * -1
     else:
         amount = abs(amount)
@@ -80,6 +85,7 @@ def _cleanup_number(value: str) -> float | None:
 class TransactionLoader:
     """Base data loader."""
 
+    broker_name: str | None = None
     csv_separator: str = ";"
     col_map: dict[str, str] | None = None
     df_raw: pd.DataFrame
@@ -111,6 +117,9 @@ class TransactionLoader:
 
         # Cleanup whitespace in columns
         df_raw = df_raw.applymap(lambda x: x.strip() if isinstance(x, str) else x)
+
+        if "broker" not in df_raw.columns and self.broker_name:
+            df_raw["broker"] = self.broker_name
 
         self.df_raw = df_raw
 
@@ -183,6 +192,12 @@ class TransactionLoader:
         for event in ("Utdelning",):
             df_raw["transaction_type"] = df_raw["transaction_type"].replace(
                 event, TransactionTypeValues.DIVIDEND.value
+            )
+
+        # Handle fee
+        for event in ("Fee",):
+            df_raw["transaction_type"] = df_raw["transaction_type"].replace(
+                event, TransactionTypeValues.FEE.value
             )
 
         self.df_raw = df_raw
