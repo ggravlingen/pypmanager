@@ -4,7 +4,9 @@ Summarize transactions in funds into a simple portfolio report.
 
 ### Why
 
-I have been looking for a library where I can download a set of transactions from my broker and pension fund manager and compile them into a report giving me an overview of all holdings. I have found some alternatives where I'm expected to store my data in the cloud. I don't want that, so I wrote this local-only library. The only thing cloud is that the library allows you to fetch market data from the Internet.
+I have been looking for a library where I can download a set of transactions from my broker and pension fund manager and compile them into a report giving me an overview of all holdings.
+
+Alternative solutions expected me to store my data in the cloud. I don't want that, so I wrote this local-only library. The only thing cloud is that the library allows you to fetch market data from the Internet.
 
 ### Installing
 
@@ -33,15 +35,19 @@ Save the data as `other.csv` in the `data` folder.
 
 `transaction_format` may be any of `buy`, `sell`, `interest`, `dividend` and `tax`.
 
+### Downloading market data
+
+I have provided a few data sources built-in. Configuration is done by appending `config/market_data.yaml` with the securities you want to download data for.
+
 ### Running the library
 
 In `VSCode`, click the `Run and debug` option. Press play next to `Python: FastAPI`. Navigate to http://localhost:8001/ in your browser.
 
 ### Some unimplemented ideas
-- <s>Output the result as well-formatted HTML instead of in a CLI table.</s>
-- Support other online brokers by extending the `DataLoader` class.
-- Adding scrapers to download historical closing data.
-- <s>Allow setting an arbitrary date to calculate the value of the portfolio.</s>
 - Calculate IRR per security and on a total.
 - Split the overview by account or maybe tag.
 - Investments made in other currencies
+- Support other online brokers by extending the `DataLoader` class.
+- <s>Adding scrapers to download historical closing data.</s>
+- <s>Output the result as well-formatted HTML instead of in a CLI table.</s>
+- <s>Allow setting an arbitrary date to calculate the value of the portfolio.</s>

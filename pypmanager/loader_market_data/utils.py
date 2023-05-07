@@ -98,6 +98,8 @@ def market_data_loader() -> None:
             raise DataError("Unable to load data", err) from err
 
         loader = data_loader_klass(
-            lookup_key=source.lookup_key, isin_code=source.isin_code
+            lookup_key=source.lookup_key,
+            isin_code=source.isin_code,
+            name=source.name,
         )
         _upsert_df(data=loader.to_source_data())
