@@ -96,8 +96,6 @@ def _calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
             index, "cumulative_invested_amount"
         ] = cumulative_invested_amount
 
-    df_calculations.to_excel("foo.xlsx", index=False)
-
     return df_calculations
 
 
