@@ -13,10 +13,13 @@ class BaseMarketDataLoader:
     raw_response: dict[str, Any]
     raw_response_io: BytesIO
 
-    def __init__(self, isin_code: str, lookup_key: str) -> None:
+    def __init__(
+        self, isin_code: str, lookup_key: str, name: str | None = None
+    ) -> None:
         """Init class."""
         self.isin_code = isin_code
         self.lookup_key = lookup_key
+        self.name = name
 
         self.get_response()
 

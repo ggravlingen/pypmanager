@@ -1,45 +1,58 @@
 sources:
-    # JPM China A (dist) USD
-  - loader_class: pypmanager.loaders.shb_fonder.SHBFonderLoader
+  - loader_class: pypmanager.loader_market_data.morningstar.MorningstarLoader
     isin_code: LU0051755006
-    lookup_key: 0p000019da
+    lookup_key: F0GBR04SN7
+    name: JPM China A (dist) USD
+  - loader_class: pypmanager.loader_market_data.morningstar.MorningstarLoader
+    isin_code: SE0009268584
+    lookup_key: F00000YG5V
+    name: Lysa Aktier C
+  - loader_class: pypmanager.loader_market_data.morningstar.MorningstarLoader
+    isin_code: SE0017231947
+    lookup_key: F00001DFD6
+    name: Lysa Sweden Equity Broad B
+  - loader_class: pypmanager.loader_market_data.morningstar.MorningstarLoader
+    isin_code: SE0009268394
+    lookup_key: F00000YG5U
+    # This is the format of the data when downloaded
+    name: Lysa R�ntor C
     # Handelsbanken Sverige 100 Ind Cri A1 SEK
-  - loader_class: pypmanager.loaders.shb_fonder.SHBFonderLoader
+  - loader_class: pypmanager.loader_market_data.shb_fonder.SHBFonderLoader
     isin_code: SE0003788587
     lookup_key: shb0000025
     # Avanza World Tech by TIN
-  - loader_class: pypmanager.loaders.ft.FTLoader
+  - loader_class: pypmanager.loader_market_data.ft.FTLoader
     isin_code: SE0014453221
     lookup_key: 601933686
     # Handelsbanken Hållbar Energi
-  - loader_class: pypmanager.loaders.ft.FTLoader
+  - loader_class: pypmanager.loader_market_data.ft.FTLoader
     isin_code: SE0005965662
     lookup_key: 535679922
     # Avanza Sverige
-  - loader_class: pypmanager.loaders.ft.FTLoader
+  - loader_class: pypmanager.loader_market_data.ft.FTLoader
     isin_code: SE0014956850
     lookup_key: 679312906
     # Länsförsäkringar Global Index
-  - loader_class: pypmanager.loaders.ft.FTLoader
+  - loader_class: pypmanager.loader_market_data.ft.FTLoader
     isin_code: SE0005188836
     lookup_key: 535619835
     # Länsförsäkringar Tillväxtmarknad Index A
-  - loader_class: pypmanager.loaders.ft.FTLoader
+  - loader_class: pypmanager.loader_market_data.ft.FTLoader
     isin_code: SE0005796331
     lookup_key: 535627197
     # PLUS Fastigheter Sverige Index
-  - loader_class: pypmanager.loaders.ft.FTLoader
+  - loader_class: pypmanager.loader_market_data.ft.FTLoader
     isin_code: SE0016798805
     lookup_key: 681984998
     # Storebrand Emerging Markets A SEK
-  - loader_class: pypmanager.loaders.ft.FTLoader
+  - loader_class: pypmanager.loader_market_data.ft.FTLoader
     isin_code: SE0003455658
     lookup_key: 535686415
     # Storebrand Global Plus A SEK
-  - loader_class: pypmanager.loaders.ft.FTLoader
+  - loader_class: pypmanager.loader_market_data.ft.FTLoader
     isin_code: SE0008129985
     lookup_key: 535691067
     # Storebrand Sverige A SEK
-  - loader_class: pypmanager.loaders.ft.FTLoader
+  - loader_class: pypmanager.loader_market_data.ft.FTLoader
     isin_code: SE0000529992
     lookup_key: 535673247
