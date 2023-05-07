@@ -4,11 +4,12 @@ from numpy.testing import assert_allclose
 import pandas as pd
 import pytest
 
-from pypmanager.analytics.holding import _calculate_aggregates
+from pypmanager.analytics.utils import calculate_aggregates, to_valid_column_name
 from pypmanager.loader_transaction.const import TransactionTypeValues
 
 TEST_DATA = [
     {
+        "broker": "Acoount 1",
         "name": "AAPL",
         "transaction_type": TransactionTypeValues.BUY,
         "amount": -10 * 100,
@@ -17,6 +18,7 @@ TEST_DATA = [
         "commission": 5,
     },
     {
+        "broker": "Acoount 1",
         "name": "AAPL",
         "transaction_type": TransactionTypeValues.BUY,
         "amount": -20 * 50,
@@ -25,6 +27,7 @@ TEST_DATA = [
         "commission": 10,
     },
     {
+        "broker": "Acoount 1",
         "name": "AAPL",
         "transaction_type": TransactionTypeValues.DIVIDEND,
         "amount": 1 * 20,
@@ -33,6 +36,7 @@ TEST_DATA = [
         "commission": 0,
     },
     {
+        "broker": "Acoount 1",
         "name": "CASH",
         "transaction_type": TransactionTypeValues.INTEREST,
         "amount": 1 * 20,
@@ -41,6 +45,7 @@ TEST_DATA = [
         "commission": 0,
     },
     {
+        "broker": "Acoount 1",
         "name": "AAPL",
         "transaction_type": TransactionTypeValues.SELL,
         "amount": 30 * 100,
@@ -49,6 +54,7 @@ TEST_DATA = [
         "commission": 100,
     },
     {
+        "broker": "Acoount 1",
         "name": "AAPL",
         "transaction_type": TransactionTypeValues.FEE,
         "amount": -20,
@@ -56,15 +62,32 @@ TEST_DATA = [
         "price": np.nan,
         "commission": np.nan,
     },
+    {
+        "broker": "Acoount 2",
+        "name": "AAPL",
+        "transaction_type": TransactionTypeValues.BUY,
+        "amount": -20 * 50,
+        "no_traded": 20,
+        "price": 50,
+        "commission": 10,
+    },
 ]
 
 
 def test_calculate_aggregates() -> None:
     """Test _calculate_aggregates."""
     data = pd.DataFrame(TEST_DATA)
-    result = _calculate_aggregates(data)
+    result = calculate_aggregates(data)
 
-    assert result.name.to_list() == ["AAPL", "AAPL", "AAPL", "CASH", "AAPL", "AAPL"]
+    assert result.name.to_list() == [
+        "AAPL",
+        "AAPL",
+        "AAPL",
+        "CASH",
+        "AAPL",
+        "AAPL",
+        "AAPL",
+    ]
     assert result.transaction_type.to_list() == [
         "buy",
         "buy",
@@ -72,12 +95,13 @@ def test_calculate_aggregates() -> None:
         "interest",
         "sell",
         "fee",
+        "buy",
     ]
-    assert result.amount.to_list() == [-1000, -1000, 20, 20, 3000, -20]
+    assert result.amount.to_list() == [-1000, -1000, 20, 20, 3000, -20, -1000]
 
     assert_allclose(
         result.no_traded.to_list(),
-        [10, 20, 1, 1, -30, np.nan],
+        [10, 20, 1, 1, -30, np.nan, 20],
         rtol=1e-9,
         atol=0,
         equal_nan=True,
@@ -85,7 +109,7 @@ def test_calculate_aggregates() -> None:
 
     assert_allclose(
         result.price.to_list(),
-        [100, 50, 20, 20, 100, np.nan],
+        [100, 50, 20, 20, 100, np.nan, 50],
         rtol=1e-9,
         atol=0,
         equal_nan=True,
@@ -93,22 +117,47 @@ def test_calculate_aggregates() -> None:
 
     assert_allclose(
         result.commission.to_list(),
-        [5, 10, 0, 0, 100, np.nan],
+        [5, 10, 0, 0, 100, np.nan, 10],
         rtol=1e-9,
         atol=0,
         equal_nan=True,
     )
 
-    assert result.cumulative_buy_amount.to_list() == [1000, 2000, 2000, 2000, 0, 0]
-
     assert pd.isna(result.realized_pnl.to_list()[0])
     assert pd.isna(result.realized_pnl.to_list()[1])
     assert pytest.approx(result.realized_pnl.sum()) == 905
-
-    assert result.cumulative_invested_amount.to_list()[:2] == [1005, 2015]
 
     assert pytest.approx(result.average_price.to_list()[0]) == 100.5
     assert pytest.approx(result.average_price.to_list()[1]) == 67.166667
     assert result.average_price.to_list()[4] is None
 
-    assert result.cumulative_dividends.to_list() == [0, 0, 20, 20, 20, 20]
+    # Cumulative amounts
+    assert result.cumulative_buy_amount.to_list() == [
+        1000,
+        2000,
+        2000,
+        2000,
+        0,
+        0,
+        1000,
+    ]
+    assert result.cumulative_invested_amount.to_list()[:2] == [1005, 2015]
+    assert result.cumulative_dividends.to_list() == [0, 0, 20, 20, 20, 20, 20]
+
+
+@pytest.mark.parametrize(
+    "input_string, expected_output",
+    [
+        ("Column Name", "column_name"),
+        ("(some) Characters - Here", "some_characters__here"),
+        ("123.45 %", "_12345_"),
+        ("$special!@chars", "specialchars"),
+        (" Spaces at beginning and end ", "_spaces_at_beginning_and_end_"),
+    ],
+)
+def test_to_valid_column_name(input_string, expected_output):
+    """Test function to_valid_column_name."""
+    result = to_valid_column_name(input_string)
+
+    # assert that the result matches the expected output
+    assert result == expected_output
