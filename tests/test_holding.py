@@ -9,7 +9,7 @@ from pypmanager.loader_transaction.const import TransactionTypeValues
 
 TEST_DATA = [
     {
-        "broker": "Aktiekonto 1",
+        "broker": "Acoount 1",
         "name": "AAPL",
         "transaction_type": TransactionTypeValues.BUY,
         "amount": -10 * 100,
@@ -18,7 +18,7 @@ TEST_DATA = [
         "commission": 5,
     },
     {
-        "broker": "a",
+        "broker": "Acoount 1",
         "name": "AAPL",
         "transaction_type": TransactionTypeValues.BUY,
         "amount": -20 * 50,
@@ -27,7 +27,7 @@ TEST_DATA = [
         "commission": 10,
     },
     {
-        "broker": "a",
+        "broker": "Acoount 1",
         "name": "AAPL",
         "transaction_type": TransactionTypeValues.DIVIDEND,
         "amount": 1 * 20,
@@ -36,7 +36,7 @@ TEST_DATA = [
         "commission": 0,
     },
     {
-        "broker": "a",
+        "broker": "Acoount 1",
         "name": "CASH",
         "transaction_type": TransactionTypeValues.INTEREST,
         "amount": 1 * 20,
@@ -45,7 +45,7 @@ TEST_DATA = [
         "commission": 0,
     },
     {
-        "broker": "a",
+        "broker": "Acoount 1",
         "name": "AAPL",
         "transaction_type": TransactionTypeValues.SELL,
         "amount": 30 * 100,
@@ -54,7 +54,7 @@ TEST_DATA = [
         "commission": 100,
     },
     {
-        "broker": "a",
+        "broker": "Acoount 1",
         "name": "AAPL",
         "transaction_type": TransactionTypeValues.FEE,
         "amount": -20,
@@ -63,7 +63,7 @@ TEST_DATA = [
         "commission": np.nan,
     },
     {
-        "broker": "b",
+        "broker": "Acoount 2",
         "name": "AAPL",
         "transaction_type": TransactionTypeValues.BUY,
         "amount": -20 * 50,
