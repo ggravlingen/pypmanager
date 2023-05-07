@@ -38,7 +38,7 @@ class SHBFonderLoader(BaseMarketDataLoader):
     def to_source_data(self) -> list[SourceData]:
         """Convert to SourceData."""
         output_data: list[SourceData] = []
-        df = pd.read_html(
+        df_tables = pd.read_html(
             self.raw_response_io,
             thousands=" ",
             decimal=",",
@@ -46,7 +46,7 @@ class SHBFonderLoader(BaseMarketDataLoader):
         )
 
         # There is only one table
-        data_table = df[0]
+        data_table = df_tables[0]
 
         for _, row in data_table.iterrows():
             output_data.append(

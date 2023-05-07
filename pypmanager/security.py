@@ -27,12 +27,14 @@ class MutualFund:
 
     def _load_data(self) -> None:
         """Load market data."""
-        df = pd.read_csv(Settings.FILE_MARKET_DATA, sep=";", index_col="report_date")
+        df_market_data = pd.read_csv(
+            Settings.FILE_MARKET_DATA, sep=";", index_col="report_date"
+        )
 
         if self.isin_code:
-            df_filtered = df.query(f"isin_code == '{self.isin_code}'")
+            df_filtered = df_market_data.query(f"isin_code == '{self.isin_code}'")
         else:
-            df_filtered = df.query(f"name == '{self.name}'")
+            df_filtered = df_market_data.query(f"name == '{self.name}'")
 
         self.filtered_df = df_filtered.sort_values("report_date")
 
@@ -51,7 +53,7 @@ class MutualFund:
             if self.filtered_df is None or self.nav_date is None:
                 return None
 
-            val = self._last_row["price"].values[0]
+            val = self._last_row["price"].to_numpy()[0]
 
             if pd.isna(val):
                 return None

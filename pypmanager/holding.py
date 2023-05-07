@@ -25,12 +25,12 @@ EMPTY_COLUMNS = [
 
 def _calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
     """Calculate aggregate values for a holding."""
-    df = data.copy()
+    df_calculations = data.copy()
 
     for col in EMPTY_COLUMNS:
-        df[col] = 0.0
+        df_calculations[col] = 0.0
 
-    df["average_price"] = None
+    df_calculations["average_price"] = None
 
     cumulative_buy_amount: float = 0.0
     cumulative_buy_volume: float = 0.0
@@ -40,7 +40,7 @@ def _calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
     average_price: float | None = 0.0
     realized_pnl: float | None = 0.0
 
-    for index, row in df.iterrows():
+    for index, row in df_calculations.iterrows():
         amount = cast(float, row["amount"])
         no_traded = cast(float, abs(row["no_traded"]))
         commission = cast(float, abs(row["commission"]))
@@ -79,15 +79,17 @@ def _calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
             cumulative_buy_amount = 0.0
 
         # Save the correct state
-        df.at[index, "cumulative_buy_amount"] = cumulative_buy_amount
-        df.at[index, "cumulative_buy_volume"] = cumulative_buy_volume
-        df.at[index, "cumulative_interest"] = cumulative_interest
-        df.at[index, "cumulative_dividends"] = cumulative_dividends
-        df.at[index, "average_price"] = average_price
-        df.at[index, "realized_pnl"] = realized_pnl
-        df.at[index, "cumulative_invested_amount"] = cumulative_invested_amount
+        df_calculations.loc[index, "cumulative_buy_amount"] = cumulative_buy_amount
+        df_calculations.loc[index, "cumulative_buy_volume"] = cumulative_buy_volume
+        df_calculations.loc[index, "cumulative_interest"] = cumulative_interest
+        df_calculations.loc[index, "cumulative_dividends"] = cumulative_dividends
+        df_calculations.loc[index, "average_price"] = average_price
+        df_calculations.loc[index, "realized_pnl"] = realized_pnl
+        df_calculations.loc[
+            index, "cumulative_invested_amount"
+        ] = cumulative_invested_amount
 
-    return df
+    return df_calculations
 
 
 @dataclass
@@ -105,12 +107,12 @@ class Holding:
 
         Here, we filter the data on security name and, if applicable, report date.
         """
-        df = self.all_data.query(f"name == '{self.name}'")
+        df_all_data = self.all_data.query(f"name == '{self.name}'")
 
         if self.report_date is not None:
-            df = df.query(f"index <= '{self.report_date}'")
+            df_all_data = df_all_data.query(f"index <= '{self.report_date}'")
 
-        self.all_data = df
+        self.all_data = df_all_data
         self.calculate_values()
 
     @property

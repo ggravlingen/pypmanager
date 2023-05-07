@@ -25,36 +25,36 @@ class AvanzaLoader(TransactionLoader):
 
     def pre_process_df(self) -> None:
         """Broker specific manipulation of the data frame."""
-        df = self.df_raw
+        df_raw = self.df_raw
+
+        # We don't need this column as we calculate it in this library
+        df_raw = df_raw.drop(columns=["pnl"])
 
         # Replace buy
         for event in ("Köp",):
-            df["transaction_type"] = df["transaction_type"].replace(
+            df_raw["transaction_type"] = df_raw["transaction_type"].replace(
                 event, TransactionTypeValues.BUY.value
             )
 
         # Replace sell
         for event in ("Sälj",):
-            df["transaction_type"] = df["transaction_type"].replace(
+            df_raw["transaction_type"] = df_raw["transaction_type"].replace(
                 event, TransactionTypeValues.SELL.value
             )
 
         for event in ("Räntor",):
-            df["transaction_type"] = df["transaction_type"].replace(
+            df_raw["transaction_type"] = df_raw["transaction_type"].replace(
                 event, TransactionTypeValues.INTEREST.value
             )
 
         for event in ("Preliminärskatt",):
-            df["transaction_type"] = df["transaction_type"].replace(
+            df_raw["transaction_type"] = df_raw["transaction_type"].replace(
                 event, TransactionTypeValues.TAX.value
             )
 
         for event in ("Utdelning",):
-            df["transaction_type"] = df["transaction_type"].replace(
+            df_raw["transaction_type"] = df_raw["transaction_type"].replace(
                 event, TransactionTypeValues.DIVIDEND.value
             )
 
-        # We don't need this column as we calculate it in this library
-        df.drop(columns=["pnl"], inplace=True)
-
-        self.df_raw = df
+        self.df_raw = df_raw

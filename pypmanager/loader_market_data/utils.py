@@ -65,7 +65,7 @@ def _upsert_df(data: list[SourceData]) -> None:
         )
 
     # Merge the existing DataFrame and the upsert DataFrame
-    merged_df = pd.merge(
+    merged_df = existing_df.merge(
         existing_df,
         upsert_df,
         on=["isin_code", "report_date"],
@@ -79,7 +79,7 @@ def _upsert_df(data: list[SourceData]) -> None:
             original_column = column[:-7]  # Remove the '_update' suffix
             merged_df[original_column].update(merged_df.pop(column))
 
-    merged_df.sort_values(["isin_code", "report_date"], inplace=True)
+    merged_df = merged_df.sort_values(["isin_code", "report_date"])
 
     # Write the merged DataFrame back to the CSV file
     merged_df.to_csv(Settings.FILE_MARKET_DATA, index=False, sep=";")
