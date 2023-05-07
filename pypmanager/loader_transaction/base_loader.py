@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from abc import abstractmethod
+from dataclasses import dataclass
 from datetime import datetime
 import glob
 import os
@@ -25,6 +26,42 @@ FILTER_STATEMENT = (
     f",'{TransactionTypeValues.BUY}'"
     f",'{TransactionTypeValues.SELL}',)"
 )
+
+
+@dataclass
+class ReplaceConfig:
+    """Configuration to replace values."""
+
+    search: list[str]
+    target: str
+
+
+REPLACE_CONFIG = [
+    ReplaceConfig(
+        search=["Köp", "Switch buy", "Buy"],
+        target=TransactionTypeValues.BUY.value,
+    ),
+    ReplaceConfig(
+        search=["Sälj", "Switch sell", "Sell"],
+        target=TransactionTypeValues.SELL.value,
+    ),
+    ReplaceConfig(
+        search=["Räntor"],
+        target=TransactionTypeValues.INTEREST.value,
+    ),
+    ReplaceConfig(
+        search=["Preliminärskatt"],
+        target=TransactionTypeValues.TAX.value,
+    ),
+    ReplaceConfig(
+        search=["Utdelning"],
+        target=TransactionTypeValues.DIVIDEND.value,
+    ),
+    ReplaceConfig(
+        search=["Fee"],
+        target=TransactionTypeValues.FEE.value,
+    ),
+]
 
 
 def _replace_name(row: pd.DataFrame) -> str:
@@ -164,41 +201,11 @@ class TransactionLoader:
         """
         df_raw = self.df_raw
 
-        # Handle sells
-        for event in ("Köp", "Switch buy", "Buy"):
-            df_raw["transaction_type"] = df_raw["transaction_type"].replace(
-                event, TransactionTypeValues.BUY.value
-            )
-
-        # Handle buys
-        for event in ("Sälj", "Switch sell", "Sell"):
-            df_raw["transaction_type"] = df_raw["transaction_type"].replace(
-                event, TransactionTypeValues.SELL.value
-            )
-
-        # Handle interest
-        for event in ("Räntor",):
-            df_raw["transaction_type"] = df_raw["transaction_type"].replace(
-                event, TransactionTypeValues.INTEREST.value
-            )
-
-        # Handle tax
-        for event in ("Preliminärskatt",):
-            df_raw["transaction_type"] = df_raw["transaction_type"].replace(
-                event, TransactionTypeValues.TAX.value
-            )
-
-        # Handle dividends
-        for event in ("Utdelning",):
-            df_raw["transaction_type"] = df_raw["transaction_type"].replace(
-                event, TransactionTypeValues.DIVIDEND.value
-            )
-
-        # Handle fee
-        for event in ("Fee",):
-            df_raw["transaction_type"] = df_raw["transaction_type"].replace(
-                event, TransactionTypeValues.FEE.value
-            )
+        for config in REPLACE_CONFIG:
+            for event in config.search:
+                df_raw["transaction_type"] = df_raw["transaction_type"].replace(
+                    event, config.target
+                )
 
         self.df_raw = df_raw
 

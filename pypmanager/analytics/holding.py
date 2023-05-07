@@ -37,7 +37,9 @@ class Holding:
             df_all_data = df_all_data.query(f"index <= '{self.report_date}'")
 
         self.all_data = df_all_data
-        self.calculate_values()
+        self.calculated_data = calculate_aggregates(
+            data=self.all_data,
+        )
 
     @property
     def security_info(self) -> MutualFund:
@@ -51,11 +53,15 @@ class Holding:
 
         return self._security_info
 
-    def calculate_values(self) -> None:
-        """Calculate all values in the dataframe."""
-        self.calculated_data = calculate_aggregates(
-            data=self.all_data,
-        )
+    @property
+    def current_price(self) -> float | None:
+        """Return current price."""
+        return self.security_info.nav
+
+    @property
+    def date_market_value(self) -> date | None:
+        """Return date of valuation."""
+        return self.security_info.nav_date
 
     @property
     def isin_code(self) -> str | None:
@@ -72,16 +78,6 @@ class Holding:
             return f"{val}"
         except (IndexError, AttributeError, TypeError):
             return None
-
-    @property
-    def current_price(self) -> float | None:
-        """Return current price."""
-        return self.security_info.nav
-
-    @property
-    def date_market_value(self) -> date | None:
-        """Return date of valuation."""
-        return self.security_info.nav_date
 
     @property
     def current_holdings(self) -> float | None:
