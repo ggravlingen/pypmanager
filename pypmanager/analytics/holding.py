@@ -7,8 +7,9 @@ from typing import cast
 
 import pandas as pd
 
-from pypmanager.analytics.security import MutualFund
 from pypmanager.loader_transaction.const import TransactionTypeValues
+
+from .security import MutualFund
 
 LOGGER = logging.Logger(__name__)
 
