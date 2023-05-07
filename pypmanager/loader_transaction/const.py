@@ -1,9 +1,9 @@
 """Constants."""
-
+from __future__ import annotations
 
 from enum import StrEnum
 
-DTYPES_MAP = {
+DTYPES_MAP: dict[str, str | float] = {
     "account": str,
     "transaction_type": str,
     "name": str,
@@ -13,7 +13,6 @@ DTYPES_MAP = {
     "commission": float,
     "currency": str,
     "isin_code": str,
-    "pnl": float,
 }
 
 NUMBER_COLS = [
