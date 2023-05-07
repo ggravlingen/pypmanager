@@ -7,7 +7,6 @@ from typing import cast
 
 import pandas as pd
 
-from pypmanager.const import NUMBER_FORMATTER
 from pypmanager.loader_transaction.const import TransactionTypeValues
 from pypmanager.security import MutualFund
 
@@ -305,27 +304,3 @@ class Holding:
             return None
 
         return calc_val
-
-    @property
-    def cli_table_row(self) -> list[str | None]:
-        """Represent the holding for CLI reports."""
-        invested_amount = (
-            f"{self.invested_amount:{NUMBER_FORMATTER}}"
-            if self.invested_amount
-            else None
-        )
-
-        market_value = (
-            f"{self.market_value:{NUMBER_FORMATTER}}" if self.market_value else None
-        )
-
-        return [
-            self.name,
-            invested_amount,
-            market_value,
-            f"{self.total_pnl:{NUMBER_FORMATTER}}",
-            f"{self.realized_pnl:{NUMBER_FORMATTER}}",
-            f"{self.unrealized_pnl:{NUMBER_FORMATTER}}",
-            f"{self.date_market_value}",
-            f"{self.total_transactions}",
-        ]
