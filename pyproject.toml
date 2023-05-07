@@ -129,7 +129,7 @@ select = [
     "F",  # pyflakes/autoflake
     "I",  # isort
     "T20", # flake8-print
-    #"PD", # pandas-vet
+    "PD", # pandas-vet
     "UP",  # pyupgrade
     "W",  # pycodestyle
 ]

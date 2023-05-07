@@ -22,22 +22,22 @@ class LysaLoader(TransactionLoader):
 
     def pre_process_df(self) -> None:
         """Load CSV."""
-        df = self.df_raw
+        df_raw = self.df_raw
 
-        df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
+        df_raw = df_raw.applymap(lambda x: x.strip() if isinstance(x, str) else x)
 
         # Replace buy
         for event in ("Switch buy", "Buy"):
-            df["transaction_type"] = df["transaction_type"].replace(
+            df_raw["transaction_type"] = df_raw["transaction_type"].replace(
                 event, TransactionTypeValues.BUY.value
             )
 
         # Replace sell
         for event in ("Switch sell", "Sell"):
-            df["transaction_type"] = df["transaction_type"].replace(
+            df_raw["transaction_type"] = df_raw["transaction_type"].replace(
                 event, TransactionTypeValues.SELL.value
             )
 
-        df["commission"] = 0.0
+        df_raw["commission"] = 0.0
 
-        self.df_raw = df
+        self.df_raw = df_raw

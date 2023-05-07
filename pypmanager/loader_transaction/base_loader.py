@@ -100,18 +100,18 @@ class TransactionLoader:
 
     def rename_set_index_filter(self) -> None:
         """Set index."""
-        df = self.df_raw.copy()
+        df_raw = self.df_raw.copy()
 
         if self.col_map is not None:
-            df.rename(columns=self.col_map, inplace=True)
+            df_raw = df_raw.rename(columns=self.col_map)
 
-        df.set_index("transaction_date", inplace=True)
+        df_raw = df_raw.set_index("transaction_date")
 
         if self.report_date is not None:
-            df = df.query(f"index <= '{self.report_date}'")
+            df_raw = df_raw.query(f"index <= '{self.report_date}'")
 
         # Apply randomness to time in order to have unique indices
-        df.index = pd.to_datetime(df.index).map(
+        df_raw.index = pd.to_datetime(df_raw.index).map(
             lambda x: x.replace(
                 hour=random.randint(0, 23),
                 minute=random.randint(0, 59),
@@ -122,9 +122,9 @@ class TransactionLoader:
         )
 
         # Sort by transaction date
-        df = df.sort_index()
+        df_raw = df_raw.sort_index()
 
-        self.df_raw = df
+        self.df_raw = df_raw
 
     @abstractmethod
     def pre_process_df(self) -> None:
@@ -135,9 +135,9 @@ class TransactionLoader:
         if self.df_raw is None:
             raise DataError("No data")
 
-        df = self.df_raw.copy()
+        df_raw = self.df_raw.copy()
 
-        df = df.query(
+        df_raw = df_raw.query(
             f"transaction_type == '{TransactionTypeValues.DIVIDEND}' or "
             f"transaction_type == '{TransactionTypeValues.BUY}' or "
             f"transaction_type == '{TransactionTypeValues.SELL}' or "
@@ -145,53 +145,55 @@ class TransactionLoader:
             f"transaction_type == '{TransactionTypeValues.TAX}'",
         )
 
-        self.df_raw = df
+        self.df_raw = df_raw
 
     def cleanup_df(self) -> None:
         """Cleanup dataframe."""
         if self.df_raw is None:
             raise DataError("No data")
 
-        df = self.df_raw.copy()
+        df_raw = self.df_raw.copy()
 
         for col in NUMBER_COLS:
-            if col in df.columns:
-                df[col] = df.apply(lambda x, _col=col: _cleanup_number(x[_col]), axis=1)
+            if col in df_raw.columns:
+                df_raw[col] = df_raw.apply(
+                    lambda x, _col=col: _cleanup_number(x[_col]), axis=1
+                )
 
         for col in ("commission", "pnl", "isin_code"):  # Replace dashes with 0
-            if col in df.columns:
+            if col in df_raw.columns:
                 try:
-                    df[col] = df[col].str.replace("-", "").replace("", 0)
+                    df_raw[col] = df_raw[col].str.replace("-", "").replace("", 0)
                 except AttributeError:
                     pass
 
-        self.df_raw = df
+        self.df_raw = df_raw
 
     def convert_data_types(self) -> None:
         """Convert data types."""
         if self.df_raw is None:
             raise DataError("No data")
 
-        df = self.df_raw.copy()
+        df_raw = self.df_raw.copy()
 
         for key, val in DTYPES_MAP.items():
-            if key in df.columns:
+            if key in df_raw.columns:
                 try:
-                    df[key] = df[key].astype(val)
+                    df_raw[key] = df_raw[key].astype(val)
                 except ValueError as err:
                     raise ValueError(f"Unable to parse {key}") from err
 
-        self.df_raw = df
+        self.df_raw = df_raw
 
     def finalize_data_load(self) -> None:
         """Post-process."""
         if self.df_raw is None:
             raise DataError("No data")
 
-        df = self.df_raw.copy()
+        df_raw = self.df_raw.copy()
 
-        df["no_traded"] = df.apply(_normalize_no_traded, axis=1)
-        df["amount"] = df.apply(_normalize_amount, axis=1)
-        df["name"] = df.apply(_replace_name, axis=1)
+        df_raw["no_traded"] = df_raw.apply(_normalize_no_traded, axis=1)
+        df_raw["amount"] = df_raw.apply(_normalize_amount, axis=1)
+        df_raw["name"] = df_raw.apply(_replace_name, axis=1)
 
-        self.df_final = df
+        self.df_final = df_raw
