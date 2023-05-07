@@ -190,9 +190,12 @@ class Holding:
         return cast(float, current)
 
     @property
-    def brokers(self) -> list[str]:
+    def brokers(self) -> list[str] | None:
         """Return broker names for this security."""
-        return self.calculated_data.broker.unique()
+        if self.calculated_data is None or self.calculated_data.broker.empty:
+            return None
+
+        return cast(list[str], self.calculated_data.broker.unique())
 
     @property
     def total_transactions(self) -> int:
