@@ -11,10 +11,11 @@ from typing import cast
 import numpy as np
 import pandas as pd
 
-from pypmanager.const import CASH_AND_EQUIVALENTS
 from pypmanager.settings import Settings
 
 from .const import DTYPES_MAP, NUMBER_COLS, TransactionTypeValues
+
+CASH_AND_EQUIVALENTS = "Cash and equivalents"
 
 FILTER_STATEMENT = (
     f"('{TransactionTypeValues.DIVIDEND}'"
