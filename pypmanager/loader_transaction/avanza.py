@@ -1,7 +1,6 @@
 """Transaction loader for Avanza."""
 
 from .base_loader import TransactionLoader
-from .const import TransactionTypeValues
 
 
 class AvanzaLoader(TransactionLoader):
@@ -29,32 +28,5 @@ class AvanzaLoader(TransactionLoader):
 
         # We don't need this column as we calculate it in this library
         df_raw = df_raw.drop(columns=["pnl"])
-
-        # Replace buy
-        for event in ("Köp",):
-            df_raw["transaction_type"] = df_raw["transaction_type"].replace(
-                event, TransactionTypeValues.BUY.value
-            )
-
-        # Replace sell
-        for event in ("Sälj",):
-            df_raw["transaction_type"] = df_raw["transaction_type"].replace(
-                event, TransactionTypeValues.SELL.value
-            )
-
-        for event in ("Räntor",):
-            df_raw["transaction_type"] = df_raw["transaction_type"].replace(
-                event, TransactionTypeValues.INTEREST.value
-            )
-
-        for event in ("Preliminärskatt",):
-            df_raw["transaction_type"] = df_raw["transaction_type"].replace(
-                event, TransactionTypeValues.TAX.value
-            )
-
-        for event in ("Utdelning",):
-            df_raw["transaction_type"] = df_raw["transaction_type"].replace(
-                event, TransactionTypeValues.DIVIDEND.value
-            )
 
         self.df_raw = df_raw

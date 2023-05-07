@@ -12,10 +12,17 @@ import numpy as np
 import pandas as pd
 
 from pypmanager.const import CASH_AND_EQUIVALENTS
-from pypmanager.error import DataError
 from pypmanager.settings import Settings
 
 from .const import DTYPES_MAP, NUMBER_COLS, TransactionTypeValues
+
+FILTER_STATEMENT = (
+    f"('{TransactionTypeValues.DIVIDEND}'"
+    f",'{TransactionTypeValues.INTEREST}'"
+    f",'{TransactionTypeValues.TAX}'"
+    f",'{TransactionTypeValues.BUY}'"
+    f",'{TransactionTypeValues.SELL}',)"
+)
 
 
 def _replace_name(row: pd.DataFrame) -> str:
@@ -86,6 +93,7 @@ class TransactionLoader:
         self.load_data_files()
         self.rename_set_index_filter()
         self.pre_process_df()
+        self.normalize_transaction_type()
         self.filter_transactions()
         self.cleanup_df()
         self.convert_data_types()
@@ -96,7 +104,14 @@ class TransactionLoader:
         files = glob.glob(os.path.join(Settings.DIR_DATA, self.file_pattern))
 
         dfs = [pd.read_csv(file, sep=self.csv_separator) for file in files]
-        self.df_raw = pd.concat(dfs, ignore_index=True)
+
+        # Merge all the data frames into one
+        df_raw = pd.concat(dfs, ignore_index=True)
+
+        # Cleanup whitespace in columns
+        df_raw = df_raw.applymap(lambda x: x.strip() if isinstance(x, str) else x)
+
+        self.df_raw = df_raw
 
     def rename_set_index_filter(self) -> None:
         """Set index."""
@@ -130,28 +145,57 @@ class TransactionLoader:
     def pre_process_df(self) -> None:
         """Broker specific manipulation of the data frame."""
 
+    def normalize_transaction_type(self) -> None:
+        """
+        Normalize transaction types.
+
+        In the source data, transactions will be named differently. To enable
+        calculations, we replace the names in the source data with our internal names.
+        """
+        df_raw = self.df_raw
+
+        # Handle sells
+        for event in ("Köp", "Switch buy", "Buy"):
+            df_raw["transaction_type"] = df_raw["transaction_type"].replace(
+                event, TransactionTypeValues.BUY.value
+            )
+
+        # Handle buys
+        for event in ("Sälj", "Switch sell", "Sell"):
+            df_raw["transaction_type"] = df_raw["transaction_type"].replace(
+                event, TransactionTypeValues.SELL.value
+            )
+
+        # Handle interest
+        for event in ("Räntor",):
+            df_raw["transaction_type"] = df_raw["transaction_type"].replace(
+                event, TransactionTypeValues.INTEREST.value
+            )
+
+        # Handle tax
+        for event in ("Preliminärskatt",):
+            df_raw["transaction_type"] = df_raw["transaction_type"].replace(
+                event, TransactionTypeValues.TAX.value
+            )
+
+        # Handle dividends
+        for event in ("Utdelning",):
+            df_raw["transaction_type"] = df_raw["transaction_type"].replace(
+                event, TransactionTypeValues.DIVIDEND.value
+            )
+
+        self.df_raw = df_raw
+
     def filter_transactions(self) -> None:
         """Filter transactions."""
-        if self.df_raw is None:
-            raise DataError("No data")
-
         df_raw = self.df_raw.copy()
 
-        df_raw = df_raw.query(
-            f"transaction_type == '{TransactionTypeValues.DIVIDEND}' or "
-            f"transaction_type == '{TransactionTypeValues.BUY}' or "
-            f"transaction_type == '{TransactionTypeValues.SELL}' or "
-            f"transaction_type == '{TransactionTypeValues.INTEREST}' or "
-            f"transaction_type == '{TransactionTypeValues.TAX}'",
-        )
+        df_raw = df_raw.query(f"transaction_type in {FILTER_STATEMENT}")
 
         self.df_raw = df_raw
 
     def cleanup_df(self) -> None:
         """Cleanup dataframe."""
-        if self.df_raw is None:
-            raise DataError("No data")
-
         df_raw = self.df_raw.copy()
 
         for col in NUMBER_COLS:
@@ -160,7 +204,7 @@ class TransactionLoader:
                     lambda x, _col=col: _cleanup_number(x[_col]), axis=1
                 )
 
-        for col in ("commission", "pnl", "isin_code"):  # Replace dashes with 0
+        for col in ("commission", "isin_code"):  # Replace dashes with 0
             if col in df_raw.columns:
                 try:
                     df_raw[col] = df_raw[col].str.replace("-", "").replace("", 0)
@@ -171,9 +215,6 @@ class TransactionLoader:
 
     def convert_data_types(self) -> None:
         """Convert data types."""
-        if self.df_raw is None:
-            raise DataError("No data")
-
         df_raw = self.df_raw.copy()
 
         for key, val in DTYPES_MAP.items():
@@ -187,9 +228,6 @@ class TransactionLoader:
 
     def finalize_data_load(self) -> None:
         """Post-process."""
-        if self.df_raw is None:
-            raise DataError("No data")
-
         df_raw = self.df_raw.copy()
 
         df_raw["no_traded"] = df_raw.apply(_normalize_no_traded, axis=1)
