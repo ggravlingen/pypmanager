@@ -40,4 +40,4 @@ def print_pretty_table(holdings: list[Holding]) -> None:
 
     table.add_row(portfolio.cli_table_row_total)
 
-    print(table)
+    print(table)  # noqa: T201

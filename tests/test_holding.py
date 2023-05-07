@@ -31,6 +31,14 @@ TEST_DATA = [
         "commission": 0,
     },
     {
+        "name": "CASH",
+        "transaction_type": TransactionTypeValues.INTEREST,
+        "amount": 1 * 20,
+        "no_traded": 1,
+        "price": 20,
+        "commission": 0,
+    },
+    {
         "name": "AAPL",
         "transaction_type": TransactionTypeValues.SELL,
         "amount": 30 * 100,
@@ -45,23 +53,29 @@ def test_calculate_aggregates() -> None:
     """Test _calculate_aggregates."""
     data = pd.DataFrame(TEST_DATA)
     result = _calculate_aggregates(data)
-    print(result)
 
-    assert result.name.to_list() == ["AAPL"] * 4
-    assert result.transaction_type.to_list() == ["buy", "buy", "dividend", "sell"]
-    assert result.amount.to_list() == [-1000, -1000, 20, 3000]
-    assert result.no_traded.to_list() == [10, 20, 1, -30]
-    assert result.price.to_list() == [100, 50, 20, 100]
-    assert result.commission.to_list() == [5, 10, 0, 100]
+    assert result.name.to_list() == ["AAPL", "AAPL", "AAPL", "CASH", "AAPL"]
+    assert result.transaction_type.to_list() == [
+        "buy",
+        "buy",
+        "dividend",
+        "interest",
+        "sell",
+    ]
+    assert result.amount.to_list() == [-1000, -1000, 20, 20, 3000]
+    assert result.no_traded.to_list() == [10, 20, 1, 1, -30]
+    assert result.price.to_list() == [100, 50, 20, 20, 100]
+    assert result.commission.to_list() == [5, 10, 0, 0, 100]
+    assert result.cumulative_dividends.to_list() == [0, 0, 20, 20, 20]
 
-    assert result.cumulative_buy_amount.to_list() == [1000, 2000, 2000, 0]
+    assert result.cumulative_buy_amount.to_list() == [1000, 2000, 2000, 2000, 0]
 
     assert pd.isna(result.realized_pnl.to_list()[0])
     assert pd.isna(result.realized_pnl.to_list()[1])
-    assert pytest.approx(result.realized_pnl.sum()) == 905
+    assert pytest.approx(result.realized_pnl.sum()) == 925
 
     assert result.cumulative_invested_amount.to_list()[:2] == [1005, 2015]
 
     assert pytest.approx(result.average_price.to_list()[0]) == 100.5
     assert pytest.approx(result.average_price.to_list()[1]) == 67.166667
-    assert result.average_price.to_list()[3] is None
+    assert result.average_price.to_list()[4] is None
