@@ -49,7 +49,7 @@ def static_file2base64(file: str) -> markupsafe.Markup:
 
 def format_decimals(value: float | None, no_decimals: int = 2) -> str | None:
     """Format a value using n decimals."""
-    if value is None:
+    if value is None or value == 0:
         return ATTR_NONE
 
     locale.setlocale(locale.LC_NUMERIC, "en_US.UTF-8")

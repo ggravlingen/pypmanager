@@ -13,11 +13,16 @@ from .misc import MiscLoader
 
 def load_data(report_date: datetime | None = None) -> tuple[pd.DataFrame, list[str]]:
     """Load all data."""
-    df_a = AvanzaLoader(report_date).df_final
-    df_b = LysaLoader(report_date).df_final
-    df_c = MiscLoader(report_date).df_final
-
-    all_data = cast(pd.DataFrame, pd.concat([df_a, df_b, df_c]))
+    all_data = cast(
+        pd.DataFrame,
+        pd.concat(
+            [
+                AvanzaLoader(report_date).df_final,
+                LysaLoader(report_date).df_final,
+                MiscLoader(report_date).df_final,
+            ],
+        ),
+    )
 
     all_securities = cast(list[str], all_data.name.unique())
 

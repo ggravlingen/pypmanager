@@ -6,6 +6,8 @@ from .base_loader import TransactionLoader
 class AvanzaLoader(TransactionLoader):
     """Data loader for Avanza."""
 
+    broker_name = "Avanza"
+
     col_map = {
         "Datum": "transaction_date",
         "Konto": "account",

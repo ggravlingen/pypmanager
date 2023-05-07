@@ -32,3 +32,4 @@ class TransactionTypeValues(StrEnum):
     INTEREST = "interest"
     TAX = "tax"
     DIVIDEND = "dividend"
+    FEE = "fee"

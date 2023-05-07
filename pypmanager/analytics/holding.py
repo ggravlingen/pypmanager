@@ -17,6 +17,7 @@ EMPTY_COLUMNS = [
     "cumulative_buy_amount",
     "cumulative_buy_volume",
     "cumulative_dividends",
+    "cumulative_fees",
     "cumulative_interest",
     "realized_pnl",
     "cumulative_invested_amount",
@@ -35,6 +36,7 @@ def _calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
     cumulative_buy_amount: float = 0.0
     cumulative_buy_volume: float = 0.0
     cumulative_dividends: float = 0.0
+    cumulative_fees: float = 0.0
     cumulative_interest: float = 0.0
     cumulative_invested_amount: float = 0.0
     average_price: float | None = 0.0
@@ -56,6 +58,10 @@ def _calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
 
         if transaction_type == TransactionTypeValues.TAX.value:
             realized_pnl = +amount
+
+        if transaction_type == TransactionTypeValues.FEE.value:
+            realized_pnl = amount
+            cumulative_fees += amount
 
         if transaction_type == TransactionTypeValues.BUY.value:
             cumulative_buy_volume += no_traded
@@ -82,6 +88,7 @@ def _calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
         df_calculations.loc[index, "cumulative_buy_amount"] = cumulative_buy_amount
         df_calculations.loc[index, "cumulative_buy_volume"] = cumulative_buy_volume
         df_calculations.loc[index, "cumulative_interest"] = cumulative_interest
+        df_calculations.loc[index, "cumulative_fees"] = cumulative_fees
         df_calculations.loc[index, "cumulative_dividends"] = cumulative_dividends
         df_calculations.loc[index, "average_price"] = average_price
         df_calculations.loc[index, "realized_pnl"] = realized_pnl
@@ -183,6 +190,14 @@ class Holding:
         return cast(float, current)
 
     @property
+    def brokers(self) -> list[str] | None:
+        """Return broker names for this security."""
+        if self.calculated_data is None or self.calculated_data.broker.empty:
+            return None
+
+        return cast(list[str], self.calculated_data.broker.unique())
+
+    @property
     def total_transactions(self) -> int:
         """Return the total number of transactions made."""
         if self.calculated_data is None:
@@ -232,6 +247,17 @@ class Holding:
             return None
 
         return cast(float, dividends)
+
+    @property
+    def fees(self) -> float | None:
+        """Return fees paid."""
+        if self.calculated_data is None or self.calculated_data.cumulative_fees.empty:
+            return None
+
+        if (fees := self.calculated_data.cumulative_fees.iloc[-1]) is None or fees == 0:
+            return None
+
+        return cast(float, fees)
 
     @property
     def interest(self) -> float | None:

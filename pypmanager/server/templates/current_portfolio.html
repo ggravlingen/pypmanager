@@ -111,6 +111,11 @@
                 border-left: 1px solid black;
             }
 
+
+            .detailRow {
+                font-size: 8px
+            }
+
         </style>
     </head>
     <body>
@@ -136,25 +141,28 @@
                 <th align="right">(b) unrealized</th>
                 <th align="right">of which dividends</th>
                 <th align="right">of which interest</th>
+                <th align="right">of which fees</th>
               </tr>
             </thead>
             <tbody>
               {% for row in securities %}
-              <tr>
-                <td data-name="{{ row.name }}"></td>
-                <td data-date-value="{{ row.date_market_value|format_none }}"></td>
-                <td data-monetary-value="{{ row.market_value|format_decimals(0) }}"></td>
-                <td data-monetary-value="{{ row.current_holdings|format_decimals(0) }}"></td>
-                <td data-monetary-value="{{ row.current_price|format_decimals(1) }}"></td>
-                <td data-monetary-value="{{ row.average_price|format_decimals(1) }}"></td>
-                <td>&nbsp;</td>
-                <td class="leftBorder" data-monetary-value="{{ row.total_pnl|format_decimals(1) }}"></td>
-                <td data-monetary-value="{{ row.realized_pnl|format_decimals(1) }}"></td>
-                <td data-monetary-value="{{ row.unrealized_pnl|format_decimals(1) }}"></td>
-                <td data-monetary-value="{{ row.dividends|format_decimals(1) }}"></td>
-                <td data-monetary-value="{{ row.interest|format_decimals(1) }}"></td>
-              </tr>
+                <tr>
+                    <td data-name="{{ row.name }}"></td>
+                    <td data-date-value="{{ row.date_market_value|format_none }}"></td>
+                    <td data-monetary-value="{{ row.market_value|format_decimals(0) }}"></td>
+                    <td data-monetary-value="{{ row.current_holdings|format_decimals(0) }}"></td>
+                    <td data-monetary-value="{{ row.current_price|format_decimals(1) }}"></td>
+                    <td data-monetary-value="{{ row.average_price|format_decimals(1) }}"></td>
+                    <td>&nbsp;</td>
+                    <td class="leftBorder" data-monetary-value="{{ row.total_pnl|format_decimals(1) }}"></td>
+                    <td data-monetary-value="{{ row.realized_pnl|format_decimals(1) }}"></td>
+                    <td data-monetary-value="{{ row.unrealized_pnl|format_decimals(1) }}"></td>
+                    <td data-monetary-value="{{ row.dividends|format_decimals(1) }}"></td>
+                    <td data-monetary-value="{{ row.interest|format_decimals(1) }}"></td>
+                    <td data-monetary-value="{{ row.fees|format_decimals(1) }}"></td>
+                </tr>
               {% endfor %}
+
               <tr class="total">
                 <td>Total</td>
                 <td>&nbsp;</td>
@@ -168,12 +176,13 @@
                 <td data-monetary-value="{{ portfolio.unrealized_pnl|format_decimals(1) }}"></td>
                 <td data-monetary-value="{{ portfolio.dividends|format_decimals(1) }}"></td>
                 <td data-monetary-value="{{ portfolio.interest|format_decimals(1) }}"></td>
+                <td>&nbsp;</td>
               </tr>
             </tbody>
           </table>
           <br/>
           <div>
-              Comments to profit and loss: while specified separately, dividends and interest are included in the realized column.
+              Comments to profit and loss: while specified separately, fees, dividends and interest are included in the realized column.
         </div>
     </body>
 </html>
