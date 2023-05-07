@@ -9,7 +9,7 @@ from .base_loader import TransactionLoader
 
 def _replace_fee_name(row: pd.DataFrame) -> str:
     """Replace interest flows with cash and equivalemts."""
-    if row["transaction_type"] == "Plattformsavgift":
+    if row["transaction_type"] == "Plattformsavgift" and row["broker"] == "SAVR":
         return "SAVR management fee"
 
     return cast(str, row["name"])
