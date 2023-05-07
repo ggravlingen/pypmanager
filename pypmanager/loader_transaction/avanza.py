@@ -54,4 +54,7 @@ class AvanzaLoader(TransactionLoader):
                 event, TransactionTypeValues.DIVIDEND.value
             )
 
+        # We don't need this column as we calculate it in this library
+        df.drop(columns=["pnl"], inplace=True)
+
         self.df_raw = df
