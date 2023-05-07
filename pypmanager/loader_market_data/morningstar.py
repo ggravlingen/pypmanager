@@ -50,6 +50,8 @@ class MorningstarLoader(BaseMarketDataLoader):
 
         output_list: list[SourceData] = []
         for row in data_list:
+            assert self.name is not None
+
             output_list.append(
                 SourceData(
                     report_date=datetime.strptime(row["EndDate"], "%Y-%m-%d"),
