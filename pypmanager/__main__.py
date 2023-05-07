@@ -1,5 +1,6 @@
 """Main."""
 import argparse
+import asyncio
 
 from pypmanager.loader_market_data import market_data_loader
 
@@ -16,4 +17,4 @@ if __name__ == "__main__":
     all_args = parser.parse_args()
 
     if all_args.load:
-        market_data_loader()
+        asyncio.run(market_data_loader())
