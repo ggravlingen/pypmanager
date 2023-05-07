@@ -101,6 +101,9 @@ class Holding:
     calculated_data: pd.DataFrame | None = None
     report_date: datetime | None = None
 
+    # Caching
+    _security_info: MutualFund | None = None
+
     def __post_init__(self) -> None:
         """
         Run after class has been instantiated.
@@ -118,11 +121,14 @@ class Holding:
     @property
     def security_info(self) -> MutualFund:
         """Return information on the security."""
-        return MutualFund(
-            isin_code=self.isin_code,
-            name=self.name,
-            report_date=self.report_date,
-        )
+        if self._security_info is None:  # Hit these calculations only once
+            self._security_info = MutualFund(
+                isin_code=self.isin_code,
+                name=self.name,
+                report_date=self.report_date,
+            )
+
+        return self._security_info
 
     def calculate_values(self) -> None:
         """Calculate all values in the dataframe."""

@@ -1,6 +1,8 @@
 """Server."""
 from __future__ import annotations
 
+import time
+
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 
@@ -8,6 +10,8 @@ from pypmanager.holding import Holding
 from pypmanager.loader_transaction import load_data
 from pypmanager.portfolio import Portfolio
 from pypmanager.server.templates import load_template
+
+from .const import LOGGER
 
 app = FastAPI()
 
@@ -19,9 +23,17 @@ async def index(view: str | None = None) -> str:
 
     holdings: list[Holding] = []
     for security_name in all_securities:
+        start_time = time.time()
+
         holding = Holding(
             name=security_name,
             all_data=all_data,
+        )
+
+        end_time = time.time()
+
+        LOGGER.info(
+            f"Calculated {security_name} in {round((end_time - start_time), 4)}s"
         )
 
         if view is None and holding.current_holdings is None:
