@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from enum import StrEnum
 
-DTYPES_MAP: dict[str, str | float] = {
+DTYPES_MAP: dict[str, type[str] | type[float]] = {
     "account": str,
     "transaction_type": str,
     "name": str,
