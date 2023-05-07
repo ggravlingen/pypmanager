@@ -58,7 +58,7 @@ REPLACE_CONFIG = [
         target=TransactionTypeValues.DIVIDEND.value,
     ),
     ReplaceConfig(
-        search=["Fee"],
+        search=["Fee", "Plattformsavgift"],
         target=TransactionTypeValues.FEE.value,
     ),
 ]
