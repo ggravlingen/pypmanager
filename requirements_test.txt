@@ -6,4 +6,4 @@ pytest==7.3.1
 pytest-cov==4.0.0
 pytest-timeout==2.1.0
 types_PyYAML==6.0.12.9
-types_requests==2.29.0.0
+types_requests==2.30.0.0
