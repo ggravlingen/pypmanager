@@ -1,9 +1,11 @@
 """Test Holding."""
+from datetime import datetime
+
 import numpy as np
 from numpy.testing import assert_allclose
 import pandas as pd
 import pytest
-from datetime import datetime
+
 from pypmanager.analytics.calculate_aggregates import (
     calculate_aggregates,
     to_valid_column_name,
