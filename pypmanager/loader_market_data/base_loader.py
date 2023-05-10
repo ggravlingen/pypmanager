@@ -14,7 +14,10 @@ class BaseMarketDataLoader:
     raw_response_io: BytesIO
 
     def __init__(
-        self, isin_code: str, lookup_key: str, name: str | None = None
+        self,
+        isin_code: str,
+        lookup_key: str,
+        name: str | None = None,
     ) -> None:
         """Init class."""
         self.isin_code = isin_code

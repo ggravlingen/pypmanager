@@ -1,6 +1,7 @@
 """Util functions."""
 from __future__ import annotations
 
+from datetime import datetime
 import os
 from typing import Any
 
@@ -51,6 +52,9 @@ def _upsert_df(data: list[SourceData]) -> None:
     """Upsert dataframe."""
     upsert_df = pd.DataFrame([vars(s) for s in data])
 
+    # Add a timestamp for when we added the date
+    upsert_df["date_added_utc"] = datetime.utcnow()
+
     column_dtypes = {"report_date": datetime64}
     # Check if the CSV file exists
     try:
@@ -61,7 +65,8 @@ def _upsert_df(data: list[SourceData]) -> None:
         )
     except FileNotFoundError:
         existing_df = pd.DataFrame(
-            columns=["isin_code", "price", "report_date", "name"], dtype=column_dtypes
+            columns=["isin_code", "price", "report_date", "name", "date_added_utc"],
+            dtype=column_dtypes,
         )
 
     # Merge the existing DataFrame and the upsert DataFrame
