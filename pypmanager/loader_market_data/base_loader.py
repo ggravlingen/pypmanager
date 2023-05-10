@@ -18,7 +18,6 @@ class BaseMarketDataLoader:
         isin_code: str,
         lookup_key: str,
         name: str | None = None,
-        start_date: str | None = None,
     ) -> None:
         """Init class."""
         self.isin_code = isin_code
