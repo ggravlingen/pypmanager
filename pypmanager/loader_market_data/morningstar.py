@@ -1,20 +1,22 @@
 """Morningstar loader."""
 
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 
 import requests
 
 from .base_loader import BaseMarketDataLoader
-from .const import LOGGER
+from .const import LOAD_HISTORY_DAYS, LOGGER
 from .models import SourceData
 
 
 class MorningstarLoader(BaseMarketDataLoader):
     """Load data from Morningstar."""
 
-    start_date = "2023-01-01"
-    end_date = "2023-12-31"
+    start_date = (datetime.utcnow() - timedelta(days=LOAD_HISTORY_DAYS)).strftime(
+        "%Y-%m-%d"
+    )
+    end_date = datetime.utcnow().strftime("%Y-%m-%d")
     currency = "SEK"
 
     url = (

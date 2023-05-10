@@ -7,14 +7,14 @@ from typing import Any
 
 import requests
 
+from pypmanager.loader_market_data.const import LOAD_HISTORY_DAYS
+
 from .base_loader import BaseMarketDataLoader
 from .models import SourceData
 
 
 class FTLoader(BaseMarketDataLoader):
     """Load data from Financial Times."""
-
-    GET_DAYS = 365
 
     url = "https://markets.ft.com/data/chartapi/series"
 
@@ -26,7 +26,7 @@ class FTLoader(BaseMarketDataLoader):
     def get_payload(self) -> dict[str, Any]:
         """Get payload."""
         return {
-            "days": self.GET_DAYS,
+            "days": LOAD_HISTORY_DAYS,
             "dataNormalized": False,
             "dataPeriod": "Day",
             "dataInterval": 1,
