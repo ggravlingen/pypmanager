@@ -3,12 +3,16 @@ import numpy as np
 from numpy.testing import assert_allclose
 import pandas as pd
 import pytest
-
-from pypmanager.analytics.utils import calculate_aggregates, to_valid_column_name
+from datetime import datetime
+from pypmanager.analytics.calculate_aggregates import (
+    calculate_aggregates,
+    to_valid_column_name,
+)
 from pypmanager.loader_transaction.const import TransactionTypeValues
 
 TEST_DATA = [
     {
+        "report_date": datetime(2023, 5, 8, 12, 0, 0),
         "broker": "Acoount 1",
         "name": "AAPL",
         "transaction_type": TransactionTypeValues.BUY,
@@ -18,6 +22,7 @@ TEST_DATA = [
         "commission": 5,
     },
     {
+        "report_date": datetime(2023, 5, 8, 12, 1, 0),
         "broker": "Acoount 1",
         "name": "AAPL",
         "transaction_type": TransactionTypeValues.BUY,
@@ -27,6 +32,7 @@ TEST_DATA = [
         "commission": 10,
     },
     {
+        "report_date": datetime(2023, 5, 8, 12, 2, 0),
         "broker": "Acoount 1",
         "name": "AAPL",
         "transaction_type": TransactionTypeValues.DIVIDEND,
@@ -36,6 +42,7 @@ TEST_DATA = [
         "commission": 0,
     },
     {
+        "report_date": datetime(2023, 5, 8, 12, 3, 0),
         "broker": "Acoount 1",
         "name": "CASH",
         "transaction_type": TransactionTypeValues.INTEREST,
@@ -45,6 +52,7 @@ TEST_DATA = [
         "commission": 0,
     },
     {
+        "report_date": datetime(2023, 5, 8, 12, 4, 0),
         "broker": "Acoount 1",
         "name": "AAPL",
         "transaction_type": TransactionTypeValues.SELL,
@@ -54,6 +62,7 @@ TEST_DATA = [
         "commission": 100,
     },
     {
+        "report_date": datetime(2023, 5, 8, 12, 5, 0),
         "broker": "Acoount 1",
         "name": "AAPL",
         "transaction_type": TransactionTypeValues.FEE,
@@ -63,6 +72,7 @@ TEST_DATA = [
         "commission": np.nan,
     },
     {
+        "report_date": datetime(2023, 5, 8, 12, 6, 0),
         "broker": "Acoount 2",
         "name": "AAPL",
         "transaction_type": TransactionTypeValues.BUY,
@@ -77,6 +87,7 @@ TEST_DATA = [
 def test_calculate_aggregates() -> None:
     """Test _calculate_aggregates."""
     data = pd.DataFrame(TEST_DATA)
+    data.set_index("report_date")
     result = calculate_aggregates(data)
 
     assert result.name.to_list() == [
@@ -127,9 +138,13 @@ def test_calculate_aggregates() -> None:
     assert pd.isna(result.realized_pnl.to_list()[1])
     assert pytest.approx(result.realized_pnl.sum()) == 905
 
-    assert pytest.approx(result.average_price.to_list()[0]) == 100.5
-    assert pytest.approx(result.average_price.to_list()[1]) == 67.166667
-    assert result.average_price.to_list()[4] is None
+    assert_allclose(
+        result.average_price.to_list(),
+        [100.5, 67.166667, 67.166667, 67.166667, np.nan, np.nan, 50],
+        rtol=1e-2,
+        atol=0,
+        equal_nan=True,
+    )
 
     # Cumulative amounts
     assert result.cumulative_buy_amount.to_list() == [

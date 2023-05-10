@@ -1,18 +1,19 @@
 """Utils."""
 import math
 import re
-from typing import cast
+from typing import Any, cast
 
 import pandas as pd
 
 from pypmanager.loader_transaction.const import TransactionTypeValues
 
-EMPTY_COLUMNS = [
+CALCULATED_COLUMNS = [
+    "average_price",
     "cumulative_buy_amount",
     "cumulative_buy_volume",
+    "cumulative_interest",
     "cumulative_dividends",
     "cumulative_fees",
-    "cumulative_interest",
     "realized_pnl",
     "cumulative_invested_amount",
 ]
@@ -36,12 +37,7 @@ def to_valid_column_name(name: str) -> str:
 
 def calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
     """Calculate aggregate values for a holding."""
-    df_calculations = data.copy()
-
-    for col in EMPTY_COLUMNS:
-        df_calculations[col] = 0.0
-
-    df_calculations["average_price"] = None
+    data_list = data.to_dict("records", index=True)
 
     cumulative_buy_amount: float = 0.0
     cumulative_buy_volume: float = 0.0
@@ -50,10 +46,11 @@ def calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
     cumulative_interest: float = 0.0
     cumulative_invested_amount: float = 0.0
     average_price: float | None = 0.0
-    realized_pnl: float | None = 0.0
+    realized_pnl: float | None = 0.0  # pylint: disable=possibly-unused-variable
 
     # Loop through all rows
-    for index, row in df_calculations.iterrows():
+    output_data: list[dict[str, Any]] = []
+    for row in data_list:
         amount = cast(float, row["amount"])
         no_traded = cast(float, abs(row["no_traded"]))
         commission = cast(float, abs(row["commission"]))
@@ -95,16 +92,13 @@ def calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
             cumulative_invested_amount = 0.0
             cumulative_buy_amount = 0.0
 
-        # Save the correct state
-        df_calculations.loc[index, "cumulative_buy_amount"] = cumulative_buy_amount
-        df_calculations.loc[index, "cumulative_buy_volume"] = cumulative_buy_volume
-        df_calculations.loc[index, "cumulative_interest"] = cumulative_interest
-        df_calculations.loc[index, "cumulative_fees"] = cumulative_fees
-        df_calculations.loc[index, "cumulative_dividends"] = cumulative_dividends
-        df_calculations.loc[index, "average_price"] = average_price
-        df_calculations.loc[index, "realized_pnl"] = realized_pnl
-        df_calculations.loc[
-            index, "cumulative_invested_amount"
-        ] = cumulative_invested_amount
+        # All variables defined inside this function
+        _locals = locals()
 
-    return df_calculations
+        # Save the correct state
+        for field in CALCULATED_COLUMNS:
+            row[field] = _locals[field]
+
+        output_data.append(row)
+
+    return pd.DataFrame(output_data)

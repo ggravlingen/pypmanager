@@ -7,8 +7,8 @@ from typing import cast
 
 import pandas as pd
 
+from .calculate_aggregates import calculate_aggregates
 from .security import MutualFund
-from .utils import calculate_aggregates
 
 LOGGER = logging.Logger(__name__)
 
@@ -37,6 +37,7 @@ class Holding:
             df_all_data = df_all_data.query(f"index <= '{self.report_date}'")
 
         self.all_data = df_all_data
+
         self.calculated_data = calculate_aggregates(
             data=self.all_data,
         )
