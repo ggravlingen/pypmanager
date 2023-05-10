@@ -46,7 +46,7 @@ def calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
     cumulative_interest: float = 0.0
     cumulative_invested_amount: float = 0.0
     average_price: float | None = 0.0
-    realized_pnl: float | None = 0.0
+    realized_pnl: float | None = 0.0  # pylint: disable=possibly-unused-variable
 
     # Loop through all rows
     output_data: list[dict[str, Any]] = []
