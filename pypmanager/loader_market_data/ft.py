@@ -61,6 +61,11 @@ class FTLoader(BaseMarketDataLoader):
 
             self.raw_response = data
 
+    @property
+    def source(self) -> str:
+        """Get name of source."""
+        return "Financial Times"
+
     def to_source_data(self) -> list[SourceData]:
         """Convert to SourceData."""
         name = self.raw_response["Elements"][0]["CompanyName"]

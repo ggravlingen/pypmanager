@@ -46,6 +46,11 @@ class MorningstarLoader(BaseMarketDataLoader):
         else:
             LOGGER.warning("Unable to load data")
 
+    @property
+    def source(self) -> str:
+        """Get name of source."""
+        return "Morningstar"
+
     def to_source_data(self) -> list[SourceData]:
         """Convert to SourceData."""
         data_list = self.raw_response["TimeSeries"]["Security"][0]["HistoryDetail"]

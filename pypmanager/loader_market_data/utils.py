@@ -48,12 +48,13 @@ def _load_sources() -> list[Source]:
         return data.sources
 
 
-def _upsert_df(data: list[SourceData]) -> None:
+def _upsert_df(data: list[SourceData], source_name: str) -> None:
     """Upsert dataframe."""
     upsert_df = pd.DataFrame([vars(s) for s in data])
 
     # Add a timestamp for when we added the date
     upsert_df["date_added_utc"] = datetime.utcnow()
+    upsert_df["source"] = source_name
 
     column_dtypes = {"report_date": datetime64}
     # Check if the CSV file exists
@@ -106,4 +107,4 @@ async def market_data_loader() -> None:
             isin_code=source.isin_code,
             name=source.name,
         )
-        _upsert_df(data=loader.to_source_data())
+        _upsert_df(data=loader.to_source_data(), source_name=loader.source)

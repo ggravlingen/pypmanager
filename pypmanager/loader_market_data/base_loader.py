@@ -30,6 +30,11 @@ class BaseMarketDataLoader:
     def get_response(self) -> None:
         """Get reqponse."""
 
+    @property
+    @abstractmethod
+    def source(self) -> str:
+        """Get name of source."""
+
     @abstractmethod
     def to_source_data(self) -> list[SourceData]:
         """Convert to SourceData."""

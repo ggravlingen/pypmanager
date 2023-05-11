@@ -4,16 +4,23 @@ from __future__ import annotations
 import time
 
 from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
+from fastapi.responses import FileResponse, HTMLResponse
 
 from pypmanager.analytics import Portfolio
 from pypmanager.analytics.holding import Holding
 from pypmanager.loader_transaction import load_data
 from pypmanager.server.templates import load_template
+from pypmanager.settings import Settings
 
 from .const import LOGGER
 
 app = FastAPI()
+
+
+@app.get("/favicon.ico")
+async def get_favicon() -> FileResponse:
+    """Return favicon."""
+    return FileResponse(f"{Settings.DIR_STATIC}/favicon.ico")
 
 
 @app.get("/", response_class=HTMLResponse)
