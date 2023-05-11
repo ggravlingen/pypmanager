@@ -35,6 +35,11 @@ class SHBFonderLoader(BaseMarketDataLoader):
         else:
             LOGGER.warning("Unable to load data")
 
+    @property
+    def source(self) -> str:
+        """Get name of source."""
+        return "Svenska Handelsbanken"
+
     def to_source_data(self) -> list[SourceData]:
         """Convert to SourceData."""
         output_data: list[SourceData] = []
