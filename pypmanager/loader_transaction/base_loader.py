@@ -16,12 +16,12 @@ from pypmanager.settings import Settings
 
 from .const import DTYPES_MAP, NUMBER_COLS, TransactionTypeValues
 
-CASH_AND_EQUIVALENTS = "Cash and equivalents"
-
 FILTER_STATEMENT = (
     f"('{TransactionTypeValues.DIVIDEND}'"
     f",'{TransactionTypeValues.FEE}'"
     f",'{TransactionTypeValues.INTEREST}'"
+    f",'{TransactionTypeValues.DEPOSIT}'"
+    f",'{TransactionTypeValues.WITHDRAW}'"
     f",'{TransactionTypeValues.TAX}'"
     f",'{TransactionTypeValues.BUY}'"
     f",'{TransactionTypeValues.SELL}',)"
@@ -61,18 +61,11 @@ REPLACE_CONFIG = [
         search=["Fee", "Plattformsavgift"],
         target=TransactionTypeValues.FEE.value,
     ),
+    ReplaceConfig(
+        search=["Deposit", "Insättning"],
+        target=TransactionTypeValues.DEPOSIT.value,
+    ),
 ]
-
-
-def _replace_name(row: pd.DataFrame) -> str:
-    """Replace interest flows with cash and equivalemts."""
-    if row["transaction_type"] in [
-        TransactionTypeValues.INTEREST,
-        TransactionTypeValues.TAX,
-    ]:
-        return CASH_AND_EQUIVALENTS
-
-    return cast(str, row["name"])
 
 
 def _normalize_amount(row: pd.DataFrame) -> float:
@@ -105,8 +98,11 @@ def _normalize_no_traded(row: pd.DataFrame) -> float:
     return cast(float, no_traded)
 
 
-def _cleanup_number(value: str) -> float | None:
+def _cleanup_number(value: str | None) -> float | None:
     """Make sure values are converted to floats."""
+    if value is None:
+        return None
+
     if (value := f"{value}") == "-":
         return 0
 
@@ -141,7 +137,10 @@ class TransactionLoader:
         self.filter_transactions()
         self.cleanup_df()
         self.convert_data_types()
-        self.finalize_data_load()
+        self.normalize_data()
+        self.assign_debit_credit()
+        self.calculate_cash_balance()
+        self.purge_deposit_withdraw()
 
     def load_data_files(self) -> None:
         """Parse CSV-files and load them into a data frame."""
@@ -249,12 +248,30 @@ class TransactionLoader:
 
         self.df_raw = df_raw
 
-    def finalize_data_load(self) -> None:
+    def normalize_data(self) -> None:
         """Post-process."""
         df_raw = self.df_raw.copy()
 
         df_raw["no_traded"] = df_raw.apply(_normalize_no_traded, axis=1)
         df_raw["amount"] = df_raw.apply(_normalize_amount, axis=1)
-        df_raw["name"] = df_raw.apply(_replace_name, axis=1)
+
+        self.df_final = df_raw
+
+    @abstractmethod
+    def assign_debit_credit(self) -> None:
+        """Calculate what accounts are debited and credited."""
+
+    @abstractmethod
+    def calculate_cash_balance(self) -> None:
+        """Calculate what accounts are debited and credited."""
+
+    def purge_deposit_withdraw(self) -> None:
+        """Delete deposits and withdrawals from the table."""
+        df_raw = self.df_final
+
+        df_raw = df_raw.query(
+            f"transaction_type != '{TransactionTypeValues.DEPOSIT}' and "
+            f"transaction_type != '{TransactionTypeValues.WITHDRAW}'"
+        )
 
         self.df_final = df_raw

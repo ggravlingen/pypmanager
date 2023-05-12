@@ -24,6 +24,8 @@ def load_data(report_date: datetime | None = None) -> tuple[pd.DataFrame, list[s
         ),
     )
 
+    all_data.to_excel("foo.xlsx", index=False)
+
     all_securities = cast(list[str], all_data.name.unique())
 
     return (

@@ -10,35 +10,11 @@ from pypmanager.loader_transaction.base_loader import (
     _cleanup_number,
     _normalize_amount,
     _normalize_no_traded,
-    _replace_name,
 )
 from pypmanager.loader_transaction.const import TransactionTypeValues
 from pypmanager.loader_transaction.lysa import LysaLoader
 from pypmanager.loader_transaction.misc import MiscLoader
 from pypmanager.settings import Settings
-
-
-@pytest.mark.parametrize(
-    "data, expected",
-    [
-        (
-            pd.Series(
-                {"name": "Foo", "transaction_type": TransactionTypeValues.INTEREST},
-            ),
-            "Cash and equivalents",
-        ),
-        (
-            pd.Series(
-                {"name": "Foo", "transaction_type": TransactionTypeValues.BUY},
-            ),
-            "Foo",
-        ),
-    ],
-)
-def test_replace_name(data, expected) -> None:
-    """Test function _replace_name."""
-    result = _replace_name(data)
-    assert result == expected
 
 
 @pytest.mark.parametrize(
