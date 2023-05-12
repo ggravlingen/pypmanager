@@ -27,3 +27,9 @@ class MiscLoader(TransactionLoader):
         df_raw["name"] = df_raw.apply(_replace_fee_name, axis=1)
 
         self.df_raw = df_raw
+
+    def assign_debit_credit(self) -> None:
+        """Calculate what accounts are debited and credited."""
+
+    def calculate_cash_balance(self) -> None:
+        """Calculate what accounts are debited and credited."""

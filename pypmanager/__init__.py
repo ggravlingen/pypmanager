@@ -3,6 +3,7 @@ import logging
 import logging.config
 import sys
 
+from colorlog import ColoredFormatter
 import pandas as pd
 
 
@@ -21,15 +22,24 @@ LOGGING_CONFIG = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "verbose": {
-            "()": VerboseFormatter,
-            "format": "%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+        "colored": {
+            "()": ColoredFormatter,
+            "format": (
+                "%(log_color)s%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+            ),
+            "log_colors": {
+                "DEBUG": "cyan",
+                "INFO": "green",
+                "WARNING": "yellow",
+                "ERROR": "red",
+                "CRITICAL": "red,bg_white",
+            },
         },
     },
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
-            "formatter": "verbose",
+            "formatter": "colored",
             "stream": sys.stdout,
         },
     },
@@ -37,7 +47,7 @@ LOGGING_CONFIG = {
         "handlers": [
             "console",
         ],
-        "level": "INFO",
+        "level": "DEBUG",
     },
 }
 

@@ -1,4 +1,5 @@
 """Utils."""
+import logging
 import math
 import re
 from typing import Any, cast
@@ -17,6 +18,7 @@ CALCULATED_COLUMNS = [
     "realized_pnl",
     "cumulative_invested_amount",
 ]
+LOGGER = logging.Logger(__name__)
 
 
 def to_valid_column_name(name: str) -> str:
@@ -53,8 +55,11 @@ def calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
     for row in data_list:
         amount = cast(float, row["amount"])
         no_traded = cast(float, abs(row["no_traded"]))
-        commission = cast(float, abs(row["commission"]))
+        commission = cast(float | None, abs(row["commission"]))
         transaction_type = cast(str, row["transaction_type"])
+
+        if commission is None or pd.isna(commission):
+            commission = 0
 
         if transaction_type == TransactionTypeValues.INTEREST.value:
             realized_pnl = amount
@@ -87,6 +92,10 @@ def calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
             realized_pnl = (row["price"] - average_price) * no_traded - commission
 
         if math.isclose(cumulative_buy_volume, 0, rel_tol=1e-9, abs_tol=1e-12):
+            LOGGER.debug(
+                f"Cumulative buy volume too small {cumulative_buy_volume} for "
+                f"{row['transaction_type']}"
+            )
             cumulative_buy_volume = 0.0
             average_price = None
             cumulative_invested_amount = 0.0
