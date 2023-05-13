@@ -24,8 +24,6 @@ def load_data(report_date: datetime | None = None) -> tuple[pd.DataFrame, list[s
         ),
     )
 
-    all_data.to_csv("debug.csv")
-
     all_securities = cast(list[str], all_data.name.unique())
 
     return (
