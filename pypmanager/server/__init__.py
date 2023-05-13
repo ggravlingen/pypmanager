@@ -44,6 +44,7 @@ async def index(view: str | None = None) -> str:
         )
 
         if view is None and holding.current_holdings is None:
+            LOGGER.debug(f"Skipping {holding}")
             continue
 
         if view == "old" and holding.current_holdings is not None:

@@ -25,6 +25,10 @@ class Holding:
     # Caching
     _security_info: MutualFund | None = None
 
+    def __repr__(self) -> str:
+        """Representation of class."""
+        return f"{self.name} | {self.current_holdings}"
+
     def __post_init__(self) -> None:
         """
         Run after class has been instantiated.
