@@ -172,7 +172,7 @@ class TransactionLoader:
         """Parse CSV-files and load them into a data frame."""
         files = glob.glob(os.path.join(Settings.DIR_DATA, self.file_pattern))
 
-        dfs: list[pd.DataFrame] = [EMPTY_DF]
+        dfs: list[pd.DataFrame] = []
         for file in files:
             df_load = pd.read_csv(file, sep=self.csv_separator)
             filename = _get_filename(file)
@@ -180,9 +180,10 @@ class TransactionLoader:
 
             dfs.append(df_load)
 
-        # Merge all the data frames into one
-        if len(dfs) == 1:
-            df_raw = dfs[0]
+        if len(files) == 0:
+            df_raw = EMPTY_DF
+        elif len(files) == 1:
+            df_raw = df_load
         else:
             df_raw = pd.concat(dfs, ignore_index=True)
 
