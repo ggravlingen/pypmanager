@@ -21,35 +21,6 @@ def _replace_fee_name(row: pd.DataFrame) -> str:
     return cast(str, row["name"])
 
 
-def _calculate_credit(row: pd.DataFrame) -> str | None:
-    """Calculate what account to credit."""
-    transaction_type = row["transaction_type"]
-    if transaction_type in [
-        TransactionTypeValues.BUY.value,
-    ]:
-        return AccountNameValues.CASH
-
-    if transaction_type == TransactionTypeValues.SELL.value:
-        return AccountNameValues.MUTUAL_FUND
-
-    if transaction_type == TransactionTypeValues.FEE.value:
-        return AccountNameValues.IS_COSTS
-
-    return None
-
-
-def _calculate_debit(row: pd.DataFrame) -> str | None:
-    """Calculate what account to debit."""
-    if row["transaction_type"] in [
-        TransactionTypeValues.DEPOSIT.value,
-        TransactionTypeValues.SELL.value,
-        TransactionTypeValues.FEE.value,
-    ]:
-        return AccountNameValues.CASH
-
-    return AccountNameValues.MUTUAL_FUND
-
-
 class LysaLoader(TransactionLoader):
     """Data loader for Lysa."""
 
@@ -98,26 +69,16 @@ class LysaLoader(TransactionLoader):
         new_row = {
             "account": "lysa",
             "transaction_type": TransactionTypeValues.CASH,
-            "name": "Cash and equivalents - Lysa",
+            "name": f"Cash and equivalents - {self.broker_name}",
             "amount": total_amount,
             "no_traded": total_amount,
             "price": 1,
             "currency": "SEK",
-            "broker": "lysa",
+            "broker": self.broker_name,
         }
 
         df_raw_copy = df_raw.copy()
 
-        # Insert the new row using loc
         df_raw_copy.loc[len(df_raw)] = new_row
 
         self.df_final = df_raw_copy
-
-    def assign_debit_credit(self) -> None:
-        """Calculate what accounts are debited and credited."""
-        df_raw = self.df_final.copy()
-
-        df_raw["debit"] = df_raw.apply(_calculate_debit, axis=1)
-        df_raw["credit"] = df_raw.apply(_calculate_credit, axis=1)
-
-        self.df_final = df_raw

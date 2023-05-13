@@ -14,6 +14,7 @@ import pandas as pd
 
 from pypmanager.settings import Settings
 
+from .common import calculate_credit, calculate_debit
 from .const import DTYPES_MAP, NUMBER_COLS, TransactionTypeValues
 
 FILTER_STATEMENT = (
@@ -257,9 +258,14 @@ class TransactionLoader:
 
         self.df_final = df_raw
 
-    @abstractmethod
     def assign_debit_credit(self) -> None:
         """Calculate what accounts are debited and credited."""
+        df_raw = self.df_final.copy()
+
+        df_raw["debit"] = df_raw.apply(calculate_debit, axis=1)
+        df_raw["credit"] = df_raw.apply(calculate_credit, axis=1)
+
+        self.df_final = df_raw
 
     @abstractmethod
     def calculate_cash_balance(self) -> None:
