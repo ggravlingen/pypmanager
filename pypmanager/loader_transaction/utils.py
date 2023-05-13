@@ -17,12 +17,14 @@ def load_data(report_date: datetime | None = None) -> tuple[pd.DataFrame, list[s
         pd.DataFrame,
         pd.concat(
             [
+                MiscLoader(report_date).df_final,
                 AvanzaLoader(report_date).df_final,
                 LysaLoader(report_date).df_final,
-                MiscLoader(report_date).df_final,
             ],
         ),
     )
+
+    all_data.to_csv("debug.csv")
 
     all_securities = cast(list[str], all_data.name.unique())
 

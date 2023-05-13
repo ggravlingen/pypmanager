@@ -7,8 +7,6 @@ from .base_loader import TransactionLoader
 class AvanzaLoader(TransactionLoader):
     """Data loader for Avanza."""
 
-    broker_name = "Avanza"
-
     col_map = {
         "Datum": "transaction_date",
         "Konto": "account",
@@ -27,12 +25,10 @@ class AvanzaLoader(TransactionLoader):
 
     def pre_process_df(self) -> None:
         """Broker specific manipulation of the data frame."""
-        df_raw = self.df_raw
+        df_raw = self.df_final
 
         # We don't need this column as we calculate it in this library
-        df_raw = df_raw.drop(columns=["pnl"])
+        if "pnl" in df_raw.columns:
+            df_raw = df_raw.drop(columns=["pnl"])
 
-        self.df_raw = df_raw
-
-    def calculate_cash_balance(self) -> None:
-        """Calculate what accounts are debited and credited."""
+        self.df_final = df_raw

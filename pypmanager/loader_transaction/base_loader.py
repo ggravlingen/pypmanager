@@ -14,7 +14,6 @@ import pandas as pd
 
 from pypmanager.settings import Settings
 
-from .common import calculate_credit, calculate_debit
 from .const import DTYPES_MAP, NUMBER_COLS, TransactionTypeValues
 
 FILTER_STATEMENT = (
@@ -116,13 +115,42 @@ def _cleanup_number(value: str | None) -> float | None:
         raise ValueError(f"Unable to parse {value}") from err
 
 
+def _get_filename(file_path: str) -> str:
+    """Return name of file."""
+    filename = os.path.basename(file_path).replace(".csv", "")
+    splitted_file_path = filename.split("-")
+
+    if len(splitted_file_path) == 2:
+        filename = splitted_file_path[1]
+    else:
+        filename = splitted_file_path[0]
+
+    filename = filename.capitalize()
+
+    return filename
+
+
+EMPTY_DF = pd.DataFrame(
+    columns=[
+        "transaction_date",
+        "account",
+        "transaction_type",
+        "name",
+        "no_traded",
+        "price",
+        "amount",
+        "commission",
+        "currency",
+        "isin_code",
+    ]
+)
+
+
 class TransactionLoader:
     """Base data loader."""
 
-    broker_name: str | None = None
     csv_separator: str = ";"
     col_map: dict[str, str] | None = None
-    df_raw: pd.DataFrame
     df_final: pd.DataFrame
     file_pattern: str
 
@@ -139,30 +167,33 @@ class TransactionLoader:
         self.cleanup_df()
         self.convert_data_types()
         self.normalize_data()
-        self.assign_debit_credit()
-        self.calculate_cash_balance()
-        self.purge_deposit_withdraw()
 
     def load_data_files(self) -> None:
         """Parse CSV-files and load them into a data frame."""
         files = glob.glob(os.path.join(Settings.DIR_DATA, self.file_pattern))
 
-        dfs = [pd.read_csv(file, sep=self.csv_separator) for file in files]
+        dfs: list[pd.DataFrame] = [EMPTY_DF]
+        for file in files:
+            df_load = pd.read_csv(file, sep=self.csv_separator)
+            filename = _get_filename(file)
+            df_load["source"] = filename
+
+            dfs.append(df_load)
 
         # Merge all the data frames into one
-        df_raw = pd.concat(dfs, ignore_index=True)
+        if len(dfs) == 1:
+            df_raw = dfs[0]
+        else:
+            df_raw = pd.concat(dfs, ignore_index=True)
 
         # Cleanup whitespace in columns
         df_raw = df_raw.applymap(lambda x: x.strip() if isinstance(x, str) else x)
 
-        if "broker" not in df_raw.columns and self.broker_name:
-            df_raw["broker"] = self.broker_name
-
-        self.df_raw = df_raw
+        self.df_final = df_raw
 
     def rename_set_index_filter(self) -> None:
         """Set index."""
-        df_raw = self.df_raw.copy()
+        df_raw = self.df_final.copy()
 
         if self.col_map is not None:
             df_raw = df_raw.rename(columns=self.col_map)
@@ -186,7 +217,7 @@ class TransactionLoader:
         # Sort by transaction date
         df_raw = df_raw.sort_index()
 
-        self.df_raw = df_raw
+        self.df_final = df_raw
 
     @abstractmethod
     def pre_process_df(self) -> None:
@@ -199,7 +230,7 @@ class TransactionLoader:
         In the source data, transactions will be named differently. To enable
         calculations, we replace the names in the source data with our internal names.
         """
-        df_raw = self.df_raw
+        df_raw = self.df_final
 
         for config in REPLACE_CONFIG:
             for event in config.search:
@@ -207,19 +238,19 @@ class TransactionLoader:
                     event, config.target
                 )
 
-        self.df_raw = df_raw
+        self.df_final = df_raw
 
     def filter_transactions(self) -> None:
         """Filter transactions."""
-        df_raw = self.df_raw.copy()
+        df_raw = self.df_final.copy()
 
         df_raw = df_raw.query(f"transaction_type in {FILTER_STATEMENT}")
 
-        self.df_raw = df_raw
+        self.df_final = df_raw
 
     def cleanup_df(self) -> None:
         """Cleanup dataframe."""
-        df_raw = self.df_raw.copy()
+        df_raw = self.df_final.copy()
 
         for col in NUMBER_COLS:
             if col in df_raw.columns:
@@ -234,11 +265,11 @@ class TransactionLoader:
                 except AttributeError:
                     pass
 
-        self.df_raw = df_raw
+        self.df_final = df_raw
 
     def convert_data_types(self) -> None:
         """Convert data types."""
-        df_raw = self.df_raw.copy()
+        df_raw = self.df_final.copy()
 
         for key, val in DTYPES_MAP.items():
             if key in df_raw.columns:
@@ -247,37 +278,13 @@ class TransactionLoader:
                 except ValueError as err:
                     raise ValueError(f"Unable to parse {key}") from err
 
-        self.df_raw = df_raw
+        self.df_final = df_raw
 
     def normalize_data(self) -> None:
         """Post-process."""
-        df_raw = self.df_raw.copy()
+        df_raw = self.df_final.copy()
 
         df_raw["no_traded"] = df_raw.apply(_normalize_no_traded, axis=1)
         df_raw["amount"] = df_raw.apply(_normalize_amount, axis=1)
-
-        self.df_final = df_raw
-
-    def assign_debit_credit(self) -> None:
-        """Calculate what accounts are debited and credited."""
-        df_raw = self.df_final.copy()
-
-        df_raw["debit"] = df_raw.apply(calculate_debit, axis=1)
-        df_raw["credit"] = df_raw.apply(calculate_credit, axis=1)
-
-        self.df_final = df_raw
-
-    @abstractmethod
-    def calculate_cash_balance(self) -> None:
-        """Calculate what accounts are debited and credited."""
-
-    def purge_deposit_withdraw(self) -> None:
-        """Delete deposits and withdrawals from the table."""
-        df_raw = self.df_final
-
-        df_raw = df_raw.query(
-            f"transaction_type != '{TransactionTypeValues.DEPOSIT}' and "
-            f"transaction_type != '{TransactionTypeValues.WITHDRAW}'"
-        )
 
         self.df_final = df_raw
