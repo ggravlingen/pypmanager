@@ -135,3 +135,5 @@ data/*.yaml
 *.xlsx
 
 *.DS_Store
+
+*debug.csv
