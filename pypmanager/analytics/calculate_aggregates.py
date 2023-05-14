@@ -6,7 +6,9 @@ from typing import Any, cast
 
 import pandas as pd
 
-from pypmanager.loader_transaction.const import TransactionTypeValues
+from pypmanager.loader_transaction.const import ColumnNameValues, TransactionTypeValues
+
+LOGGER = logging.Logger(__name__)
 
 CALCULATED_COLUMNS = [
     "average_price",
@@ -18,7 +20,6 @@ CALCULATED_COLUMNS = [
     "realized_pnl",
     "cumulative_invested_amount",
 ]
-LOGGER = logging.Logger(__name__)
 
 
 def to_valid_column_name(name: str) -> str:
@@ -53,10 +54,10 @@ def calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
     # Loop through all rows
     output_data: list[dict[str, Any]] = []
     for row in data_list:
-        amount = cast(float, row["amount"])
-        no_traded = cast(float, abs(row["no_traded"]))
-        commission = cast(float | None, abs(row["commission"]))
-        transaction_type = cast(str, row["transaction_type"])
+        amount = cast(float, row[ColumnNameValues.AMOUNT])
+        no_traded = cast(float, abs(row[ColumnNameValues.NO_TRADED]))
+        commission = cast(float | None, abs(row[ColumnNameValues.COMMISSION]))
+        transaction_type = cast(str, row[ColumnNameValues.TRANSACTION_TYPE])
 
         if commission is None or pd.isna(commission):
             commission = 0
@@ -89,7 +90,9 @@ def calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
         if transaction_type == TransactionTypeValues.SELL.value:
             cumulative_invested_amount += -amount
             cumulative_buy_volume += -no_traded
-            realized_pnl = (row["price"] - average_price) * no_traded - commission
+            realized_pnl = (
+                row[ColumnNameValues.PRICE] - average_price
+            ) * no_traded - commission
 
         if math.isclose(cumulative_buy_volume, 0, rel_tol=1e-9, abs_tol=1e-12):
             LOGGER.debug(
