@@ -4,15 +4,20 @@ from typing import cast
 
 import pandas as pd
 
+from pypmanager.loader_transaction.const import ColumnNameValues
+
 from .base_loader import TransactionLoader
 
 
 def _replace_fee_name(row: pd.DataFrame) -> str:
     """Replace interest flows with cash and equivalemts."""
-    if row["transaction_type"] == "Plattformsavgift" and row["broker"] == "SAVR":
+    if (
+        row[ColumnNameValues.TRANSACTION_TYPE] == "Plattformsavgift"
+        and row[ColumnNameValues.BROKER] == "SAVR"
+    ):
         return "SAVR management fee"
 
-    return cast(str, row["name"])
+    return cast(str, row[ColumnNameValues.NAME])
 
 
 class MiscLoader(TransactionLoader):
@@ -24,6 +29,6 @@ class MiscLoader(TransactionLoader):
         """Load CSV."""
         df_raw = self.df_final
 
-        df_raw["name"] = df_raw.apply(_replace_fee_name, axis=1)
+        df_raw[ColumnNameValues.NAME] = df_raw.apply(_replace_fee_name, axis=1)
 
         self.df_final = df_raw

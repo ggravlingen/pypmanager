@@ -14,7 +14,13 @@ import pandas as pd
 
 from pypmanager.settings import Settings
 
-from .const import DTYPES_MAP, NUMBER_COLS, TransactionTypeValues
+from .const import (
+    DTYPES_MAP,
+    NUMBER_COLS,
+    ColumnNameValues,
+    CSVSeparator,
+    TransactionTypeValues,
+)
 
 FILTER_STATEMENT = (
     f"('{TransactionTypeValues.DIVIDEND}'"
@@ -71,10 +77,10 @@ REPLACE_CONFIG = [
 
 def _normalize_amount(row: pd.DataFrame) -> float:
     """Calculate amount if nan."""
-    if np.isnan(row["amount"]):
-        amount = row["no_traded"] * row["price"]
+    if np.isnan(row[ColumnNameValues.AMOUNT]):
+        amount = row[ColumnNameValues.NO_TRADED] * row[ColumnNameValues.PRICE]
     else:
-        amount = row["amount"]
+        amount = row[ColumnNameValues.AMOUNT]
 
     # Buy and tax is a negative cash flow for us
     if row.transaction_type in [
@@ -92,9 +98,9 @@ def _normalize_amount(row: pd.DataFrame) -> float:
 def _normalize_no_traded(row: pd.DataFrame) -> float:
     """Calculate number of units traded."""
     if row.transaction_type == TransactionTypeValues.BUY:
-        no_traded = row["no_traded"]
+        no_traded = row[ColumnNameValues.NO_TRADED]
     else:
-        no_traded = abs(row["no_traded"]) * -1
+        no_traded = abs(row[ColumnNameValues.NO_TRADED]) * -1
 
     return cast(float, no_traded)
 
@@ -133,16 +139,16 @@ def _get_filename(file_path: str) -> str:
 
 EMPTY_DF = pd.DataFrame(
     columns=[
-        "transaction_date",
-        "account",
-        "transaction_type",
-        "name",
-        "no_traded",
-        "price",
-        "amount",
-        "commission",
-        "currency",
-        "isin_code",
+        ColumnNameValues.TRANSACTION_DATE,
+        ColumnNameValues.ACCOUNT,
+        ColumnNameValues.TRANSACTION_TYPE,
+        ColumnNameValues.NAME,
+        ColumnNameValues.NO_TRADED,
+        ColumnNameValues.PRICE,
+        ColumnNameValues.AMOUNT,
+        ColumnNameValues.COMMISSION,
+        ColumnNameValues.CURRENCY,
+        ColumnNameValues.ISIN_CODE,
     ]
 )
 
@@ -150,7 +156,7 @@ EMPTY_DF = pd.DataFrame(
 class TransactionLoader:
     """Base data loader."""
 
-    csv_separator: str = ";"
+    csv_separator: str = CSVSeparator.SEMI_COLON
     col_map: dict[str, str] | None = None
     df_final: pd.DataFrame
     file_pattern: str
@@ -177,7 +183,7 @@ class TransactionLoader:
         for file in files:
             df_load = pd.read_csv(file, sep=self.csv_separator)
             filename = _get_filename(file)
-            df_load["source"] = filename
+            df_load[ColumnNameValues.SOURCE] = filename
 
             dfs.append(df_load)
 
@@ -200,7 +206,7 @@ class TransactionLoader:
         if self.col_map is not None:
             df_raw = df_raw.rename(columns=self.col_map)
 
-        df_raw = df_raw.set_index("transaction_date")
+        df_raw = df_raw.set_index(ColumnNameValues.TRANSACTION_DATE)
 
         if self.report_date is not None:
             df_raw = df_raw.query(f"index <= '{self.report_date}'")
@@ -236,9 +242,9 @@ class TransactionLoader:
 
         for config in REPLACE_CONFIG:
             for event in config.search:
-                df_raw["transaction_type"] = df_raw["transaction_type"].replace(
-                    event, config.target
-                )
+                df_raw[ColumnNameValues.TRANSACTION_TYPE] = df_raw[
+                    ColumnNameValues.TRANSACTION_TYPE
+                ].replace(event, config.target)
 
         self.df_final = df_raw
 
@@ -246,7 +252,9 @@ class TransactionLoader:
         """Filter transactions."""
         df_raw = self.df_final.copy()
 
-        df_raw = df_raw.query(f"transaction_type in {FILTER_STATEMENT}")
+        df_raw = df_raw.query(
+            f"{ColumnNameValues.TRANSACTION_TYPE} in {FILTER_STATEMENT}"
+        )
 
         self.df_final = df_raw
 
@@ -260,7 +268,10 @@ class TransactionLoader:
                     lambda x, _col=col: _cleanup_number(x[_col]), axis=1
                 )
 
-        for col in ("commission", "isin_code"):  # Replace dashes with 0
+        for col in (
+            ColumnNameValues.COMMISSION,
+            ColumnNameValues.ISIN_CODE,
+        ):  # Replace dashes with 0
             if col in df_raw.columns:
                 try:
                     df_raw[col] = df_raw[col].str.replace("-", "").replace("", 0)
@@ -286,7 +297,7 @@ class TransactionLoader:
         """Post-process."""
         df_raw = self.df_final.copy()
 
-        df_raw["no_traded"] = df_raw.apply(_normalize_no_traded, axis=1)
-        df_raw["amount"] = df_raw.apply(_normalize_amount, axis=1)
+        df_raw[ColumnNameValues.NO_TRADED] = df_raw.apply(_normalize_no_traded, axis=1)
+        df_raw[ColumnNameValues.AMOUNT] = df_raw.apply(_normalize_amount, axis=1)
 
         self.df_final = df_raw
