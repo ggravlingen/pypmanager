@@ -6,6 +6,9 @@ import sys
 from colorlog import ColoredFormatter
 import pandas as pd
 
+# Disable logger
+logging.getLogger("urllib3.connectionpool").setLevel(logging.CRITICAL)
+
 
 class VerboseFormatter(logging.Formatter):
     """Custom log formatter."""
