@@ -59,11 +59,25 @@ class ColumnNameValues(StrEnum):
 
     ACCOUNT = "ledger_account"
     AMOUNT = "amount"
+    BROKER = "broker"
+    COMMISSION = "commission"
+    CURRENCY = "currency"
     CREDIT = "credit"
     DEBIT = "debit"
+    ISIN_CODE = "isin_code"
+    NAME = "name"
     NO_TRADED = "no_traded"
     PRICE = "price"
+    SOURCE = "source"
+    TRANSACTION_DATE = "transaction_date"
     TRANSACTION_TYPE = "transaction_type"
+
+
+class CSVSeparator(StrEnum):
+    """Represent CSV-file separators."""
+
+    COMMA = ","
+    SEMI_COLON = ";"
 
 
 LOGGER = logging.getLogger(__package__)

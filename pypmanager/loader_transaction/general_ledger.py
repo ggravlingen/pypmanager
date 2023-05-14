@@ -86,4 +86,4 @@ class GeneralLedger:
         for row in self.ledger_list:
             ledger_list.extend(_amend_row(row=row))
 
-        pd.DataFrame(ledger_list).set_index("transaction_date")
+        pd.DataFrame(ledger_list).set_index(ColumnNameValues.TRANSACTION_DATE)
