@@ -38,6 +38,7 @@ class LysaLoader(TransactionLoader):
         """Load CSV."""
         df_raw = self.df_final
 
+        df_raw["broker"] = "Lysa"
         df_raw["name"] = df_raw.apply(_replace_fee_name, axis=1)
 
         df_raw["commission"] = None

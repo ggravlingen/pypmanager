@@ -29,7 +29,7 @@ class TransactionTypeValues(StrEnum):
     """Represent transaction types."""
 
     BUY = "buy"
-    CASH = "cash"
+    CASHBACK = "cashback"
     DEPOSIT = "deposit"
     DIVIDEND = "dividend"
     FEE = "fee"
@@ -43,7 +43,8 @@ class AccountNameValues(StrEnum):
     """Represent names of accounts."""
 
     CASH = "cash"
-    MUTUAL_FUND = "mutual_funds"
+    EQUITY = "equity"
+    SECURITIES = "securities"
     IS_COSTS = "income_statement_costs"
 
 
@@ -51,6 +52,18 @@ class CurrencyValues(StrEnum):
     """Represent names of currencies."""
 
     SEK = "SEK"
+
+
+class ColumnNameValues(StrEnum):
+    """Represent names of columns in the ledger."""
+
+    ACCOUNT = "ledger_account"
+    AMOUNT = "amount"
+    CREDIT = "credit"
+    DEBIT = "debit"
+    NO_TRADED = "no_traded"
+    PRICE = "price"
+    TRANSACTION_TYPE = "transaction_type"
 
 
 LOGGER = logging.getLogger(__package__)

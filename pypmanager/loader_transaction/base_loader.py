@@ -21,6 +21,7 @@ FILTER_STATEMENT = (
     f",'{TransactionTypeValues.FEE}'"
     f",'{TransactionTypeValues.INTEREST}'"
     f",'{TransactionTypeValues.DEPOSIT}'"
+    f",'{TransactionTypeValues.CASHBACK}'"
     f",'{TransactionTypeValues.WITHDRAW}'"
     f",'{TransactionTypeValues.TAX}'"
     f",'{TransactionTypeValues.BUY}'"

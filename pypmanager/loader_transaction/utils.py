@@ -7,6 +7,7 @@ from typing import cast
 import pandas as pd
 
 from .avanza import AvanzaLoader
+from .general_ledger import GeneralLedger
 from .lysa import LysaLoader
 from .misc import MiscLoader
 
@@ -23,6 +24,8 @@ def load_data(report_date: datetime | None = None) -> tuple[pd.DataFrame, list[s
             ],
         ),
     )
+
+    GeneralLedger(transactions=all_data)
 
     all_securities = cast(list[str], all_data.name.unique())
 
