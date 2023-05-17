@@ -22,6 +22,7 @@ def _load_environment_and_filter() -> Environment:
     env.filters["static_file2base64"] = static_file2base64
     env.filters["format_decimals"] = format_decimals
     env.filters["format_none"] = format_none
+    env.filters["format_pct"] = format_pct
 
     return env
 
@@ -67,3 +68,12 @@ def format_none(value: Any) -> Any:
         return ATTR_NONE
 
     return value
+
+
+def format_pct(value: Any, decimals: int = 1) -> Any:
+    """Return – if None."""
+    if value is None or pd.isna(value):
+        return ATTR_NONE
+
+    template = "{" + f":.{decimals}%" + "}"
+    return template.format(value)
