@@ -1,4 +1,4 @@
-"""Utils."""
+"""Calculation tools for aggregates."""
 import logging
 import math
 import re
@@ -40,7 +40,12 @@ def to_valid_column_name(name: str) -> str:
 
 def calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
     """Calculate aggregate values for a holding."""
-    data_list = data.to_dict("records", index=True)
+    data_copy = data.copy()
+
+    data_copy[
+        ColumnNameValues.TRANSACTION_DATE
+    ] = data_copy.index  # Convert index to a column
+    data_list = data_copy.to_dict("records", index=True)
 
     cumulative_buy_amount: float = 0.0
     cumulative_buy_volume: float = 0.0
@@ -116,4 +121,24 @@ def calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
 
         output_data.append(row)
 
-    return pd.DataFrame(output_data)
+    final_df = pd.DataFrame(output_data)
+    final_df = final_df.set_index(ColumnNameValues.TRANSACTION_DATE)
+
+    return final_df
+
+
+def calculate_results(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
+    """Calculate aggregate values for a holding."""
+    all_securities_name = cast(list[str], data.name.unique())
+
+    dfs: list[pd.DataFrame] = []
+
+    for name in all_securities_name:
+        df_data = data.query(f"name == '{name}'")
+        df_result = calculate_aggregates(df_data)
+
+        dfs.append(df_result)
+
+    df_output = pd.concat(dfs, ignore_index=False)
+
+    return df_output
