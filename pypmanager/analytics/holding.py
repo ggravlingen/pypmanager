@@ -7,7 +7,6 @@ from typing import cast
 
 import pandas as pd
 
-from .calculate_aggregates import calculate_aggregates
 from .security import MutualFund
 
 LOGGER = logging.Logger(__name__)
@@ -42,9 +41,7 @@ class Holding:
 
         self.all_data = df_all_data
 
-        self.calculated_data = calculate_aggregates(
-            data=self.all_data,
-        )
+        self.calculated_data = df_all_data
 
     @property
     def security_info(self) -> MutualFund:

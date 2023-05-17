@@ -3,6 +3,7 @@ from typing import Any
 
 import pandas as pd
 
+from .calculate_aggregates import calculate_results
 from .const import AccountNameValues, ColumnNameValues, TransactionTypeValues
 
 
@@ -68,10 +69,11 @@ class GeneralLedger:
 
     ledger_list: list[dict[str, Any]]
     ledger_df: pd.DataFrame
+    output_df: pd.DataFrame
 
     def __init__(self, transactions: pd.DataFrame) -> None:
         """Init."""
-        self.transactions = transactions
+        self.transactions = calculate_results(transactions)
 
         self.transactions_to_dict()
         self.create_ledger()
@@ -86,4 +88,6 @@ class GeneralLedger:
         for row in self.ledger_list:
             ledger_list.extend(_amend_row(row=row))
 
-        pd.DataFrame(ledger_list).set_index(ColumnNameValues.TRANSACTION_DATE)
+        self.output_df = pd.DataFrame(ledger_list).set_index(
+            ColumnNameValues.TRANSACTION_DATE
+        )

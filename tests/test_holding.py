@@ -6,7 +6,7 @@ from numpy.testing import assert_allclose
 import pandas as pd
 import pytest
 
-from pypmanager.analytics.calculate_aggregates import (
+from pypmanager.loader_transaction.calculate_aggregates import (
     calculate_aggregates,
     to_valid_column_name,
 )

@@ -25,11 +25,11 @@ def load_data(report_date: datetime | None = None) -> tuple[pd.DataFrame, list[s
         ),
     )
 
-    GeneralLedger(transactions=all_data)
+    calculated_df = GeneralLedger(transactions=all_data).output_df
 
-    all_securities = cast(list[str], all_data.name.unique())
+    all_securities = cast(list[str], calculated_df.name.unique())
 
     return (
-        all_data,
+        calculated_df,
         all_securities,
     )
