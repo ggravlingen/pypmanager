@@ -1,5 +1,5 @@
 Datum;Konto;Typ av transaktion;Värdepapper/beskrivning;Antal;Kurs;Belopp;Courtage;Valuta;ISIN;Resultat
-2023-03-25;Account A;Köp;ABC;22,7616;351.496;-8000;-;SEK;SE0005180000;-
+2023-03-25;Account A;Köp;ABC;100,7616;351.496;-8000;-;SEK;SE0005180000;-
 2023-03-25;Account A;Sälj;ABC;35,1344;62.2385;-2000;-;SEK;SE0005180000;-
 2023-03-31;Cash account;Preliminärskatt;;-;-;-168,48;-;SEK;-;-
 2023-03-31;Cash account;Räntor;;-;-;561,59;-;SEK;-;-

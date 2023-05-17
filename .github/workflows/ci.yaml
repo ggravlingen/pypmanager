@@ -126,6 +126,10 @@ jobs:
       - uses: syphar/restore-virtualenv@v1.3
         id: cache-virtualenv
 
+      - name: Copy fixtures
+        run: |
+          cp tests/fixtures/* data/
+
       - name: Run tests
         run: |
           export PYTEST_ARGS="--timeout=30 --cov pypmanager --cov-report xml:coverage.xml -s"
