@@ -30,6 +30,14 @@ class Portfolio:
         return sum(s.market_value for s in self.holdings if s.market_value is not None)
 
     @property
+    def return_pct(self) -> float | None:
+        """Return return in %."""
+        if self.market_value and self.invested_amount:
+            return self.market_value / self.invested_amount - 1
+
+        return None
+
+    @property
     def total_pnl(self) -> float:
         """Return total PnL."""
         return sum(s.total_pnl for s in self.holdings if s.total_pnl is not None)

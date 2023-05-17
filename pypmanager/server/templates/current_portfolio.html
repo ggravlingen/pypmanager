@@ -135,7 +135,7 @@
                 <th align="right"># held</th>
                 <th align="right">Close</th>
                 <th align="right">Avg cost</th>
-                <th align="right">Chg</th>
+                <th align="right">Change</th>
                 <th>&nbsp;</th>
                 <th align="right">Total (a) + (b)</th>
                 <th align="right">(a) realized</th>
@@ -172,7 +172,7 @@
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
-                <td>&nbsp;</td>
+                <td data-monetary-value="{{ portfolio.return_pct|format_pct }}"></td>
                 <td>&nbsp;</td>
                 <td class="leftBorder" data-monetary-value="{{ portfolio.total_pnl|format_decimals(1) }}"></td>
                 <td data-monetary-value="{{ portfolio.realized_pnl|format_decimals(1) }}"></td>
