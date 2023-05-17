@@ -135,6 +135,7 @@
                 <th align="right"># held</th>
                 <th align="right">Close</th>
                 <th align="right">Avg cost</th>
+                <th align="right">Chg</th>
                 <th>&nbsp;</th>
                 <th align="right">Total (a) + (b)</th>
                 <th align="right">(a) realized</th>
@@ -153,6 +154,7 @@
                     <td data-monetary-value="{{ row.current_holdings|format_decimals(0) }}"></td>
                     <td data-monetary-value="{{ row.current_price|format_decimals(1) }}"></td>
                     <td data-monetary-value="{{ row.average_price|format_decimals(1) }}"></td>
+                    <td data-monetary-value="{{ row.return_pct|format_pct }}"></td>
                     <td>&nbsp;</td>
                     <td class="leftBorder" data-monetary-value="{{ row.total_pnl|format_decimals(1) }}"></td>
                     <td data-monetary-value="{{ row.realized_pnl|format_decimals(1) }}"></td>
@@ -167,6 +169,7 @@
                 <td>Total</td>
                 <td>&nbsp;</td>
                 <td data-monetary-value="{{ portfolio.market_value|format_decimals(0) }}"></td>
+                <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>

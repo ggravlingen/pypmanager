@@ -148,6 +148,14 @@ class Holding:
         return cast(float, avg_price)
 
     @property
+    def return_pct(self) -> float | None:
+        """Return return in %."""
+        if self.average_price and self.current_price:
+            return self.current_price / self.average_price - 1
+
+        return None
+
+    @property
     def dividends(self) -> float | None:
         """Return average price."""
         if (
