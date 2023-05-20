@@ -148,9 +148,6 @@ ignore = [# One of these is to be disabled..
 [tool.ruff.flake8-pytest-style]
 fixture-parentheses = false
 
-[tool.ruff.pyupgrade]
-keep-runtime-typing = true
-
 [tool.ruff.pydocstyle]
 convention = 'pep257'
 
