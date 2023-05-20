@@ -33,6 +33,7 @@ class TransactionTypeValues(StrEnum):
     DEPOSIT = "deposit"
     DIVIDEND = "dividend"
     FEE = "fee"
+    FEE_CREDIT = "fee_credit"
     INTEREST = "interest"
     SELL = "sell"
     TAX = "tax"
@@ -45,7 +46,12 @@ class AccountNameValues(StrEnum):
     CASH = "cash"
     EQUITY = "equity"
     SECURITIES = "securities"
-    IS_COSTS = "income_statement_costs"
+    IS_PNL = "is_trading"
+    IS_CASHBACK = "is_cashback"
+    IS_DIVIDEND = "is_dividends"
+    IS_INTEREST = "is_interest"
+    IS_FEE = "is_costs_fee"
+    IS_TAX = "is_costs_tax"
 
 
 class CurrencyValues(StrEnum):
@@ -58,6 +64,7 @@ class ColumnNameValues(StrEnum):
     """Represent names of columns in the ledger."""
 
     ACCOUNT = "ledger_account"
+    AVG_PRICE = "average_price"
     AMOUNT = "amount"
     BROKER = "broker"
     COMMISSION = "commission"
@@ -68,9 +75,11 @@ class ColumnNameValues(StrEnum):
     NAME = "name"
     NO_TRADED = "no_traded"
     PRICE = "price"
+    REALIZED_PNL = "realized_pnl"
     SOURCE = "source"
     TRANSACTION_DATE = "transaction_date"
     TRANSACTION_TYPE = "transaction_type"
+    TRANSACTION_TYPE_INTERNAL = "transaction_type_internal"
 
 
 class CSVSeparator(StrEnum):

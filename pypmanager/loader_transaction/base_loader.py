@@ -25,6 +25,7 @@ from .const import (
 FILTER_STATEMENT = (
     f"('{TransactionTypeValues.DIVIDEND}'"
     f",'{TransactionTypeValues.FEE}'"
+    f",'{TransactionTypeValues.FEE_CREDIT}'"
     f",'{TransactionTypeValues.INTEREST}'"
     f",'{TransactionTypeValues.DEPOSIT}'"
     f",'{TransactionTypeValues.CASHBACK}'"
