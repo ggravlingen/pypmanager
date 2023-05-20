@@ -32,9 +32,11 @@ class TransactionMacro:
         self.amount = row[ColumnNameValues.AMOUNT]
         self.transaction_type = row[ColumnNameValues.TRANSACTION_TYPE]
         self.profit_loss = row[ColumnNameValues.REALIZED_PNL]
-        self.invested_amount = (
-            row[ColumnNameValues.AVG_PRICE] * row[ColumnNameValues.NO_TRADED]
-        )
+
+        if row[ColumnNameValues.AVG_PRICE] and row[ColumnNameValues.NO_TRADED]:
+            self.invested_amount = (
+                row[ColumnNameValues.AVG_PRICE] * row[ColumnNameValues.NO_TRADED]
+            )
 
         self.credit_rows: ListType = []
         self.debit_rows: ListType = []
