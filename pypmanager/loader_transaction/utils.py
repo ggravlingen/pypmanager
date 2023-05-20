@@ -27,6 +27,8 @@ def load_data(report_date: datetime | None = None) -> tuple[pd.DataFrame, list[s
 
     calculated_df = GeneralLedger(transactions=all_data).output_df
 
+    calculated_df.to_excel("debug.xlsx")
+
     all_securities = cast(list[str], calculated_df.name.unique())
 
     return (

@@ -18,7 +18,7 @@ def _transaction_type(row: pd.DataFrame) -> pd.Series:
         row[ColumnNameValues.TRANSACTION_TYPE] == "Övrigt"
         and "Flyttavg" in row[ColumnNameValues.NAME]
     ):
-        return TransactionTypeValues.FEE
+        return TransactionTypeValues.FEE_CREDIT
 
     return row[ColumnNameValues.TRANSACTION_TYPE]
 

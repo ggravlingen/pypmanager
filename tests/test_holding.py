@@ -91,6 +91,7 @@ def test_calculate_aggregates() -> None:
     data = pd.DataFrame(TEST_DATA)
     data.set_index("report_date")
     result = calculate_aggregates(data)
+    print(result)
 
     assert result.name.to_list() == [
         "AAPL",
@@ -142,7 +143,7 @@ def test_calculate_aggregates() -> None:
 
     assert_allclose(
         result.average_price.to_list(),
-        [100.5, 67.166667, 67.166667, 67.166667, np.nan, np.nan, 50],
+        [100.5, 67.166667, 67.166667, 67.166667, 67.166667, np.nan, 50],
         rtol=1e-2,
         atol=0,
         equal_nan=True,
@@ -154,7 +155,7 @@ def test_calculate_aggregates() -> None:
         2000,
         2000,
         2000,
-        0,
+        2000,
         0,
         1000,
     ]

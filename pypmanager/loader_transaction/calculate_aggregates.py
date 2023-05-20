@@ -59,6 +59,16 @@ def calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
     # Loop through all rows
     output_data: list[dict[str, Any]] = []
     for row in data_list:
+        if math.isclose(cumulative_buy_volume, 0, rel_tol=1e-9, abs_tol=1e-12):
+            LOGGER.debug(
+                f"Cumulative buy volume too small {cumulative_buy_volume} for "
+                f"{row['transaction_type']}"
+            )
+            cumulative_buy_volume = 0.0
+            average_price = None
+            cumulative_invested_amount = 0.0
+            cumulative_buy_amount = 0.0
+
         amount = cast(float, row[ColumnNameValues.AMOUNT])
         no_traded = cast(float, abs(row[ColumnNameValues.NO_TRADED]))
         commission = cast(float | None, abs(row[ColumnNameValues.COMMISSION]))
@@ -75,10 +85,17 @@ def calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
             realized_pnl = amount
             cumulative_dividends += amount
 
-        if transaction_type == TransactionTypeValues.TAX.value:
+        if transaction_type in [
+            TransactionTypeValues.TAX.value,
+            TransactionTypeValues.CASHBACK.value,
+        ]:
             realized_pnl = +amount
 
         if transaction_type == TransactionTypeValues.FEE.value:
+            realized_pnl = amount
+            cumulative_fees += amount
+
+        if transaction_type == TransactionTypeValues.FEE_CREDIT.value:
             realized_pnl = amount
             cumulative_fees += amount
 
@@ -101,16 +118,6 @@ def calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
             realized_pnl = (
                 row[ColumnNameValues.PRICE] - average_price
             ) * no_traded - commission
-
-        if math.isclose(cumulative_buy_volume, 0, rel_tol=1e-9, abs_tol=1e-12):
-            LOGGER.debug(
-                f"Cumulative buy volume too small {cumulative_buy_volume} for "
-                f"{row['transaction_type']}"
-            )
-            cumulative_buy_volume = 0.0
-            average_price = None
-            cumulative_invested_amount = 0.0
-            cumulative_buy_amount = 0.0
 
         # All variables defined inside this function
         _locals = locals()
