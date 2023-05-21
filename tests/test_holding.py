@@ -93,12 +93,92 @@ TEST_DATA = [
 ]
 
 
+def test_calculate_aggregates__buy_sell__same_ccy() -> None:
+    """Test _calculate_aggregates for buy/sell in the same currency."""
+    sample_data = [
+        {
+            "report_date": datetime(2023, 5, 8, 12, 0, 0),
+            "broker": "Acoount 1",
+            "name": "AAPL",
+            "transaction_type": TransactionTypeValues.BUY,
+            "amount": -10 * 100,
+            "no_traded": 10,
+            "price": 100,
+            "commission": -5,
+            "fx_rate": 1,
+        },
+        {
+            "report_date": datetime(2023, 5, 8, 13, 0, 0),
+            "broker": "Acoount 1",
+            "name": "AAPL",
+            "transaction_type": TransactionTypeValues.BUY,
+            "amount": -20 * 50,
+            "no_traded": 20,
+            "price": 50,
+            "commission": -10,
+            "fx_rate": 1,
+        },
+        {
+            "report_date": datetime(2023, 5, 8, 14, 0, 0),
+            "broker": "Acoount 1",
+            "name": "AAPL",
+            "transaction_type": TransactionTypeValues.SELL,
+            "amount": 30 * 100,
+            "no_traded": 30,
+            "price": 100,
+            "commission": -100,
+            "fx_rate": 1,
+        },
+    ]
+    data = pd.DataFrame(sample_data)
+    data.set_index("report_date")
+    result = calculate_aggregates(data)
+
+    assert result.name.to_list() == ["AAPL", "AAPL", "AAPL"]
+    assert result.amount.to_list() == [-1000, -1000, 3000]
+    assert result.commission.to_list() == [-5, -10, -100]
+    assert result.fx_rate.to_list() == [1.0, 1.0, 1.0]
+    assert result.average_fx_rate.to_list() == [1.0, 1.0, 0.0]
+    assert_allclose(
+        result.average_price.to_list(),
+        [100.500000, 67.166667, np.nan],
+        rtol=1e-2,
+        atol=0,
+        equal_nan=True,
+    )
+    assert result.cash_flow_base_ccy.to_list() == [-1005, -1010, 2900]
+    assert result.cumulative_invested_amount.to_list() == [-1005, -2015, 885.0]
+    assert result.cumulative_buy_amount.to_list() == [1000, 2000, 2000]
+    assert result.cumulative_buy_volume.to_list() == [10, 30, 0]
+    assert_allclose(
+        result.realized_pnl_equity.to_list(),
+        [0.0, 0.0, 885.0],
+        rtol=1e-2,
+        atol=0,
+        equal_nan=True,
+    )
+    assert_allclose(
+        result.realized_pnl_fx.to_list(),
+        [0.0, 0.0, 0.0],
+        rtol=1e-2,
+        atol=0,
+        equal_nan=True,
+    )
+
+    assert_allclose(
+        result.realized_pnl.to_list(),
+        [np.nan, np.nan, 885.0],
+        rtol=1e-2,
+        atol=0,
+        equal_nan=True,
+    )
+
+
 def test_calculate_aggregates() -> None:
     """Test _calculate_aggregates."""
     data = pd.DataFrame(TEST_DATA)
     data.set_index("report_date")
     result = calculate_aggregates(data)
-    print(result)
 
     assert result.name.to_list() == [
         "AAPL",

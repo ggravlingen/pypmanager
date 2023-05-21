@@ -78,8 +78,8 @@ def calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
     cumulative_invested_amount: float = 0.0
     sum_amount_x_fx: float = 0.0
     realized_pnl: float | None = 0.0  # pylint: disable=possibly-unused-variable
-    realized_pnl_equity: float | None = 0.0  # pylint: disable=possibly-unused-variable
-    realized_pnl_fx: float | None = 0.0  # pylint: disable=possibly-unused-variable
+    realized_pnl_equity: float = 0.0  # pylint: disable=possibly-unused-variable
+    realized_pnl_fx: float = 0.0  # pylint: disable=possibly-unused-variable
 
     # Loop through all rows
     output_data: list[dict[str, Any]] = []
@@ -104,7 +104,7 @@ def calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
         else:
             fx_rate = 1.0
         if pd.isna(fx_rate):
-            fx_rate = 11.0
+            fx_rate = 1.0
 
         if transaction_type == TransactionTypeValues.INTEREST.value:
             realized_pnl = amount
@@ -171,10 +171,7 @@ def calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
                 * average_fx_rate
             )
 
-            if realized_pnl_equity and realized_pnl_fx:
-                realized_pnl = realized_pnl_equity + realized_pnl_fx
-            else:
-                realized_pnl = 0.0
+            realized_pnl = realized_pnl_equity + realized_pnl_fx
 
         if math.isclose(cumulative_buy_volume, 0, rel_tol=1e-9, abs_tol=1e-12):
             LOGGER.debug(
@@ -193,10 +190,7 @@ def calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
 
         output_data.append(row)
 
-    final_df = pd.DataFrame(output_data)
-    final_df = final_df.set_index(ColumnNameValues.TRANSACTION_DATE)
-
-    return final_df
+    return pd.DataFrame(output_data).set_index(ColumnNameValues.TRANSACTION_DATE)
 
 
 def calculate_results(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
