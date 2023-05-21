@@ -30,8 +30,11 @@ class TransactionMacro:
         self.row = row
 
         self.amount = row[ColumnNameValues.AMOUNT]
+        self.amount_local = row[ColumnNameValues.CASH_FLOW_LOCAL]
         self.transaction_type = row[ColumnNameValues.TRANSACTION_TYPE]
         self.profit_loss = row[ColumnNameValues.REALIZED_PNL]
+        self.profit_loss_eq = row[ColumnNameValues.REALIZED_PNL_EQ]
+        self.profit_loss_fx = row[ColumnNameValues.REALIZED_PNL_FX]
 
         if row[ColumnNameValues.AVG_PRICE] and row[ColumnNameValues.NO_TRADED]:
             self.invested_amount = (
@@ -46,16 +49,20 @@ class TransactionMacro:
         credit_row = self.row.copy()
         credit_row[ColumnNameValues.ACCOUNT] = AccountNameValues.CASH
         # Amount is negative in the row data due to being a cash outflow
-        credit_row[ColumnNameValues.CREDIT] = -self.amount
+        credit_row[ColumnNameValues.CREDIT] = -self.amount_local
 
         debit_row = self.row.copy()
         debit_row[ColumnNameValues.ACCOUNT] = AccountNameValues.SECURITIES
         debit_row[ColumnNameValues.AMOUNT] = None
+        debit_row[ColumnNameValues.AVG_PRICE] = None
         debit_row[ColumnNameValues.COMMISSION] = None
         # Amount is negative in the row data due to being a cash outflow
         debit_row[ColumnNameValues.DEBIT] = -self.amount
         debit_row[ColumnNameValues.NO_TRADED] = None
+        debit_row[ColumnNameValues.NO_HELD] = None
         debit_row[ColumnNameValues.REALIZED_PNL] = None
+        debit_row[ColumnNameValues.REALIZED_PNL_EQ] = None
+        debit_row[ColumnNameValues.REALIZED_PNL_FX] = None
         debit_row[ColumnNameValues.PRICE] = None
         debit_row[ColumnNameValues.TRANSACTION_TYPE] = None
 
@@ -139,39 +146,57 @@ class TransactionMacro:
                 self.transaction_type
             ]
             credit_row[ColumnNameValues.AMOUNT] = None
+            credit_row[ColumnNameValues.AVG_PRICE] = None
             credit_row[ColumnNameValues.COMMISSION] = None
             credit_row[ColumnNameValues.CREDIT] = self.profit_loss
+            credit_row[ColumnNameValues.PRICE] = None
             credit_row[ColumnNameValues.REALIZED_PNL] = None
+            credit_row[ColumnNameValues.REALIZED_PNL_EQ] = None
+            credit_row[ColumnNameValues.REALIZED_PNL_FX] = None
             credit_row[ColumnNameValues.NO_TRADED] = None
+            credit_row[ColumnNameValues.NO_HELD] = None
             credit_row[ColumnNameValues.TRANSACTION_TYPE] = None
             self.credit_rows.append(credit_row)
 
             if self.transaction_type == TransactionTypeValues.SELL:
                 credit_row_2[ColumnNameValues.ACCOUNT] = AccountNameValues.EQUITY
+                credit_row_2[ColumnNameValues.AVG_PRICE] = None
                 credit_row_2[ColumnNameValues.AMOUNT] = None
                 credit_row_2[ColumnNameValues.COMMISSION] = None
                 credit_row_2[ColumnNameValues.CREDIT] = self.profit_loss
+                credit_row_2[ColumnNameValues.PRICE] = None
                 credit_row_2[ColumnNameValues.REALIZED_PNL] = None
+                credit_row_2[ColumnNameValues.REALIZED_PNL_EQ] = None
+                credit_row_2[ColumnNameValues.REALIZED_PNL_FX] = None
                 credit_row_2[ColumnNameValues.NO_TRADED] = None
+                credit_row_2[ColumnNameValues.NO_HELD] = None
                 credit_row_2[ColumnNameValues.TRANSACTION_TYPE] = None
                 self.credit_rows.append(credit_row_2)
 
         else:
             debit_row[ColumnNameValues.ACCOUNT] = MAP_PNL_ACCOUNT[self.transaction_type]
             debit_row[ColumnNameValues.AMOUNT] = None
+            debit_row[ColumnNameValues.AVG_PRICE] = None
             debit_row[ColumnNameValues.COMMISSION] = None
             debit_row[ColumnNameValues.DEBIT] = -self.profit_loss
-            debit_row[ColumnNameValues.REALIZED_PNL] = None
             debit_row[ColumnNameValues.NO_TRADED] = None
+            debit_row[ColumnNameValues.PRICE] = None
+            debit_row[ColumnNameValues.REALIZED_PNL] = None
+            debit_row[ColumnNameValues.REALIZED_PNL_EQ] = None
+            debit_row[ColumnNameValues.REALIZED_PNL_FX] = None
             debit_row[ColumnNameValues.TRANSACTION_TYPE] = None
             self.debit_rows.append(debit_row)
 
             if self.transaction_type == TransactionTypeValues.SELL:
                 debit_row_2[ColumnNameValues.ACCOUNT] = AccountNameValues.EQUITY
                 debit_row_2[ColumnNameValues.AMOUNT] = None
+                debit_row_2[ColumnNameValues.AVG_PRICE] = None
                 debit_row_2[ColumnNameValues.COMMISSION] = None
                 debit_row_2[ColumnNameValues.DEBIT] = -self.profit_loss
+                debit_row_2[ColumnNameValues.PRICE] = None
                 debit_row_2[ColumnNameValues.REALIZED_PNL] = None
+                debit_row_2[ColumnNameValues.REALIZED_PNL_EQ] = None
+                debit_row_2[ColumnNameValues.REALIZED_PNL_FX] = None
                 debit_row_2[ColumnNameValues.NO_TRADED] = None
                 debit_row_2[ColumnNameValues.TRANSACTION_TYPE] = None
                 self.debit_rows.append(debit_row_2)
@@ -186,15 +211,20 @@ class TransactionMacro:
         # We want to reduce the securities account by the nominal invested amount
         # as we haven't market the AccountNameValues.SECURITIES to market
         credit_row[ColumnNameValues.ACCOUNT] = AccountNameValues.SECURITIES
-        credit_row[ColumnNameValues.CREDIT] = -self.invested_amount
+        credit_row[ColumnNameValues.CREDIT] = self.amount
 
         # The cash amount should be increased by the full amount of the sale
         debit_row[ColumnNameValues.ACCOUNT] = AccountNameValues.CASH
         debit_row[ColumnNameValues.AMOUNT] = None
+        debit_row[ColumnNameValues.AVG_PRICE] = None
         debit_row[ColumnNameValues.COMMISSION] = None
-        debit_row[ColumnNameValues.DEBIT] = self.amount
+        debit_row[ColumnNameValues.DEBIT] = self.amount_local
         debit_row[ColumnNameValues.NO_TRADED] = None
+        debit_row[ColumnNameValues.NO_HELD] = None
+        debit_row[ColumnNameValues.PRICE] = None
         debit_row[ColumnNameValues.REALIZED_PNL] = None
+        debit_row[ColumnNameValues.REALIZED_PNL_EQ] = None
+        debit_row[ColumnNameValues.REALIZED_PNL_FX] = None
         debit_row[ColumnNameValues.TRANSACTION_TYPE] = None
 
         self.credit_rows.append(credit_row)

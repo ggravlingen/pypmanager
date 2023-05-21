@@ -22,6 +22,7 @@ TEST_DATA = [
         "no_traded": 10,
         "price": 100,
         "commission": 5,
+        "fx_rate": 1,
     },
     {
         "report_date": datetime(2023, 5, 8, 12, 1, 0),
@@ -32,6 +33,7 @@ TEST_DATA = [
         "no_traded": 20,
         "price": 50,
         "commission": 10,
+        "fx_rate": 1,
     },
     {
         "report_date": datetime(2023, 5, 8, 12, 2, 0),
@@ -42,6 +44,7 @@ TEST_DATA = [
         "no_traded": 1,
         "price": 20,
         "commission": 0,
+        "fx_rate": 1,
     },
     {
         "report_date": datetime(2023, 5, 8, 12, 3, 0),
@@ -52,6 +55,7 @@ TEST_DATA = [
         "no_traded": 1,
         "price": 20,
         "commission": 0,
+        "fx_rate": 1,
     },
     {
         "report_date": datetime(2023, 5, 8, 12, 4, 0),
@@ -62,6 +66,7 @@ TEST_DATA = [
         "no_traded": -30,
         "price": 100,
         "commission": 100,
+        "fx_rate": 1,
     },
     {
         "report_date": datetime(2023, 5, 8, 12, 5, 0),
@@ -72,6 +77,7 @@ TEST_DATA = [
         "no_traded": np.nan,
         "price": np.nan,
         "commission": np.nan,
+        "fx_rate": 1,
     },
     {
         "report_date": datetime(2023, 5, 8, 12, 6, 0),
@@ -82,6 +88,7 @@ TEST_DATA = [
         "no_traded": 20,
         "price": 50,
         "commission": 10,
+        "fx_rate": 1,
     },
 ]
 
@@ -139,11 +146,11 @@ def test_calculate_aggregates() -> None:
 
     assert pd.isna(result.realized_pnl.to_list()[0])
     assert pd.isna(result.realized_pnl.to_list()[1])
-    assert pytest.approx(result.realized_pnl.sum()) == 905
+    assert pytest.approx(result.realized_pnl.sum()) == 935
 
     assert_allclose(
         result.average_price.to_list(),
-        [100.5, 67.166667, 67.166667, 67.166667, 67.166667, np.nan, 50],
+        [99.5, 66.166667, 66.166667, 66.166667, np.nan, np.nan, 49.5],
         rtol=1e-2,
         atol=0,
         equal_nan=True,
@@ -159,7 +166,7 @@ def test_calculate_aggregates() -> None:
         0,
         1000,
     ]
-    assert result.cumulative_invested_amount.to_list()[:2] == [1005, 2015]
+    assert result.cumulative_invested_amount.to_list()[:2] == [-995.0, -1985.0]
     assert result.cumulative_dividends.to_list() == [0, 0, 20, 20, 20, 20, 20]
 
 

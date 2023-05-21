@@ -11,14 +11,18 @@ from pypmanager.loader_transaction.const import ColumnNameValues, TransactionTyp
 LOGGER = logging.Logger(__name__)
 
 CALCULATED_COLUMNS = [
+    "average_fx_rate",
     "average_price",
+    "cash_flow_base_ccy",
+    "cumulative_invested_amount",
     "cumulative_buy_amount",
     "cumulative_buy_volume",
     "cumulative_interest",
     "cumulative_dividends",
     "cumulative_fees",
     "realized_pnl",
-    "cumulative_invested_amount",
+    "realized_pnl_equity",
+    "realized_pnl_fx",
 ]
 
 
@@ -38,6 +42,22 @@ def to_valid_column_name(name: str) -> str:
     return name
 
 
+def _calculate_cash_flow(row: dict[str, Any]) -> float:
+    """Calculate FX-adjusted cash flow."""
+    amount = cast(float, row[ColumnNameValues.AMOUNT])
+
+    # Convert amount to base currency
+    if ColumnNameValues.FX in row and row[ColumnNameValues.FX]:
+        fx_rate = cast(float, row[ColumnNameValues.FX])
+        amount *= fx_rate
+
+    commission = cast(float, row[ColumnNameValues.COMMISSION])
+    if commission is None or pd.isna(commission):
+        commission = 0.0
+
+    return amount + commission
+
+
 def calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
     """Calculate aggregate values for a holding."""
     data_copy = data.copy()
@@ -47,14 +67,19 @@ def calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
     ] = data_copy.index  # Convert index to a column
     data_list = data_copy.to_dict("records", index=True)
 
+    average_fx_rate: float | None = 0.0
+    average_price: float | None = 0.0
+    cash_flow_base_ccy: float = 0.0
     cumulative_buy_amount: float = 0.0
     cumulative_buy_volume: float = 0.0
     cumulative_dividends: float = 0.0
     cumulative_fees: float = 0.0
     cumulative_interest: float = 0.0
     cumulative_invested_amount: float = 0.0
-    average_price: float | None = 0.0
+    sum_amount_x_fx: float = 0.0
     realized_pnl: float | None = 0.0  # pylint: disable=possibly-unused-variable
+    realized_pnl_equity: float | None = 0.0  # pylint: disable=possibly-unused-variable
+    realized_pnl_fx: float | None = 0.0  # pylint: disable=possibly-unused-variable
 
     # Loop through all rows
     output_data: list[dict[str, Any]] = []
@@ -65,17 +90,21 @@ def calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
                 f"{row['transaction_type']}"
             )
             cumulative_buy_volume = 0.0
-            average_price = None
             cumulative_invested_amount = 0.0
             cumulative_buy_amount = 0.0
 
-        amount = cast(float, row[ColumnNameValues.AMOUNT])
-        no_traded = cast(float, abs(row[ColumnNameValues.NO_TRADED]))
+        amount = cast(float, row[ColumnNameValues.AMOUNT])  # in nominal amount
+        cash_flow_base_ccy = _calculate_cash_flow(row=row)
         commission = cast(float | None, abs(row[ColumnNameValues.COMMISSION]))
+        no_traded = cast(float, abs(row[ColumnNameValues.NO_TRADED]))
         transaction_type = cast(str, row[ColumnNameValues.TRANSACTION_TYPE])
 
-        if commission is None or pd.isna(commission):
-            commission = 0
+        if ColumnNameValues.FX in row:
+            fx_rate = cast(float, abs(row[ColumnNameValues.FX]))
+        else:
+            fx_rate = 1.0
+        if pd.isna(fx_rate):
+            fx_rate = 11.0
 
         if transaction_type == TransactionTypeValues.INTEREST.value:
             realized_pnl = amount
@@ -101,23 +130,59 @@ def calculate_aggregates(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
 
         if transaction_type == TransactionTypeValues.BUY.value:
             cumulative_buy_volume += no_traded
+
             # Amounts have a negative sign due to being cash outflows so we need to
             # adjust for that here
             cumulative_buy_amount += -amount
+
+            # Calculate volume weighted fx rate
+            sum_amount_x_fx += -amount * fx_rate
+
             # Amount will be negative here due to it being a negative cash flow
-            cumulative_invested_amount += -amount + commission
+            cumulative_invested_amount += cash_flow_base_ccy
             try:
-                average_price = cumulative_invested_amount / cumulative_buy_volume
+                average_price = cumulative_invested_amount / cumulative_buy_volume * -1
             except ZeroDivisionError:
                 average_price = None
+
+            try:
+                average_fx_rate = sum_amount_x_fx / cumulative_buy_amount
+            except ZeroDivisionError:
+                average_fx_rate = None
+
             realized_pnl = None
 
         if transaction_type == TransactionTypeValues.SELL.value:
-            cumulative_invested_amount += -amount
+            cumulative_invested_amount += cash_flow_base_ccy
             cumulative_buy_volume += -no_traded
-            realized_pnl = (
-                row[ColumnNameValues.PRICE] - average_price
-            ) * no_traded - commission
+
+            assert average_price is not None
+
+            # Calculate PnL
+            realized_pnl_equity = (
+                (row[ColumnNameValues.PRICE] - average_price)
+                * no_traded
+                * average_fx_rate
+            ) - commission
+
+            realized_pnl_fx = (
+                (row[ColumnNameValues.FX] - average_fx_rate)
+                * (average_price * no_traded)
+                * average_fx_rate
+            )
+
+            if realized_pnl_equity and realized_pnl_fx:
+                realized_pnl = realized_pnl_equity + realized_pnl_fx
+            else:
+                realized_pnl = 0.0
+
+        if math.isclose(cumulative_buy_volume, 0, rel_tol=1e-9, abs_tol=1e-12):
+            LOGGER.debug(
+                f"Cumulative buy volume too small {cumulative_buy_volume} for "
+                f"{row['transaction_type']}"
+            )
+            average_fx_rate = 0.0
+            average_price = None
 
         # All variables defined inside this function
         _locals = locals()

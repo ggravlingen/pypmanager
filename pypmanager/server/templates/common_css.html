@@ -1,0 +1,137 @@
+<style>
+    *,
+    html,
+    body {
+        margin: 0;
+        box-sizing: border-box;
+        max-width: 1440px;
+    }
+
+    :root {
+        --primary-color: #0d2e54;
+        --secondary-color: #d9d9d9;
+        --primary-font: Verdana, Geneva, Tahoma, sans-serif;
+        --font-size: 11px;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    tr:nth-child(odd) {
+        background-color: var(--secondary-color);
+    }
+
+    th {
+        padding: 3px;
+        margin: 0px;
+        font-family: var(--primary-font);
+        font-size: var(--font-size);
+        background-color: #000000;
+        color: #FFFFFF;
+    }
+
+    tr:hover {
+        background-color: yellow;
+    }
+
+    td {
+        padding: 3px;
+        font-family: var(--primary-font);
+        font-size: var(--font-size);
+        vertical-align: top;
+    }
+
+    td[data-name]:after {
+        content: attr(data-name);
+    }
+
+    td[data-name] {
+        text-align: left;
+    }
+
+    td[data-name-right]:after {
+        content: attr(data-name-right);
+    }
+
+    td[data-name-right] {
+        text-align: right;
+    }
+
+    td[data-monetary-value]:after {
+        content: attr(data-monetary-value);
+    }
+    td[data-monetary-value][data-monetary-value^="-"]:after {
+        color: red;
+    }
+    td[data-monetary-value] {
+        text-align: right;
+    }
+    td[data-date-value]:after {
+        content: attr(data-date-value);
+        white-space: nowrap;
+    }
+
+    td[data-date-value] {
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    td[data-int-value]:after {
+        content: attr(data-int-value);
+    }
+
+    td[data-int-value] {
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    /* Classes */
+    .total {
+        font-weight: bold;
+        border-top: 1px solid black;
+    }
+
+    .navigation {
+        background-color: #000000;
+        font-size: var(--font-size);
+    }
+
+    .navigation a {
+        color: #FFFFFF;
+        font-weight: bold;
+        font-family: var(--primary-font);
+    }
+
+    .navigation a:hover {
+        color: #f00;
+    }
+
+    .bodyText {
+        color: #000000;
+        font-family: var(--primary-font);
+        font-size: var(--font-size);
+    }
+
+    .leftBorder {
+        border-left: 1px solid black;
+    }
+
+    .detailRow {
+        font-size: 8px
+    }
+
+    .tableHeaderNoWrap {
+        white-space: nowrap;
+    }
+
+    .tableRowNoWrap {
+        white-space: nowrap;
+    }
+
+    .backgroundLocal {
+        background-color: #0d2e54;
+    }
+
+</style>
