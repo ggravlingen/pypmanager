@@ -1,4 +1,7 @@
 """Transaction loader."""
-from .utils import load_data
+from .avanza import AvanzaLoader
+from .general_ledger import GeneralLedger
+from .lysa import LysaLoader
+from .misc import MiscLoader
 
-__all__ = ["load_data"]
+__all__ = ["AvanzaLoader", "LysaLoader", "MiscLoader", "GeneralLedger"]

@@ -9,10 +9,8 @@ from numpy import datetime64
 import pandas as pd
 import yaml
 
-from pypmanager.error import DataError
 from pypmanager.settings import Settings
 
-from .const import LOGGER
 from .models import Source, SourceData, Sources
 
 CONFIG_FILE = os.path.abspath(os.path.join(Settings.DIR_CONFIG, "market_data.yaml"))
@@ -88,23 +86,3 @@ def _upsert_df(data: list[SourceData], source_name: str) -> None:
 
     # Write the merged DataFrame back to the CSV file
     merged_df.to_csv(Settings.FILE_MARKET_DATA, index=False, sep=";")
-
-
-async def market_data_loader() -> None:
-    """Load JSON-data from a source."""
-    sources = _load_sources()
-
-    for source in sources:
-        LOGGER.info(f"Parsing {source.isin_code} using {source.loader_class}")
-
-        try:
-            data_loader_klass = _class_importer(source.loader_class)
-        except AttributeError as err:
-            raise DataError("Unable to load data", err) from err
-
-        loader = data_loader_klass(
-            lookup_key=source.lookup_key,
-            isin_code=source.isin_code,
-            name=source.name,
-        )
-        _upsert_df(data=loader.to_source_data(), source_name=loader.source)
