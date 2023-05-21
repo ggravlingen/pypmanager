@@ -2,14 +2,14 @@
 from __future__ import annotations
 
 import time
+from typing import cast
 
 from fastapi import FastAPI
 from fastapi.responses import FileResponse, HTMLResponse
 
 from pypmanager.analytics import Portfolio
 from pypmanager.analytics.holding import Holding
-from pypmanager.loader_transaction import load_data
-from pypmanager.loader_transaction.utils import get_general_ledger
+from pypmanager.helpers import get_general_ledger
 from pypmanager.server.templates import load_template
 from pypmanager.settings import Settings
 
@@ -27,7 +27,8 @@ async def get_favicon() -> FileResponse:
 @app.get("/", response_class=HTMLResponse)
 async def index(view: str | None = None) -> str:
     """Present overview page."""
-    all_data, all_securities = load_data()
+    df_general_ledger = get_general_ledger()
+    all_securities = cast(list[str], df_general_ledger.name.unique())
 
     holdings: list[Holding] = []
     for security_name in all_securities:
@@ -35,7 +36,7 @@ async def index(view: str | None = None) -> str:
 
         holding = Holding(
             name=security_name,
-            all_data=all_data,
+            all_data=df_general_ledger,
         )
 
         end_time = time.time()
