@@ -50,6 +50,8 @@ class TransactionMacro:
         credit_row[ColumnNameValues.ACCOUNT] = AccountNameValues.CASH
         # Amount is negative in the row data due to being a cash outflow
         credit_row[ColumnNameValues.CREDIT] = -self.amount_local
+        credit_row[ColumnNameValues.REALIZED_PNL_EQ] = None
+        credit_row[ColumnNameValues.REALIZED_PNL_FX] = None
 
         debit_row = self.row.copy()
         debit_row[ColumnNameValues.ACCOUNT] = AccountNameValues.SECURITIES
@@ -211,6 +213,7 @@ class TransactionMacro:
         # We want to reduce the securities account by the nominal invested amount
         # as we haven't market the AccountNameValues.SECURITIES to market
         credit_row[ColumnNameValues.ACCOUNT] = AccountNameValues.SECURITIES
+        credit_row[ColumnNameValues.AVG_PRICE] = None
         credit_row[ColumnNameValues.CREDIT] = self.amount
 
         # The cash amount should be increased by the full amount of the sale
