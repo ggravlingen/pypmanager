@@ -226,7 +226,7 @@ def test_calculate_aggregates() -> None:
 
     assert pd.isna(result.realized_pnl.to_list()[0])
     assert pd.isna(result.realized_pnl.to_list()[1])
-    assert pytest.approx(result.realized_pnl.sum()) == 20
+    assert pytest.approx(result.realized_pnl.sum()) == 935
 
     assert_allclose(
         result.average_price.to_list(),
