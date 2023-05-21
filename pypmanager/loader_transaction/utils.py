@@ -12,8 +12,8 @@ from .lysa import LysaLoader
 from .misc import MiscLoader
 
 
-def load_data(report_date: datetime | None = None) -> tuple[pd.DataFrame, list[str]]:
-    """Load all data."""
+def get_general_ledger(report_date: datetime | None = None) -> pd.DataFrame:
+    """Return the general ledger."""
     all_data = cast(
         pd.DataFrame,
         pd.concat(
@@ -25,11 +25,16 @@ def load_data(report_date: datetime | None = None) -> tuple[pd.DataFrame, list[s
         ),
     )
 
-    calculated_df = GeneralLedger(transactions=all_data).output_df
+    return GeneralLedger(transactions=all_data).output_df
 
-    all_securities = cast(list[str], calculated_df.name.unique())
+
+def load_data(report_date: datetime | None = None) -> tuple[pd.DataFrame, list[str]]:
+    """Load all data."""
+    df_general_ledger = get_general_ledger(report_date=report_date)
+
+    all_securities = cast(list[str], df_general_ledger.name.unique())
 
     return (
-        calculated_df,
+        df_general_ledger,
         all_securities,
     )

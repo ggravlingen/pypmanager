@@ -9,6 +9,7 @@ from fastapi.responses import FileResponse, HTMLResponse
 from pypmanager.analytics import Portfolio
 from pypmanager.analytics.holding import Holding
 from pypmanager.loader_transaction import load_data
+from pypmanager.loader_transaction.utils import get_general_ledger
 from pypmanager.server.templates import load_template
 from pypmanager.settings import Settings
 
@@ -60,4 +61,15 @@ async def index(view: str | None = None) -> str:
     return await load_template(
         template_name="current_portfolio.html",
         context={"securities": holdings, "portfolio": portfolio},
+    )
+
+
+@app.get("/ledger", response_class=HTMLResponse)
+async def ledger() -> str:
+    """Return the general ledger."""
+    general_ledger = get_general_ledger().reset_index().to_dict(orient="records")
+
+    return await load_template(
+        template_name="general_ledger.html",
+        context={"ledger": general_ledger},
     )

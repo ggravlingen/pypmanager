@@ -134,6 +134,17 @@ class Holding:
         return cast(date, min(self.calculated_data.index))
 
     @property
+    def average_fx_rate(self) -> float | None:
+        """Return average price."""
+        if self.calculated_data is None or self.calculated_data.average_fx_rate.empty:
+            return 0.0
+
+        if (average_fx_rate := self.calculated_data.average_fx_rate.iloc[-1]) is None:
+            return None
+
+        return cast(float, average_fx_rate)
+
+    @property
     def average_price(self) -> float | None:
         """Return average price."""
         if self.calculated_data is None or self.calculated_data.average_price.empty:
@@ -213,6 +224,35 @@ class Holding:
             return 0.0
 
         pnl = self.calculated_data.realized_pnl.sum()
+
+        if pd.isna(pnl):
+            return 0.0
+
+        return cast(float, pnl)
+
+    @property
+    def realized_pnl_equity(self) -> float:
+        """Return realized PnL."""
+        if (
+            self.calculated_data is None
+            or self.calculated_data.realized_pnl_equity.empty
+        ):
+            return 0.0
+
+        pnl = self.calculated_data.realized_pnl_equity.sum()
+
+        if pd.isna(pnl):
+            return 0.0
+
+        return cast(float, pnl)
+
+    @property
+    def realized_pnl_fx(self) -> float:
+        """Return realized PnL."""
+        if self.calculated_data is None or self.calculated_data.realized_pnl_fx.empty:
+            return 0.0
+
+        pnl = self.calculated_data.realized_pnl_fx.sum()
 
         if pd.isna(pnl):
             return 0.0

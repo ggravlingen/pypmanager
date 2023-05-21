@@ -4,26 +4,6 @@ from __future__ import annotations
 from enum import StrEnum
 import logging
 
-DTYPES_MAP: dict[str, type[str] | type[float]] = {
-    "account": str,
-    "transaction_type": str,
-    "name": str,
-    "no_traded": float,
-    "price": float,
-    "amount": float,
-    "commission": float,
-    "currency": str,
-    "isin_code": str,
-}
-
-NUMBER_COLS = [
-    "no_traded",
-    "price",
-    "amount",
-    "commission",
-    "pnl",
-]
-
 
 class TransactionTypeValues(StrEnum):
     """Represent transaction types."""
@@ -68,14 +48,19 @@ class ColumnNameValues(StrEnum):
     AMOUNT = "amount"
     BROKER = "broker"
     COMMISSION = "commission"
+    CASH_FLOW_LOCAL = "cash_flow_base_ccy"
     CURRENCY = "currency"
     CREDIT = "credit"
     DEBIT = "debit"
+    FX = "fx_rate"
     ISIN_CODE = "isin_code"
     NAME = "name"
     NO_TRADED = "no_traded"
+    NO_HELD = "cumulative_buy_volume"
     PRICE = "price"
     REALIZED_PNL = "realized_pnl"
+    REALIZED_PNL_EQ = "realized_pnl_equity"
+    REALIZED_PNL_FX = "realized_pnl_fx"
     SOURCE = "source"
     TRANSACTION_DATE = "transaction_date"
     TRANSACTION_TYPE = "transaction_type"
@@ -87,6 +72,29 @@ class CSVSeparator(StrEnum):
 
     COMMA = ","
     SEMI_COLON = ";"
+
+
+DTYPES_MAP: dict[str, type[str] | type[float]] = {
+    ColumnNameValues.ACCOUNT: str,
+    ColumnNameValues.TRANSACTION_TYPE: str,
+    ColumnNameValues.NAME: str,
+    ColumnNameValues.NO_TRADED: float,
+    ColumnNameValues.PRICE: float,
+    ColumnNameValues.AMOUNT: float,
+    ColumnNameValues.COMMISSION: float,
+    ColumnNameValues.CURRENCY: str,
+    ColumnNameValues.ISIN_CODE: str,
+    ColumnNameValues.FX: float,
+}
+
+NUMBER_COLS = [
+    ColumnNameValues.AMOUNT,
+    ColumnNameValues.COMMISSION,
+    ColumnNameValues.FX,
+    ColumnNameValues.NO_TRADED,
+    ColumnNameValues.PRICE,
+    ColumnNameValues.REALIZED_PNL,
+]
 
 
 LOGGER = logging.getLogger(__package__)

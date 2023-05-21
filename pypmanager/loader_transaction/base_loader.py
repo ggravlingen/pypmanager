@@ -9,7 +9,6 @@ import os
 import random
 from typing import cast
 
-import numpy as np
 import pandas as pd
 
 from pypmanager.settings import Settings
@@ -78,10 +77,13 @@ REPLACE_CONFIG = [
 
 def _normalize_amount(row: pd.DataFrame) -> float:
     """Calculate amount if nan."""
-    if np.isnan(row[ColumnNameValues.AMOUNT]):
-        amount = row[ColumnNameValues.NO_TRADED] * row[ColumnNameValues.PRICE]
-    else:
+    if row[ColumnNameValues.TRANSACTION_TYPE] in [
+        TransactionTypeValues.CASHBACK,
+        TransactionTypeValues.FEE,
+    ]:
         amount = row[ColumnNameValues.AMOUNT]
+    else:
+        amount = row[ColumnNameValues.NO_TRADED] * row[ColumnNameValues.PRICE]
 
     # Buy and tax is a negative cash flow for us
     if row.transaction_type in [
@@ -219,7 +221,7 @@ class TransactionLoader:
                 minute=random.randint(0, 59),
                 microsecond=random.randint(0, 999999),
             )
-            if x.strftime("%Y-%m-%d") == x.strftime("%Y-%m-%d")
+            if x and x.strftime("%Y-%m-%d") == x.strftime("%Y-%m-%d")
             else x
         )
 

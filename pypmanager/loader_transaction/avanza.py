@@ -37,6 +37,7 @@ class AvanzaLoader(TransactionLoader):
         "Courtage": ColumnNameValues.COMMISSION,
         "Valuta": ColumnNameValues.CURRENCY,
         "ISIN": ColumnNameValues.ISIN_CODE,
+        "FX": ColumnNameValues.FX,
     }
 
     file_pattern = "avanza*.csv"
