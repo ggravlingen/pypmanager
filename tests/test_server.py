@@ -1,6 +1,7 @@
 """Tests for FastAPI server."""
 
 from fastapi.testclient import TestClient
+
 from pypmanager.server import app
 
 client = TestClient(app)
