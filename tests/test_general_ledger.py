@@ -1,5 +1,4 @@
 """Tests for the general ledger."""
-import pytest
 
 from pypmanager.loader_transaction.const import (
     AccountNameValues,

@@ -1,6 +1,6 @@
 """Test loader for market data."""
-import json
 from datetime import datetime
+import json
 from unittest import mock
 
 from pypmanager.loader_market_data.avanza import AvanzaLoader
