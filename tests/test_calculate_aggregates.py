@@ -15,8 +15,13 @@ def test_interest_transaction():
         [
             {
                 ColumnNameValues.AMOUNT: 100.0,
+                ColumnNameValues.AVG_PRICE: None,
                 ColumnNameValues.BROKER: "Broker",
+                ColumnNameValues.CF_EX_COMMISSION: None,
+                ColumnNameValues.COST_BASIS_DELTA: None,
+                ColumnNameValues.SUM_COST_BASIS_DELTA: None,
                 ColumnNameValues.NAME: "Name A",
+                ColumnNameValues.NO_HELD: None,
                 ColumnNameValues.REALIZED_PNL: 100.0,
                 ColumnNameValues.REALIZED_PNL_DIVIDEND: 0.0,
                 ColumnNameValues.REALIZED_PNL_INTEREST: 100.0,
