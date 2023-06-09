@@ -23,6 +23,7 @@ def test_interest_transaction():
                 ColumnNameValues.NAME: "Name A",
                 ColumnNameValues.NO_HELD: None,
                 ColumnNameValues.REALIZED_PNL: 100.0,
+                ColumnNameValues.REALIZED_PNL_EQ: None,
                 ColumnNameValues.REALIZED_PNL_DIVIDEND: 0.0,
                 ColumnNameValues.REALIZED_PNL_INTEREST: 100.0,
                 ColumnNameValues.SOURCE: "Source",
