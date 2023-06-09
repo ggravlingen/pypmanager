@@ -67,6 +67,9 @@ class ColumnNameValues(StrEnum):
     TRANSACTION_DATE = "transaction_date"
     TRANSACTION_TYPE = "transaction_type"
     TRANSACTION_TYPE_INTERNAL = "transaction_type_internal"
+    CF_EX_COMMISSION = "cf_ex_commission"
+    COST_BASIS_DELTA = "cost_basis_delta"
+    SUM_COST_BASIS_DELTA = "sum_cost_basis_delta"
 
 
 class CSVSeparator(StrEnum):

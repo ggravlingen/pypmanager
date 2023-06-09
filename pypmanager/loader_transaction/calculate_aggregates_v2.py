@@ -38,11 +38,11 @@ class CalculateAggregates:
     # The commission paid. None if there is no commission.
     nominal_commission: float | None
     # Cumulative sum of bought/sold. None if all are sold.
-    cf_ex_commission: float | None
+    cf_ex_commission: float | None = None
     # no_traded x nominal_price
     nominal_cf: float
     # The current amount held
-    sum_held: float | None
+    sum_held: float | None = None
     # The total PnL
     pnl_total: float | None
     # The PnL from changes in the security price
@@ -54,11 +54,11 @@ class CalculateAggregates:
     # The PnL from dividends received
     pnl_dividend: float = 0.0
     # The delta on the cost bases from this transaction
-    cost_basis_delta: float | None
+    cost_basis_delta: float | None = None
     # The cumulative sum of cost_basis_delta
-    sum_cost_basis_delta: float | None
+    sum_cost_basis_delta: float | None = None
     # The average cost for the currently held securities
-    avg_cost_basis: float | None
+    avg_cost_basis: float | None = None
 
     def __init__(self, security_transactions: pd.DataFrame) -> None:
         """Init class."""
@@ -88,6 +88,9 @@ class CalculateAggregates:
             if self.transaction_type == TransactionTypeValues.DIVIDEND.value:
                 self.handle_dividend()
 
+            if self.transaction_type == TransactionTypeValues.BUY.value:
+                self.handle_buy()
+
         self.calculate_total_pnl()
         self.add_transaction()
 
@@ -100,6 +103,26 @@ class CalculateAggregates:
         """Handle an interest payment."""
         if self.amount:
             self.pnl_dividend += self.amount
+
+    def handle_buy(self) -> None:
+        """Handle a buy transaction."""
+        if self.sum_held is None:
+            self.sum_held = 0.0
+
+        if self.cf_ex_commission is None:
+            self.cf_ex_commission = 0.0
+
+        if self.cost_basis_delta is None:
+            self.cost_basis_delta = 0.0
+
+        if self.sum_cost_basis_delta is None:
+            self.sum_cost_basis_delta = 0.0
+
+        self.sum_held += self.no_traded
+        self.cf_ex_commission += self.no_traded * self.nominal_price
+        self.cost_basis_delta = -self.cf_ex_commission
+        self.sum_cost_basis_delta += self.cost_basis_delta
+        self.avg_cost_basis = self.cost_basis_delta / self.sum_held
 
     def calculate_total_pnl(self) -> None:
         """Calculate total PnL."""
@@ -126,8 +149,13 @@ class CalculateAggregates:
         self.calculated_transaction_list.append(
             {
                 ColumnNameValues.AMOUNT: self.amount,
+                ColumnNameValues.AVG_PRICE: self.avg_cost_basis,
                 ColumnNameValues.BROKER: self.broker,
+                ColumnNameValues.CF_EX_COMMISSION: self.cf_ex_commission,
+                ColumnNameValues.COST_BASIS_DELTA: self.cost_basis_delta,
+                ColumnNameValues.SUM_COST_BASIS_DELTA: self.sum_cost_basis_delta,
                 ColumnNameValues.NAME: self.name,
+                ColumnNameValues.NO_HELD: self.sum_held,
                 ColumnNameValues.REALIZED_PNL: self.pnl_total,
                 ColumnNameValues.REALIZED_PNL_DIVIDEND: self.pnl_dividend,
                 ColumnNameValues.REALIZED_PNL_INTEREST: self.pnl_interest,
