@@ -1,7 +1,6 @@
 """Aggregation calculator."""
 from datetime import date
 import logging
-import re
 from typing import Any
 
 import pandas as pd
@@ -20,6 +19,10 @@ class CalculateAggregates:
 
     # The transaction's amount
     amount: float | None
+    # Name of the broker
+    broker: str
+    # Name of the source
+    source: str
     # The date of the transaction
     transaction_date: date
     # Type of transaction, eg buy/sell
@@ -28,6 +31,8 @@ class CalculateAggregates:
     nominal_ccy: str
     # Number of securities traded in the transaction
     no_traded: int
+    # The name of the security
+    name: str
     # The price of the security
     nominal_price: float
     # The commission paid. None if there is no commission.
@@ -70,28 +75,6 @@ class CalculateAggregates:
         final_df = final_df.set_index(ColumnNameValues.TRANSACTION_DATE)
         self.output_data = final_df
 
-    @staticmethod
-    def to_valid_column_name(name: str) -> str:
-        """Convert a string to a valid pandas column name."""
-        name = name.lower()  # lowercase
-
-        name = re.sub(r"\s+", "_", name)  # replace whitespace with underscores
-
-        name = re.sub(r"[^\w]", "", name)  # remove non-alphanumeric characters
-
-        if (
-            not name[0].isalpha() and name[0] != "_"
-        ):  # ensure column name starts with a letter or underscore
-            name = "_" + name
-
-        return name
-
-    def set_base_data(self, row: dict[str, Any]) -> None:
-        """Set base data from the transaction."""
-        self.transaction_type = row[ColumnNameValues.TRANSACTION_TYPE]
-        self.transaction_date = row[ColumnNameValues.TRANSACTION_DATE]
-        self.amount = row[ColumnNameValues.AMOUNT]
-
     def parse_transactions(self) -> None:
         """Loop through all transactions."""
         for row in self.input_data:
@@ -116,14 +99,26 @@ class CalculateAggregates:
 
         self.pnl_total = pnl
 
+    def set_base_data(self, row: dict[str, Any]) -> None:
+        """Set base data from the transaction."""
+        self.amount = row[ColumnNameValues.AMOUNT]
+        self.broker = row[ColumnNameValues.BROKER]
+        self.name = row[ColumnNameValues.NAME]
+        self.source = row[ColumnNameValues.SOURCE]
+        self.transaction_type = row[ColumnNameValues.TRANSACTION_TYPE]
+        self.transaction_date = row[ColumnNameValues.TRANSACTION_DATE]
+
     def add_transaction(self) -> None:
         """Add the transaction back to a data list."""
         self.calculated_transaction_list.append(
             {
+                ColumnNameValues.AMOUNT: self.amount,
+                ColumnNameValues.BROKER: self.broker,
+                ColumnNameValues.NAME: self.name,
+                ColumnNameValues.REALIZED_PNL: self.pnl_total,
+                ColumnNameValues.REALIZED_PNL_INTEREST: self.pnl_interest,
+                ColumnNameValues.SOURCE: self.source,
                 ColumnNameValues.TRANSACTION_DATE: self.transaction_date,
                 ColumnNameValues.TRANSACTION_TYPE: self.transaction_type,
-                ColumnNameValues.AMOUNT: self.amount,
-                ColumnNameValues.REALIZED_PNL_INTEREST: self.pnl_interest,
-                ColumnNameValues.REALIZED_PNL: self.pnl_total,
             }
         )

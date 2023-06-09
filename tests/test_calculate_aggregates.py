@@ -14,11 +14,14 @@ def test_interest_transaction():
     expected_df = pd.DataFrame(
         [
             {
+                ColumnNameValues.AMOUNT: 100.0,
+                ColumnNameValues.BROKER: "Broker",
+                ColumnNameValues.NAME: "Name A",
+                ColumnNameValues.REALIZED_PNL: 100.0,
+                ColumnNameValues.REALIZED_PNL_INTEREST: 100.0,
+                ColumnNameValues.SOURCE: "Source",
                 ColumnNameValues.TRANSACTION_DATE: datetime(2023, 4, 1),
                 ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.INTEREST,
-                ColumnNameValues.AMOUNT: 100.0,
-                ColumnNameValues.REALIZED_PNL_INTEREST: 100.0,
-                ColumnNameValues.REALIZED_PNL: 100.0,
             }
         ]
     )
@@ -26,9 +29,12 @@ def test_interest_transaction():
 
     data = [
         {
+            ColumnNameValues.AMOUNT: 100.0,
+            ColumnNameValues.BROKER: "Broker",
+            ColumnNameValues.NAME: "Name A",
+            ColumnNameValues.SOURCE: "Source",
             ColumnNameValues.TRANSACTION_DATE: datetime(2023, 4, 1),
             ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.INTEREST,
-            ColumnNameValues.AMOUNT: 100.0,
         }
     ]
     df_test = pd.DataFrame(data)
