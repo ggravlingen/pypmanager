@@ -51,6 +51,8 @@ class CalculateAggregates:
     pnl_commission: float | None
     # The PnL from interest paid or received
     pnl_interest: float = 0.0
+    # The PnL from dividends received
+    pnl_dividend: float = 0.0
     # The delta on the cost bases from this transaction
     cost_basis_delta: float | None
     # The cumulative sum of cost_basis_delta
@@ -83,6 +85,9 @@ class CalculateAggregates:
             if self.transaction_type == TransactionTypeValues.INTEREST.value:
                 self.handle_interest()
 
+            if self.transaction_type == TransactionTypeValues.DIVIDEND.value:
+                self.handle_dividend()
+
         self.calculate_total_pnl()
         self.add_transaction()
 
@@ -91,11 +96,19 @@ class CalculateAggregates:
         if self.amount:
             self.pnl_interest += self.amount
 
+    def handle_dividend(self) -> None:
+        """Handle an interest payment."""
+        if self.amount:
+            self.pnl_dividend += self.amount
+
     def calculate_total_pnl(self) -> None:
         """Calculate total PnL."""
         pnl = 0.0
         if self.pnl_interest:
             pnl += self.pnl_interest
+
+        if self.pnl_dividend:
+            pnl += self.pnl_dividend
 
         self.pnl_total = pnl
 
@@ -116,6 +129,7 @@ class CalculateAggregates:
                 ColumnNameValues.BROKER: self.broker,
                 ColumnNameValues.NAME: self.name,
                 ColumnNameValues.REALIZED_PNL: self.pnl_total,
+                ColumnNameValues.REALIZED_PNL_DIVIDEND: self.pnl_dividend,
                 ColumnNameValues.REALIZED_PNL_INTEREST: self.pnl_interest,
                 ColumnNameValues.SOURCE: self.source,
                 ColumnNameValues.TRANSACTION_DATE: self.transaction_date,
