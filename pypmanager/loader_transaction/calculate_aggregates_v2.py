@@ -46,7 +46,7 @@ class CalculateAggregates:
     # The total PnL
     pnl_total: float | None
     # The PnL from changes in the security price
-    pnl_price: float | None
+    pnl_price: float | None = None
     # The PnL from commissions paid
     pnl_commission: float | None
     # The PnL from interest paid or received
@@ -91,6 +91,9 @@ class CalculateAggregates:
             if self.transaction_type == TransactionTypeValues.BUY.value:
                 self.handle_buy()
 
+            if self.transaction_type == TransactionTypeValues.SELL.value:
+                self.handle_sell()
+
         self.calculate_total_pnl()
         self.add_transaction()
 
@@ -124,14 +127,34 @@ class CalculateAggregates:
         self.sum_cost_basis_delta += self.cost_basis_delta
         self.avg_cost_basis = self.cost_basis_delta / self.sum_held
 
+    def handle_sell(self) -> None:
+        """Handle a sell transaction."""
+        if (
+            self.avg_cost_basis is None
+            or self.sum_cost_basis_delta is None
+            or self.sum_held is None
+        ):
+            return
+
+        self.pnl_price = (
+            (self.nominal_price - self.avg_cost_basis) * self.no_traded * -1
+        )
+        self.cost_basis_delta = self.avg_cost_basis * self.no_traded * -1
+        self.sum_cost_basis_delta += self.cost_basis_delta
+        self.avg_cost_basis = self.cost_basis_delta / self.sum_held
+
     def calculate_total_pnl(self) -> None:
         """Calculate total PnL."""
         pnl = 0.0
+
         if self.pnl_interest:
             pnl += self.pnl_interest
 
         if self.pnl_dividend:
             pnl += self.pnl_dividend
+
+        if self.pnl_price:
+            pnl += self.pnl_price
 
         self.pnl_total = pnl
 
@@ -157,6 +180,7 @@ class CalculateAggregates:
                 ColumnNameValues.NAME: self.name,
                 ColumnNameValues.NO_HELD: self.sum_held,
                 ColumnNameValues.REALIZED_PNL: self.pnl_total,
+                ColumnNameValues.REALIZED_PNL_EQ: self.pnl_price,
                 ColumnNameValues.REALIZED_PNL_DIVIDEND: self.pnl_dividend,
                 ColumnNameValues.REALIZED_PNL_INTEREST: self.pnl_interest,
                 ColumnNameValues.SOURCE: self.source,
