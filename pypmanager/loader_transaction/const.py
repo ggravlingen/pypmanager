@@ -62,6 +62,7 @@ class ColumnNameValues(StrEnum):
     REALIZED_PNL_EQ = "realized_pnl_equity"
     REALIZED_PNL_FX = "realized_pnl_fx"
     REALIZED_PNL_INTEREST = "realized_pnl_interest"
+    REALIZED_PNL_DIVIDEND = "realized_pnl_dividend"
     SOURCE = "source"
     TRANSACTION_DATE = "transaction_date"
     TRANSACTION_TYPE = "transaction_type"

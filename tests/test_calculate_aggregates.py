@@ -18,6 +18,7 @@ def test_interest_transaction():
                 ColumnNameValues.BROKER: "Broker",
                 ColumnNameValues.NAME: "Name A",
                 ColumnNameValues.REALIZED_PNL: 100.0,
+                ColumnNameValues.REALIZED_PNL_DIVIDEND: 0.0,
                 ColumnNameValues.REALIZED_PNL_INTEREST: 100.0,
                 ColumnNameValues.SOURCE: "Source",
                 ColumnNameValues.TRANSACTION_DATE: datetime(2023, 4, 1),
