@@ -23,6 +23,7 @@ def test_interest_transaction() -> None:
                 ColumnNameValues.SUM_COST_BASIS_DELTA: None,
                 ColumnNameValues.NAME: "Name A",
                 ColumnNameValues.NO_HELD: None,
+                ColumnNameValues.PRICE: None,
                 ColumnNameValues.REALIZED_PNL: 100.0,
                 ColumnNameValues.REALIZED_PNL_COMMISSION: None,
                 ColumnNameValues.REALIZED_PNL_EQ: None,
@@ -70,6 +71,7 @@ def test_dividend_transaction() -> None:
                 ColumnNameValues.SUM_COST_BASIS_DELTA: None,
                 ColumnNameValues.NAME: "Name A",
                 ColumnNameValues.NO_HELD: None,
+                ColumnNameValues.PRICE: None,
                 ColumnNameValues.REALIZED_PNL: 100.0,
                 ColumnNameValues.REALIZED_PNL_COMMISSION: None,
                 ColumnNameValues.REALIZED_PNL_EQ: None,
@@ -93,6 +95,56 @@ def test_dividend_transaction() -> None:
             ColumnNameValues.SOURCE: "Source",
             ColumnNameValues.TRANSACTION_DATE: datetime(2023, 4, 1),
             ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.DIVIDEND,
+        }
+    ]
+    df_test = pd.DataFrame(data)
+    df_test = df_test.set_index(ColumnNameValues.TRANSACTION_DATE)
+
+    data = CalculateAggregates(security_transactions=df_test)
+
+    assert_frame_equal(data.output_data, expected_df)
+
+
+def test_buy_transaction() -> None:
+    """Test buy transaction."""
+    expected_df = pd.DataFrame(
+        [
+            {
+                ColumnNameValues.AMOUNT: 100.0,
+                ColumnNameValues.AVG_PRICE: 10.0,
+                ColumnNameValues.BROKER: "Broker",
+                ColumnNameValues.CF_EX_COMMISSION: -100.0,
+                ColumnNameValues.COMMISSION: -5.0,
+                ColumnNameValues.COST_BASIS_DELTA: -100.0,
+                ColumnNameValues.SUM_COST_BASIS_DELTA: -100.0,
+                ColumnNameValues.NAME: "Name A",
+                ColumnNameValues.NO_HELD: 10.0,
+                ColumnNameValues.PRICE: 10.0,
+                ColumnNameValues.REALIZED_PNL: None,
+                ColumnNameValues.REALIZED_PNL_COMMISSION: None,
+                ColumnNameValues.REALIZED_PNL_EQ: None,
+                ColumnNameValues.REALIZED_PNL_DIVIDEND: None,
+                ColumnNameValues.REALIZED_PNL_INTEREST: None,
+                ColumnNameValues.SOURCE: "Source",
+                ColumnNameValues.TRANSACTION_CASH_FLOW: -105.0,
+                ColumnNameValues.TRANSACTION_DATE: datetime(2023, 4, 1),
+                ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.BUY,
+            }
+        ]
+    )
+    expected_df = expected_df.set_index(ColumnNameValues.TRANSACTION_DATE)
+
+    data = [
+        {
+            ColumnNameValues.AMOUNT: 100.0,
+            ColumnNameValues.BROKER: "Broker",
+            ColumnNameValues.COMMISSION: -5.0,
+            ColumnNameValues.NAME: "Name A",
+            ColumnNameValues.NO_TRADED: 10.0,
+            ColumnNameValues.PRICE: 10.0,
+            ColumnNameValues.SOURCE: "Source",
+            ColumnNameValues.TRANSACTION_DATE: datetime(2023, 4, 1),
+            ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.BUY,
         }
     ]
     df_test = pd.DataFrame(data)
