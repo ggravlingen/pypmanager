@@ -110,7 +110,7 @@ def test_buy_transaction() -> None:
     expected_df = pd.DataFrame(
         [
             {
-                ColumnNameValues.AMOUNT: 100.0,
+                ColumnNameValues.AMOUNT: -100.0,
                 ColumnNameValues.AVG_PRICE: 10.0,
                 ColumnNameValues.BROKER: "Broker",
                 ColumnNameValues.CF_EX_COMMISSION: -100.0,
@@ -136,7 +136,7 @@ def test_buy_transaction() -> None:
 
     data = [
         {
-            ColumnNameValues.AMOUNT: 100.0,
+            ColumnNameValues.AMOUNT: -100.0,
             ColumnNameValues.BROKER: "Broker",
             ColumnNameValues.COMMISSION: -5.0,
             ColumnNameValues.NAME: "Name A",
