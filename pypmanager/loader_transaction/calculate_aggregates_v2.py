@@ -50,9 +50,9 @@ class CalculateAggregates:
     # The PnL from commissions paid
     pnl_commission: float | None
     # The PnL from interest paid or received
-    pnl_interest: float = 0.0
+    pnl_interest: float | None = None
     # The PnL from dividends received
-    pnl_dividend: float = 0.0
+    pnl_dividend: float | None = None
     # The delta on the cost bases from this transaction
     cost_basis_delta: float | None = None
     # The cumulative sum of cost_basis_delta
@@ -100,11 +100,17 @@ class CalculateAggregates:
 
     def handle_interest(self) -> None:
         """Handle an interest payment."""
+        if self.pnl_interest is None:
+            self.pnl_interest = 0.0
+
         if self.amount:
             self.pnl_interest += self.amount
 
     def handle_dividend(self) -> None:
         """Handle an interest payment."""
+        if self.pnl_dividend is None:
+            self.pnl_dividend = 0.0
+
         if self.amount:
             self.pnl_dividend += self.amount
 
