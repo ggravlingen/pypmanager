@@ -39,8 +39,6 @@ class CalculateAggregates:
     nominal_commission: float | None = None
     # Cumulative sum of bought/sold. None if all are sold.
     cf_ex_commission: float | None = None
-    # no_traded x nominal_price
-    nominal_cf: float
     # The current amount held
     sum_held: float | None = None
     # The total PnL
