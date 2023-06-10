@@ -57,6 +57,8 @@ class CalculateAggregates:
     sum_cost_basis_delta: float | None = None
     # The average cost for the currently held securities
     avg_cost_basis: float | None = None
+    # The transaction's cash flow effect
+    transaction_cash_flow: float | None = None
 
     def __init__(self, security_transactions: pd.DataFrame) -> None:
         """Init class."""
@@ -175,6 +177,18 @@ class CalculateAggregates:
         self.transaction_type = row[ColumnNameValues.TRANSACTION_TYPE]
         self.transaction_date = row[ColumnNameValues.TRANSACTION_DATE]
         self.nominal_commission = row[ColumnNameValues.COMMISSION]
+        self._calculate_transaction_cash_flow()
+
+    def _calculate_transaction_cash_flow(self) -> None:
+        """Calculate the transaction's cash flow effect."""
+        transaction_cash_flow = 0.0
+        if self.amount:
+            transaction_cash_flow += self.amount
+
+        if self.nominal_commission:
+            transaction_cash_flow += self.nominal_commission
+
+        self.transaction_cash_flow = transaction_cash_flow
 
     def add_transaction(self) -> None:
         """Add the transaction back to a data list."""
@@ -195,6 +209,7 @@ class CalculateAggregates:
                 ColumnNameValues.REALIZED_PNL_DIVIDEND: self.pnl_dividend,
                 ColumnNameValues.REALIZED_PNL_INTEREST: self.pnl_interest,
                 ColumnNameValues.SOURCE: self.source,
+                ColumnNameValues.TRANSACTION_CASH_FLOW: self.transaction_cash_flow,
                 ColumnNameValues.TRANSACTION_DATE: self.transaction_date,
                 ColumnNameValues.TRANSACTION_TYPE: self.transaction_type,
             }

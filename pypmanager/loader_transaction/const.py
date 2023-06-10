@@ -71,6 +71,7 @@ class ColumnNameValues(StrEnum):
     CF_EX_COMMISSION = "cf_ex_commission"
     COST_BASIS_DELTA = "cost_basis_delta"
     SUM_COST_BASIS_DELTA = "sum_cost_basis_delta"
+    TRANSACTION_CASH_FLOW = "transaction_cash_flow"
 
 
 class CSVSeparator(StrEnum):

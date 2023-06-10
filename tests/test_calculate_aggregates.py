@@ -29,6 +29,7 @@ def test_interest_transaction() -> None:
                 ColumnNameValues.REALIZED_PNL_DIVIDEND: None,
                 ColumnNameValues.REALIZED_PNL_INTEREST: 100.0,
                 ColumnNameValues.SOURCE: "Source",
+                ColumnNameValues.TRANSACTION_CASH_FLOW: 100.0,
                 ColumnNameValues.TRANSACTION_DATE: datetime(2023, 4, 1),
                 ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.INTEREST,
             }
@@ -75,6 +76,7 @@ def test_dividend_transaction() -> None:
                 ColumnNameValues.REALIZED_PNL_DIVIDEND: 100.0,
                 ColumnNameValues.REALIZED_PNL_INTEREST: None,
                 ColumnNameValues.SOURCE: "Source",
+                ColumnNameValues.TRANSACTION_CASH_FLOW: 100.0,
                 ColumnNameValues.TRANSACTION_DATE: datetime(2023, 4, 1),
                 ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.DIVIDEND,
             }
