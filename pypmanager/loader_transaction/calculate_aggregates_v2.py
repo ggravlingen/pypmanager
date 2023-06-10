@@ -14,7 +14,7 @@ class CalculateAggregates:
     """Class to calculate aggregates for a security."""
 
     input_data: list[dict[str, Any]]
-    calculated_transaction_list: list[dict[str, Any]] = []
+    calculated_transaction_list: list[dict[str, Any]]
     output_data: pd.DataFrame
 
     # The transaction's amount
@@ -62,6 +62,7 @@ class CalculateAggregates:
 
     def __init__(self, security_transactions: pd.DataFrame) -> None:
         """Init class."""
+        self.calculated_transaction_list = []
         data_copy = security_transactions.copy()
         self.data = data_copy
 
@@ -94,8 +95,8 @@ class CalculateAggregates:
             if self.transaction_type == TransactionTypeValues.SELL.value:
                 self.handle_sell()
 
-        self.calculate_total_pnl()
-        self.add_transaction()
+            self.calculate_total_pnl()
+            self.add_transaction()
 
     def handle_interest(self) -> None:
         """Handle an interest payment."""

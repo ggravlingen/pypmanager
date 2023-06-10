@@ -9,7 +9,7 @@ from pypmanager.loader_transaction.calculate_aggregates_v2 import CalculateAggre
 from pypmanager.loader_transaction.const import ColumnNameValues, TransactionTypeValues
 
 
-def test_interest_transaction():
+def test_interest_transaction() -> None:
     """Test interest transaction."""
     expected_df = pd.DataFrame(
         [
@@ -52,15 +52,21 @@ def test_interest_transaction():
     assert_frame_equal(data.output_data, expected_df)
 
 
-def test_dividend_transaction():
-    """Test interest transaction."""
+def test_dividend_transaction() -> None:
+    """Test dividend transaction."""
     expected_df = pd.DataFrame(
         [
             {
                 ColumnNameValues.AMOUNT: 100.0,
+                ColumnNameValues.AVG_PRICE: None,
                 ColumnNameValues.BROKER: "Broker",
+                ColumnNameValues.CF_EX_COMMISSION: None,
+                ColumnNameValues.COST_BASIS_DELTA: None,
+                ColumnNameValues.SUM_COST_BASIS_DELTA: None,
                 ColumnNameValues.NAME: "Name A",
+                ColumnNameValues.NO_HELD: None,
                 ColumnNameValues.REALIZED_PNL: 100.0,
+                ColumnNameValues.REALIZED_PNL_EQ: None,
                 ColumnNameValues.REALIZED_PNL_DIVIDEND: 100.0,
                 ColumnNameValues.REALIZED_PNL_INTEREST: 0.0,
                 ColumnNameValues.SOURCE: "Source",
@@ -85,3 +91,5 @@ def test_dividend_transaction():
     df_test = df_test.set_index(ColumnNameValues.TRANSACTION_DATE)
 
     data = CalculateAggregates(security_transactions=df_test)
+
+    assert_frame_equal(data.output_data, expected_df)
