@@ -60,6 +60,7 @@ class ColumnNameValues(StrEnum):
     PRICE = "price"
     REALIZED_PNL = "realized_pnl"
     REALIZED_PNL_EQ = "realized_pnl_equity"
+    REALIZED_PNL_COMMISSION = "realized_pnl_commission"
     REALIZED_PNL_FX = "realized_pnl_fx"
     REALIZED_PNL_INTEREST = "realized_pnl_interest"
     REALIZED_PNL_DIVIDEND = "realized_pnl_dividend"

@@ -36,7 +36,7 @@ class CalculateAggregates:
     # The price of the security
     nominal_price: float
     # The commission paid. None if there is no commission.
-    nominal_commission: float | None
+    nominal_commission: float | None = None
     # Cumulative sum of bought/sold. None if all are sold.
     cf_ex_commission: float | None = None
     # no_traded x nominal_price
@@ -48,7 +48,7 @@ class CalculateAggregates:
     # The PnL from changes in the security price
     pnl_price: float | None = None
     # The PnL from commissions paid
-    pnl_commission: float | None
+    pnl_commission: float | None = None
     # The PnL from interest paid or received
     pnl_interest: float | None = None
     # The PnL from dividends received
@@ -157,6 +157,9 @@ class CalculateAggregates:
         if self.pnl_interest:
             pnl += self.pnl_interest
 
+        if self.pnl_commission:
+            pnl += self.pnl_commission
+
         if self.pnl_dividend:
             pnl += self.pnl_dividend
 
@@ -173,6 +176,7 @@ class CalculateAggregates:
         self.source = row[ColumnNameValues.SOURCE]
         self.transaction_type = row[ColumnNameValues.TRANSACTION_TYPE]
         self.transaction_date = row[ColumnNameValues.TRANSACTION_DATE]
+        self.nominal_commission = row[ColumnNameValues.COMMISSION]
 
     def add_transaction(self) -> None:
         """Add the transaction back to a data list."""
@@ -182,11 +186,13 @@ class CalculateAggregates:
                 ColumnNameValues.AVG_PRICE: self.avg_cost_basis,
                 ColumnNameValues.BROKER: self.broker,
                 ColumnNameValues.CF_EX_COMMISSION: self.cf_ex_commission,
+                ColumnNameValues.COMMISSION: self.nominal_commission,
                 ColumnNameValues.COST_BASIS_DELTA: self.cost_basis_delta,
                 ColumnNameValues.SUM_COST_BASIS_DELTA: self.sum_cost_basis_delta,
                 ColumnNameValues.NAME: self.name,
                 ColumnNameValues.NO_HELD: self.sum_held,
                 ColumnNameValues.REALIZED_PNL: self.pnl_total,
+                ColumnNameValues.REALIZED_PNL_COMMISSION: self.pnl_commission,
                 ColumnNameValues.REALIZED_PNL_EQ: self.pnl_price,
                 ColumnNameValues.REALIZED_PNL_DIVIDEND: self.pnl_dividend,
                 ColumnNameValues.REALIZED_PNL_INTEREST: self.pnl_interest,
