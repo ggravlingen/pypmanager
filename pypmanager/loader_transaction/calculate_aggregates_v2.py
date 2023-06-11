@@ -18,7 +18,7 @@ class CalculateAggregates:
     output_data: pd.DataFrame
 
     # The transaction's amount
-    amount: float | None
+    amount: float | None = None
     # Name of the broker
     broker: str
     # Name of the source
@@ -155,12 +155,27 @@ class CalculateAggregates:
         ):
             return
 
+        transaction_cash_flow: float = -(self.no_traded * self.nominal_price)
+        if self.nominal_commission:
+            transaction_cash_flow += self.nominal_commission
+        self.transaction_cash_flow = transaction_cash_flow
+
+        self.sum_held += self.no_traded
         self.pnl_price = (
             (self.nominal_price - self.avg_cost_basis) * self.no_traded * -1
         )
         self.cost_basis_delta = self.avg_cost_basis * self.no_traded * -1
+        self.cf_ex_commission = self.nominal_price * self.no_traded * -1
         self.sum_cost_basis_delta += self.cost_basis_delta
-        self.avg_cost_basis = self.cost_basis_delta / self.sum_held * -1
+        if self.sum_held <= 0:
+            self.cost_basis_delta = None
+            self.sum_cost_basis_delta = None
+            self.avg_cost_basis = None
+            self.sum_held = None
+        else:
+            self.cost_basis_delta = self.avg_cost_basis * self.no_traded * -1
+            self.sum_cost_basis_delta += self.cost_basis_delta
+            self.avg_cost_basis = self.cost_basis_delta / self.sum_held * -1
 
     def calculate_total_pnl(self) -> None:
         """Calculate total PnL."""
