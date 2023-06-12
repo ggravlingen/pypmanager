@@ -45,6 +45,7 @@ class ColumnNameValues(StrEnum):
 
     ACCOUNT = "ledger_account"
     AVG_PRICE = "average_price"
+    AVG_FX = "average_fx_rate"
     AMOUNT = "amount"
     BROKER = "broker"
     COMMISSION = "commission"

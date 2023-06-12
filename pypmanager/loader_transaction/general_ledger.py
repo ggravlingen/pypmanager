@@ -5,7 +5,7 @@ from typing import Any
 
 import pandas as pd
 
-from .calculate_aggregates import calculate_results
+from .calculate_aggregates_v2 import calculate_results_v2
 from .const import AccountNameValues, ColumnNameValues, TransactionTypeValues
 
 MAP_PNL_ACCOUNT = {
@@ -34,7 +34,7 @@ class TransactionMacro:
         self.transaction_type = row[ColumnNameValues.TRANSACTION_TYPE]
         self.profit_loss = row[ColumnNameValues.REALIZED_PNL]
         self.profit_loss_eq = row[ColumnNameValues.REALIZED_PNL_EQ]
-        self.profit_loss_fx = row[ColumnNameValues.REALIZED_PNL_FX]
+        self.profit_loss_fx = None
 
         if row[ColumnNameValues.AVG_PRICE] and row[ColumnNameValues.NO_TRADED]:
             self.invested_amount = (
@@ -295,7 +295,7 @@ class GeneralLedger:
 
     def __init__(self, transactions: pd.DataFrame) -> None:
         """Init."""
-        self.transactions = calculate_results(transactions)
+        self.transactions = calculate_results_v2(transactions)
 
         self.transactions_to_dict()
         self.create_ledger()

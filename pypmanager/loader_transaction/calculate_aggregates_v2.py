@@ -1,4 +1,6 @@
 """Aggregation calculator."""
+from __future__ import annotations
+
 from datetime import date
 import logging
 from typing import Any
@@ -27,6 +29,8 @@ class CalculateAggregates:
     transaction_date: date
     # Type of transaction, eg buy/sell
     transaction_type: str
+    # The FX rate against the base currency
+    fx_rate: float
     # Currency of the transaction
     nominal_ccy: str
     # Number of securities traded in the transaction
@@ -59,6 +63,8 @@ class CalculateAggregates:
     avg_cost_basis: float | None = None
     # The transaction's cash flow effect
     transaction_cash_flow: float | None = None
+    # The transaction's cash flow effect in the local currency
+    transaction_cash_flow_local: float | None = None
 
     def __init__(self, security_transactions: pd.DataFrame) -> None:
         """Init class."""
@@ -106,6 +112,7 @@ class CalculateAggregates:
         if self.amount:
             self.pnl_interest += self.amount
             self.transaction_cash_flow = self.amount
+            self.transaction_cash_flow_local = self.transaction_cash_flow * self.fx_rate
 
     def handle_dividend(self) -> None:
         """Handle an interest payment."""
@@ -115,6 +122,7 @@ class CalculateAggregates:
         if self.amount:
             self.pnl_dividend += self.amount
             self.transaction_cash_flow = self.amount
+            self.transaction_cash_flow_local = self.transaction_cash_flow * self.fx_rate
 
     def handle_buy(self) -> None:
         """Handle a buy transaction."""
@@ -137,12 +145,13 @@ class CalculateAggregates:
         if self.nominal_commission:
             transaction_cash_flow += self.nominal_commission
         self.transaction_cash_flow = transaction_cash_flow
+        self.transaction_cash_flow_local = self.transaction_cash_flow * self.fx_rate
 
         self.sum_held += self.no_traded
         self.cf_ex_commission = -(self.no_traded * self.nominal_price)
         self.cost_basis_delta = self.cf_ex_commission
         self.sum_cost_basis_delta += self.cost_basis_delta
-        self.avg_cost_basis = self.cost_basis_delta / self.sum_held * -1
+        self.avg_cost_basis = self.sum_cost_basis_delta / self.sum_held * -1
 
     def handle_sell(self) -> None:
         """Handle a sell transaction."""
@@ -159,6 +168,7 @@ class CalculateAggregates:
         if self.nominal_commission:
             transaction_cash_flow += self.nominal_commission
         self.transaction_cash_flow = transaction_cash_flow
+        self.transaction_cash_flow_local = self.transaction_cash_flow * self.fx_rate
 
         self.sum_held += self.no_traded
         self.pnl_price = (
@@ -175,7 +185,7 @@ class CalculateAggregates:
         else:
             self.cost_basis_delta = self.avg_cost_basis * self.no_traded * -1
             self.sum_cost_basis_delta += self.cost_basis_delta
-            self.avg_cost_basis = self.cost_basis_delta / self.sum_held * -1
+            self.avg_cost_basis = self.sum_cost_basis_delta / self.sum_held * -1
 
     def calculate_total_pnl(self) -> None:
         """Calculate total PnL."""
@@ -208,6 +218,7 @@ class CalculateAggregates:
         self.transaction_type = row[ColumnNameValues.TRANSACTION_TYPE]
         self.transaction_date = row[ColumnNameValues.TRANSACTION_DATE]
         self.nominal_commission = row[ColumnNameValues.COMMISSION]
+        self.fx_rate = 1.0
 
         if ColumnNameValues.PRICE in row and row[ColumnNameValues.PRICE]:
             self.nominal_price = row[ColumnNameValues.PRICE]
@@ -225,13 +236,17 @@ class CalculateAggregates:
             {
                 ColumnNameValues.AMOUNT: self.amount,
                 ColumnNameValues.AVG_PRICE: self.avg_cost_basis,
+                ColumnNameValues.AVG_FX: None,
                 ColumnNameValues.BROKER: self.broker,
+                ColumnNameValues.CASH_FLOW_LOCAL: self.transaction_cash_flow_local,
                 ColumnNameValues.CF_EX_COMMISSION: self.cf_ex_commission,
                 ColumnNameValues.COMMISSION: self.nominal_commission,
                 ColumnNameValues.COST_BASIS_DELTA: self.cost_basis_delta,
+                ColumnNameValues.FX: self.fx_rate,
                 ColumnNameValues.SUM_COST_BASIS_DELTA: self.sum_cost_basis_delta,
                 ColumnNameValues.NAME: self.name,
                 ColumnNameValues.NO_HELD: self.sum_held,
+                ColumnNameValues.NO_TRADED: self.no_traded,
                 ColumnNameValues.PRICE: self.nominal_price,
                 ColumnNameValues.REALIZED_PNL: self.pnl_total,
                 ColumnNameValues.REALIZED_PNL_COMMISSION: self.pnl_commission,
@@ -244,3 +259,20 @@ class CalculateAggregates:
                 ColumnNameValues.TRANSACTION_TYPE: self.transaction_type,
             }
         )
+
+
+def calculate_results_v2(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
+    """Calculate aggregate values for a holding."""
+    all_securities_name = data.name.unique()
+
+    dfs: list[pd.DataFrame] = []
+
+    for name in all_securities_name:
+        df_data = data.query(f"name == '{name}'")
+        df_result = CalculateAggregates(df_data).output_data
+
+        dfs.append(df_result)
+
+    df_output = pd.concat(dfs, ignore_index=False)
+
+    return df_output
