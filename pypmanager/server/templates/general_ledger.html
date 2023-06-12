@@ -30,10 +30,6 @@
                 <th align="right" class="backgroundLocal">Cash flow</th>
                 <th align="right">FX</th>
                 <th align="right">Average FX</th>
-                <th align="right" class="backgroundLocal">Agg cash flow</th>
-                <th align="right" class="backgroundLocal">Agg interest</th>
-                <th align="right" class="backgroundLocal">Agg dividends</th>
-                <th align="right" class="backgroundLocal">Agg fees</th>
                 <th align="right" class="backgroundLocal">PnL</th>
                 <th align="right" class="backgroundLocal">...security</th>
                 <th align="right" class="backgroundLocal">...FX</th>
@@ -59,10 +55,6 @@
                     <td data-monetary-value="{{ row.cash_flow_base_ccy|format_decimals(0) }}"></td>
                     <td data-monetary-value="{{ row.fx_rate|format_decimals(3) }}"></td>
                     <td data-monetary-value="{{ row.average_fx_rate|format_decimals(3) }}"></td>
-                    <td data-monetary-value="{{ row.cumulative_invested_amount|format_decimals(0) }}"></td>
-                    <td data-monetary-value="{{ row.cumulative_interest|format_decimals(0) }}"></td>
-                    <td data-monetary-value="{{ row.cumulative_dividends|format_decimals(0) }}"></td>
-                    <td data-monetary-value="{{ row.cumulative_fees|format_decimals(0) }}"></td>
                     <td data-monetary-value="{{ row.realized_pnl|format_decimals(0) }}"></td>
                     <td data-monetary-value="{{ row.realized_pnl_equity|format_decimals(0) }}"></td>
                     <td data-monetary-value="{{ row.realized_pnl_fx|format_decimals(0) }}"></td>

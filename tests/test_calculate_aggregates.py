@@ -2,12 +2,12 @@
 
 from datetime import datetime
 
+import numpy as np
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
 from pypmanager.loader_transaction.calculate_aggregates_v2 import CalculateAggregates
 from pypmanager.loader_transaction.const import ColumnNameValues, TransactionTypeValues
-import numpy as np
 
 
 def test_interest_transaction() -> None:
@@ -17,13 +17,17 @@ def test_interest_transaction() -> None:
             {
                 ColumnNameValues.AMOUNT: 100.0,
                 ColumnNameValues.AVG_PRICE: None,
+                ColumnNameValues.AVG_FX: None,
                 ColumnNameValues.BROKER: "Broker",
+                ColumnNameValues.CASH_FLOW_LOCAL: 100.0,
                 ColumnNameValues.CF_EX_COMMISSION: None,
                 ColumnNameValues.COMMISSION: None,
                 ColumnNameValues.COST_BASIS_DELTA: None,
+                ColumnNameValues.FX: 1.0,
                 ColumnNameValues.SUM_COST_BASIS_DELTA: None,
                 ColumnNameValues.NAME: "Name A",
                 ColumnNameValues.NO_HELD: None,
+                ColumnNameValues.NO_TRADED: None,
                 ColumnNameValues.PRICE: None,
                 ColumnNameValues.REALIZED_PNL: 100.0,
                 ColumnNameValues.REALIZED_PNL_COMMISSION: None,
@@ -65,13 +69,17 @@ def test_dividend_transaction() -> None:
             {
                 ColumnNameValues.AMOUNT: 100.0,
                 ColumnNameValues.AVG_PRICE: None,
+                ColumnNameValues.AVG_FX: None,
                 ColumnNameValues.BROKER: "Broker",
+                ColumnNameValues.CASH_FLOW_LOCAL: 100.0,
                 ColumnNameValues.CF_EX_COMMISSION: None,
                 ColumnNameValues.COMMISSION: None,
                 ColumnNameValues.COST_BASIS_DELTA: None,
+                ColumnNameValues.FX: 1.0,
                 ColumnNameValues.SUM_COST_BASIS_DELTA: None,
                 ColumnNameValues.NAME: "Name A",
                 ColumnNameValues.NO_HELD: None,
+                ColumnNameValues.NO_TRADED: None,
                 ColumnNameValues.PRICE: None,
                 ColumnNameValues.REALIZED_PNL: 100.0,
                 ColumnNameValues.REALIZED_PNL_COMMISSION: None,
@@ -113,13 +121,17 @@ def test_buy_transaction() -> None:
             {
                 ColumnNameValues.AMOUNT: -100.0,
                 ColumnNameValues.AVG_PRICE: 10.0,
+                ColumnNameValues.AVG_FX: None,
                 ColumnNameValues.BROKER: "Broker",
+                ColumnNameValues.CASH_FLOW_LOCAL: -105.0,
                 ColumnNameValues.CF_EX_COMMISSION: -100.0,
                 ColumnNameValues.COMMISSION: -5.0,
                 ColumnNameValues.COST_BASIS_DELTA: -100.0,
+                ColumnNameValues.FX: 1.0,
                 ColumnNameValues.SUM_COST_BASIS_DELTA: -100.0,
                 ColumnNameValues.NAME: "Name A",
                 ColumnNameValues.NO_HELD: 10.0,
+                ColumnNameValues.NO_TRADED: 10.0,
                 ColumnNameValues.PRICE: 10.0,
                 ColumnNameValues.REALIZED_PNL: None,
                 ColumnNameValues.REALIZED_PNL_COMMISSION: None,
@@ -163,13 +175,17 @@ def test_sell_transaction() -> None:
             {
                 ColumnNameValues.AMOUNT: -100.0,
                 ColumnNameValues.AVG_PRICE: 10.0,
+                ColumnNameValues.AVG_FX: None,
                 ColumnNameValues.BROKER: "Broker",
+                ColumnNameValues.CASH_FLOW_LOCAL: -105.0,
                 ColumnNameValues.CF_EX_COMMISSION: -100.0,
                 ColumnNameValues.COMMISSION: -5.0,
                 ColumnNameValues.COST_BASIS_DELTA: -100.0,
+                ColumnNameValues.FX: 1.0,
                 ColumnNameValues.SUM_COST_BASIS_DELTA: -100.0,
                 ColumnNameValues.NAME: "Name A",
                 ColumnNameValues.NO_HELD: 10.0,
+                ColumnNameValues.NO_TRADED: 10.0,
                 ColumnNameValues.PRICE: 10.0,
                 ColumnNameValues.REALIZED_PNL: None,
                 ColumnNameValues.REALIZED_PNL_COMMISSION: None,
@@ -184,13 +200,17 @@ def test_sell_transaction() -> None:
             {
                 ColumnNameValues.AMOUNT: 200.0,
                 ColumnNameValues.AVG_PRICE: None,
+                ColumnNameValues.AVG_FX: None,
                 ColumnNameValues.BROKER: "Broker",
                 ColumnNameValues.CF_EX_COMMISSION: 200.0,
+                ColumnNameValues.CASH_FLOW_LOCAL: 190.0,
                 ColumnNameValues.COMMISSION: -10.0,
                 ColumnNameValues.COST_BASIS_DELTA: None,
+                ColumnNameValues.FX: 1.0,
                 ColumnNameValues.SUM_COST_BASIS_DELTA: None,
                 ColumnNameValues.NAME: "Name A",
                 ColumnNameValues.NO_HELD: None,
+                ColumnNameValues.NO_TRADED: -10.0,
                 ColumnNameValues.PRICE: 20.0,
                 ColumnNameValues.REALIZED_PNL: 100.0,
                 ColumnNameValues.REALIZED_PNL_COMMISSION: None,

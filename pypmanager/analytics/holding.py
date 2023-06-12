@@ -7,6 +7,8 @@ from typing import cast
 
 import pandas as pd
 
+from pypmanager.loader_transaction.const import ColumnNameValues
+
 from .security import MutualFund
 
 LOGGER = logging.Logger(__name__)
@@ -102,14 +104,6 @@ class Holding:
         return cast(float, current)
 
     @property
-    def brokers(self) -> list[str] | None:
-        """Return broker names for this security."""
-        if self.calculated_data is None or self.calculated_data.broker.empty:
-            return None
-
-        return cast(list[str], self.calculated_data.broker.unique())
-
-    @property
     def total_transactions(self) -> int:
         """Return the total number of transactions made."""
         if self.calculated_data is None:
@@ -165,46 +159,40 @@ class Holding:
 
     @property
     def dividends(self) -> float | None:
-        """Return average price."""
+        """Return dividends price."""
         if (
             self.calculated_data is None
-            or self.calculated_data.cumulative_dividends.empty
+            or self.calculated_data[ColumnNameValues.REALIZED_PNL_DIVIDEND].empty
         ):
             return None
 
-        if (
-            dividends := self.calculated_data.cumulative_dividends.iloc[-1]
-        ) is None or dividends == 0:
+        pnl = self.calculated_data[ColumnNameValues.REALIZED_PNL_DIVIDEND].sum()
+
+        if pd.isna(pnl) or pnl == 0.0:
             return None
 
-        return cast(float, dividends)
+        return cast(float, pnl)
 
     @property
     def fees(self) -> float | None:
         """Return fees paid."""
-        if self.calculated_data is None or self.calculated_data.cumulative_fees.empty:
-            return None
-
-        if (fees := self.calculated_data.cumulative_fees.iloc[-1]) is None or fees == 0:
-            return None
-
-        return cast(float, fees)
+        return None
 
     @property
     def interest(self) -> float | None:
-        """Return average price."""
+        """Return interest price."""
         if (
             self.calculated_data is None
-            or self.calculated_data.cumulative_interest.empty
+            or self.calculated_data[ColumnNameValues.REALIZED_PNL_INTEREST].empty
         ):
             return None
 
-        if (
-            dividends := self.calculated_data.cumulative_interest.iloc[-1]
-        ) is None or dividends == 0:
+        pnl = self.calculated_data[ColumnNameValues.REALIZED_PNL_INTEREST].sum()
+
+        if pd.isna(pnl) or pnl == 0.0:
             return None
 
-        return cast(float, dividends)
+        return cast(float, pnl)
 
     @property
     def market_value(self) -> float | None:
@@ -249,15 +237,7 @@ class Holding:
     @property
     def realized_pnl_fx(self) -> float:
         """Return realized PnL."""
-        if self.calculated_data is None or self.calculated_data.realized_pnl_fx.empty:
-            return 0.0
-
-        pnl = self.calculated_data.realized_pnl_fx.sum()
-
-        if pd.isna(pnl):
-            return 0.0
-
-        return cast(float, pnl)
+        return 0
 
     @property
     def unrealized_pnl(self) -> float | None:
