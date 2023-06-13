@@ -5,7 +5,7 @@ from typing import Any
 
 import pandas as pd
 
-from .calculate_aggregates_v2 import calculate_results_v2
+from .calculate_aggregates import calculate_results
 from .const import AccountNameValues, ColumnNameValues, TransactionTypeValues
 
 MAP_PNL_ACCOUNT = {
@@ -297,7 +297,7 @@ class GeneralLedger:
 
     def __init__(self, transactions: pd.DataFrame) -> None:
         """Init."""
-        self.transactions = calculate_results_v2(transactions)
+        self.transactions = calculate_results(transactions)
 
         self.transactions_to_dict()
         self.create_ledger()
