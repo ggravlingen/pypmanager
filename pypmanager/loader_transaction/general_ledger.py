@@ -143,6 +143,9 @@ class TransactionMacro:
         debit_row = self.row.copy()
         debit_row_2 = self.row.copy()
 
+        if not self.profit_loss:
+            return self
+
         if self.profit_loss > 0:
             credit_row[ColumnNameValues.ACCOUNT] = MAP_PNL_ACCOUNT[
                 self.transaction_type
@@ -211,9 +214,8 @@ class TransactionMacro:
         debit_row = self.row.copy()
 
         # We want to reduce the securities account by the nominal invested amount
-        # as we haven't market the AccountNameValues.SECURITIES to market
+        # as we haven't marked the AccountNameValues.SECURITIES to market
         credit_row[ColumnNameValues.ACCOUNT] = AccountNameValues.SECURITIES
-        credit_row[ColumnNameValues.AVG_PRICE] = None
         credit_row[ColumnNameValues.CREDIT] = self.amount
 
         # The cash amount should be increased by the full amount of the sale
