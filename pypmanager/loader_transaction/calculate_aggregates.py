@@ -260,7 +260,7 @@ class CalculateAggregates:
         )
 
 
-def calculate_results_v2(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
+def calculate_results(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
     """Calculate aggregate values for a holding."""
     all_securities_name = data.name.unique()
 
