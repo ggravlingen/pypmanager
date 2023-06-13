@@ -135,7 +135,7 @@ def test_amend_row__sell() -> None:
     expected_result = [
         {
             ColumnNameValues.AMOUNT: 10000,
-            ColumnNameValues.AVG_PRICE: None,
+            ColumnNameValues.AVG_PRICE: 100.0,
             ColumnNameValues.CASH_FLOW_LOCAL: 10000,
             ColumnNameValues.CREDIT: 10000,
             ColumnNameValues.ACCOUNT: AccountNameValues.SECURITIES,

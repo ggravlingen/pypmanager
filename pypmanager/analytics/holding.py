@@ -35,8 +35,11 @@ class Holding:
         Run after class has been instantiated.
 
         Here, we filter the data on security name and, if applicable, report date.
+        We filter by ledger account = cash since the relevant data is in that row.
         """
-        df_all_data = self.all_data.query(f"name == '{self.name}'")
+        df_all_data = self.all_data.query(
+            f"name == '{self.name}' and ledger_account == 'cash'"
+        )
 
         if self.report_date is not None:
             df_all_data = df_all_data.query(f"index <= '{self.report_date}'")
@@ -88,11 +91,11 @@ class Holding:
         """Return the number of securities currently held."""
         if (
             self.calculated_data is None
-            or self.calculated_data.cumulative_buy_volume.empty
+            or self.calculated_data[ColumnNameValues.NO_HELD].empty
         ):
             return None
 
-        current = self.calculated_data.cumulative_buy_volume.iloc[-1]
+        current = self.calculated_data[ColumnNameValues.NO_HELD].iloc[-1]
 
         # We use round here as no sold/bought may not sum to exactly 0 when divesting
         if math.isclose(current, 0, rel_tol=1e-9, abs_tol=1e-12):

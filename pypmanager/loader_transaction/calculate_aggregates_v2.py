@@ -176,7 +176,6 @@ class CalculateAggregates:
         )
         self.cost_basis_delta = self.avg_cost_basis * self.no_traded * -1
         self.cf_ex_commission = self.nominal_price * self.no_traded * -1
-        self.sum_cost_basis_delta += self.cost_basis_delta
         if self.sum_held <= 0:
             self.cost_basis_delta = None
             self.sum_cost_basis_delta = None

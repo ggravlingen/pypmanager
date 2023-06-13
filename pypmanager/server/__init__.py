@@ -10,6 +10,7 @@ from fastapi.responses import FileResponse, HTMLResponse
 from pypmanager.analytics import Portfolio
 from pypmanager.analytics.holding import Holding
 from pypmanager.helpers import get_general_ledger
+from pypmanager.loader_transaction.const import ColumnNameValues
 from pypmanager.server.templates import load_template
 from pypmanager.settings import Settings
 
@@ -28,7 +29,7 @@ async def get_favicon() -> FileResponse:
 async def index(view: str | None = None) -> str:
     """Present overview page."""
     df_general_ledger = get_general_ledger()
-    all_securities = cast(list[str], df_general_ledger.name.unique())
+    all_securities = cast(list[str], df_general_ledger[ColumnNameValues.NAME].unique())
 
     holdings: list[Holding] = []
     for security_name in all_securities:
