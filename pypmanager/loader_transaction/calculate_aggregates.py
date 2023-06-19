@@ -46,7 +46,7 @@ class CalculateAggregates:
     # The current amount held
     sum_held: float | None = None
     # The total PnL
-    pnl_total: float | None
+    pnl_total: float | None = None
     # The PnL from changes in the security price
     pnl_price: float | None = None
     # The PnL from commissions paid
@@ -126,6 +126,8 @@ class CalculateAggregates:
 
     def handle_buy(self) -> None:
         """Handle a buy transaction."""
+        self.pnl_price = None  # force pnl for price to None
+
         if self.sum_held is None:
             self.sum_held = 0.0
 
