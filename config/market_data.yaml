@@ -8,6 +8,10 @@ sources:
     loader_class: pypmanager.loader_market_data.morningstar.MorningstarLoader
     lookup_key: F00000YG5V
     name: Lysa Aktier C
+  - isin_code: SE0013720000
+    loader_class: pypmanager.loader_market_data.morningstar.MorningstarLoader
+    lookup_key: F000014U6O
+    name: Aktiespararna Direktavkastning B
   - isin_code: SE0017231947
     loader_class: pypmanager.loader_market_data.morningstar.MorningstarLoader
     lookup_key: F00001DFD6
