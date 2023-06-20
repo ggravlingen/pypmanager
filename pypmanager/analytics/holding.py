@@ -89,22 +89,19 @@ class Holding:
     @property
     def current_holdings(self) -> float | None:
         """Return the number of securities currently held."""
+        if self.calculated_data is None:
+            return None
+
+        total_held = self.calculated_data[ColumnNameValues.NO_TRADED].sum()
+
         if (
             self.calculated_data is None
-            or self.calculated_data[ColumnNameValues.NO_HELD].empty
+            or pd.isna(total_held)
+            or math.isclose(total_held, 0, rel_tol=1e-9, abs_tol=1e-12)
         ):
             return None
 
-        current = self.calculated_data[ColumnNameValues.NO_HELD].iloc[-1]
-
-        # We use round here as no sold/bought may not sum to exactly 0 when divesting
-        if math.isclose(current, 0, rel_tol=1e-9, abs_tol=1e-12):
-            return None
-
-        if pd.isna(current):
-            return None
-
-        return cast(float, current)
+        return cast(float, total_held)
 
     @property
     def total_transactions(self) -> int:
@@ -147,7 +144,9 @@ class Holding:
         if self.calculated_data is None or self.calculated_data.average_price.empty:
             return 0.0
 
-        if (avg_price := self.calculated_data.average_price.iloc[-1]) is None:
+        avg_price = self.calculated_data.average_price.iloc[-1]
+
+        if avg_price is None or pd.isna(avg_price):
             return None
 
         return cast(float, avg_price)

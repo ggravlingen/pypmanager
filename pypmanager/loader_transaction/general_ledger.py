@@ -221,10 +221,8 @@ class TransactionMacro:
         # The cash amount should be increased by the full amount of the sale
         debit_row[ColumnNameValues.ACCOUNT] = AccountNameValues.CASH
         debit_row[ColumnNameValues.AMOUNT] = None
-        debit_row[ColumnNameValues.AVG_PRICE] = None
         debit_row[ColumnNameValues.COMMISSION] = None
         debit_row[ColumnNameValues.DEBIT] = self.amount_local
-        debit_row[ColumnNameValues.NO_TRADED] = None
         debit_row[ColumnNameValues.NO_HELD] = None
         debit_row[ColumnNameValues.PRICE] = None
         debit_row[ColumnNameValues.REALIZED_PNL] = None
