@@ -37,6 +37,8 @@ class CalculateAggregates:
     no_traded: float | None = None
     # The name of the security
     name: str
+    # The name ISIN of the security
+    isin: str | None = None
     # The price of the security
     nominal_price: float | None
     # The commission paid. None if there is no commission.
@@ -214,6 +216,7 @@ class CalculateAggregates:
         """Set base data from the transaction."""
         self.amount = row[ColumnNameValues.AMOUNT]
         self.broker = row[ColumnNameValues.BROKER]
+        self.isin = row[ColumnNameValues.ISIN_CODE]
         self.name = row[ColumnNameValues.NAME]
         self.source = row[ColumnNameValues.SOURCE]
         self.transaction_type = row[ColumnNameValues.TRANSACTION_TYPE]
@@ -244,7 +247,7 @@ class CalculateAggregates:
                 ColumnNameValues.COMMISSION: self.nominal_commission,
                 ColumnNameValues.COST_BASIS_DELTA: self.cost_basis_delta,
                 ColumnNameValues.FX: self.fx_rate,
-                ColumnNameValues.SUM_COST_BASIS_DELTA: self.sum_cost_basis_delta,
+                ColumnNameValues.ISIN_CODE: self.isin,
                 ColumnNameValues.NAME: self.name,
                 ColumnNameValues.NO_HELD: self.sum_held,
                 ColumnNameValues.NO_TRADED: self.no_traded,
@@ -255,6 +258,7 @@ class CalculateAggregates:
                 ColumnNameValues.REALIZED_PNL_DIVIDEND: self.pnl_dividend,
                 ColumnNameValues.REALIZED_PNL_INTEREST: self.pnl_interest,
                 ColumnNameValues.SOURCE: self.source,
+                ColumnNameValues.SUM_COST_BASIS_DELTA: self.sum_cost_basis_delta,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: self.transaction_cash_flow,
                 ColumnNameValues.TRANSACTION_DATE: self.transaction_date,
                 ColumnNameValues.TRANSACTION_TYPE: self.transaction_type,
