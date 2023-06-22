@@ -1,10 +1,12 @@
 """Template management."""
 
 import base64
+from datetime import datetime
 import locale
 import os
 from typing import Any
 
+import humanize
 from jinja2 import Environment, FileSystemLoader
 import markupsafe
 import pandas as pd
@@ -23,6 +25,7 @@ def _load_environment_and_filter() -> Environment:
     env.filters["format_decimals"] = format_decimals
     env.filters["format_none"] = format_none
     env.filters["format_pct"] = format_pct
+    env.filters["format_date"] = format_date
 
     return env
 
@@ -77,3 +80,13 @@ def format_pct(value: Any, decimals: int = 1) -> Any:
 
     template = "{" + f":.{decimals}%" + "}"
     return template.format(value)
+
+
+def format_date(value: str) -> str:
+    """Return – if None."""
+    if value is None or pd.isna(value):
+        return ATTR_NONE
+
+    value_as_date = datetime.strptime(value, "%Y-%m-%d").date()
+
+    return humanize.naturalday(value_as_date)

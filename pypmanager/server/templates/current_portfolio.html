@@ -35,7 +35,7 @@
               {% for row in securities %}
                 <tr>
                     <td data-name="{{ row.name }}"></td>
-                    <td data-date-value="{{ row.date_market_value|format_none }}"></td>
+                    <td data-date-value="{{ row.date_market_value|format_date }}"></td>
                     <td data-monetary-value="{{ row.market_value|format_decimals(0) }}"></td>
                     <td data-monetary-value="{{ row.current_holdings|format_decimals(0) }}"></td>
                     <td data-monetary-value="{{ row.current_price|format_decimals(1) }}"></td>
