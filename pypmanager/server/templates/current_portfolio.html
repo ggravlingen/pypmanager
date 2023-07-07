@@ -11,12 +11,13 @@
         <table>
             <thead>
               <tr>
-                <th colspan="9">&nbsp;</th>
+                <th colspan="10">&nbsp;</th>
                 <th colspan="5" align="center">Profit and loss</th>
               </tr>
               <tr>
                 <th align="left">Name</th>
                 <th align="right">Date</th>
+                <th align="right">Invested</th>
                 <th align="right">Market value</th>
                 <th align="right"># held</th>
                 <th align="right">Close</th>
@@ -36,6 +37,7 @@
                 <tr>
                     <td data-name="{{ row.name }}"></td>
                     <td data-date-value="{{ row.date_market_value|format_date }}"></td>
+                    <td data-monetary-value="{{ row.invested_amount|format_decimals(0) }}"></td>
                     <td data-monetary-value="{{ row.market_value|format_decimals(0) }}"></td>
                     <td data-monetary-value="{{ row.current_holdings|format_decimals(0) }}"></td>
                     <td data-monetary-value="{{ row.current_price|format_decimals(1) }}"></td>
@@ -54,6 +56,7 @@
               <tr class="total">
                 <td>Total</td>
                 <td>&nbsp;</td>
+                <td data-monetary-value="{{ portfolio.invested_amount|format_decimals(0) }}"></td>
                 <td data-monetary-value="{{ portfolio.market_value|format_decimals(0) }}"></td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
