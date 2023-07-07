@@ -77,7 +77,7 @@ class Holding:
             return None
 
         try:
-            val = self.calculated_data.isin_code.unique()[0]
+            val = self.calculated_data[ColumnNameValues.ISIN_CODE].unique()[0]
 
             if pd.isna(val) or val == "0":
                 return None
@@ -141,10 +141,13 @@ class Holding:
     @property
     def average_price(self) -> float | None:
         """Return average price."""
-        if self.calculated_data is None or self.calculated_data.average_price.empty:
+        if (
+            self.calculated_data is None
+            or self.calculated_data[ColumnNameValues.AVG_PRICE].empty
+        ):
             return 0.0
 
-        avg_price = self.calculated_data.average_price.iloc[-1]
+        avg_price = self.calculated_data[ColumnNameValues.AVG_PRICE].iloc[-1]
 
         if avg_price is None or pd.isna(avg_price):
             return None
@@ -210,13 +213,13 @@ class Holding:
     @property
     def realized_pnl(self) -> float:
         """Return realized PnL."""
-        if self.calculated_data is None or self.calculated_data.realized_pnl.empty:
+        if (
+            self.calculated_data is None
+            or self.calculated_data[ColumnNameValues.REALIZED_PNL].empty
+        ):
             return 0.0
 
-        pnl = self.calculated_data.realized_pnl.sum()
-
-        if pd.isna(pnl):
-            return 0.0
+        pnl = self.calculated_data[ColumnNameValues.REALIZED_PNL].sum()
 
         return cast(float, pnl)
 
@@ -225,11 +228,11 @@ class Holding:
         """Return realized PnL."""
         if (
             self.calculated_data is None
-            or self.calculated_data.realized_pnl_equity.empty
+            or self.calculated_data[ColumnNameValues.REALIZED_PNL_EQ].empty
         ):
             return 0.0
 
-        pnl = self.calculated_data.realized_pnl_equity.sum()
+        pnl = self.calculated_data[ColumnNameValues.REALIZED_PNL_EQ].sum()
 
         if pd.isna(pnl):
             return 0.0
