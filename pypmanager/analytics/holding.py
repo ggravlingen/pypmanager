@@ -49,6 +49,27 @@ class Holding:
         self.calculated_data = df_all_data
 
     @property
+    def current_holdings(self) -> float | None:
+        """
+        Return the number of securities currently held.
+
+        Will return None if everything has been sold.
+        """
+        if self.calculated_data is None:
+            return None
+
+        total_held = self.calculated_data[ColumnNameValues.NO_TRADED].sum()
+
+        if (
+            self.calculated_data is None
+            or pd.isna(total_held)
+            or math.isclose(total_held, 0, rel_tol=1e-9, abs_tol=1e-12)
+        ):
+            return None
+
+        return cast(float, total_held)
+
+    @property
     def security_info(self) -> MutualFund:
         """Return information on the security."""
         if self._security_info is None:  # Hit these calculations only once
@@ -85,23 +106,6 @@ class Holding:
             return f"{val}"
         except (IndexError, AttributeError, TypeError):
             return None
-
-    @property
-    def current_holdings(self) -> float | None:
-        """Return the number of securities currently held."""
-        if self.calculated_data is None:
-            return None
-
-        total_held = self.calculated_data[ColumnNameValues.NO_TRADED].sum()
-
-        if (
-            self.calculated_data is None
-            or pd.isna(total_held)
-            or math.isclose(total_held, 0, rel_tol=1e-9, abs_tol=1e-12)
-        ):
-            return None
-
-        return cast(float, total_held)
 
     @property
     def total_transactions(self) -> int:

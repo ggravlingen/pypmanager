@@ -180,7 +180,9 @@ class CalculateAggregates:
         )
         self.cost_basis_delta = self.avg_cost_basis * self.no_traded * -1
         self.cf_ex_commission = self.nominal_price * self.no_traded * -1
-        if self.sum_held <= 0:
+
+        # Everything has been sold
+        if round(self.sum_held, 0) <= 0:
             self.cost_basis_delta = None
             self.sum_cost_basis_delta = None
             self.avg_cost_basis = None
