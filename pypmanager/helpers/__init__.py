@@ -54,9 +54,12 @@ async def download_market_data() -> None:
         except AttributeError as err:
             raise DataError("Unable to load data", err) from err
 
-        loader = data_loader_klass(
-            lookup_key=source.lookup_key,
-            isin_code=source.isin_code,
-            name=source.name,
-        )
-        _upsert_df(data=loader.to_source_data(), source_name=loader.source)
+        try:
+            loader = data_loader_klass(
+                lookup_key=source.lookup_key,
+                isin_code=source.isin_code,
+                name=source.name,
+            )
+            _upsert_df(data=loader.to_source_data(), source_name=loader.source)
+        except AttributeError:
+            LOGGER.error(f"Unable to load {loader}")
