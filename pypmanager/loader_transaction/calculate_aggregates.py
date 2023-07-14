@@ -129,6 +129,8 @@ class CalculateAggregates:
     def handle_buy(self) -> None:
         """Handle a buy transaction."""
         self.pnl_price = None  # force pnl for price to None
+        self.pnl_dividend = None  # force pnl for dividend to None
+        self.pnl_interest = None  # force pnl for interest to None
 
         if self.sum_held is None:
             self.sum_held = 0.0
