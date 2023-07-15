@@ -186,7 +186,7 @@ def test_amend_row__sell() -> None:
             ColumnNameValues.NO_HELD: None,
             ColumnNameValues.DEBIT: 10000,
             ColumnNameValues.ACCOUNT: AccountNameValues.CASH,
-            ColumnNameValues.NO_TRADED: 100.0,
+            ColumnNameValues.NO_TRADED: None,
             ColumnNameValues.PRICE: None,
             ColumnNameValues.REALIZED_PNL: None,
             ColumnNameValues.REALIZED_PNL_EQ: None,
