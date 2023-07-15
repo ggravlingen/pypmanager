@@ -69,9 +69,13 @@ async def index(view: str | None = None) -> str:
 @app.get("/ledger", response_class=HTMLResponse)
 async def ledger() -> str:
     """Return the general ledger."""
-    general_ledger = get_general_ledger().reset_index().to_dict(orient="records")
+    df_general_ledger = get_general_ledger()
+    df_general_ledger = df_general_ledger.sort_values(
+        ColumnNameValues.TRANSACTION_DATE, ascending=False
+    )
+    output_dict = df_general_ledger.reset_index().to_dict(orient="records")
 
     return await load_template(
         template_name="general_ledger.html",
-        context={"ledger": general_ledger},
+        context={"ledger": output_dict},
     )
