@@ -71,7 +71,11 @@ async def ledger() -> str:
     """Return the general ledger."""
     df_general_ledger = get_general_ledger()
     df_general_ledger = df_general_ledger.sort_values(
-        ColumnNameValues.TRANSACTION_DATE, ascending=False
+        [
+            ColumnNameValues.TRANSACTION_DATE,
+            ColumnNameValues.NAME,
+        ],
+        ascending=False,
     )
     output_dict = df_general_ledger.reset_index().to_dict(orient="records")
 
