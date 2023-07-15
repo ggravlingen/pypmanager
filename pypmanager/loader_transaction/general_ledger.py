@@ -224,6 +224,7 @@ class TransactionMacro:
         debit_row[ColumnNameValues.COMMISSION] = None
         debit_row[ColumnNameValues.DEBIT] = self.amount_local
         debit_row[ColumnNameValues.NO_HELD] = None
+        debit_row[ColumnNameValues.NO_TRADED] = None
         debit_row[ColumnNameValues.PRICE] = None
         debit_row[ColumnNameValues.REALIZED_PNL] = None
         debit_row[ColumnNameValues.REALIZED_PNL_EQ] = None
