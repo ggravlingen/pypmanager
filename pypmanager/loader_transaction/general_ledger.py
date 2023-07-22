@@ -25,6 +25,10 @@ ListType = list[RowType]
 class TransactionMacro:
     """Macros run depending on transactions."""
 
+    profit_loss: float
+    profit_loss_eq: float
+    profit_loss_fx: float | None
+
     def __init__(self, row: RowType) -> None:
         """Init class."""
         self.row = row
@@ -87,6 +91,29 @@ class TransactionMacro:
         debit_row[ColumnNameValues.DEBIT] = self.amount
         debit_row[ColumnNameValues.NO_TRADED] = None
         debit_row[ColumnNameValues.REALIZED_PNL] = None
+        debit_row[ColumnNameValues.TRANSACTION_TYPE] = None
+
+        self.credit_rows.append(credit_row)
+        self.debit_rows.append(debit_row)
+
+        return self
+
+    def dividend(self) -> TransactionMacro:
+        """Record a dividend."""
+        credit_row = self.row.copy()
+
+        credit_row[ColumnNameValues.ACCOUNT] = AccountNameValues.EQUITY
+        credit_row[ColumnNameValues.CREDIT] = self.amount
+        credit_row[ColumnNameValues.NO_TRADED] = None
+        credit_row[ColumnNameValues.REALIZED_PNL] = None
+
+        debit_row = self.row.copy()
+        debit_row[ColumnNameValues.ACCOUNT] = AccountNameValues.CASH
+        debit_row[ColumnNameValues.AMOUNT] = None
+        debit_row[ColumnNameValues.COMMISSION] = None
+        debit_row[ColumnNameValues.DEBIT] = self.amount
+        debit_row[ColumnNameValues.NO_TRADED] = None
+        debit_row[ColumnNameValues.REALIZED_PNL] = self.amount
         debit_row[ColumnNameValues.TRANSACTION_TYPE] = None
 
         self.credit_rows.append(credit_row)
@@ -217,15 +244,15 @@ class TransactionMacro:
         # as we haven't marked the AccountNameValues.SECURITIES to market
         credit_row[ColumnNameValues.ACCOUNT] = AccountNameValues.SECURITIES
         credit_row[ColumnNameValues.CREDIT] = self.amount
+        credit_row[ColumnNameValues.NO_TRADED] = None
+        credit_row[ColumnNameValues.PRICE] = None
+        credit_row[ColumnNameValues.AMOUNT] = None
 
         # The cash amount should be increased by the full amount of the sale
         debit_row[ColumnNameValues.ACCOUNT] = AccountNameValues.CASH
-        debit_row[ColumnNameValues.AMOUNT] = None
         debit_row[ColumnNameValues.COMMISSION] = None
         debit_row[ColumnNameValues.DEBIT] = self.amount_local
         debit_row[ColumnNameValues.NO_HELD] = None
-        debit_row[ColumnNameValues.NO_TRADED] = None
-        debit_row[ColumnNameValues.PRICE] = None
         debit_row[ColumnNameValues.REALIZED_PNL] = None
         debit_row[ColumnNameValues.REALIZED_PNL_EQ] = None
         debit_row[ColumnNameValues.REALIZED_PNL_FX] = None
@@ -271,7 +298,7 @@ def _amend_row(row: RowType) -> ListType:
 
     if transaction_type == TransactionTypeValues.DIVIDEND:
         transaction = TransactionMacro(row=row)
-        transaction.deposit().pnl_equity()
+        transaction.dividend().pnl_equity()
 
     if transaction_type == TransactionTypeValues.INTEREST:
         transaction = TransactionMacro(row=row)

@@ -8,6 +8,7 @@ from typing import Any
 import pandas as pd
 
 from pypmanager.loader_transaction.const import ColumnNameValues, TransactionTypeValues
+from pypmanager.settings import Settings
 
 LOGGER = logging.Logger(__name__)
 
@@ -117,7 +118,7 @@ class CalculateAggregates:
             self.transaction_cash_flow_local = self.transaction_cash_flow * self.fx_rate
 
     def handle_dividend(self) -> None:
-        """Handle an interest payment."""
+        """Handle a dividend payment."""
         if self.pnl_dividend is None:
             self.pnl_dividend = 0.0
 
@@ -271,12 +272,15 @@ class CalculateAggregates:
 
 
 def calculate_results(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
-    """Calculate aggregate values for a holding."""
+    """Calculate the general ledger."""
     all_securities_name = data.name.unique()
 
     dfs: list[pd.DataFrame] = []
 
     for name in all_securities_name:
+        if Settings.DEBUG_NAME and Settings.DEBUG_NAME not in name:
+            continue
+
         df_data = data.query(f"name == '{name}'")
         df_result = CalculateAggregates(df_data).output_data
 
