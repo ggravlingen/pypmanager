@@ -19,7 +19,7 @@ class SHBFonderLoader(BaseMarketDataLoader):
     Even though the endpoint says xls, data is really returned as a HTML table.
     """
 
-    url = "https://secure.msse.se/shb/sv.se/history/onefund.xls"
+    url = "https://secure.msse.se/shb/sv.se/history/onefund.xlsx"
 
     @property
     def full_url(self) -> str:
