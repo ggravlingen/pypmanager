@@ -18,7 +18,7 @@ LOGGER = logging.Logger(__name__)
 class Holding:
     """Represent a security."""
 
-    all_data: pd.DataFrame
+    df_general_ledger: pd.DataFrame
     name: str
     calculated_data: pd.DataFrame | None = None
     report_date: datetime | None = None
@@ -37,14 +37,14 @@ class Holding:
         Here, we filter the data on security name and, if applicable, report date.
         We filter by ledger account = cash since the relevant data is in that row.
         """
-        df_all_data = self.all_data.query(
+        df_all_data = self.df_general_ledger.query(
             f"name == '{self.name}' and ledger_account == 'cash'"
         )
 
         if self.report_date is not None:
             df_all_data = df_all_data.query(f"index <= '{self.report_date}'")
 
-        self.all_data = df_all_data
+        self.df_general_ledger = df_all_data
 
         self.calculated_data = df_all_data
 
@@ -215,19 +215,6 @@ class Holding:
         return market_value
 
     @property
-    def realized_pnl(self) -> float:
-        """Return realized PnL."""
-        if (
-            self.calculated_data is None
-            or self.calculated_data[ColumnNameValues.REALIZED_PNL].empty
-        ):
-            return 0.0
-
-        pnl = self.calculated_data[ColumnNameValues.REALIZED_PNL].sum()
-
-        return cast(float, pnl)
-
-    @property
     def realized_pnl_equity(self) -> float:
         """Return realized PnL."""
         if (
@@ -249,7 +236,20 @@ class Holding:
         return 0
 
     @property
-    def unrealized_pnl(self) -> float | None:
+    def realized_pnl(self) -> float:
+        """Return realized PnL."""
+        if (
+            self.calculated_data is None
+            or self.calculated_data[ColumnNameValues.REALIZED_PNL].empty
+        ):
+            return 0.0
+
+        pnl = self.calculated_data[ColumnNameValues.REALIZED_PNL].sum()
+
+        return cast(float, pnl)
+
+    @property
+    def unrealized_pnl(self) -> float:
         """Return unrealized PnL."""
         if (
             self.average_price is None
@@ -263,9 +263,6 @@ class Holding:
     @property
     def total_pnl(self) -> float | None:
         """Return PnL."""
-        if self.unrealized_pnl is None or self.realized_pnl is None:
-            return None
-
         return self.realized_pnl + self.unrealized_pnl
 
     @property

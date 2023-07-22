@@ -134,12 +134,13 @@ def test_amend_row__sell() -> None:
     }
     expected_result = [
         {
-            ColumnNameValues.AMOUNT: 10000,
+            ColumnNameValues.AMOUNT: None,
             ColumnNameValues.AVG_PRICE: 100.0,
             ColumnNameValues.CASH_FLOW_LOCAL: 10000,
             ColumnNameValues.CREDIT: 10000,
             ColumnNameValues.ACCOUNT: AccountNameValues.SECURITIES,
-            ColumnNameValues.NO_TRADED: 100,
+            ColumnNameValues.NO_TRADED: None,
+            ColumnNameValues.PRICE: None,
             ColumnNameValues.REALIZED_PNL: 50,
             ColumnNameValues.REALIZED_PNL_EQ: 50,
             ColumnNameValues.REALIZED_PNL_FX: 0,
@@ -179,15 +180,14 @@ def test_amend_row__sell() -> None:
             ColumnNameValues.TRANSACTION_TYPE_INTERNAL: TransactionTypeValues.SELL,
         },
         {
-            ColumnNameValues.AMOUNT: None,
+            ColumnNameValues.AMOUNT: 10000,
             ColumnNameValues.AVG_PRICE: 100.0,
             ColumnNameValues.CASH_FLOW_LOCAL: 10000,
             ColumnNameValues.COMMISSION: None,
             ColumnNameValues.NO_HELD: None,
             ColumnNameValues.DEBIT: 10000,
             ColumnNameValues.ACCOUNT: AccountNameValues.CASH,
-            ColumnNameValues.NO_TRADED: None,
-            ColumnNameValues.PRICE: None,
+            ColumnNameValues.NO_TRADED: 100,
             ColumnNameValues.REALIZED_PNL: None,
             ColumnNameValues.REALIZED_PNL_EQ: None,
             ColumnNameValues.REALIZED_PNL_FX: None,

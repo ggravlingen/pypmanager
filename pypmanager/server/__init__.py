@@ -37,7 +37,7 @@ async def index(view: str | None = None) -> str:
 
         holding = Holding(
             name=security_name,
-            all_data=df_general_ledger,
+            df_general_ledger=df_general_ledger,
         )
 
         end_time = time.time()
