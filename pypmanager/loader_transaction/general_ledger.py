@@ -245,6 +245,8 @@ class TransactionMacro:
         credit_row[ColumnNameValues.ACCOUNT] = AccountNameValues.SECURITIES
         credit_row[ColumnNameValues.CREDIT] = self.amount
         credit_row[ColumnNameValues.NO_TRADED] = None
+        credit_row[ColumnNameValues.REALIZED_PNL] = None
+        credit_row[ColumnNameValues.REALIZED_PNL_EQ] = None
         credit_row[ColumnNameValues.PRICE] = None
         credit_row[ColumnNameValues.AMOUNT] = None
 
@@ -253,8 +255,8 @@ class TransactionMacro:
         debit_row[ColumnNameValues.COMMISSION] = None
         debit_row[ColumnNameValues.DEBIT] = self.amount_local
         debit_row[ColumnNameValues.NO_HELD] = None
-        debit_row[ColumnNameValues.REALIZED_PNL] = None
-        debit_row[ColumnNameValues.REALIZED_PNL_EQ] = None
+        debit_row[ColumnNameValues.REALIZED_PNL] = self.profit_loss
+        debit_row[ColumnNameValues.REALIZED_PNL_EQ] = self.profit_loss_eq
         debit_row[ColumnNameValues.REALIZED_PNL_FX] = None
         debit_row[ColumnNameValues.TRANSACTION_TYPE] = None
 
