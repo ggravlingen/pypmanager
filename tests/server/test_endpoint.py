@@ -1,9 +1,9 @@
 """Tests for FastAPI server."""
+import pytest
 
 from fastapi.testclient import TestClient
 
 from pypmanager.server import app
-import pytest
 
 client = TestClient(app)
 
