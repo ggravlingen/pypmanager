@@ -11,6 +11,7 @@ from pypmanager.analytics import Portfolio
 from pypmanager.analytics.holding import Holding
 from pypmanager.helpers import get_general_ledger
 from pypmanager.loader_transaction.const import ColumnNameValues
+from pypmanager.server.graphql import graphql_app
 from pypmanager.server.templates import load_template
 from pypmanager.settings import Settings
 
@@ -83,3 +84,7 @@ async def ledger() -> str:
         template_name="general_ledger.html",
         context={"ledger": output_dict},
     )
+
+
+app.add_route("/graphql", graphql_app)
+app.add_websocket_route("/graphql", graphql_app)
