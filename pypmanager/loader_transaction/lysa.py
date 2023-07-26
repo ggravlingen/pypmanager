@@ -44,7 +44,6 @@ class LysaLoader(TransactionLoader):
         df_raw[ColumnNameValues.NAME] = df_raw.apply(_replace_fee_name, axis=1)
 
         df_raw[ColumnNameValues.COMMISSION] = None
-        df_raw[ColumnNameValues.FX] = 1
         df_raw[ColumnNameValues.CURRENCY] = CurrencyValues.SEK
 
         self.df_final = df_raw

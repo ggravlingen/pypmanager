@@ -108,6 +108,17 @@ def _normalize_no_traded(row: pd.DataFrame) -> float:
     return cast(float, no_traded)
 
 
+def _normalize_fx(row: pd.DataFrame) -> float:
+    """Set FX rate to a value."""
+    if ColumnNameValues.FX not in row:
+        return 1.00
+
+    if pd.isna(row[ColumnNameValues.FX]):
+        return 1.00
+
+    return cast(float, row[ColumnNameValues.FX])
+
+
 def _cleanup_number(value: str | None) -> float | None:
     """Make sure values are converted to floats."""
     if value is None:
@@ -302,5 +313,6 @@ class TransactionLoader:
 
         df_raw[ColumnNameValues.NO_TRADED] = df_raw.apply(_normalize_no_traded, axis=1)
         df_raw[ColumnNameValues.AMOUNT] = df_raw.apply(_normalize_amount, axis=1)
+        df_raw[ColumnNameValues.FX] = df_raw.apply(_normalize_fx, axis=1)
 
         self.df_final = df_raw
