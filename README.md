@@ -53,3 +53,23 @@ In `VSCode`, click the `Run and debug` option. Press play next to `Python: FastA
 - <s>Adding scrapers to download historical closing data.</s>
 - <s>Output the result as well-formatted HTML instead of in a CLI table.</s>
 - <s>Allow setting an arbitrary date to calculate the value of the portfolio.</s>
+
+### Architecture
+
+#### Loading transactions
+
+Transactions are loaded using a loader class in the `pypmanager.loader_transaction`. A loader class should inherit from the `pypmanager.loader_transaction.TransactionLoader` class, which does some normalising of data.
+
+The helper function `pypmanager.helpers.load_transaction_files` merges data from all transaction loaders and return them as a dataframe.
+
+#### Loading market data
+
+The helper function `pypmanager.helpers.download_market_data` loads all sources in `config.market_data.yaml` and parses each source using its associated loader class. Each loader class should inherit from `pypmanager.loader_market_data.base_loader.BaseMarketDataLoader`. A loader class typically fetches data from a JSON endpoint or HTML-table and parses it so that it fits into the `pypmanager.loader_market_data.models.SourceData` dataclass.
+
+Historical market data is written, rather naively, to the `data/market_data.csv` file.
+
+#### The general ledger
+
+The general ledger, which we can load using the helper `pypmanager.helpers.get_general_ledger`, is a Pandas dataframe. The dataframe contains each loaded transaction but split into separate components for the transaction's effect on your equity, cash balance, PnL, and so on.
+
+Any PnL effect is written to the cash record of the general ledger.

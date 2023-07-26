@@ -7,7 +7,7 @@ from typing import cast
 
 import pandas as pd
 
-from pypmanager.loader_transaction.const import ColumnNameValues
+from pypmanager.loader_transaction.const import AccountNameValues, ColumnNameValues
 
 from .security import MutualFund
 
@@ -38,7 +38,7 @@ class Holding:
         We filter by ledger account = cash since the relevant data is in that row.
         """
         df_all_data = self.df_general_ledger.query(
-            f"name == '{self.name}' and ledger_account == 'cash'"
+            f"name == '{self.name}' and ledger_account == '{AccountNameValues.CASH}'"
         )
 
         if self.report_date is not None:
@@ -261,7 +261,7 @@ class Holding:
         return (self.current_price - self.average_price) * self.current_holdings
 
     @property
-    def total_pnl(self) -> float | None:
+    def total_pnl(self) -> float:
         """Return PnL."""
         return self.realized_pnl + self.unrealized_pnl
 
