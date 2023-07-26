@@ -227,7 +227,7 @@ class CalculateAggregates:
         self.transaction_type = row[ColumnNameValues.TRANSACTION_TYPE]
         self.transaction_date = row[ColumnNameValues.TRANSACTION_DATE]
         self.nominal_commission = row[ColumnNameValues.COMMISSION]
-        self.fx_rate = 1.0
+        self.fx_rate = row[ColumnNameValues.FX]
 
         if ColumnNameValues.PRICE in row and row[ColumnNameValues.PRICE]:
             self.nominal_price = row[ColumnNameValues.PRICE]
