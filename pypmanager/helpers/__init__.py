@@ -47,7 +47,10 @@ async def download_market_data() -> None:
     sources = _load_sources()
 
     for source in sources:
-        LOGGER.info(f"Parsing {source.isin_code} using {source.loader_class}")
+        LOGGER.info(
+            f"Parsing {source.isin_code} using "
+            f"{source.loader_class.replace('pypmanager.loader_market_data.', '')}"
+        )
 
         try:
             data_loader_klass = _class_importer(source.loader_class)

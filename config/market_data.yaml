@@ -29,28 +29,28 @@ sources:
     lookup_key: shb0000025
   - isin_code: SE0014453221
     loader_class: pypmanager.loader_market_data.ft.FTLoader
-    lookup_key: 601933686
+    lookup_key: "601933686"
   - isin_code: SE0005965662
     loader_class: pypmanager.loader_market_data.ft.FTLoader
-    lookup_key: 535679922
+    lookup_key: "535679922"
   - isin_code: SE0014956850
     loader_class: pypmanager.loader_market_data.ft.FTLoader
-    lookup_key: 679312906
+    lookup_key: "679312906"
   - isin_code: SE0005188836
     loader_class: pypmanager.loader_market_data.ft.FTLoader
-    lookup_key: 535619835
+    lookup_key: "535619835"
   - isin_code: SE0005796331
     loader_class: pypmanager.loader_market_data.ft.FTLoader
-    lookup_key: 535627197
+    lookup_key: "535627197"
   - isin_code: SE0016798805
     loader_class: pypmanager.loader_market_data.ft.FTLoader
-    lookup_key: 681984998
+    lookup_key: "681984998"
   - isin_code: SE0003455658
     loader_class: pypmanager.loader_market_data.ft.FTLoader
-    lookup_key: 535686415
+    lookup_key: "535686415"
   - isin_code: SE0008129985
     loader_class: pypmanager.loader_market_data.ft.FTLoader
-    lookup_key: 535691067
+    lookup_key: "535691067"
   - isin_code: SE0000529992
     loader_class: pypmanager.loader_market_data.ft.FTLoader
-    lookup_key: 535673247
+    lookup_key: "535673247"
