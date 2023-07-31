@@ -13,7 +13,7 @@ from pypmanager.loader_transaction.base_loader import (
 from pypmanager.loader_transaction.const import TransactionTypeValues
 from pypmanager.loader_transaction.lysa import LysaLoader
 from pypmanager.loader_transaction.misc import MiscLoader
-from pypmanager.settings import Settings
+from pypmanager.settings import TypedSettings
 
 
 @pytest.mark.parametrize(
@@ -98,7 +98,7 @@ def test_cleanup_number(number, expected_result) -> None:
     assert result == expected_result
 
 
-@patch.object(Settings, "DIR_DATA", "tests/fixtures/")
+@patch.object(TypedSettings, "dir_data", "tests/fixtures/")
 def test_avanza_loder() -> None:
     """Test AvanzaLoader."""
     df_avanza = AvanzaLoader().df_final
@@ -106,7 +106,7 @@ def test_avanza_loder() -> None:
     assert len(df_avanza) > 0
 
 
-@patch.object(Settings, "DIR_DATA", "tests/fixtures/")
+@patch.object(TypedSettings, "dir_data", "tests/fixtures/")
 def test_lysa_loader() -> None:
     """Test LysaLoader."""
     df_lysa = LysaLoader().df_final
@@ -114,7 +114,7 @@ def test_lysa_loader() -> None:
     assert len(df_lysa) > 0
 
 
-@patch.object(Settings, "DIR_DATA", "tests/fixtures/")
+@patch.object(TypedSettings, "dir_data", "tests/fixtures/")
 def test_misc_loader() -> None:
     """Test MiscLoader."""
     df_misc = MiscLoader().df_final

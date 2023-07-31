@@ -191,7 +191,7 @@ class TransactionLoader:
 
     def load_data_files(self) -> None:
         """Parse CSV-files and load them into a data frame."""
-        files = glob.glob(os.path.join(Settings.DIR_DATA, self.file_pattern))
+        files = glob.glob(os.path.join(Settings.dir_data, self.file_pattern))
 
         dfs: list[pd.DataFrame] = []
         for file in files:

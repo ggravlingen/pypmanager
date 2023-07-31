@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from datetime import datetime
-import os
 from typing import Any
 
 from numpy import datetime64
@@ -12,8 +11,6 @@ import yaml
 from pypmanager.settings import Settings
 
 from .models import Source, SourceData, Sources
-
-CONFIG_FILE = os.path.abspath(os.path.join(Settings.DIR_CONFIG, "market_data.yaml"))
 
 
 def _class_importer(name: str) -> Any:
@@ -37,7 +34,7 @@ def _class_importer(name: str) -> Any:
 
 def _load_sources() -> list[Source]:
     """Load settings."""
-    with open(CONFIG_FILE, encoding="UTF-8") as file:
+    with open(Settings.file_market_data_config, encoding="UTF-8") as file:
         # Load the YAML content from the file
         yaml_data = yaml.safe_load(file)
 
@@ -58,7 +55,7 @@ def _upsert_df(data: list[SourceData], source_name: str) -> None:
     # Check if the CSV file exists
     try:
         existing_df = pd.read_csv(
-            Settings.FILE_MARKET_DATA,
+            Settings.file_market_data,
             sep=";",
             parse_dates=["report_date"],
         )
@@ -85,4 +82,4 @@ def _upsert_df(data: list[SourceData], source_name: str) -> None:
     merged_df = merged_df.sort_values(["isin_code", "report_date"])
 
     # Write the merged DataFrame back to the CSV file
-    merged_df.to_csv(Settings.FILE_MARKET_DATA, index=False, sep=";")
+    merged_df.to_csv(Settings.file_market_data, index=False, sep=";")

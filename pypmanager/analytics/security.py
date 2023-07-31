@@ -28,7 +28,7 @@ class MutualFund:
     def _load_data(self) -> None:
         """Load market data."""
         df_market_data = pd.read_csv(
-            Settings.FILE_MARKET_DATA, sep=";", index_col="report_date"
+            Settings.file_market_data, sep=";", index_col="report_date"
         )
 
         if self.isin_code:
