@@ -25,7 +25,7 @@ sources:
     lookup_key: F0GBR04M88
     name: Storebrand Global All Countries A SEK
   - isin_code: SE0003788587
-    loader_class: pypmanager.loader_market_data.shb_fonder.SHBFonderLoader
+    loader_class: pypmanager.loader_market_data.morningstar.MorningstarLoaderSHB
     lookup_key: shb0000025
   - isin_code: SE0014453221
     loader_class: pypmanager.loader_market_data.ft.FTLoader
