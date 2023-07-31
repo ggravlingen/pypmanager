@@ -17,7 +17,7 @@ app = FastAPI()
 @app.get("/favicon.ico")
 async def get_favicon() -> FileResponse:
     """Return favicon."""
-    return FileResponse(f"{Settings.DIR_STATIC}/favicon.ico")
+    return FileResponse(f"{Settings.dir_static}/favicon.ico")
 
 
 @app.get("/", response_class=HTMLResponse)

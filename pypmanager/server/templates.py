@@ -45,7 +45,7 @@ async def load_template(
 
 def static_file2base64(file: str) -> markupsafe.Markup:
     """Convert a file in the static folder to base 64."""
-    file = os.path.join(Settings.DIR_STATIC, file)
+    file = os.path.join(Settings.dir_static, file)
 
     with open(file, "rb") as _file:
         encoded_bytes = base64.b64encode(_file.read())
