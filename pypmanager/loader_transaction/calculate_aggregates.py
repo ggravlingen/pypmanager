@@ -278,7 +278,7 @@ def calculate_results(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
     dfs: list[pd.DataFrame] = []
 
     for name in all_securities_name:
-        if Settings.DEBUG_NAME and Settings.DEBUG_NAME not in name:
+        if Settings.debug_name and Settings.debug_name not in name:
             continue
 
         df_data = data.query(f"name == '{name}'")
