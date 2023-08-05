@@ -2,6 +2,12 @@
 
 Summarize transactions in funds into a simple portfolio report.
 
+The overview page:
+![Screenshot of the overview page.](/docs/assets/overview.png)
+
+The general ledger:
+![Screenshot of the general ledger.](/docs/assets/general_ledger.png)
+
 ### Why
 
 I have been looking for a library where I can download a set of transactions from my broker and pension fund manager and compile them into a report giving me an overview of all holdings.
