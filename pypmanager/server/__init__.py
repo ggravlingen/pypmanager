@@ -5,7 +5,11 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse, HTMLResponse
 
 from pypmanager.analytics import Portfolio
-from pypmanager.helpers import get_general_ledger, get_holdings
+from pypmanager.helpers import (
+    get_general_ledger,
+    get_historical_portfolio,
+    get_holdings,
+)
 from pypmanager.loader_transaction.const import ColumnNameValues
 from pypmanager.server.graphql import graphql_app
 from pypmanager.server.templates import load_template
@@ -49,6 +53,21 @@ async def ledger() -> str:
     return await load_template(
         template_name="general_ledger.html",
         context={"ledger": output_dict},
+    )
+
+
+app.add_route("/graphql", graphql_app)
+app.add_websocket_route("/graphql", graphql_app)
+
+
+@app.get("/history", response_class=HTMLResponse)
+async def portfolio_history() -> str:
+    """Return historical data."""
+    portfolio_data = await get_historical_portfolio()
+
+    return await load_template(
+        template_name="historical_portfolio.html",
+        context={"data": portfolio_data},
     )
 
 

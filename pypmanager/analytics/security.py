@@ -1,5 +1,5 @@
 """Representation of a security."""
-from datetime import date, datetime
+from datetime import date
 from typing import cast
 
 import pandas as pd
@@ -16,7 +16,7 @@ class MutualFund:
         self,
         isin_code: str | None = None,
         name: str | None = None,
-        report_date: datetime | None = None,
+        report_date: date | None = None,
     ) -> None:
         """Init."""
         self.isin_code = isin_code
