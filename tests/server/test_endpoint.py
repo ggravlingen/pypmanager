@@ -1,7 +1,6 @@
 """Tests for FastAPI server."""
-import pytest
-
 from fastapi.testclient import TestClient
+import pytest
 
 from pypmanager.server import app
 
@@ -17,7 +16,7 @@ async def test_root_endpoint():
 
 @pytest.mark.asyncio
 async def test_graphql_endpoint():
-    """Test endpoint /graphql"""
+    """Test endpoint /graphql."""
     query = """
     {
         allGeneralLedger {

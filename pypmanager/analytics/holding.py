@@ -1,6 +1,6 @@
 """Handle securities."""
 from dataclasses import dataclass
-from datetime import date, datetime
+from datetime import date
 import logging
 import math
 from typing import cast
@@ -21,7 +21,7 @@ class Holding:
     df_general_ledger: pd.DataFrame
     name: str
     calculated_data: pd.DataFrame | None = None
-    report_date: datetime | None = None
+    report_date: date | None = None
 
     # Caching
     _security_info: MutualFund | None = None
@@ -42,7 +42,7 @@ class Holding:
         )
 
         if self.report_date is not None:
-            df_all_data = df_all_data.query(f"index <= '{self.report_date}'")
+            df_all_data = df_all_data.loc[(df_all_data.index <= self.report_date)]
 
         self.df_general_ledger = df_all_data
 
