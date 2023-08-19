@@ -1,6 +1,7 @@
 """Handle securities."""
 from dataclasses import dataclass
 from datetime import date
+from functools import cached_property
 import logging
 import math
 from typing import cast
@@ -48,7 +49,7 @@ class Holding:
 
         self.calculated_data = df_all_data
 
-    @property
+    @cached_property
     def current_holdings(self) -> float | None:
         """
         Return the number of securities currently held.
@@ -69,7 +70,7 @@ class Holding:
 
         return cast(float, total_held)
 
-    @property
+    @cached_property
     def security_info(self) -> MutualFund:
         """Return information on the security."""
         if self._security_info is None:  # Hit these calculations only once
@@ -81,17 +82,23 @@ class Holding:
 
         return self._security_info
 
-    @property
+    @cached_property
     def current_price(self) -> float | None:
         """Return current price."""
+        if self.current_holdings is None:
+            return None
+
         return self.security_info.nav
 
     @property
     def date_market_value(self) -> date | None:
         """Return date of valuation."""
+        if self.current_holdings is None:
+            return None
+
         return self.security_info.nav_date
 
-    @property
+    @cached_property
     def isin_code(self) -> str | None:
         """Return the security's ISIN code."""
         if self.calculated_data is None:
@@ -142,7 +149,7 @@ class Holding:
 
         return cast(float, average_fx_rate)
 
-    @property
+    @cached_property
     def average_price(self) -> float | None:
         """Return average price."""
         if (
@@ -235,7 +242,7 @@ class Holding:
         """Return realized PnL."""
         return 0
 
-    @property
+    @cached_property
     def realized_pnl(self) -> float:
         """Return realized PnL."""
         if (
@@ -248,7 +255,7 @@ class Holding:
 
         return cast(float, pnl)
 
-    @property
+    @cached_property
     def unrealized_pnl(self) -> float:
         """Return unrealized PnL."""
         if (
