@@ -3,7 +3,6 @@
 from dataclasses import dataclass
 from datetime import date, datetime
 import logging
-import time
 from typing import cast
 
 import pandas as pd
@@ -11,6 +10,7 @@ import pandas as pd
 from pypmanager.analytics.holding import Holding
 from pypmanager.analytics.portfolio import Portfolio
 from pypmanager.error import DataError
+from pypmanager.loader_market_data.base_loader import BaseMarketDataLoader
 from pypmanager.loader_market_data.utils import (
     _class_importer,
     _load_sources,
@@ -55,18 +55,10 @@ async def get_holdings(report_date: date | None = None) -> list[Holding]:
 
     holdings: list[Holding] = []
     for security_name in all_securities:
-        start_time = time.time()
-
         holding = Holding(
             name=security_name,
             df_general_ledger=df_general_ledger,
             report_date=report_date,
-        )
-
-        end_time = time.time()
-
-        LOGGER.info(
-            f"Calculated {security_name} in {round((end_time - start_time), 4)}s"
         )
 
         if holding.total_pnl == 0:
@@ -96,7 +88,7 @@ async def download_market_data() -> None:
             raise DataError("Unable to load data", err) from err
 
         try:
-            loader = data_loader_klass(
+            loader: BaseMarketDataLoader = data_loader_klass(
                 lookup_key=source.lookup_key,
                 isin_code=source.isin_code,
                 name=source.name,
