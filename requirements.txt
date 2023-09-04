@@ -3,7 +3,7 @@ fastapi==0.103.0
 humanize==4.8.0
 Jinja2==3.1.2
 lxml==4.9.3
-pandas==2.0.3
+pandas==2.1.0
 pydantic-settings==2.0.3
 requests==2.31.0
 strawberry_graphql[debug-server]==0.205.0
