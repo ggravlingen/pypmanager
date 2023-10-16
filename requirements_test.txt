@@ -8,4 +8,4 @@ pytest-asyncio==0.21.1
 pytest-cov==4.1.0
 pytest-timeout==2.2.0
 types_PyYAML==6.0.12.12
-types_requests==2.31.0.8
+types_requests==2.31.0.9
