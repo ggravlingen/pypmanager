@@ -5,7 +5,7 @@ repos:
           - '--fix'
         id: ruff
     repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.0.292
+    rev: v0.1.1
   - hooks:
       - args:
           - '--safe'
@@ -13,7 +13,7 @@ repos:
         files: ^((pypmanager|tests)/.+)?[^/]+\.py$
         id: black
     repo: https://github.com/psf/black
-    rev: 23.9.1
+    rev: 23.10.0
   - hooks:
       - id: requirements-txt-fixer
       - id: check-executables-have-shebangs
