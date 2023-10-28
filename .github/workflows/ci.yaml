@@ -38,6 +38,7 @@ jobs:
               - tests/**/*.py
               - requirements.txt
               - requirements_test.txt
+              - .github/**/*.yaml
               - .github/**/*.yml
 
       - name: Generate partial Python venv restore key
