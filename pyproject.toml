@@ -133,6 +133,11 @@ select = [
     "I",  # isort
     "T20", # flake8-print
     "PD", # pandas-vet
+    "PLC", # pylint
+    "PLE", # pylint
+    "PLR", # pylint
+    "PLW", # pylint
+    "Q000", # Double quotes found but single quotes preferred
     "UP",  # pyupgrade
     "W",  # pycodestyle
 ]
