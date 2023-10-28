@@ -1,7 +1,10 @@
 """Base loader."""
 from abc import abstractmethod
 from io import BytesIO
-from typing import Any
+import json
+from typing import Any, cast
+
+import requests
 
 from .models import SourceData
 
@@ -9,7 +12,6 @@ from .models import SourceData
 class BaseMarketDataLoader:
     """Base class for market data loading."""
 
-    url: str
     raw_response: dict[str, Any]
     raw_response_io: BytesIO
 
@@ -26,6 +28,15 @@ class BaseMarketDataLoader:
 
         self.get_response()
 
+    def query_endpoint(self) -> dict[str, Any]:
+        """Get data endpoint."""
+        response = requests.get(self.full_url, timeout=10)
+
+        if response.status_code == 200:
+            return cast(dict[str, Any], json.loads(response.text))
+
+        raise ValueError("Unable to load data")
+
     @abstractmethod
     def get_response(self) -> None:
         """Get reqponse."""
@@ -34,6 +45,11 @@ class BaseMarketDataLoader:
     @abstractmethod
     def source(self) -> str:
         """Get name of source."""
+
+    @property
+    @abstractmethod
+    def full_url(self) -> str:
+        """Full URL to query."""
 
     @abstractmethod
     def to_source_data(self) -> list[SourceData]:

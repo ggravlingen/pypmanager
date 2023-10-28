@@ -2,7 +2,6 @@
 
 from datetime import datetime, timedelta
 from io import BytesIO
-import json
 
 import pandas as pd
 import requests
@@ -38,15 +37,9 @@ class MorningstarLoader(BaseMarketDataLoader):
         )
 
     def get_response(self) -> None:
-        """Get reqponse."""
-        response = requests.get(self.full_url, timeout=10)
-
-        if response.status_code == 200:
-            data = json.loads(response.text)
-
-            self.raw_response = data
-        else:
-            LOGGER.warning("Unable to load data")
+        """Get response."""
+        data = self.query_endpoint()
+        self.raw_response = data
 
     @property
     def source(self) -> str:

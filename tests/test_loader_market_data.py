@@ -14,7 +14,9 @@ def test_avanza_loader():
         "nav": 100.0,
         "name": "Sample Fund",
     }
-    with mock.patch("pypmanager.loader_market_data.avanza.requests.get") as mock_get:
+    with mock.patch(
+        "pypmanager.loader_market_data.base_loader.requests.get"
+    ) as mock_get:
         mock_response = mock_get.return_value
         mock_response.status_code = 200
         mock_response.text = json.dumps(response_data)

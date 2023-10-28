@@ -6,11 +6,10 @@ from fastapi.responses import FileResponse, HTMLResponse
 
 from pypmanager.analytics import Portfolio
 from pypmanager.helpers import (
-    get_general_ledger,
+    get_general_ledger_as_dict,
     get_historical_portfolio,
     get_holdings,
 )
-from pypmanager.loader_transaction.const import ColumnNameValues
 from pypmanager.server.graphql import graphql_app
 from pypmanager.server.templates import load_template
 from pypmanager.settings import Settings
@@ -40,15 +39,7 @@ async def index() -> str:
 @app.get("/ledger", response_class=HTMLResponse)
 async def ledger() -> str:
     """Return the general ledger."""
-    df_general_ledger = get_general_ledger()
-    df_general_ledger = df_general_ledger.sort_values(
-        [
-            ColumnNameValues.TRANSACTION_DATE,
-            ColumnNameValues.NAME,
-        ],
-        ascending=False,
-    )
-    output_dict = df_general_ledger.reset_index().to_dict(orient="records")
+    output_dict = get_general_ledger_as_dict()
 
     return await load_template(
         template_name="general_ledger.html",

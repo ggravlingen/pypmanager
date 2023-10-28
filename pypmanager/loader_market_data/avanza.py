@@ -1,12 +1,8 @@
 """Avanza loader."""
 
 from datetime import datetime
-import json
-
-import requests
 
 from .base_loader import BaseMarketDataLoader
-from .const import LOGGER
 from .models import SourceData
 
 
@@ -21,15 +17,9 @@ class AvanzaLoader(BaseMarketDataLoader):
         return f"{self.url}{self.lookup_key}"
 
     def get_response(self) -> None:
-        """Get reqponse."""
-        response = requests.get(self.full_url, timeout=10)
-
-        if response.status_code == 200:
-            data = json.loads(response.text)
-
-            self.raw_response = data
-        else:
-            LOGGER.warning("Unable to load data")
+        """Get response."""
+        data = self.query_endpoint()
+        self.raw_response = data
 
     @property
     def source(self) -> str:

@@ -16,7 +16,7 @@ from .models import SourceData
 class FTLoader(BaseMarketDataLoader):
     """Load data from Financial Times."""
 
-    url = "https://markets.ft.com/data/chartapi/series"
+    full_url = "https://markets.ft.com/data/chartapi/series"
 
     @property
     def headers(self) -> dict[str, str]:
@@ -51,7 +51,7 @@ class FTLoader(BaseMarketDataLoader):
     def get_response(self) -> None:
         """Get reqponse."""
         response = requests.post(
-            self.url,
+            self.full_url,
             data=json.dumps(self.get_payload()),
             headers=self.headers,
             timeout=10,
