@@ -24,6 +24,10 @@ sources:
     loader_class: pypmanager.loader_market_data.morningstar.MorningstarLoader
     lookup_key: F0GBR04M88
     name: Storebrand Global All Countries A SEK
+  - isin_code: SE0004297927
+    loader_class: pypmanager.loader_market_data.morningstar.MorningstarLoader
+    lookup_key: F00000NBM7
+    name: Spiltan Aktiefond Investmentbolag
   - isin_code: SE0003788587
     loader_class: pypmanager.loader_market_data.morningstar.MorningstarLoaderSHB
     lookup_key: shb0000025
