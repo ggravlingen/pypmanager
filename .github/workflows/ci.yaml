@@ -2,6 +2,7 @@ name: Code quality tests
 
 env:
   ALL_PYTHON_VERSIONS: "['3.11']"
+  CACHE_VERSION: 1
 
 on:
   pull_request:
@@ -22,6 +23,7 @@ jobs:
     outputs:
       run_pipeline: ${{ steps.changes.outputs.core }}
       python_versions: ${{ steps.info.outputs.python_versions }}
+      python_cache_key: ${{ steps.generate_python_cache_key.outputs.key }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.1.1
@@ -34,9 +36,19 @@ jobs:
             core:
               - pypmanager/**/*.py
               - tests/**/*.py
+              - pyproject.toml
               - requirements.txt
               - requirements_test.txt
+              - .github/**/*.yaml
               - .github/**/*.yml
+
+      - name: Generate partial Python venv restore key
+        id: generate_python_cache_key
+        run: >-
+          echo "key=venv-${{ env.CACHE_VERSION }}-${{
+            hashFiles('pyproject.toml') }}-${{
+            hashFiles('requirements.txt') }}-${{
+            hashFiles('requirements_test.txt') }}" >> $GITHUB_OUTPUT
 
       - name: Collect additional information
         id: info
@@ -62,17 +74,24 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - uses: syphar/restore-virtualenv@v1.3
-        id: cache-virtualenv
-
-      - uses: syphar/restore-pip-download-cache@v1.2
-        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
+      - name: Restore base Python virtual environment
+        id: cache-venv
+        uses: actions/cache@v3.3.2
+        with:
+          path: venv
+          lookup-only: true
+          key: >-
+            ${{ runner.os }}-${{ steps.python.outputs.python-version }}-${{
+            needs.info.outputs.python_cache_key }}
 
       - name: Install requirements
+        if: steps.cache-venv.outputs.cache-hit != 'true'
         run: |
+          python -m venv venv
+          . venv/bin/activate
+
           pip install -r requirements.txt
           pip install -r requirements_test.txt
-        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
 
   linter:
     name: Run code linters
@@ -94,14 +113,27 @@ jobs:
         uses: actions/setup-python@v4.7.1
         with:
           python-version: ${{ matrix.python-version }}
-      - uses: syphar/restore-virtualenv@v1.3
-        id: cache-virtualenv
-      - name: Run ruff
-        uses: chartboost/ruff-action@v1.0.0
+      - name: Restore full Python ${{ steps.python.outputs.python-version }} virtual environment
+        id: cache-venv
+        uses: actions/cache/restore@v3.3.2
+        with:
+          path: venv
+          fail-on-cache-miss: true
+          key: >-
+            ${{ runner.os }}-${{ steps.python.outputs.python-version }}-${{
+            needs.info.outputs.python_cache_key }}
+      - name: Run ruff (fully)
+        run: |
+          . venv/bin/activate
+          pre-commit run --hook-stage manual ruff --all-files --show-diff-on-failure
       - name: Run Black
-        run: black --check --fast --quiet --diff pypmanager tests
+        run: |
+          . venv/bin/activate
+          black --check --fast --quiet --diff pypmanager tests
       - name: Run mypy
-        run: mypy pypmanager
+        run: |
+          . venv/bin/activate
+          mypy pypmanager
 
   pytest:
     name: Run test suite
@@ -123,21 +155,22 @@ jobs:
         uses: actions/setup-python@v4.7.1
         with:
           python-version: ${{ matrix.python-version }}
-
-      - uses: syphar/restore-virtualenv@v1.3
-        id: cache-virtualenv
-
+      - name: Restore full Python ${{ steps.python.outputs.python-version }} virtual environment
+        id: cache-venv
+        uses: actions/cache/restore@v3.3.2
+        with:
+          path: venv
+          fail-on-cache-miss: true
+          key: >-
+            ${{ runner.os }}-${{ steps.python.outputs.python-version }}-${{
+            needs.info.outputs.python_cache_key }}
       - name: Copy fixtures
         run: |
           cp tests/fixtures/* data/
-
       - name: Run tests
         run: |
-          export PYTEST_ARGS="--timeout=30 --cov pypmanager --cov-report xml:coverage.xml -s"
-
-          pytest tests/ \
-            $PYTEST_ARGS
-
+          . venv/bin/activate
+          pytest tests --timeout=30 --cov pypmanager --cov-report xml:coverage.xml
       - name: Post coverage
         uses: orgoro/coverage@v3
         with:
