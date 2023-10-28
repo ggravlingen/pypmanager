@@ -36,6 +36,7 @@ jobs:
             core:
               - pypmanager/**/*.py
               - tests/**/*.py
+              - pyproject.toml
               - requirements.txt
               - requirements_test.txt
               - .github/**/*.yaml
