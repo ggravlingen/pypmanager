@@ -48,10 +48,4 @@ repos:
         name: mypy
         require_serial: true
         types: [python]
-      - entry: script/run-in-env.sh pylint
-        files: ^pypmanager/.+\.py$
-        id: pylint
-        language: script
-        name: pylint
-        types: [python]
     repo: local

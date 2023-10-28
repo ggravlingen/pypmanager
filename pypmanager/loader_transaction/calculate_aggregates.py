@@ -211,7 +211,7 @@ class CalculateAggregates:
         if self.pnl_price:
             pnl += self.pnl_price
 
-        if pnl == 0.0:
+        if pnl == 0.0:  # noqa: PLR2004
             self.pnl_total = None
             return
 

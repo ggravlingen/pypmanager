@@ -163,7 +163,7 @@ class TransactionMacro:
 
         return self
 
-    def pnl_equity(self) -> TransactionMacro:
+    def pnl_equity(self) -> TransactionMacro:  # noqa: PLR0915
         """Book profit/loss against equity."""
         credit_row = self.row.copy()
         credit_row_2 = self.row.copy()

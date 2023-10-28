@@ -7,6 +7,7 @@ from typing import Any
 
 import requests
 
+from pypmanager.const import HttpResponseCodeLabels
 from pypmanager.loader_market_data.const import LOAD_HISTORY_DAYS
 
 from .base_loader import BaseMarketDataLoader
@@ -56,7 +57,7 @@ class FTLoader(BaseMarketDataLoader):
             headers=self.headers,
             timeout=10,
         )
-        if response.status_code == 200:
+        if response.status_code == HttpResponseCodeLabels.OK:
             data = json.loads(response.text)
 
             self.raw_response = data

@@ -141,7 +141,7 @@ def _get_filename(file_path: str) -> str:
     filename = os.path.basename(file_path).replace(".csv", "")
     splitted_file_path = filename.split("-")
 
-    if len(splitted_file_path) == 2:
+    if len(splitted_file_path) == 2:  # noqa: PLR2004
         filename = splitted_file_path[1]
     else:
         filename = splitted_file_path[0]

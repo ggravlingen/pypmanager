@@ -6,6 +6,8 @@ from typing import Any, cast
 
 import requests
 
+from pypmanager.const import HttpResponseCodeLabels
+
 from .models import SourceData
 
 
@@ -32,7 +34,7 @@ class BaseMarketDataLoader:
         """Get data endpoint."""
         response = requests.get(self.full_url, timeout=10)
 
-        if response.status_code == 200:
+        if response.status_code == HttpResponseCodeLabels.OK:
             return cast(dict[str, Any], json.loads(response.text))
 
         raise ValueError("Unable to load data")
