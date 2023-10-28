@@ -16,45 +16,34 @@
     "vscode": {
       "settings": {
         "python.pythonPath": "/usr/local/bin/python",
-        "python.linting.enabled": true,
-        "python.linting.pylintEnabled": true,
-        "python.formatting.blackPath": "/usr/local/bin/black",
-        "python.linting.mypyPath": "/usr/local/bin/mypy",
-        "python.linting.pylintPath": "/usr/local/bin/pylint",
-        "python.formatting.provider": "black",
-        "editor.formatOnPaste": false,
-        "editor.formatOnSave": true,
-        "editor.formatOnType": true,
-        "files.trimTrailingWhitespace": true,
-        "terminal.integrated.profiles.linux": {
-          "zsh": {
-            "path": "/usr/bin/zsh"
-          }
-        },
-        "terminal.integrated.defaultProfile.linux": "zsh",
-        "python.terminal.activateEnvInCurrentTerminal": true,
+        "python.languageServer": "Pylance",
         "python.analysis.extraPaths": [
           "/workspaces/pypmanager"
         ],
         "[python]": {
           "editor.codeActionsOnSave": {
             "source.organizeImports": true
+          },
+          "editor.defaultFormatter": "ms-python.black-formatter",
+          "editor.formatOnSave": true,
+          "editor.formatOnPaste": false,
+          "editor.formatOnType": true
+        },
+        "python.testing.pytestEnabled": true,
+        "files.trimTrailingWhitespace": true,
+        "terminal.integrated.profiles.linux": {
+          "zsh": {
+            "path": "/usr/bin/zsh"
           }
         },
-        "python.formatting.blackArgs": [
-          "-S",
-          "--line-length",
-          "88"
-        ],
-        "python.testing.pytestEnabled": true,
-        "python.testing.unittestArgs": [
-          "-no-cov",
-          "-s"
-        ]
+        "terminal.integrated.defaultProfile.linux": "zsh"
       },
       "extensions": [
-        "ms-python.python",
         "ms-python.vscode-pylance",
+        "ms-python.python",
+        "ms-python.black-formatter",
+        "ms-python.mypy-type-checker",
+        "ms-python.pylint",
         "mechatroner.rainbow-csv"
       ]
     }
