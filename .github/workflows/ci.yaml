@@ -169,6 +169,7 @@ jobs:
           cp tests/fixtures/* data/
       - name: Run tests
         run: |
+          . venv/bin/activate
           pytest tests --timeout=30 --cov pypmanager --cov-report xml:coverage.xml
       - name: Post coverage
         uses: orgoro/coverage@v3
