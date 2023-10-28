@@ -53,9 +53,10 @@ class MorningstarLoader(BaseMarketDataLoader):
         data_list = self.raw_response["TimeSeries"]["Security"][0]["HistoryDetail"]
 
         output_list: list[SourceData] = []
-        for row in data_list:
-            assert self.name is not None
+        if self.name is None:
+            return output_list
 
+        for row in data_list:
             output_list.append(
                 SourceData(
                     report_date=datetime.strptime(row["EndDate"], "%Y-%m-%d"),
