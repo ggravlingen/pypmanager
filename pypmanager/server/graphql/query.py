@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import strawberry
 
-from pypmanager.helpers import get_general_ledger
+from pypmanager.helpers import get_general_ledger_as_dict
 from pypmanager.loader_transaction.const import ColumnNameValues
 
 from .models import LedgerRow
@@ -16,15 +16,7 @@ class Query:
     @strawberry.field
     def all_general_ledger(self) -> list[LedgerRow]:
         """Return all general ledger rows."""
-        df_general_ledger = get_general_ledger()
-        df_general_ledger = df_general_ledger.sort_values(
-            [
-                ColumnNameValues.TRANSACTION_DATE,
-                ColumnNameValues.NAME,
-            ],
-            ascending=False,
-        )
-        output_dict = df_general_ledger.reset_index().to_dict(orient="records")
+        output_dict = get_general_ledger_as_dict()
 
         output_data: list[LedgerRow] = []
 
