@@ -11,7 +11,7 @@ client = TestClient(app)
 async def test_root_endpoint():
     """Test endpoint /."""
     response = client.get("/")
-    assert response.status_code == 200
+    assert response.status_code == 200  # noqa: PLR2004
 
 
 @pytest.mark.asyncio
@@ -27,4 +27,4 @@ async def test_graphql_endpoint():
     }
     """
     response = client.post("/graphql", json={"query": query})
-    assert response.status_code == 200
+    assert response.status_code == 200  # noqa: PLR2004

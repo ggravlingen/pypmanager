@@ -126,11 +126,15 @@ exclude = [
 target-version = "py311"
 
 select = [
+    "A",  # flake8-builtins
+    "ASYNC",  # flake8-async
     "C",  # complexity
     "D",  # docstrings
     "E",  # pycodestyle
     "F",  # pyflakes/autoflake
     "I",  # isort
+    "ISC",  # flake8-implicit-str-concat
+    "N",  # pep8-naming
     "T20", # flake8-print
     "PD", # pandas-vet
     "PLC", # pylint
@@ -138,6 +142,7 @@ select = [
     "PLR", # pylint
     "PLW", # pylint
     "Q000", # Double quotes found but single quotes preferred
+    "S",  # flake8-bandit
     "UP",  # pyupgrade
     "W",  # pycodestyle
 ]
@@ -170,3 +175,8 @@ known-first-party = [
   "pypmanager",
   "tests",
 ]
+
+[tool.ruff.per-file-ignores]
+
+# Allow using assert in tests
+"tests/*" = ["S101"]

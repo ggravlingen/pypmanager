@@ -145,8 +145,8 @@ class CalculateAggregates:
         if self.sum_cost_basis_delta is None:
             self.sum_cost_basis_delta = 0.0
 
-        assert self.no_traded is not None
-        assert self.nominal_price is not None
+        if self.no_traded is None or self.nominal_price is None:
+            return None
 
         transaction_cash_flow: float = -(self.no_traded * self.nominal_price)
         if self.nominal_commission:

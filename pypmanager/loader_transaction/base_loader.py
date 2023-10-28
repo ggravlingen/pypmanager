@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from datetime import datetime
 import glob
 import os
-import random
+from secrets import randbelow
 from typing import cast
 
 import pandas as pd
@@ -228,9 +228,9 @@ class TransactionLoader:
         # Apply randomness to time in order to have unique indices
         df_raw.index = pd.to_datetime(df_raw.index).map(
             lambda x: x.replace(
-                hour=random.randint(0, 23),
-                minute=random.randint(0, 59),
-                microsecond=random.randint(0, 999999),
+                hour=randbelow(23),
+                minute=randbelow(59),
+                microsecond=randbelow(999999),
             )
             if x and x.strftime("%Y-%m-%d") == x.strftime("%Y-%m-%d")
             else x
