@@ -5,7 +5,7 @@ repos:
           - '--fix'
         id: ruff
     repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.1.3
+    rev: v0.1.4
   - hooks:
       - args:
           - '--safe'
