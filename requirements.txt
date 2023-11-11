@@ -7,4 +7,4 @@ pandas==2.1.2
 pydantic-settings==2.0.3
 requests==2.31.0
 strawberry_graphql[debug-server]==0.211.1
-uvicorn[standard]==0.23.2
+uvicorn[standard]==0.24.0.post1
