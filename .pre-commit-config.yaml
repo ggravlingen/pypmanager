@@ -5,7 +5,7 @@ repos:
           - '--fix'
         id: ruff
     repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.1.1
+    rev: v0.1.6
   - hooks:
       - args:
           - '--safe'
@@ -13,7 +13,7 @@ repos:
         files: ^((pypmanager|tests)/.+)?[^/]+\.py$
         id: black
     repo: https://github.com/psf/black
-    rev: 23.10.0
+    rev: 23.11.0
   - hooks:
       - id: requirements-txt-fixer
       - id: check-executables-have-shebangs
@@ -30,7 +30,7 @@ repos:
           - '-d relaxed'
         id: yamllint
     repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.32.0
+    rev: v1.33.0
   - hooks:
       # Run mypy through our wrapper script in order to get the possible
       # pyenv and/or virtualenv activated; it may not have been e.g. if
@@ -39,7 +39,7 @@ repos:
       - id: prettier
         stages: [manual]
     repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v3.0.3
+    rev: v3.1.0
   - hooks:
       - entry: script/run-in-env.sh mypy
         files: ^(pypmanager|tests)/.+\.py$
