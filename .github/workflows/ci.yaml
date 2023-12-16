@@ -37,7 +37,6 @@ jobs:
               - pypmanager/**/*.py
               - tests/**/*.py
               - pyproject.toml
-              - requirements.txt
               - requirements_test.txt
               - .github/**/*.yaml
               - .github/**/*.yml
@@ -47,7 +46,6 @@ jobs:
         run: >-
           echo "key=venv-${{ env.CACHE_VERSION }}-${{
             hashFiles('pyproject.toml') }}-${{
-            hashFiles('requirements.txt') }}-${{
             hashFiles('requirements_test.txt') }}" >> $GITHUB_OUTPUT
 
       - name: Collect additional information
@@ -90,8 +88,7 @@ jobs:
           python -m venv venv
           . venv/bin/activate
 
-          pip install -r requirements.txt
-          pip install -r requirements_test.txt
+          ./script/bootstrap.sh
 
   linter:
     name: Run code linters
