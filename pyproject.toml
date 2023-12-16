@@ -5,8 +5,19 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "pypmanager"
 requires-python = ">=3.11"
-dependencies = []
 dynamic = ['version']
+dependencies    = [
+  "colorlog==6.8.0",
+  "fastapi==0.104.1",
+  "humanize==4.9.0",
+  "Jinja2==3.1.2",
+  "lxml==4.9.3",
+  "pandas==2.1.4",
+  "pydantic-settings==2.1.0",
+  "requests==2.31.0",
+  "strawberry_graphql[debug-server]==0.216.0",
+  "uvicorn[standard]==0.24.0.post1",
+]
 
 [tool.setuptools]
 platforms = ["any"]
