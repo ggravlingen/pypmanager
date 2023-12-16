@@ -37,7 +37,6 @@ jobs:
               - pypmanager/**/*.py
               - tests/**/*.py
               - pyproject.toml
-              - requirements_test.txt
               - .github/**/*.yaml
               - .github/**/*.yml
 
@@ -45,8 +44,7 @@ jobs:
         id: generate_python_cache_key
         run: >-
           echo "key=venv-${{ env.CACHE_VERSION }}-${{
-            hashFiles('pyproject.toml') }}-${{
-            hashFiles('requirements_test.txt') }}" >> $GITHUB_OUTPUT
+            hashFiles('pyproject.toml') }}" >> $GITHUB_OUTPUT
 
       - name: Collect additional information
         id: info

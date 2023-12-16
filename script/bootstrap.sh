@@ -10,4 +10,4 @@ echo "Installing internal dependencies..."
 
 python3 -m pip install --upgrade pip setuptools wheel cython
 python3 -m pip install -e .
-python3 -m pip install -r requirements_test.txt
+python3 -m pip install -e .'[test]'
