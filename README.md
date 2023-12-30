@@ -1,4 +1,4 @@
-### PyP(ortfolio)Manager
+### PyLocalP(portfolio)Manager
 
 Summarize transactions in funds into a simple portfolio report.
 
