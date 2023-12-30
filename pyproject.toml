@@ -3,7 +3,7 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pypmanager"
+name = "pylocalpmanager"
 requires-python = ">=3.11"
 dynamic = ['version']
 dependencies    = [
