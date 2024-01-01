@@ -4,6 +4,7 @@ from __future__ import annotations
 from datetime import date
 import logging
 from typing import Any
+import warnings
 
 import pandas as pd
 
@@ -286,6 +287,9 @@ def calculate_results(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
 
         dfs.append(df_result)
 
-    df_output = pd.concat(dfs, ignore_index=False)
+    with warnings.catch_warnings():
+        warnings.simplefilter(action="ignore", category=FutureWarning)
+
+        df_output = pd.concat(dfs, ignore_index=False)
 
     return df_output

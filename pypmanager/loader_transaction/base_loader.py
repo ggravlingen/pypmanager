@@ -209,7 +209,7 @@ class TransactionLoader:
             df_raw = pd.concat(dfs, ignore_index=True)
 
         # Cleanup whitespace in columns
-        df_raw = df_raw.applymap(lambda x: x.strip() if isinstance(x, str) else x)
+        df_raw = df_raw.map(lambda x: x.strip() if isinstance(x, str) else x)
 
         self.df_final = df_raw
 
