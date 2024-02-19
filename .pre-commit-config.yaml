@@ -5,7 +5,7 @@ repos:
           - '--fix'
         id: ruff
     repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.2.1
+    rev: v0.2.2
   - hooks:
       - args:
           - '--safe'
@@ -13,7 +13,7 @@ repos:
         files: ^((pypmanager|tests)/.+)?[^/]+\.py$
         id: black
     repo: https://github.com/psf/black
-    rev: 24.1.1
+    rev: 24.2.0
   - hooks:
       - id: requirements-txt-fixer
       - id: check-executables-have-shebangs
@@ -30,7 +30,7 @@ repos:
           - '-d relaxed'
         id: yamllint
     repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.34.0
+    rev: v1.35.1
   - hooks:
       # Run mypy through our wrapper script in order to get the possible
       # pyenv and/or virtualenv activated; it may not have been e.g. if
