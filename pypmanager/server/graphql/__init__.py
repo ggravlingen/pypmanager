@@ -1,4 +1,5 @@
 """A GraphQL API."""
+
 import strawberry
 from strawberry.asgi import GraphQL
 

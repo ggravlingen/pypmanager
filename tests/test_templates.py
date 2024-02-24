@@ -1,4 +1,5 @@
 """Tests for template utils."""
+
 import math
 
 import pytest

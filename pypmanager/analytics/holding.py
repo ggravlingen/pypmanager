@@ -1,4 +1,5 @@
 """Handle securities."""
+
 from dataclasses import dataclass
 from datetime import date
 from functools import cached_property

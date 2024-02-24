@@ -1,4 +1,5 @@
 """Aggregation calculator."""
+
 from __future__ import annotations
 
 from datetime import date
@@ -76,9 +77,9 @@ class CalculateAggregates:
         data_copy = security_transactions.copy()
         self.data = data_copy
 
-        data_copy[
-            ColumnNameValues.TRANSACTION_DATE
-        ] = data_copy.index  # Convert index to a column
+        data_copy[ColumnNameValues.TRANSACTION_DATE] = (
+            data_copy.index
+        )  # Convert index to a column
 
         self.input_data = data_copy.to_dict("records", index=True)
 
