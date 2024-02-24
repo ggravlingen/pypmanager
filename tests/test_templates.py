@@ -50,5 +50,5 @@ def test_format_none(value, expected_output) -> None:
 
 def test_static_file2base64() -> None:
     """Test function static_file2base64."""
-    static_file2base64("favicon.ico")
-    assert True
+    function_result = static_file2base64("favicon.ico")
+    assert "iVBORw0KG" in function_result
