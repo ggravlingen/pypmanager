@@ -10,7 +10,13 @@ on:
       - main
 
 permissions:
-   pull-requests: write
+  # Gives the action the necessary permissions for publishing new
+  # comments in pull requests.
+  pull-requests: write
+  # Gives the action the necessary permissions for pushing data to the
+  # python-coverage-comment-action branch, and for editing existing
+  # comments (to avoid publishing multiple comments in the same PR)
+  contents: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -165,9 +171,19 @@ jobs:
       - name: Run tests
         run: |
           . venv/bin/activate
-          pytest tests --timeout=30 --cov pypmanager --cov-report xml:coverage.xml
-      - name: Post coverage
-        uses: orgoro/coverage@v3
+          pytest tests --timeout=30 --cov pypmanager
+
+      - name: Coverage comment
+        id: coverage_comment
+        uses: py-cov-action/python-coverage-comment-action@v3.23
         with:
-          coverageFile: coverage.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Store Pull Request comment to be posted
+        uses: actions/upload-artifact@v4.3.1
+        if: steps.coverage_comment.outputs.COMMENT_FILE_WRITTEN == 'true'
+        with:
+          # If you use a different name, update COMMENT_ARTIFACT_NAME accordingly
+          name: python-coverage-comment-action
+          # If you use a different name, update COMMENT_FILENAME accordingly
+          path: python-coverage-comment-action.txt

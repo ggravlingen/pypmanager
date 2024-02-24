@@ -206,3 +206,13 @@ known-first-party = [
 
 # Allow using assert in tests
 "tests/*" = ["S101"]
+
+[tool.coverage.run]
+branch = true
+
+ignore_errors = true
+
+relative_files = true
+
+[tool.coverage.html]
+directory = "coverage_html_report"
