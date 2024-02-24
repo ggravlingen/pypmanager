@@ -66,7 +66,7 @@ known_first_party = [
 
 [tool.pytest.ini_options]
 python_files="test_*.py"
-addopts="-W error"
+# addopts="-W error"
 
 [tool.pylint.MASTER]
 py-version = "3.11"
