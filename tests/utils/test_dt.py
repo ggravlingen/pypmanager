@@ -1,22 +1,24 @@
 """Test date utilities."""
 
 from datetime import date
-from unittest.mock import patch
 
 import pytest
+from freezegun.api import FrozenDateTimeFactory
 
 from pypmanager.utils.dt import async_get_last_n_quarters, get_previous_quarter
 
 
 @pytest.mark.asyncio
-async def test_async_get_last_n_quarters() -> None:
+async def test_async_get_last_n_quarters(
+    freezer: FrozenDateTimeFactory,
+) -> None:
     """Test function async_get_last_n_quarters."""
-    with patch("pypmanager.utils.dt._get_current_date", return_value=date(2023, 8, 5)):
-        result = await async_get_last_n_quarters(no_quarters=2)
-        assert result == [
-            date(2023, 3, 31),
-            date(2023, 6, 30),
-        ]
+    freezer.move_to(date(2023, 8, 5))
+    result = await async_get_last_n_quarters(no_quarters=2)
+    assert result == [
+        date(2023, 3, 31),
+        date(2023, 6, 30),
+    ]
 
 
 @pytest.mark.parametrize(

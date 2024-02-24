@@ -30,6 +30,7 @@ test = [
   "pytest==8.0.1",
   "pytest-asyncio==0.23.5",
   "pytest-cov==4.1.0",
+  "pytest-freezer==0.4.8",
   "pytest-timeout==2.2.0",
   "types_PyYAML==6.0.12.12",
   "types_requests==2.31.0.20240218",
@@ -65,7 +66,7 @@ known_first_party = [
 
 [tool.pytest.ini_options]
 python_files="test_*.py"
-addopts=""
+# addopts="-W error"
 
 [tool.pylint.MASTER]
 py-version = "3.11"

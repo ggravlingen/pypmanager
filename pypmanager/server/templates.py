@@ -61,7 +61,7 @@ def format_decimals(value: float | None, no_decimals: int = 2) -> str | None:
 
     try:
         return locale.format_string(f"%.{no_decimals}f", value, grouping=True)
-    except ValueError:
+    except (ValueError, TypeError):
         return ATTR_NONE
 
 
