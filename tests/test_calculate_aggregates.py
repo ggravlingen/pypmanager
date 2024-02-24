@@ -272,6 +272,7 @@ def test_sell_transaction() -> None:
 
     compare_df = data.output_data
     compare_df = compare_df.replace({np.nan: None})
+    expected_df = expected_df.replace({np.nan: None})
 
     assert_frame_equal(compare_df, expected_df, check_dtype=False)
 
@@ -476,5 +477,6 @@ def test_buy_sell_sequence() -> None:
 
     compare_df = data.output_data
     compare_df = compare_df.replace({np.nan: None})
+    expected_df = expected_df.replace({np.nan: None})
 
     assert_frame_equal(compare_df, expected_df, check_dtype=False)
