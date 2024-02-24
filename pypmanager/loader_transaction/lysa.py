@@ -1,4 +1,5 @@
 """Transaction loader for Lysa."""
+
 from typing import cast
 
 import pandas as pd

@@ -1,4 +1,5 @@
 """Date utilities."""
+
 from datetime import date, timedelta
 from enum import IntEnum
 

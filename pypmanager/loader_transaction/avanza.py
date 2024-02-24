@@ -1,4 +1,5 @@
 """Transaction loader for Avanza."""
+
 import pandas as pd
 
 from pypmanager.loader_transaction.const import ColumnNameValues, TransactionTypeValues
