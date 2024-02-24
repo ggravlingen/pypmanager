@@ -1,6 +1,5 @@
 """Handle portfolios."""
 
-
 from dataclasses import dataclass
 
 from .holding import Holding

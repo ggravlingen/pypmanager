@@ -1,4 +1,5 @@
 """Base loader."""
+
 from __future__ import annotations
 
 from abc import abstractmethod
@@ -227,13 +228,15 @@ class TransactionLoader:
 
         # Apply randomness to time in order to have unique indices
         df_raw.index = pd.to_datetime(df_raw.index).map(
-            lambda x: x.replace(
-                hour=randbelow(23),
-                minute=randbelow(59),
-                microsecond=randbelow(999999),
+            lambda x: (
+                x.replace(
+                    hour=randbelow(23),
+                    minute=randbelow(59),
+                    microsecond=randbelow(999999),
+                )
+                if x and x.strftime("%Y-%m-%d") == x.strftime("%Y-%m-%d")
+                else x
             )
-            if x and x.strftime("%Y-%m-%d") == x.strftime("%Y-%m-%d")
-            else x
         )
 
         # Sort by transaction date

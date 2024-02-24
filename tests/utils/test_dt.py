@@ -1,4 +1,5 @@
 """Test date utilities."""
+
 from datetime import date
 from unittest.mock import patch
 

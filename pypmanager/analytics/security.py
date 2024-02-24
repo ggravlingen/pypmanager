@@ -1,4 +1,5 @@
 """Representation of a security."""
+
 from datetime import date
 from typing import cast
 

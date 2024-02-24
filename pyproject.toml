@@ -12,26 +12,26 @@ dependencies    = [
   "humanize==4.9.0",
   "Jinja2==3.1.3",
   "lxml==5.1.0",
-  "pandas==2.1.4",
-  "pydantic-settings==2.1.0",
+  "pandas==2.2.0",
+  "pydantic-settings==2.2.0",
   "requests==2.31.0",
-  "strawberry_graphql[debug-server]==0.219.1",
-  "uvicorn[standard]==0.27.0.post1",
+  "strawberry_graphql[debug-server]==0.219.2",
+  "uvicorn[standard]==0.27.1",
 ]
 
 [project.optional-dependencies]
 test = [
-  "black==23.12.1",
+  "black==24.2.0",
   "httpx==0.26.0",
   "mypy==1.8.0",
-  "pre-commit==3.6.0",
+  "pre-commit==3.6.2",
   "pylint==3.0.3",
-  "pytest==7.4.4",
-  "pytest-asyncio==0.23.3",
+  "pytest==8.0.1",
+  "pytest-asyncio==0.23.5",
   "pytest-cov==4.1.0",
   "pytest-timeout==2.2.0",
   "types_PyYAML==6.0.12.12",
-  "types_requests==2.31.0.20240125",
+  "types_requests==2.31.0.20240218",
 ]
 
 [tool.setuptools]

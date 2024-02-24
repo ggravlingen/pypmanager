@@ -1,4 +1,5 @@
 """Tests."""
+
 from unittest.mock import patch
 
 import pandas as pd

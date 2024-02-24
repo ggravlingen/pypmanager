@@ -1,4 +1,5 @@
 """Transaction loader."""
+
 from .avanza import AvanzaLoader
 from .general_ledger import GeneralLedger
 from .lysa import LysaLoader

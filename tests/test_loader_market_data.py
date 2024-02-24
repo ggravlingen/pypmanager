@@ -1,4 +1,5 @@
 """Test loader for market data."""
+
 from datetime import datetime
 import json
 from unittest import mock

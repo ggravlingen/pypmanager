@@ -1,4 +1,5 @@
 """Base loader."""
+
 from abc import abstractmethod
 from io import BytesIO
 import json
