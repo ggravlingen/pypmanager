@@ -15,7 +15,7 @@ dependencies    = [
   "pandas==2.1.4",
   "pydantic-settings==2.2.0",
   "requests==2.31.0",
-  "strawberry_graphql[debug-server]==0.219.1",
+  "strawberry_graphql[debug-server]==0.219.2",
   "uvicorn[standard]==0.27.1",
 ]
 
