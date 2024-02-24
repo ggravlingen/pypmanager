@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
-from fastapi import FastAPI
+from collections.abc import Awaitable, Callable
+from typing import cast
+
+from fastapi import FastAPI, Request, Response, WebSocket
 from fastapi.responses import FileResponse, HTMLResponse
 
 from pypmanager.analytics import Portfolio
@@ -16,6 +19,12 @@ from pypmanager.server.templates import load_template
 from pypmanager.settings import Settings
 
 app = FastAPI()
+
+TypeGraphQL = Callable[[Request], Awaitable[Response] | Response]
+TypeGraphQLWebsocket = Callable[[WebSocket], Awaitable[None]]
+
+app.add_route("/graphql", cast(TypeGraphQL, graphql_app))
+app.add_websocket_route("/graphql", cast(TypeGraphQLWebsocket, graphql_app))
 
 
 @app.get("/favicon.ico")
@@ -48,10 +57,6 @@ async def ledger() -> str:
     )
 
 
-app.add_route("/graphql", graphql_app)
-app.add_websocket_route("/graphql", graphql_app)
-
-
 @app.get("/history", response_class=HTMLResponse)
 async def portfolio_history() -> str:
     """Return historical data."""
@@ -61,7 +66,3 @@ async def portfolio_history() -> str:
         template_name="historical_portfolio.html",
         context={"data": portfolio_data},
     )
-
-
-app.add_route("/graphql", graphql_app)
-app.add_websocket_route("/graphql", graphql_app)
