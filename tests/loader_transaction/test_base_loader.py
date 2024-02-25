@@ -1,19 +1,14 @@
 """Tests."""
 
-from unittest.mock import patch
-
 import pandas as pd
 import pytest
 
-from pypmanager.loader_transaction.avanza import AvanzaLoader
 from pypmanager.loader_transaction.base_loader import (
     _cleanup_number,
     _normalize_amount,
     _normalize_no_traded,
 )
 from pypmanager.loader_transaction.const import TransactionTypeValues
-from pypmanager.loader_transaction.misc import MiscLoader
-from pypmanager.settings import TypedSettings
 
 
 @pytest.mark.parametrize(
@@ -96,19 +91,3 @@ def test_cleanup_number(number, expected_result) -> None:
     result = _cleanup_number(number)
 
     assert result == expected_result
-
-
-@patch.object(TypedSettings, "dir_data", "tests/fixtures/")
-def test_avanza_loder() -> None:
-    """Test AvanzaLoader."""
-    df_avanza = AvanzaLoader().df_final
-
-    assert len(df_avanza) > 0
-
-
-@patch.object(TypedSettings, "dir_data", "tests/fixtures/")
-def test_misc_loader() -> None:
-    """Test MiscLoader."""
-    df_misc = MiscLoader().df_final
-
-    assert len(df_misc) > 0

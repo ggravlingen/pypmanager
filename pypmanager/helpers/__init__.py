@@ -19,8 +19,8 @@ from pypmanager.loader_market_data.utils import (
 from pypmanager.loader_transaction import (
     AvanzaLoader,
     GeneralLedger,
+    GenericLoader,
     LysaLoader,
-    MiscLoader,
 )
 from pypmanager.loader_transaction.const import ColumnNameValues
 from pypmanager.utils.dt import async_get_last_n_quarters
@@ -34,7 +34,7 @@ def load_transaction_files(report_date: datetime | None = None) -> pd.DataFrame:
         pd.DataFrame,
         pd.concat(
             [
-                MiscLoader(report_date).df_final,
+                GenericLoader(report_date).df_final,
                 AvanzaLoader(report_date).df_final,
                 LysaLoader(report_date).df_final,
             ],
