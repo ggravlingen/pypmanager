@@ -217,5 +217,9 @@ source = ['pypmanager']
 relative_files = true
 
 omit = [
-  "const.py",
+  "const.py",  # We can ignore all constants
+  "__main__.py",
+  "pypmanager/__init__.py",
+  "pypmanager/error.py",
+  "pypmanager/analytics/__init__.py",
 ]
