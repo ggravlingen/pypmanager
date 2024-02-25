@@ -2,8 +2,8 @@
 
 from datetime import date
 
-import pytest
 from freezegun.api import FrozenDateTimeFactory
+import pytest
 
 from pypmanager.utils.dt import async_get_last_n_quarters, get_previous_quarter
 

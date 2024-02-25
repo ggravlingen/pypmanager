@@ -171,7 +171,7 @@ jobs:
       - name: Run tests
         run: |
           . venv/bin/activate
-          pytest tests --timeout=30 --cov pypmanager
+          pytest tests --timeout=30 --cov pypmanager --cov-report term-missing
 
       - name: Coverage comment
         id: coverage_comment

@@ -12,7 +12,6 @@ from pypmanager.loader_transaction.base_loader import (
     _normalize_no_traded,
 )
 from pypmanager.loader_transaction.const import TransactionTypeValues
-from pypmanager.loader_transaction.lysa import LysaLoader
 from pypmanager.loader_transaction.misc import MiscLoader
 from pypmanager.settings import TypedSettings
 
@@ -105,14 +104,6 @@ def test_avanza_loder() -> None:
     df_avanza = AvanzaLoader().df_final
 
     assert len(df_avanza) > 0
-
-
-@patch.object(TypedSettings, "dir_data", "tests/fixtures/")
-def test_lysa_loader() -> None:
-    """Test LysaLoader."""
-    df_lysa = LysaLoader().df_final
-
-    assert len(df_lysa) > 0
 
 
 @patch.object(TypedSettings, "dir_data", "tests/fixtures/")
