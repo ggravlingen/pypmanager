@@ -22,8 +22,7 @@ def test_lysa_loader() -> None:
     "transaction_type, name, expected_result",
     [
         (TransactionTypeValues.FEE.value, "Some Name", "Lysa management fee"),
-        ("Other Type", "Another Name", "Another Name"),
-        # Add more test cases as needed
+        (TransactionTypeValues.CASHBACK.value, "Another Name", "Another Name"),
     ],
 )
 def test_replace_fee_name(transaction_type, name, expected_result):
