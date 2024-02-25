@@ -20,7 +20,7 @@ def _replace_fee_name(row: pd.DataFrame) -> str:
     return cast(str, row[ColumnNameValues.NAME])
 
 
-class MiscLoader(TransactionLoader):
+class GenericLoader(TransactionLoader):
     """Data loader for misc data."""
 
     file_pattern = "other*.csv"
