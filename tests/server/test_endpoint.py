@@ -16,6 +16,27 @@ async def test_root_endpoint():
 
 
 @pytest.mark.asyncio
+async def test_favicon():
+    """Test endpoint /favicon.ico."""
+    response = client.get("/favicon.ico")
+    assert response.status_code == 200  # noqa: PLR2004
+
+
+@pytest.mark.asyncio
+async def test_ledger():
+    """Test endpoint /ledger."""
+    response = client.get("/ledger")
+    assert response.status_code == 200  # noqa: PLR2004
+
+
+@pytest.mark.asyncio
+async def test_history():
+    """Test endpoint /history."""
+    response = client.get("/history")
+    assert response.status_code == 200  # noqa: PLR2004
+
+
+@pytest.mark.asyncio
 async def test_graphql_endpoint():
     """Test endpoint /graphql."""
     query = """
