@@ -218,4 +218,7 @@ relative_files = true
 
 omit = [
   "const.py",
+  "__main__.py",
+  "pypmanager/__init__.py",
+  "pypmanager/analytics/__init__.py",
 ]
