@@ -216,5 +216,6 @@ source = ['pypmanager']
 
 relative_files = true
 
-[tool.coverage.html]
-directory = "coverage_html_report"
+omit = [
+  "const.py",
+]
