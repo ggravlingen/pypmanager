@@ -1,6 +1,6 @@
 """Test class CalculateAggregates."""
 
-from datetime import datetime
+from datetime import date
 
 import numpy as np
 import pandas as pd
@@ -37,7 +37,7 @@ def test_interest_transaction() -> None:
                 ColumnNameValues.SOURCE: "Source",
                 ColumnNameValues.SUM_COST_BASIS_DELTA: None,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: 100.0,
-                ColumnNameValues.TRANSACTION_DATE: datetime(2023, 4, 1),
+                ColumnNameValues.TRANSACTION_DATE: date(2023, 4, 1),
                 ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.INTEREST,
             }
         ]
@@ -53,7 +53,7 @@ def test_interest_transaction() -> None:
             ColumnNameValues.ISIN_CODE: "isin",
             ColumnNameValues.NAME: "Name A",
             ColumnNameValues.SOURCE: "Source",
-            ColumnNameValues.TRANSACTION_DATE: datetime(2023, 4, 1),
+            ColumnNameValues.TRANSACTION_DATE: date(2023, 4, 1),
             ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.INTEREST,
         }
     ]
@@ -92,7 +92,7 @@ def test_dividend_transaction() -> None:
                 ColumnNameValues.SOURCE: "Source",
                 ColumnNameValues.SUM_COST_BASIS_DELTA: None,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: 100.0,
-                ColumnNameValues.TRANSACTION_DATE: datetime(2023, 4, 1),
+                ColumnNameValues.TRANSACTION_DATE: date(2023, 4, 1),
                 ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.DIVIDEND,
             }
         ]
@@ -108,7 +108,7 @@ def test_dividend_transaction() -> None:
             ColumnNameValues.ISIN_CODE: "isin",
             ColumnNameValues.NAME: "Name A",
             ColumnNameValues.SOURCE: "Source",
-            ColumnNameValues.TRANSACTION_DATE: datetime(2023, 4, 1),
+            ColumnNameValues.TRANSACTION_DATE: date(2023, 4, 1),
             ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.DIVIDEND,
         }
     ]
@@ -147,7 +147,7 @@ def test_buy_transaction() -> None:
                 ColumnNameValues.SOURCE: "Source",
                 ColumnNameValues.SUM_COST_BASIS_DELTA: -100.0,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: -105.0,
-                ColumnNameValues.TRANSACTION_DATE: datetime(2023, 4, 1),
+                ColumnNameValues.TRANSACTION_DATE: date(2023, 4, 1),
                 ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.BUY,
             }
         ]
@@ -165,7 +165,7 @@ def test_buy_transaction() -> None:
             ColumnNameValues.NO_TRADED: 10.0,
             ColumnNameValues.PRICE: 10.0,
             ColumnNameValues.SOURCE: "Source",
-            ColumnNameValues.TRANSACTION_DATE: datetime(2023, 4, 1),
+            ColumnNameValues.TRANSACTION_DATE: date(2023, 4, 1),
             ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.BUY,
         }
     ]
@@ -204,7 +204,7 @@ def test_sell_transaction() -> None:
                 ColumnNameValues.SOURCE: "Source",
                 ColumnNameValues.SUM_COST_BASIS_DELTA: -100.0,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: -105.0,
-                ColumnNameValues.TRANSACTION_DATE: datetime(2023, 4, 1),
+                ColumnNameValues.TRANSACTION_DATE: date(2023, 4, 1),
                 ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.BUY,
             },
             {
@@ -230,7 +230,7 @@ def test_sell_transaction() -> None:
                 ColumnNameValues.SOURCE: "Source",
                 ColumnNameValues.SUM_COST_BASIS_DELTA: None,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: 190.0,
-                ColumnNameValues.TRANSACTION_DATE: datetime(2023, 5, 1),
+                ColumnNameValues.TRANSACTION_DATE: date(2023, 5, 1),
                 ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.SELL,
             },
         ]
@@ -248,7 +248,7 @@ def test_sell_transaction() -> None:
             ColumnNameValues.NO_TRADED: 10.0,
             ColumnNameValues.PRICE: 10.0,
             ColumnNameValues.SOURCE: "Source",
-            ColumnNameValues.TRANSACTION_DATE: datetime(2023, 4, 1),
+            ColumnNameValues.TRANSACTION_DATE: date(2023, 4, 1),
             ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.BUY,
         },
         {
@@ -261,7 +261,7 @@ def test_sell_transaction() -> None:
             ColumnNameValues.NO_TRADED: -10.0,
             ColumnNameValues.PRICE: 20.0,
             ColumnNameValues.SOURCE: "Source",
-            ColumnNameValues.TRANSACTION_DATE: datetime(2023, 5, 1),
+            ColumnNameValues.TRANSACTION_DATE: date(2023, 5, 1),
             ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.SELL,
         },
     ]
@@ -304,7 +304,7 @@ def test_buy_sell_sequence() -> None:
                 ColumnNameValues.SOURCE: "Source",
                 ColumnNameValues.SUM_COST_BASIS_DELTA: -1500.0,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: -1599.0,
-                ColumnNameValues.TRANSACTION_DATE: datetime(2023, 4, 1),
+                ColumnNameValues.TRANSACTION_DATE: date(2023, 4, 1),
                 ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.BUY,
             },
             {
@@ -330,7 +330,7 @@ def test_buy_sell_sequence() -> None:
                 ColumnNameValues.SOURCE: "Source",
                 ColumnNameValues.SUM_COST_BASIS_DELTA: -2625.0,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: -1224.0,
-                ColumnNameValues.TRANSACTION_DATE: datetime(2023, 4, 2),
+                ColumnNameValues.TRANSACTION_DATE: date(2023, 4, 2),
                 ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.BUY,
             },
             {
@@ -353,7 +353,7 @@ def test_buy_sell_sequence() -> None:
                 ColumnNameValues.SUM_COST_BASIS_DELTA: -2041.67,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: 901.0,
                 ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.SELL,
-                ColumnNameValues.TRANSACTION_DATE: datetime(2023, 4, 3),
+                ColumnNameValues.TRANSACTION_DATE: date(2023, 4, 3),
             },
             {
                 ColumnNameValues.AMOUNT: -625.0,
@@ -375,7 +375,7 @@ def test_buy_sell_sequence() -> None:
                 ColumnNameValues.SUM_COST_BASIS_DELTA: -2666.67,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: -724.0,
                 ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.BUY,
-                ColumnNameValues.TRANSACTION_DATE: datetime(2023, 4, 4),
+                ColumnNameValues.TRANSACTION_DATE: date(2023, 4, 4),
             },
             {
                 ColumnNameValues.AMOUNT: 5000.0,
@@ -397,7 +397,7 @@ def test_buy_sell_sequence() -> None:
                 ColumnNameValues.SUM_COST_BASIS_DELTA: None,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: 4901.0,
                 ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.SELL,
-                ColumnNameValues.TRANSACTION_DATE: datetime(2023, 4, 5),
+                ColumnNameValues.TRANSACTION_DATE: date(2023, 4, 5),
             },
         ]
     )
@@ -414,7 +414,7 @@ def test_buy_sell_sequence() -> None:
             ColumnNameValues.NO_TRADED: 150.0,
             ColumnNameValues.PRICE: 10.0,
             ColumnNameValues.SOURCE: "Source",
-            ColumnNameValues.TRANSACTION_DATE: datetime(2023, 4, 1),
+            ColumnNameValues.TRANSACTION_DATE: date(2023, 4, 1),
             ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.BUY,
         },
         {
@@ -427,7 +427,7 @@ def test_buy_sell_sequence() -> None:
             ColumnNameValues.NO_TRADED: 75.0,
             ColumnNameValues.PRICE: 15.0,
             ColumnNameValues.SOURCE: "Source",
-            ColumnNameValues.TRANSACTION_DATE: datetime(2023, 4, 2),
+            ColumnNameValues.TRANSACTION_DATE: date(2023, 4, 2),
             ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.BUY,
         },
         {
@@ -440,7 +440,7 @@ def test_buy_sell_sequence() -> None:
             ColumnNameValues.NO_TRADED: -50.0,
             ColumnNameValues.PRICE: 20.0,
             ColumnNameValues.SOURCE: "Source",
-            ColumnNameValues.TRANSACTION_DATE: datetime(2023, 4, 3),
+            ColumnNameValues.TRANSACTION_DATE: date(2023, 4, 3),
             ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.SELL,
         },
         {
@@ -453,7 +453,7 @@ def test_buy_sell_sequence() -> None:
             ColumnNameValues.NO_TRADED: 25.0,
             ColumnNameValues.PRICE: 25.0,
             ColumnNameValues.SOURCE: "Source",
-            ColumnNameValues.TRANSACTION_DATE: datetime(2023, 4, 4),
+            ColumnNameValues.TRANSACTION_DATE: date(2023, 4, 4),
             ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.BUY,
         },
         {
@@ -466,7 +466,7 @@ def test_buy_sell_sequence() -> None:
             ColumnNameValues.NO_TRADED: -200.0,
             ColumnNameValues.PRICE: 25.0,
             ColumnNameValues.SOURCE: "Source",
-            ColumnNameValues.TRANSACTION_DATE: datetime(2023, 4, 5),
+            ColumnNameValues.TRANSACTION_DATE: date(2023, 4, 5),
             ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.SELL,
         },
     ]

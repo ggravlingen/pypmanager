@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from io import BytesIO
 
 import pandas as pd
@@ -18,10 +18,10 @@ from .models import SourceData
 class MorningstarLoader(BaseMarketDataLoader):
     """Load data from Morningstar."""
 
-    start_date = (datetime.utcnow() - timedelta(days=LOAD_HISTORY_DAYS)).strftime(
+    start_date = (datetime.now(UTC) - timedelta(days=LOAD_HISTORY_DAYS)).strftime(
         "%Y-%m-%d"
     )
-    end_date = datetime.utcnow().strftime("%Y-%m-%d")
+    end_date = datetime.now(UTC).strftime("%Y-%m-%d")
     currency = "SEK"
 
     url = (
@@ -61,7 +61,7 @@ class MorningstarLoader(BaseMarketDataLoader):
         for row in data_list:
             output_list.append(
                 SourceData(
-                    report_date=datetime.strptime(row["EndDate"], "%Y-%m-%d"),
+                    report_date=datetime.strptime(row["EndDate"], "%Y-%m-%d"),  # noqa: DTZ007
                     isin_code=self.isin_code,
                     price=row["Value"],
                     name=self.name,
@@ -115,7 +115,7 @@ class MorningstarLoaderSHB(BaseMarketDataLoader):
         for _, row in data_table.iterrows():
             output_data.append(
                 SourceData(
-                    report_date=datetime.strptime(row["Datum"], "%Y-%m-%d"),
+                    report_date=datetime.strptime(row["Datum"], "%Y-%m-%d"),  # noqa: DTZ007
                     isin_code=self.isin_code,
                     name=row["Namn"],
                     price=row["Kurs"],

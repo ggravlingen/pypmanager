@@ -32,7 +32,7 @@ class AvanzaLoader(BaseMarketDataLoader):
         """Convert to SourceData."""
         return [
             SourceData(
-                report_date=datetime.strptime(
+                report_date=datetime.strptime(  # noqa: DTZ007
                     self.raw_response["navDate"], "%Y-%m-%dT%H:%M:%S"
                 ),
                 isin_code=self.isin_code,

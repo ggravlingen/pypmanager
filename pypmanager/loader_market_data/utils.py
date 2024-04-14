@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 
 from numpy import datetime64
@@ -49,7 +49,7 @@ def _upsert_df(data: list[SourceData], source_name: str) -> None:
     upsert_df = pd.DataFrame([vars(s) for s in data])
 
     # Add a timestamp for when we added the date
-    upsert_df["date_added_utc"] = datetime.utcnow()
+    upsert_df["date_added_utc"] = datetime.now(UTC)
     upsert_df["source"] = source_name
 
     column_dtypes = {"report_date": datetime64}

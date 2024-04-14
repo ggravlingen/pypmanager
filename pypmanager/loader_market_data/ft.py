@@ -77,7 +77,7 @@ class FTLoader(BaseMarketDataLoader):
         for idx, _ in enumerate(self.raw_response["Dates"]):
             output_list.append(
                 SourceData(
-                    report_date=datetime.strptime(dates[idx], "%Y-%m-%dT%H:%M:%S"),
+                    report_date=datetime.strptime(dates[idx], "%Y-%m-%dT%H:%M:%S"),  # noqa: DTZ007
                     isin_code=self.isin_code,
                     name=name,
                     price=close[idx],

@@ -87,6 +87,6 @@ def format_date(value: str) -> str:
     if value is None or pd.isna(value):
         return ATTR_NONE
 
-    value_as_date = datetime.strptime(value, "%Y-%m-%d").date()
+    value_as_date = datetime.strptime(value, "%Y-%m-%d").date()  # noqa: DTZ007
 
     return humanize.naturalday(value_as_date)

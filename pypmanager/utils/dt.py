@@ -1,6 +1,6 @@
 """Date utilities."""
 
-from datetime import date, timedelta
+from datetime import UTC, date, datetime, timedelta
 from enum import IntEnum
 
 QUARTER_ENDS = [(3, 31), (6, 30), (9, 30), (12, 31)]
@@ -37,7 +37,7 @@ class WeekDayEnumValues(IntEnum):
 
 def _get_current_date() -> date:
     """Return today's date."""
-    return date.today()
+    return datetime.now(UTC).date()
 
 
 def get_previous_quarter(report_date: date) -> date:

@@ -139,6 +139,7 @@ lint.select = [
     "ASYNC",  # flake8-async
     "C",  # complexity
     "D",  # docstrings
+    "DTZ",  # flake8-datetimez
     "E",  # pycodestyle
     "F",  # pyflakes/autoflake
     "I",  # isort
