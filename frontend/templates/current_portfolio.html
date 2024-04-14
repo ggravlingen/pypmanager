@@ -55,7 +55,7 @@
                 <td>&nbsp;</td>
                 <td class="leftBorder" data-monetary-value="{{ portfolio.total_pnl|format_decimals(1) }}"></td>
                 <td data-monetary-value="{{ portfolio.realized_pnl|format_decimals(1) }}"></td>
-                <td>&nbsp;</td>
+                <td data-monetary-value="{{ portfolio.unrealized_pnl|format_decimals(1) }}"></td>
               </tr>
             </tbody>
           </table>
