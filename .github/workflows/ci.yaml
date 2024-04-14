@@ -95,7 +95,7 @@ jobs:
 
           source .venv/bin/activate
 
-          uv python3 -m pip install -e .'[test]'
+          uv pip install -e .'[test]'
 
   linter:
     name: Run code linters
