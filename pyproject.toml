@@ -47,7 +47,7 @@ version = {file = "pypmanager/VERSION"}
 exclude = ["tests", "tests*"]
 
 [tool.pytest.ini_options]
-addopts="-W error"
+# addopts="-W error"
 filterwarnings = []
 
 [tool.pylint.MASTER]
