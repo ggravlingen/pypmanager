@@ -176,7 +176,7 @@ class TransactionLoader:
     df_final: pd.DataFrame
     file_pattern: str
 
-    def __init__(self, report_date: datetime | None = None) -> None:
+    def __init__(self: TransactionLoader, report_date: datetime | None = None) -> None:
         """Init class."""
         self.report_date = report_date
 
@@ -190,7 +190,7 @@ class TransactionLoader:
         self.convert_data_types()
         self.normalize_data()
 
-    def load_data_files(self) -> None:
+    def load_data_files(self: TransactionLoader) -> None:
         """Parse CSV-files and load them into a data frame."""
         files = glob.glob(os.path.join(Settings.dir_data, self.file_pattern))
 
@@ -214,7 +214,7 @@ class TransactionLoader:
 
         self.df_final = df_raw
 
-    def rename_set_index_filter(self) -> None:
+    def rename_set_index_filter(self: TransactionLoader) -> None:
         """Set index."""
         df_raw = self.df_final.copy()
 
@@ -245,10 +245,10 @@ class TransactionLoader:
         self.df_final = df_raw
 
     @abstractmethod
-    def pre_process_df(self) -> None:
+    def pre_process_df(self: TransactionLoader) -> None:
         """Broker specific manipulation of the data frame."""
 
-    def normalize_transaction_type(self) -> None:
+    def normalize_transaction_type(self: TransactionLoader) -> None:
         """
         Normalize transaction types.
 
@@ -265,7 +265,7 @@ class TransactionLoader:
 
         self.df_final = df_raw
 
-    def filter_transactions(self) -> None:
+    def filter_transactions(self: TransactionLoader) -> None:
         """Filter transactions."""
         df_raw = self.df_final.copy()
 
@@ -275,7 +275,7 @@ class TransactionLoader:
 
         self.df_final = df_raw
 
-    def cleanup_df(self) -> None:
+    def cleanup_df(self: TransactionLoader) -> None:
         """Cleanup dataframe."""
         df_raw = self.df_final.copy()
 
@@ -297,7 +297,7 @@ class TransactionLoader:
 
         self.df_final = df_raw
 
-    def convert_data_types(self) -> None:
+    def convert_data_types(self: TransactionLoader) -> None:
         """Convert data types."""
         df_raw = self.df_final.copy()
 
@@ -310,7 +310,7 @@ class TransactionLoader:
 
         self.df_final = df_raw
 
-    def normalize_data(self) -> None:
+    def normalize_data(self: TransactionLoader) -> None:
         """Post-process."""
         df_raw = self.df_final.copy()
 

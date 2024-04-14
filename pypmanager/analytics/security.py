@@ -1,5 +1,7 @@
 """Representation of a security."""
 
+from __future__ import annotations
+
 from datetime import date
 from typing import cast
 
@@ -14,7 +16,7 @@ class MutualFund:
     filtered_df: pd.DataFrame | None
 
     def __init__(
-        self,
+        self: MutualFund,
         isin_code: str | None = None,
         name: str | None = None,
         report_date: date | None = None,
@@ -26,7 +28,7 @@ class MutualFund:
 
         self._load_data()
 
-    def _load_data(self) -> None:
+    def _load_data(self: MutualFund) -> None:
         """Load market data."""
         df_market_data = pd.read_csv(
             Settings.file_market_data, sep=";", index_col="report_date"
@@ -40,7 +42,7 @@ class MutualFund:
         self.filtered_df = df_filtered.sort_values("report_date")
 
     @property
-    def _last_row(self) -> pd.DataFrame:
+    def _last_row(self: MutualFund) -> pd.DataFrame:
         """Return last row."""
         if self.nav_date is None or self.filtered_df is None:
             return pd.DataFrame()
@@ -48,7 +50,7 @@ class MutualFund:
         return self.filtered_df.query(f"report_date == '{self.nav_date}'")
 
     @property
-    def nav(self) -> float | None:
+    def nav(self: MutualFund) -> float | None:
         """Return net asset value."""
         try:
             if self.filtered_df is None or self.nav_date is None:
@@ -64,7 +66,7 @@ class MutualFund:
             return None
 
     @property
-    def nav_date(self) -> date | None:
+    def nav_date(self: MutualFund) -> date | None:
         """Return date of net asset value."""
         if self.filtered_df is None:
             return None

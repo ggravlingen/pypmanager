@@ -1,5 +1,7 @@
 """Avanza loader."""
 
+from __future__ import annotations
+
 from datetime import datetime
 
 from .base_loader import BaseMarketDataLoader
@@ -12,21 +14,21 @@ class AvanzaLoader(BaseMarketDataLoader):
     url = "https://www.avanza.se/_api/fund-guide/guide/"
 
     @property
-    def full_url(self) -> str:
+    def full_url(self: AvanzaLoader) -> str:
         """Return full URL, including lookup key."""
         return f"{self.url}{self.lookup_key}"
 
-    def get_response(self) -> None:
+    def get_response(self: AvanzaLoader) -> None:
         """Get response."""
         data = self.query_endpoint()
         self.raw_response = data
 
     @property
-    def source(self) -> str:
+    def source(self: AvanzaLoader) -> str:
         """Get name of source."""
         return "Avanza"
 
-    def to_source_data(self) -> list[SourceData]:
+    def to_source_data(self: AvanzaLoader) -> list[SourceData]:
         """Convert to SourceData."""
         return [
             SourceData(

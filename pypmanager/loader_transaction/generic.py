@@ -1,5 +1,7 @@
 """Transaction loader for Misc transactions."""
 
+from __future__ import annotations
+
 from typing import cast
 
 import pandas as pd
@@ -25,7 +27,7 @@ class GenericLoader(TransactionLoader):
 
     file_pattern = "other*.csv"
 
-    def pre_process_df(self) -> None:
+    def pre_process_df(self: GenericLoader) -> None:
         """Load CSV."""
         df_raw = self.df_final
 

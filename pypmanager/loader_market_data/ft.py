@@ -21,11 +21,11 @@ class FTLoader(BaseMarketDataLoader):
     full_url = "https://markets.ft.com/data/chartapi/series"
 
     @property
-    def headers(self) -> dict[str, str]:
+    def headers(self: FTLoader) -> dict[str, str]:
         """Return headers."""
         return {"Content-Type": "application/json"}
 
-    def get_payload(self) -> dict[str, Any]:
+    def get_payload(self: FTLoader) -> dict[str, Any]:
         """Get payload."""
         return {
             "days": LOAD_HISTORY_DAYS,
@@ -50,7 +50,7 @@ class FTLoader(BaseMarketDataLoader):
             ],
         }
 
-    def get_response(self) -> None:
+    def get_response(self: FTLoader) -> None:
         """Get reqponse."""
         response = requests.post(
             self.full_url,
@@ -64,11 +64,11 @@ class FTLoader(BaseMarketDataLoader):
             self.raw_response = data
 
     @property
-    def source(self) -> str:
+    def source(self: FTLoader) -> str:
         """Get name of source."""
         return "Financial Times"
 
-    def to_source_data(self) -> list[SourceData]:
+    def to_source_data(self: FTLoader) -> list[SourceData]:
         """Convert to SourceData."""
         name = self.raw_response["Elements"][0]["CompanyName"]
         output_list: list[SourceData] = []
