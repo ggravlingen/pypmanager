@@ -137,24 +137,19 @@ lint.select = [
     "A",  # flake8-builtins
     "ANN",  # flake8-annotations
     "ASYNC",  # flake8-async
-    "C",  # complexity
     "D",  # docstrings
     "DTZ",  # flake8-datetimez
-    "E",  # pycodestyle
     "F",  # pyflakes/autoflake
     "I",  # isort
     "ISC",  # flake8-implicit-str-concat
     "N",  # pep8-naming
     "T20", # flake8-print
     "PD", # pandas-vet
-    "PLC", # pylint
-    "PLE", # pylint
-    "PLR", # pylint
-    "PLW", # pylint
+    "PL", # pylint
     "Q000", # Double quotes found but single quotes preferred
+    "RUF",  # Ruff-specific rules
     "S",  # flake8-bandit
     "UP",  # pyupgrade
-    "W",  # pycodestyle
 ]
 
 line-length = 88

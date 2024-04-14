@@ -187,7 +187,7 @@ class Holding:
 
         pnl = self.calculated_data[ColumnNameValues.REALIZED_PNL_DIVIDEND].sum()
 
-        if pd.isna(pnl) or pnl == 0.0:  # noqa: PLR2004
+        if pd.isna(pnl) or pnl == 0.0:
             return None
 
         return cast(float, pnl)
@@ -208,7 +208,7 @@ class Holding:
 
         pnl = self.calculated_data[ColumnNameValues.REALIZED_PNL_INTEREST].sum()
 
-        if pd.isna(pnl) or pnl == 0.0:  # noqa: PLR2004
+        if pd.isna(pnl) or pnl == 0.0:
             return None
 
         return cast(float, pnl)

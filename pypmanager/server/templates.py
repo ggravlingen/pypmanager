@@ -13,7 +13,8 @@ import pandas as pd
 
 from pypmanager.settings import Settings
 
-ATTR_NONE = "–"
+# The use of en dash is intentional
+ATTR_NONE = "–"  # noqa: RUF001
 
 
 def _load_environment_and_filter() -> Environment:
@@ -66,7 +67,7 @@ def format_decimals(value: float | None, no_decimals: int = 2) -> str | None:
 
 
 def format_none(value: str | float | None) -> str | float:
-    """Return – if None."""
+    """Return value, or en dash if None."""
     if value is None or pd.isna(value):
         return ATTR_NONE
 
@@ -74,7 +75,7 @@ def format_none(value: str | float | None) -> str | float:
 
 
 def format_pct(value: str | float | None, decimals: int = 1) -> str | float:
-    """Return – if None."""
+    """Return per cent, or en dash if None."""
     if value is None or pd.isna(value):
         return ATTR_NONE
 
@@ -83,7 +84,7 @@ def format_pct(value: str | float | None, decimals: int = 1) -> str | float:
 
 
 def format_date(value: str) -> str:
-    """Return – if None."""
+    """Return date, or en dash if None."""
     if value is None or pd.isna(value):
         return ATTR_NONE
 

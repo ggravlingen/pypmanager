@@ -147,9 +147,7 @@ def _get_filename(file_path: str) -> str:
     else:
         filename = splitted_file_path[0]
 
-    filename = filename.capitalize()
-
-    return filename
+    return filename.capitalize()
 
 
 EMPTY_DF = pd.DataFrame(

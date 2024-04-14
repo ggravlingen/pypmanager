@@ -27,7 +27,7 @@ def _replace_fee_name(row: pd.DataFrame) -> str:
 class LysaLoader(TransactionLoader):
     """Data loader for Lysa."""
 
-    col_map = {
+    col_map = {  # noqa: RUF012
         "Date": ColumnNameValues.TRANSACTION_DATE,
         "Type": ColumnNameValues.TRANSACTION_TYPE,
         "Amount": ColumnNameValues.AMOUNT,
