@@ -127,10 +127,14 @@ jobs:
         run: |
           . venv/bin/activate
           pre-commit run --hook-stage manual ruff --all-files --show-diff-on-failure
-      - name: Run Black
+        env:
+          RUFF_OUTPUT_FORMAT: github
+      - name: Run ruff-format
         run: |
           . venv/bin/activate
-          black --check --fast --quiet --diff pypmanager tests
+          pre-commit run --hook-stage manual ruff-format --all-files --show-diff-on-failure
+        env:
+          RUFF_OUTPUT_FORMAT: github
       - name: Run mypy
         run: |
           . venv/bin/activate
