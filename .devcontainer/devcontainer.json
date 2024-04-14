@@ -21,11 +21,12 @@
           "/workspaces/pypmanager"
         ],
         "[python]": {
-          "editor.codeActionsOnSave": {
-            "source.organizeImports": true
-          },
-          "editor.defaultFormatter": "ms-python.black-formatter",
           "editor.formatOnSave": true,
+          "editor.codeActionsOnSave": {
+            "source.fixAll": "explicit",
+            "source.organizeImports": "explicit"
+          },
+          "editor.defaultFormatter": "charliermarsh.ruff",
           "editor.formatOnPaste": false,
           "editor.formatOnType": true
         },
@@ -41,7 +42,7 @@
       "extensions": [
         "ms-python.vscode-pylance",
         "ms-python.python",
-        "ms-python.black-formatter",
+        "charliermarsh.ruff",
         "ms-python.mypy-type-checker",
         "ms-python.pylint",
         "mechatroner.rainbow-csv"
