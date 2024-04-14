@@ -48,10 +48,7 @@ exclude = ["tests", "tests*"]
 
 [tool.pytest.ini_options]
 addopts="-W error"
-filterwarnings = [
-  # DeprecationWarning: 'typing.ByteString' is deprecated and slated for removal in Python 3.14
-  "ignore::DeprecationWarning:typing.ByteString"
-]
+filterwarnings = []
 
 [tool.pylint.MASTER]
 py-version = "3.11"
