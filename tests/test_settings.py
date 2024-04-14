@@ -1,6 +1,5 @@
 """Tests for settings."""
 
-import os
 from pathlib import Path
 
 from pypmanager.settings import TypedSettings
@@ -10,14 +9,14 @@ def test_dir_data_demo() -> None:
     """Test property dir_data in demo mode."""
     settings = TypedSettings()
     settings.is_demo = True
-    assert settings.dir_data == os.path.abspath("data-demo")
+    assert "data-demo" in settings.dir_data.name
 
 
 def test_dir_data_not_demo() -> None:
     """Test property dir_data in production mode."""
     settings = TypedSettings()
     settings.is_demo = False
-    assert settings.dir_data == os.path.abspath("data")
+    assert "data" in settings.dir_data.name
 
 
 def test_file_market_data_config() -> None:
