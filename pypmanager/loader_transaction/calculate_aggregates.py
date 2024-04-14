@@ -79,6 +79,10 @@ class CalculateAggregates:
         data_copy = security_transactions.copy()
         self.data = data_copy
 
+        # Set the index to a date explicitly
+        data_copy.index = pd.to_datetime(data_copy.index)
+        data_copy.index = data_copy.index.map(lambda x: x.date())
+
         data_copy[ColumnNameValues.TRANSACTION_DATE] = (
             data_copy.index
         )  # Convert index to a column
