@@ -65,7 +65,7 @@ def format_decimals(value: float | None, no_decimals: int = 2) -> str | None:
         return ATTR_NONE
 
 
-def format_none(value: Any) -> Any:
+def format_none(value: str | float | None) -> str | float:
     """Return – if None."""
     if value is None or pd.isna(value):
         return ATTR_NONE
@@ -73,7 +73,7 @@ def format_none(value: Any) -> Any:
     return value
 
 
-def format_pct(value: Any, decimals: int = 1) -> Any:
+def format_pct(value: str | float | None, decimals: int = 1) -> str | float:
     """Return – if None."""
     if value is None or pd.isna(value):
         return ATTR_NONE

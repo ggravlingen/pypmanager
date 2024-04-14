@@ -14,7 +14,7 @@ from pypmanager.settings import Settings
 from .models import Source, SourceData, Sources
 
 
-def _class_importer(name: str) -> Any:
+def _class_importer(name: str) -> Any:  # noqa: ANN401
     """
     Load a class from a string representing a fully qualified class name.
 

@@ -1,5 +1,7 @@
 """Transaction loader for Avanza."""
 
+from __future__ import annotations
+
 import pandas as pd
 
 from pypmanager.loader_transaction.const import ColumnNameValues, TransactionTypeValues
@@ -43,7 +45,7 @@ class AvanzaLoader(TransactionLoader):
 
     file_pattern = "avanza*.csv"
 
-    def pre_process_df(self) -> None:
+    def pre_process_df(self: AvanzaLoader) -> None:
         """Broker specific manipulation of the data frame."""
         df_raw = self.df_final
 

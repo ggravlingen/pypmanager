@@ -31,6 +31,7 @@ test = [
   "pytest-cov==5.0.0",
   "pytest-freezer==0.4.8",
   "pytest-timeout==2.3.1",
+  "ruff==0.3.7",
   "types_PyYAML==6.0.12.20240311",
   "types_requests==2.31.0.20240406",
 ]
@@ -134,8 +135,9 @@ exclude = [
 
 target-version = "py311"
 
-select = [
+lint.select = [
     "A",  # flake8-builtins
+    "ANN",  # flake8-annotations
     "ASYNC",  # flake8-async
     "C",  # complexity
     "D",  # docstrings
@@ -158,21 +160,23 @@ select = [
 
 line-length = 88
 
-ignore = [# One of these is to be disabled..
+lint.ignore = [# One of these is to be disabled..
           "D213", # See https://github.com/charliermarsh/ruff/issues/2281
           #"D212", # See https://github.com/charliermarsh/ruff/issues/2281
 
           "D203", # See https://github.com/charliermarsh/ruff/issues/2281
           #"D211", # See https://github.com/charliermarsh/ruff/issues/2281
+
+          "ISC001",  # Recommended disable
 ]
 
-[tool.ruff.flake8-pytest-style]
+[tool.ruff.lint.flake8-pytest-style]
 fixture-parentheses = false
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = 'pep257'
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 # will group `import x` and `from x import` of the same module.
 combine-as-imports = true
 force-sort-within-sections = true
@@ -184,7 +188,7 @@ known-first-party = [
   "tests",
 ]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 
 # Allow using assert in tests
 "tests/*" = ["S101"]

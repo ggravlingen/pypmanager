@@ -1,5 +1,7 @@
 """Morningstar loader."""
 
+from __future__ import annotations
+
 from datetime import datetime, timedelta
 from io import BytesIO
 
@@ -29,7 +31,7 @@ class MorningstarLoader(BaseMarketDataLoader):
     )
 
     @property
-    def full_url(self) -> str:
+    def full_url(self: MorningstarLoader) -> str:
         """Return full URL, including lookup key."""
         return self.url.format(
             lookup_key=self.lookup_key,
@@ -38,17 +40,17 @@ class MorningstarLoader(BaseMarketDataLoader):
             currency=self.currency,
         )
 
-    def get_response(self) -> None:
+    def get_response(self: MorningstarLoader) -> None:
         """Get response."""
         data = self.query_endpoint()
         self.raw_response = data
 
     @property
-    def source(self) -> str:
+    def source(self: MorningstarLoader) -> str:
         """Get name of source."""
         return "Morningstar"
 
-    def to_source_data(self) -> list[SourceData]:
+    def to_source_data(self: MorningstarLoader) -> list[SourceData]:
         """Convert to SourceData."""
         data_list = self.raw_response["TimeSeries"]["Security"][0]["HistoryDetail"]
 
@@ -79,11 +81,11 @@ class MorningstarLoaderSHB(BaseMarketDataLoader):
     url = "https://secure.msse.se/shb/sv.se/history/onefund.xlsx"
 
     @property
-    def full_url(self) -> str:
+    def full_url(self: MorningstarLoaderSHB) -> str:
         """Return full URL, including lookup key."""
         return f"{self.url}?fundid={self.lookup_key}"
 
-    def get_response(self) -> None:
+    def get_response(self: MorningstarLoaderSHB) -> None:
         """Get reqponse."""
         response = requests.get(self.full_url, timeout=10)
 
@@ -93,11 +95,11 @@ class MorningstarLoaderSHB(BaseMarketDataLoader):
             LOGGER.warning("Unable to load data")
 
     @property
-    def source(self) -> str:
+    def source(self: MorningstarLoaderSHB) -> str:
         """Get name of source."""
         return "Svenska Handelsbanken"
 
-    def to_source_data(self) -> list[SourceData]:
+    def to_source_data(self: MorningstarLoaderSHB) -> list[SourceData]:
         """Convert to SourceData."""
         output_data: list[SourceData] = []
         df_tables = pd.read_html(

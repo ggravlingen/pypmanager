@@ -1,5 +1,7 @@
 """Handle securities."""
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 from datetime import date
 from functools import cached_property
@@ -28,11 +30,11 @@ class Holding:
     # Caching
     _security_info: MutualFund | None = None
 
-    def __repr__(self) -> str:
+    def __repr__(self: Holding) -> str:
         """Representation of class."""
         return f"{self.name} | {self.current_holdings}"
 
-    def __post_init__(self) -> None:
+    def __post_init__(self: Holding) -> None:
         """
         Run after class has been instantiated.
 
@@ -51,7 +53,7 @@ class Holding:
         self.calculated_data = df_all_data
 
     @cached_property
-    def current_holdings(self) -> float | None:
+    def current_holdings(self: Holding) -> float | None:
         """
         Return the number of securities currently held.
 
@@ -72,7 +74,7 @@ class Holding:
         return cast(float, total_held)
 
     @cached_property
-    def security_info(self) -> MutualFund:
+    def security_info(self: Holding) -> MutualFund:
         """Return information on the security."""
         if self._security_info is None:  # Hit these calculations only once
             self._security_info = MutualFund(
@@ -84,7 +86,7 @@ class Holding:
         return self._security_info
 
     @cached_property
-    def current_price(self) -> float | None:
+    def current_price(self: Holding) -> float | None:
         """Return current price."""
         if self.current_holdings is None:
             return None
@@ -92,7 +94,7 @@ class Holding:
         return self.security_info.nav
 
     @property
-    def date_market_value(self) -> date | None:
+    def date_market_value(self: Holding) -> date | None:
         """Return date of valuation."""
         if self.current_holdings is None:
             return None
@@ -100,7 +102,7 @@ class Holding:
         return self.security_info.nav_date
 
     @cached_property
-    def isin_code(self) -> str | None:
+    def isin_code(self: Holding) -> str | None:
         """Return the security's ISIN code."""
         if self.calculated_data is None:
             return None
@@ -116,7 +118,7 @@ class Holding:
             return None
 
     @property
-    def total_transactions(self) -> int:
+    def total_transactions(self: Holding) -> int:
         """Return the total number of transactions made."""
         if self.calculated_data is None:
             return 0
@@ -124,7 +126,7 @@ class Holding:
         return len(self.calculated_data)
 
     @property
-    def date_last_transaction(self) -> date | None:
+    def date_last_transaction(self: Holding) -> date | None:
         """Return last transaction date."""
         if self.calculated_data is None:
             return None
@@ -132,7 +134,7 @@ class Holding:
         return cast(date, max(self.calculated_data.index))
 
     @property
-    def date_first_transaction(self) -> date | None:
+    def date_first_transaction(self: Holding) -> date | None:
         """Return last transaction date."""
         if self.calculated_data is None:
             return None
@@ -140,7 +142,7 @@ class Holding:
         return cast(date, min(self.calculated_data.index))
 
     @property
-    def average_fx_rate(self) -> float | None:
+    def average_fx_rate(self: Holding) -> float | None:
         """Return average price."""
         if self.calculated_data is None or self.calculated_data.average_fx_rate.empty:
             return 0.0
@@ -151,7 +153,7 @@ class Holding:
         return cast(float, average_fx_rate)
 
     @cached_property
-    def average_price(self) -> float | None:
+    def average_price(self: Holding) -> float | None:
         """Return average price."""
         if (
             self.calculated_data is None
@@ -167,7 +169,7 @@ class Holding:
         return cast(float, avg_price)
 
     @property
-    def return_pct(self) -> float | None:
+    def return_pct(self: Holding) -> float | None:
         """Return return in %."""
         if self.average_price and self.current_price:
             return self.current_price / self.average_price - 1
@@ -175,7 +177,7 @@ class Holding:
         return None
 
     @property
-    def dividends(self) -> float | None:
+    def dividends(self: Holding) -> float | None:
         """Return dividends price."""
         if (
             self.calculated_data is None
@@ -191,12 +193,12 @@ class Holding:
         return cast(float, pnl)
 
     @property
-    def fees(self) -> float | None:
+    def fees(self: Holding) -> float | None:
         """Return fees paid."""
         return None
 
     @property
-    def interest(self) -> float | None:
+    def interest(self: Holding) -> float | None:
         """Return interest price."""
         if (
             self.calculated_data is None
@@ -212,7 +214,7 @@ class Holding:
         return cast(float, pnl)
 
     @property
-    def market_value(self) -> float | None:
+    def market_value(self: Holding) -> float | None:
         """Return current market value."""
         if self.current_price is None or self.current_holdings is None:
             return None
@@ -223,7 +225,7 @@ class Holding:
         return market_value
 
     @property
-    def realized_pnl_equity(self) -> float:
+    def realized_pnl_equity(self: Holding) -> float:
         """Return realized PnL."""
         if (
             self.calculated_data is None
@@ -239,12 +241,12 @@ class Holding:
         return cast(float, pnl)
 
     @property
-    def realized_pnl_fx(self) -> float:
+    def realized_pnl_fx(self: Holding) -> float:
         """Return realized PnL."""
         return 0
 
     @cached_property
-    def realized_pnl(self) -> float:
+    def realized_pnl(self: Holding) -> float:
         """Return realized PnL."""
         if (
             self.calculated_data is None
@@ -257,7 +259,7 @@ class Holding:
         return cast(float, pnl)
 
     @cached_property
-    def unrealized_pnl(self) -> float:
+    def unrealized_pnl(self: Holding) -> float:
         """Return unrealized PnL."""
         if (
             self.average_price is None
@@ -269,12 +271,12 @@ class Holding:
         return (self.current_price - self.average_price) * self.current_holdings
 
     @property
-    def total_pnl(self) -> float:
+    def total_pnl(self: Holding) -> float:
         """Return PnL."""
         return self.realized_pnl + self.unrealized_pnl
 
     @property
-    def invested_amount(self) -> float | None:
+    def invested_amount(self: Holding) -> float | None:
         """Return total invested amount."""
         if self.average_price is None or self.current_holdings is None:
             return None

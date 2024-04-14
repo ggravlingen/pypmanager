@@ -15,7 +15,7 @@ class Query:
     """GraphQL query."""
 
     @strawberry.field
-    def all_general_ledger(self) -> list[LedgerRow]:
+    def all_general_ledger(self: Query) -> list[LedgerRow]:
         """Return all general ledger rows."""
         output_dict = get_general_ledger_as_dict()
 

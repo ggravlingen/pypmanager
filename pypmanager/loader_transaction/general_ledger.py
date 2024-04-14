@@ -30,7 +30,7 @@ class TransactionMacro:
     profit_loss_eq: float
     profit_loss_fx: float | None
 
-    def __init__(self, row: RowType) -> None:
+    def __init__(self: TransactionMacro, row: RowType) -> None:
         """Init class."""
         self.row = row
 
@@ -49,7 +49,7 @@ class TransactionMacro:
         self.credit_rows: ListType = []
         self.debit_rows: ListType = []
 
-    def buy(self) -> TransactionMacro:
+    def buy(self: TransactionMacro) -> TransactionMacro:
         """Record buy transactions."""
         credit_row = self.row.copy()
         credit_row[ColumnNameValues.ACCOUNT] = AccountNameValues.CASH
@@ -78,7 +78,7 @@ class TransactionMacro:
 
         return self
 
-    def deposit(self) -> TransactionMacro:
+    def deposit(self: TransactionMacro) -> TransactionMacro:
         """Record a deposit."""
         credit_row = self.row.copy()
 
@@ -99,7 +99,7 @@ class TransactionMacro:
 
         return self
 
-    def dividend(self) -> TransactionMacro:
+    def dividend(self: TransactionMacro) -> TransactionMacro:
         """Record a dividend."""
         credit_row = self.row.copy()
 
@@ -122,7 +122,7 @@ class TransactionMacro:
 
         return self
 
-    def fee_tax(self) -> TransactionMacro:
+    def fee_tax(self: TransactionMacro) -> TransactionMacro:
         """Record a fee or tax cost."""
         credit_row = self.row.copy()
 
@@ -143,7 +143,7 @@ class TransactionMacro:
 
         return self
 
-    def fee_credit(self) -> TransactionMacro:
+    def fee_credit(self: TransactionMacro) -> TransactionMacro:
         """Record a fee or tax cost."""
         credit_row = self.row.copy()
 
@@ -164,7 +164,7 @@ class TransactionMacro:
 
         return self
 
-    def pnl_equity(self) -> TransactionMacro:  # noqa: PLR0915
+    def pnl_equity(self: TransactionMacro) -> TransactionMacro:  # noqa: PLR0915
         """Book profit/loss against equity."""
         credit_row = self.row.copy()
         credit_row_2 = self.row.copy()
@@ -236,7 +236,7 @@ class TransactionMacro:
 
         return self
 
-    def sell(self) -> TransactionMacro:
+    def sell(self: TransactionMacro) -> TransactionMacro:
         """Book a sell."""
         credit_row = self.row.copy()
         debit_row = self.row.copy()
@@ -324,7 +324,7 @@ class GeneralLedger:
     ledger_df: pd.DataFrame
     output_df: pd.DataFrame
 
-    def __init__(self, transactions: pd.DataFrame) -> None:
+    def __init__(self: GeneralLedger, transactions: pd.DataFrame) -> None:
         """Init."""
         self.transactions = calculate_results(transactions)
 
@@ -332,11 +332,11 @@ class GeneralLedger:
         self.create_ledger()
         self.set_date_index()
 
-    def transactions_to_dict(self) -> None:
+    def transactions_to_dict(self: GeneralLedger) -> None:
         """Convert transactions to dict."""
         self.ledger_list = self.transactions.reset_index().to_dict(orient="records")
 
-    def create_ledger(self) -> None:
+    def create_ledger(self: GeneralLedger) -> None:
         """Create ledger."""
         ledger_list: list[dict[str, Any]] = []
         for row in self.ledger_list:
@@ -344,7 +344,7 @@ class GeneralLedger:
 
         self.output_df = pd.DataFrame(ledger_list)
 
-    def set_date_index(self) -> None:
+    def set_date_index(self: GeneralLedger) -> None:
         """Set index to date."""
         df_tmp = self.output_df.copy()
         # Convert index to a date of format YYYY-MM-DD

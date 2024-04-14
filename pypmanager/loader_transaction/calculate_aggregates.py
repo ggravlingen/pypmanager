@@ -71,7 +71,9 @@ class CalculateAggregates:
     # The transaction's cash flow effect in the local currency
     transaction_cash_flow_local: float | None = None
 
-    def __init__(self, security_transactions: pd.DataFrame) -> None:
+    def __init__(
+        self: CalculateAggregates, security_transactions: pd.DataFrame
+    ) -> None:
         """Init class."""
         self.calculated_transaction_list = []
         data_copy = security_transactions.copy()
@@ -89,7 +91,7 @@ class CalculateAggregates:
         final_df = final_df.set_index(ColumnNameValues.TRANSACTION_DATE)
         self.output_data = final_df
 
-    def parse_transactions(self) -> None:
+    def parse_transactions(self: CalculateAggregates) -> None:
         """Loop through all transactions."""
         for row in self.input_data:
             self.set_base_data(row=row)
@@ -109,7 +111,7 @@ class CalculateAggregates:
             self.calculate_total_pnl()
             self.add_transaction()
 
-    def handle_interest(self) -> None:
+    def handle_interest(self: CalculateAggregates) -> None:
         """Handle an interest payment."""
         if self.pnl_interest is None:
             self.pnl_interest = 0.0
@@ -119,7 +121,7 @@ class CalculateAggregates:
             self.transaction_cash_flow = self.amount
             self.transaction_cash_flow_local = self.transaction_cash_flow * self.fx_rate
 
-    def handle_dividend(self) -> None:
+    def handle_dividend(self: CalculateAggregates) -> None:
         """Handle a dividend payment."""
         if self.pnl_dividend is None:
             self.pnl_dividend = 0.0
@@ -129,7 +131,7 @@ class CalculateAggregates:
             self.transaction_cash_flow = self.amount
             self.transaction_cash_flow_local = self.transaction_cash_flow * self.fx_rate
 
-    def handle_buy(self) -> None:
+    def handle_buy(self: CalculateAggregates) -> None:
         """Handle a buy transaction."""
         self.pnl_price = None  # force pnl for price to None
         self.pnl_dividend = None  # force pnl for dividend to None
@@ -162,7 +164,7 @@ class CalculateAggregates:
         self.sum_cost_basis_delta += self.cost_basis_delta
         self.avg_cost_basis = self.sum_cost_basis_delta / self.sum_held * -1
 
-    def handle_sell(self) -> None:
+    def handle_sell(self: CalculateAggregates) -> None:
         """Handle a sell transaction."""
         if (
             self.avg_cost_basis is None
@@ -197,7 +199,7 @@ class CalculateAggregates:
             self.sum_cost_basis_delta += self.cost_basis_delta
             self.avg_cost_basis = self.sum_cost_basis_delta / self.sum_held * -1
 
-    def calculate_total_pnl(self) -> None:
+    def calculate_total_pnl(self: CalculateAggregates) -> None:
         """Calculate total PnL."""
         pnl: float = 0.0
 
@@ -219,7 +221,7 @@ class CalculateAggregates:
 
         self.pnl_total = pnl
 
-    def set_base_data(self, row: dict[str, Any]) -> None:
+    def set_base_data(self: CalculateAggregates, row: dict[str, Any]) -> None:
         """Set base data from the transaction."""
         self.amount = row[ColumnNameValues.AMOUNT]
         self.broker = row[ColumnNameValues.BROKER]
@@ -241,7 +243,7 @@ class CalculateAggregates:
         else:
             self.no_traded = None
 
-    def add_transaction(self) -> None:
+    def add_transaction(self: CalculateAggregates) -> None:
         """Add the transaction back to a data list."""
         self.calculated_transaction_list.append(
             {

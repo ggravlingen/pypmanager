@@ -1,5 +1,7 @@
 """Init."""
 
+from __future__ import annotations
+
 import logging
 import logging.config
 import sys
@@ -14,7 +16,7 @@ logging.getLogger("urllib3.connectionpool").setLevel(logging.CRITICAL)
 class VerboseFormatter(logging.Formatter):
     """Custom log formatter."""
 
-    def format(self, record: logging.LogRecord) -> str:  # noqa: A003
+    def format(self: VerboseFormatter, record: logging.LogRecord) -> str:  # noqa: A003
         """Format log string."""
         return (
             f"[{self.formatTime(record)}] [{record.levelname}] "

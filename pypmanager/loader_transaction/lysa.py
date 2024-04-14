@@ -1,5 +1,7 @@
 """Transaction loader for Lysa."""
 
+from __future__ import annotations
+
 from typing import cast
 
 import pandas as pd
@@ -37,7 +39,7 @@ class LysaLoader(TransactionLoader):
     csv_separator = CSVSeparator.COMMA
     file_pattern = "lysa*.csv"
 
-    def pre_process_df(self) -> None:
+    def pre_process_df(self: LysaLoader) -> None:
         """Load CSV."""
         df_raw = self.df_final
 
