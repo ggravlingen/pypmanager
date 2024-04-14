@@ -129,9 +129,7 @@ module = "tests.*"
 ignore_errors = true
 
 [tool.ruff]
-exclude = [
-    "tests",
-]
+exclude = []
 
 target-version = "py311"
 

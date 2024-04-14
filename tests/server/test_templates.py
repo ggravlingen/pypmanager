@@ -1,6 +1,7 @@
 """Tests for template utils."""
 
 import math
+from typing import Any
 
 import pytest
 
@@ -30,7 +31,7 @@ async def test_load_template() -> None:
         ("abc", 2, "–"),
     ],
 )
-def test_format_decimals(value, no_decimals, expected_output) -> None:
+def test_format_decimals(value: Any, no_decimals: int, expected_output: str) -> None:  # noqa: ANN401
     """Test function format_decimals."""
     assert format_decimals(value, no_decimals) == expected_output
 
@@ -43,7 +44,9 @@ def test_format_decimals(value, no_decimals, expected_output) -> None:
         (math.nan, "–"),
     ],
 )
-def test_format_none(value, expected_output) -> None:
+def test_format_none(
+    value: float | None | math.nan, expected_output: float | str
+) -> None:
     """Test function format_none."""
     assert format_none(value) == expected_output
 

@@ -1,5 +1,7 @@
 """Tests."""
 
+from __future__ import annotations
+
 import pandas as pd
 import pytest
 
@@ -51,7 +53,7 @@ from pypmanager.loader_transaction.const import TransactionTypeValues
         ),
     ],
 )
-def test_normalize_amount(row, expected):
+def test_normalize_amount(row: pd.Series, expected: int) -> None:
     """Test function _normalize_amount."""
     assert _normalize_amount(row) == expected
 
@@ -69,7 +71,7 @@ def data_normalize_no_traded() -> pd.DataFrame:
         (TransactionTypeValues.SELL, -5, -5),
     ],
 )
-def test__normalize_no_traded(trans_type, no_traded, expected):
+def test__normalize_no_traded(trans_type: str, no_traded: int, expected: int) -> None:
     """Test function _normalize_no_traded."""
     test_data = pd.DataFrame(
         {"transaction_type": [trans_type], "no_traded": [no_traded]}
@@ -87,7 +89,7 @@ def test__normalize_no_traded(trans_type, no_traded, expected):
         ("500,0", 500.0),
     ],
 )
-def test_cleanup_number(number, expected_result) -> None:
+def test_cleanup_number(number: str, expected_result: float | int) -> None:
     """Test function _cleanup_number."""
     result = _cleanup_number(number)
 
@@ -108,7 +110,7 @@ def test_empty_loader() -> None:
 
         file_pattern = "abc123"
 
-        def pre_process_df(self) -> None:
+        def pre_process_df(self: MockLoader) -> None:
             """Mock method."""
 
     mock_loader = MockLoader()

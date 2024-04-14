@@ -25,7 +25,9 @@ def test_lysa_loader() -> None:
         (TransactionTypeValues.CASHBACK.value, "Another Name", "Another Name"),
     ],
 )
-def test_replace_fee_name(transaction_type, name, expected_result):
+def test_replace_fee_name(
+    transaction_type: str, name: str, expected_result: str
+) -> None:
     """Test function _replace_fee_name."""
     data = {
         ColumnNameValues.TRANSACTION_TYPE: [transaction_type],
