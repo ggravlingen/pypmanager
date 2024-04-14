@@ -32,6 +32,7 @@ class TypedSettings(BaseSettings):
         return Path("data").resolve()
 
     dir_static: Path = Path("frontend/static").resolve()
+    dir_templates: Path = Path("frontend/templates").resolve()
 
     @property
     def file_market_data(self: TypedSettings) -> Path:

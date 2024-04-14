@@ -20,7 +20,7 @@ ATTR_NONE = "–"  # noqa: RUF001
 def _load_environment_and_filter() -> Environment:
     """Load Jinja environment and add filters."""
     env = Environment(
-        loader=FileSystemLoader("frontend/templates"),
+        loader=FileSystemLoader(Settings.dir_templates),
         autoescape=True,
     )
     env.filters["static_file2base64"] = static_file2base64
