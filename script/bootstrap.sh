@@ -8,6 +8,4 @@ cd "$(dirname "$0")/../"
 
 echo "Installing internal dependencies..."
 
-python3 -m pip install --upgrade pip setuptools wheel cython
-python3 -m pip install -e .
 python3 -m pip install -e .'[test]'

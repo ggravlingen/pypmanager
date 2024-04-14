@@ -80,7 +80,7 @@ jobs:
         id: cache-venv
         uses: actions/cache@v4.0.2
         with:
-          path: venv
+          path: .venv
           lookup-only: true
           key: >-
             ${{ runner.os }}-${{ steps.python.outputs.python-version }}-${{
@@ -89,10 +89,13 @@ jobs:
       - name: Install requirements
         if: steps.cache-venv.outputs.cache-hit != 'true'
         run: |
-          python -m venv venv
-          . venv/bin/activate
+          pip install uv
 
-          ./script/bootstrap.sh
+          uv venv
+
+          source .venv/bin/activate
+
+          uv pip install -e .'[test]'
 
   linter:
     name: Run code linters
@@ -118,26 +121,26 @@ jobs:
         id: cache-venv
         uses: actions/cache/restore@v4.0.2
         with:
-          path: venv
+          path: .venv
           fail-on-cache-miss: true
           key: >-
             ${{ runner.os }}-${{ steps.python.outputs.python-version }}-${{
             needs.info.outputs.python_cache_key }}
       - name: Run ruff (fully)
         run: |
-          . venv/bin/activate
+          source .venv/bin/activate
           pre-commit run --hook-stage manual ruff --all-files --show-diff-on-failure
         env:
           RUFF_OUTPUT_FORMAT: github
       - name: Run ruff-format
         run: |
-          . venv/bin/activate
+          source .venv/bin/activate
           pre-commit run --hook-stage manual ruff-format --all-files --show-diff-on-failure
         env:
           RUFF_OUTPUT_FORMAT: github
       - name: Run mypy
         run: |
-          . venv/bin/activate
+          source .venv/bin/activate
           mypy pypmanager
 
   pytest:
@@ -164,7 +167,7 @@ jobs:
         id: cache-venv
         uses: actions/cache/restore@v4.0.2
         with:
-          path: venv
+          path: .venv
           fail-on-cache-miss: true
           key: >-
             ${{ runner.os }}-${{ steps.python.outputs.python-version }}-${{
@@ -174,7 +177,7 @@ jobs:
           cp tests/fixtures/* data/
       - name: Run tests
         run: |
-          . venv/bin/activate
+          source .venv/bin/activate
           pytest tests --timeout=30 --cov pypmanager --cov-report term-missing
 
       - name: Coverage comment
