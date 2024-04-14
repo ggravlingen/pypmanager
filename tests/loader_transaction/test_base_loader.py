@@ -4,6 +4,7 @@ import pandas as pd
 import pytest
 
 from pypmanager.loader_transaction.base_loader import (
+    TransactionLoader,
     _cleanup_number,
     _normalize_amount,
     _normalize_no_traded,
@@ -91,3 +92,25 @@ def test_cleanup_number(number, expected_result) -> None:
     result = _cleanup_number(number)
 
     assert result == expected_result
+
+
+def test_cleanup_number_raise() -> None:
+    """Test function _cleanup_number for invalid number."""
+    with pytest.raises(ValueError):
+        _cleanup_number("abc")
+
+
+def test_empty_loader() -> None:
+    """Test the base loader class with empty data."""
+
+    class MockLoader(TransactionLoader):
+        """Mock the TransactionLoader."""
+
+        file_pattern = "abc123"
+
+        def pre_process_df(self) -> None:
+            """Mock method."""
+
+    mock_loader = MockLoader()
+
+    assert len(mock_loader.df_final) == 0
