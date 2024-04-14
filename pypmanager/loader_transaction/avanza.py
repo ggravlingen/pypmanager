@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
-import pandas as pd
+from typing import TYPE_CHECKING
 
 from pypmanager.loader_transaction.const import ColumnNameValues, TransactionTypeValues
 
 from .base_loader import TransactionLoader
+
+if TYPE_CHECKING:
+    import pandas as pd
 
 
 def _transaction_type(row: pd.DataFrame) -> pd.Series:
@@ -56,7 +59,8 @@ class AvanzaLoader(TransactionLoader):
             df_raw = df_raw.drop(columns=["Resultat"])
 
         df_raw[ColumnNameValues.TRANSACTION_TYPE] = df_raw.apply(
-            _transaction_type, axis=1
+            _transaction_type,
+            axis=1,
         )
 
         self.df_final = df_raw

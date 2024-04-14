@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
-from .holding import Holding
+if TYPE_CHECKING:
+    from .holding import Holding
 
 
 @dataclass

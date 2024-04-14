@@ -31,7 +31,9 @@ class MutualFund:
     def _load_data(self: MutualFund) -> None:
         """Load market data."""
         df_market_data = pd.read_csv(
-            Settings.file_market_data, sep=";", index_col="report_date"
+            Settings.file_market_data,
+            sep=";",
+            index_col="report_date",
         )
 
         if self.isin_code:
@@ -74,7 +76,7 @@ class MutualFund:
         try:
             if self.report_date is not None:
                 val = self.filtered_df.query(
-                    f"index <= '{self.report_date}'"
+                    f"index <= '{self.report_date}'",
                 ).index.max()
             else:
                 val = self.filtered_df.index.max()

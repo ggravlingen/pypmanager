@@ -19,14 +19,16 @@ def test_lysa_loader() -> None:
 
 
 @pytest.mark.parametrize(
-    "transaction_type, name, expected_result",
+    ("transaction_type", "name", "expected_result"),
     [
         (TransactionTypeValues.FEE.value, "Some Name", "Lysa management fee"),
         (TransactionTypeValues.CASHBACK.value, "Another Name", "Another Name"),
     ],
 )
 def test_replace_fee_name(
-    transaction_type: str, name: str, expected_result: str
+    transaction_type: str,
+    name: str,
+    expected_result: str,
 ) -> None:
     """Test function _replace_fee_name."""
     data = {

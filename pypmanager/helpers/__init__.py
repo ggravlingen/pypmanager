@@ -3,14 +3,13 @@
 from dataclasses import dataclass
 from datetime import UTC, date, datetime
 import logging
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any, cast
 
 import pandas as pd
 
 from pypmanager.analytics.holding import Holding
 from pypmanager.analytics.portfolio import Portfolio
 from pypmanager.error import DataError
-from pypmanager.loader_market_data.base_loader import BaseMarketDataLoader
 from pypmanager.loader_market_data.utils import (
     _class_importer,
     _load_sources,
@@ -24,6 +23,9 @@ from pypmanager.loader_transaction import (
 )
 from pypmanager.loader_transaction.const import ColumnNameValues
 from pypmanager.utils.dt import async_get_last_n_quarters
+
+if TYPE_CHECKING:
+    from pypmanager.loader_market_data.base_loader import BaseMarketDataLoader
 
 LOGGER = logging.getLogger(__package__)
 
@@ -92,13 +94,14 @@ async def download_market_data() -> None:
     for source in sources:
         LOGGER.info(
             f"Parsing {source.isin_code} using "
-            f"{source.loader_class.replace('pypmanager.loader_market_data.', '')}"
+            f"{source.loader_class.replace('pypmanager.loader_market_data.', '')}",
         )
 
         try:
             data_loader_klass = _class_importer(source.loader_class)
         except AttributeError as err:
-            raise DataError("Unable to load data", err) from err
+            msg = "Unable to load data"
+            raise DataError(msg, err) from err
 
         try:
             loader: BaseMarketDataLoader = data_loader_klass(
@@ -108,7 +111,7 @@ async def download_market_data() -> None:
             )
             _upsert_df(data=loader.to_source_data(), source_name=loader.source)
         except AttributeError:
-            LOGGER.error(f"Unable to load {loader}")
+            LOGGER.exception(f"Unable to load {loader}")
 
 
 @dataclass
@@ -132,7 +135,7 @@ async def get_historical_portfolio() -> list[PortfolioSnapshot]:
             PortfolioSnapshot(
                 report_date=report_date,
                 portfolio=portfolio,
-            )
+            ),
         )
 
     return portfolio_data

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import date
+from datetime import date  # noqa: TCH003
 
 import strawberry
 

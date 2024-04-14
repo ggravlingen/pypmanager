@@ -19,7 +19,7 @@ class MorningstarLoader(BaseMarketDataLoader):
     """Load data from Morningstar."""
 
     start_date = (datetime.now(UTC) - timedelta(days=LOAD_HISTORY_DAYS)).strftime(
-        "%Y-%m-%d"
+        "%Y-%m-%d",
     )
     end_date = datetime.now(UTC).strftime("%Y-%m-%d")
     currency = "SEK"
@@ -54,21 +54,18 @@ class MorningstarLoader(BaseMarketDataLoader):
         """Convert to SourceData."""
         data_list = self.raw_response["TimeSeries"]["Security"][0]["HistoryDetail"]
 
-        output_list: list[SourceData] = []
         if self.name is None:
-            return output_list
+            return []
 
-        for row in data_list:
-            output_list.append(
-                SourceData(
-                    report_date=datetime.strptime(row["EndDate"], "%Y-%m-%d"),  # noqa: DTZ007
-                    isin_code=self.isin_code,
-                    price=row["Value"],
-                    name=self.name,
-                )
+        return [
+            SourceData(
+                report_date=datetime.strptime(row["EndDate"], "%Y-%m-%d"),  # noqa: DTZ007
+                isin_code=self.isin_code,
+                price=row["Value"],
+                name=self.name,
             )
-
-        return output_list
+            for row in data_list
+        ]
 
 
 class MorningstarLoaderSHB(BaseMarketDataLoader):
@@ -119,7 +116,7 @@ class MorningstarLoaderSHB(BaseMarketDataLoader):
                     isin_code=self.isin_code,
                     name=row["Namn"],
                     price=row["Kurs"],
-                )
+                ),
             )
 
         return output_data

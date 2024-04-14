@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime
+from pathlib import Path
 from typing import Any
 
 from numpy import datetime64
@@ -35,7 +36,8 @@ def _class_importer(name: str) -> Any:  # noqa: ANN401
 
 def _load_sources() -> list[Source]:
     """Load settings."""
-    with open(Settings.file_market_data_config, encoding="UTF-8") as file:
+    path = Path(Settings.file_market_data_config)
+    with path.open(encoding="UTF-8") as file:
         # Load the YAML content from the file
         yaml_data = yaml.safe_load(file)
 

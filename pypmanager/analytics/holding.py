@@ -15,7 +15,7 @@ from pypmanager.loader_transaction.const import AccountNameValues, ColumnNameVal
 
 from .security import MutualFund
 
-LOGGER = logging.Logger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 
 @dataclass
@@ -42,7 +42,7 @@ class Holding:
         We filter by ledger account = cash since the relevant data is in that row.
         """
         df_all_data = self.df_general_ledger.query(
-            f"name == '{self.name}' and ledger_account == '{AccountNameValues.CASH}'"
+            f"name == '{self.name}' and ledger_account == '{AccountNameValues.CASH}'",
         )
 
         if self.report_date is not None:
@@ -109,13 +109,13 @@ class Holding:
 
         try:
             val = self.calculated_data[ColumnNameValues.ISIN_CODE].unique()[0]
-
-            if pd.isna(val) or val == "0":
-                return None
-
-            return f"{val}"
         except (IndexError, AttributeError, TypeError):
             return None
+
+        if pd.isna(val) or val == "0":
+            return None
+
+        return f"{val}"
 
     @property
     def total_transactions(self: Holding) -> int:

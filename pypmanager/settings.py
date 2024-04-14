@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import os
+from pathlib import Path
 
 from dotenv import load_dotenv
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -21,27 +21,29 @@ class TypedSettings(BaseSettings):
 
     debug_name: str | None = None
 
-    dir_config: str = os.path.abspath("config")
+    dir_config: Path = Path("config").resolve()
 
     @property
-    def dir_data(self: TypedSettings) -> str:
+    def dir_data(self: TypedSettings) -> Path:
         """Return data directory."""
         if self.is_demo:
-            return os.path.abspath("data-demo")
+            return Path("data-demo").resolve()
 
-        return os.path.abspath("data")
+        return Path("data").resolve()
 
-    dir_static: str = os.path.abspath("pypmanager/server/static")
-
-    @property
-    def file_market_data(self: TypedSettings) -> str:
-        """Return market data file."""
-        return os.path.abspath(os.path.join(self.dir_data, "market_data.csv"))
+    dir_static: Path = Path("pypmanager/server/static").resolve()
 
     @property
-    def file_market_data_config(self: TypedSettings) -> str:
+    def file_market_data(self: TypedSettings) -> Path:
         """Return market data file."""
-        return os.path.abspath(os.path.join(self.dir_config, "market_data.yaml"))
+        folder_path = Path(self.dir_data)
+        return (folder_path / "market_data.csv").resolve()
+
+    @property
+    def file_market_data_config(self: TypedSettings) -> Path:
+        """Return market data file."""
+        folder_path = Path(self.dir_config)
+        return (folder_path / "market_data.yaml").resolve()
 
     is_demo: bool = False
 

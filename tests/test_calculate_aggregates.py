@@ -39,8 +39,8 @@ def test_interest_transaction() -> None:
                 ColumnNameValues.TRANSACTION_CASH_FLOW: 100.0,
                 ColumnNameValues.TRANSACTION_DATE: date(2023, 4, 1),
                 ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.INTEREST,
-            }
-        ]
+            },
+        ],
     )
     expected_df = expected_df.set_index(ColumnNameValues.TRANSACTION_DATE)
 
@@ -55,7 +55,7 @@ def test_interest_transaction() -> None:
             ColumnNameValues.SOURCE: "Source",
             ColumnNameValues.TRANSACTION_DATE: date(2023, 4, 1),
             ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.INTEREST,
-        }
+        },
     ]
     df_test = pd.DataFrame(data)
     df_test = df_test.set_index(ColumnNameValues.TRANSACTION_DATE)
@@ -94,8 +94,8 @@ def test_dividend_transaction() -> None:
                 ColumnNameValues.TRANSACTION_CASH_FLOW: 100.0,
                 ColumnNameValues.TRANSACTION_DATE: date(2023, 4, 1),
                 ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.DIVIDEND,
-            }
-        ]
+            },
+        ],
     )
     expected_df = expected_df.set_index(ColumnNameValues.TRANSACTION_DATE)
 
@@ -110,7 +110,7 @@ def test_dividend_transaction() -> None:
             ColumnNameValues.SOURCE: "Source",
             ColumnNameValues.TRANSACTION_DATE: date(2023, 4, 1),
             ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.DIVIDEND,
-        }
+        },
     ]
     df_test = pd.DataFrame(data)
     df_test = df_test.set_index(ColumnNameValues.TRANSACTION_DATE)
@@ -149,8 +149,8 @@ def test_buy_transaction() -> None:
                 ColumnNameValues.TRANSACTION_CASH_FLOW: -105.0,
                 ColumnNameValues.TRANSACTION_DATE: date(2023, 4, 1),
                 ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.BUY,
-            }
-        ]
+            },
+        ],
     )
     expected_df = expected_df.set_index(ColumnNameValues.TRANSACTION_DATE)
 
@@ -167,7 +167,7 @@ def test_buy_transaction() -> None:
             ColumnNameValues.SOURCE: "Source",
             ColumnNameValues.TRANSACTION_DATE: date(2023, 4, 1),
             ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.BUY,
-        }
+        },
     ]
     df_test = pd.DataFrame(data)
     df_test = df_test.set_index(ColumnNameValues.TRANSACTION_DATE)
@@ -233,7 +233,7 @@ def test_sell_transaction() -> None:
                 ColumnNameValues.TRANSACTION_DATE: date(2023, 5, 1),
                 ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.SELL,
             },
-        ]
+        ],
     )
     expected_df = expected_df.set_index(ColumnNameValues.TRANSACTION_DATE)
 
@@ -399,7 +399,7 @@ def test_buy_sell_sequence() -> None:
                 ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.SELL,
                 ColumnNameValues.TRANSACTION_DATE: date(2023, 4, 5),
             },
-        ]
+        ],
     )
     expected_df = expected_df.set_index(ColumnNameValues.TRANSACTION_DATE)
 

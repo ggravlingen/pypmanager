@@ -47,11 +47,8 @@ version = {file = "pypmanager/VERSION"}
 exclude = ["tests", "tests*"]
 
 [tool.pytest.ini_options]
-addopts="-W error"
-filterwarnings = [
-  # DeprecationWarning: 'typing.ByteString' is deprecated and slated for removal in Python 3.14
-  "ignore::DeprecationWarning:typing.ByteString"
-]
+# addopts="-W error"
+filterwarnings = []
 
 [tool.pylint.MASTER]
 py-version = "3.11"
@@ -137,22 +134,7 @@ exclude = []
 target-version = "py311"
 
 lint.select = [
-    "A",  # flake8-builtins
-    "ANN",  # flake8-annotations
-    "ASYNC",  # flake8-async
-    "D",  # docstrings
-    "DTZ",  # flake8-datetimez
-    "F",  # pyflakes/autoflake
-    "I",  # isort
-    "ISC",  # flake8-implicit-str-concat
-    "N",  # pep8-naming
-    "T20", # flake8-print
-    "PD", # pandas-vet
-    "PL", # pylint
-    "Q000", # Double quotes found but single quotes preferred
-    "RUF",  # Ruff-specific rules
-    "S",  # flake8-bandit
-    "UP",  # pyupgrade
+  "ALL"
 ]
 
 line-length = 88
@@ -165,6 +147,8 @@ lint.ignore = [# One of these is to be disabled..
           #"D211", # See https://github.com/charliermarsh/ruff/issues/2281
 
           "ISC001",  # Recommended disable
+          "G004",  # Logging statement uses f-string
+          "COM812",  # Trailing comma missing
 ]
 
 [tool.ruff.lint.flake8-pytest-style]

@@ -19,15 +19,11 @@ class Query:
         """Return all general ledger rows."""
         output_dict = get_general_ledger_as_dict()
 
-        output_data: list[LedgerRow] = []
-
-        for row in output_dict:
-            output_data.append(
-                LedgerRow(
-                    date=row[ColumnNameValues.TRANSACTION_DATE],
-                    broker=row[ColumnNameValues.BROKER],
-                    source=row[ColumnNameValues.SOURCE],
-                )
+        return [
+            LedgerRow(
+                date=row[ColumnNameValues.TRANSACTION_DATE],
+                broker=row[ColumnNameValues.BROKER],
+                source=row[ColumnNameValues.SOURCE],
             )
-
-        return output_data
+            for row in output_dict
+        ]
