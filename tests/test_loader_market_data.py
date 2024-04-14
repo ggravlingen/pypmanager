@@ -30,7 +30,7 @@ def test_avanza_loader() -> None:
 
         expected_source_data = [
             SourceData(
-                report_date=datetime.strptime(
+                report_date=datetime.strptime(  # noqa: DTZ007
                     "2023-05-14T12:00:00", "%Y-%m-%dT%H:%M:%S"
                 ),
                 isin_code="abc123",
