@@ -98,7 +98,7 @@ def test_cleanup_number(number: str, expected_result: int) -> None:
 
 def test_cleanup_number_raise() -> None:
     """Test function _cleanup_number for invalid number."""
-    with pytest.raises(match=ValueError):
+    with pytest.raises(ValueError, match="Unable to parse abc"):
         _cleanup_number("abc")
 
 

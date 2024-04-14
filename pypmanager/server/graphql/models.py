@@ -2,12 +2,9 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from datetime import date  # noqa: TCH003
 
 import strawberry
-
-if TYPE_CHECKING:
-    from datetime import date
 
 
 @strawberry.type
