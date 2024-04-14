@@ -89,10 +89,13 @@ jobs:
       - name: Install requirements
         if: steps.cache-venv.outputs.cache-hit != 'true'
         run: |
-          python -m venv venv
-          . venv/bin/activate
+          pip install uv
 
-          ./script/bootstrap.sh
+          uv venv
+
+          source .venv/bin/activate
+
+          uv python3 -m pip install -e .'[test]'
 
   linter:
     name: Run code linters
