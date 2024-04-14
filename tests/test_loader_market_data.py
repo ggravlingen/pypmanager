@@ -8,7 +8,7 @@ from pypmanager.loader_market_data.avanza import AvanzaLoader
 from pypmanager.loader_market_data.models import SourceData
 
 
-def test_avanza_loader():
+def test_avanza_loader() -> None:
     """Test loading data from Avanza."""
     response_data = {
         "navDate": "2023-05-14T12:00:00",
