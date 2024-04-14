@@ -31,7 +31,7 @@ class TypedSettings(BaseSettings):
 
         return Path("data").resolve()
 
-    dir_static: Path = Path("pypmanager/server/static").resolve()
+    dir_static: Path = Path("frontend/static").resolve()
 
     @property
     def file_market_data(self: TypedSettings) -> Path:
