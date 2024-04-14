@@ -29,7 +29,7 @@ def _transaction_type(row: pd.DataFrame) -> pd.Series:
 class AvanzaLoader(TransactionLoader):
     """Data loader for Avanza."""
 
-    col_map = {
+    col_map = {  # noqa: RUF012
         "Datum": ColumnNameValues.TRANSACTION_DATE,
         "Konto": ColumnNameValues.ACCOUNT,
         "Typ av transaktion": ColumnNameValues.TRANSACTION_TYPE,

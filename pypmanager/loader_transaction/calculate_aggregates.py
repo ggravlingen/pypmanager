@@ -154,7 +154,7 @@ class CalculateAggregates:
             self.sum_cost_basis_delta = 0.0
 
         if self.no_traded is None or self.nominal_price is None:
-            return None
+            return
 
         transaction_cash_flow: float = -(self.no_traded * self.nominal_price)
         if self.nominal_commission:
@@ -219,7 +219,7 @@ class CalculateAggregates:
         if self.pnl_price:
             pnl += self.pnl_price
 
-        if pnl == 0.0:  # noqa: PLR2004
+        if pnl == 0.0:
             self.pnl_total = None
             return
 
@@ -237,12 +237,12 @@ class CalculateAggregates:
         self.nominal_commission = row[ColumnNameValues.COMMISSION]
         self.fx_rate = row[ColumnNameValues.FX]
 
-        if ColumnNameValues.PRICE in row and row[ColumnNameValues.PRICE]:
+        if row.get(ColumnNameValues.PRICE):
             self.nominal_price = row[ColumnNameValues.PRICE]
         else:
             self.nominal_price = None
 
-        if ColumnNameValues.NO_TRADED in row and row[ColumnNameValues.NO_TRADED]:
+        if row.get(ColumnNameValues.NO_TRADED):
             self.no_traded = row[ColumnNameValues.NO_TRADED]
         else:
             self.no_traded = None
@@ -279,7 +279,7 @@ class CalculateAggregates:
         )
 
 
-def calculate_results(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
+def calculate_results(data: pd.DataFrame) -> pd.DataFrame:
     """Calculate the general ledger."""
     all_securities_name = data.name.unique()
 
@@ -297,6 +297,4 @@ def calculate_results(data: pd.DataFrame) -> pd.DataFrame:  # noqa: C901
     with warnings.catch_warnings():
         warnings.simplefilter(action="ignore", category=FutureWarning)
 
-        df_output = pd.concat(dfs, ignore_index=False)
-
-    return df_output
+        return pd.concat(dfs, ignore_index=False)

@@ -82,9 +82,7 @@ async def get_holdings(report_date: date | None = None) -> list[Holding]:
         holdings.append(holding)
 
     # Order by name
-    holdings = sorted(holdings, key=lambda x: x.name)
-
-    return holdings
+    return sorted(holdings, key=lambda x: x.name)
 
 
 async def download_market_data() -> None:

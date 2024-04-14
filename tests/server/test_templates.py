@@ -28,9 +28,9 @@ async def test_load_template() -> None:
         (1234.5678, 2, "1,234.57"),
         (1234.5678, 0, "1,235"),
         (1234.5678, 4, "1,234.5678"),
-        (None, 2, "–"),
-        (math.nan, 2, "–"),
-        ("abc", 2, "–"),
+        (None, 2, "–"),  # noqa: RUF001
+        (math.nan, 2, "–"),  # noqa: RUF001
+        ("abc", 2, "–"),  # noqa: RUF001
     ],
 )
 def test_format_decimals(value: Any, no_decimals: int, expected_output: str) -> None:  # noqa: ANN401
@@ -42,8 +42,8 @@ def test_format_decimals(value: Any, no_decimals: int, expected_output: str) -> 
     "value, expected_output",
     [
         (1234.5678, 1234.5678),
-        (None, "–"),
-        (math.nan, "–"),
+        (None, "–"),  # noqa: RUF001
+        (math.nan, "–"),  # noqa: RUF001
     ],
 )
 def test_format_none(

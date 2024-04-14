@@ -16,7 +16,7 @@ logging.getLogger("urllib3.connectionpool").setLevel(logging.CRITICAL)
 class VerboseFormatter(logging.Formatter):
     """Custom log formatter."""
 
-    def format(self: VerboseFormatter, record: logging.LogRecord) -> str:  # noqa: A003
+    def format(self: VerboseFormatter, record: logging.LogRecord) -> str:
         """Format log string."""
         return (
             f"[{self.formatTime(record)}] [{record.levelname}] "
