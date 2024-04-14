@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import math
 from typing import Any
-import warnings
 
 import pytest
 
@@ -14,8 +13,6 @@ from pypmanager.server.templates import (
     load_template,
     static_file2base64,
 )
-
-warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 
 @pytest.mark.asyncio()
