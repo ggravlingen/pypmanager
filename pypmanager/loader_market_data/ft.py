@@ -46,7 +46,7 @@ class FTLoader(BaseMarketDataLoader):
                     "Symbol": self.lookup_key,
                     "OverlayIndicators": [],
                     "Params": {},
-                }
+                },
             ],
         }
 
@@ -81,7 +81,7 @@ class FTLoader(BaseMarketDataLoader):
                     isin_code=self.isin_code,
                     name=name,
                     price=close[idx],
-                )
+                ),
             )
 
         return output_list

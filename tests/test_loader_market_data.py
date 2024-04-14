@@ -16,7 +16,7 @@ def test_avanza_loader() -> None:
         "name": "Sample Fund",
     }
     with mock.patch(
-        "pypmanager.loader_market_data.base_loader.requests.get"
+        "pypmanager.loader_market_data.base_loader.requests.get",
     ) as mock_get:
         mock_response = mock_get.return_value
         mock_response.status_code = 200
@@ -31,11 +31,12 @@ def test_avanza_loader() -> None:
         expected_source_data = [
             SourceData(
                 report_date=datetime.strptime(  # noqa: DTZ007
-                    "2023-05-14T12:00:00", "%Y-%m-%dT%H:%M:%S"
+                    "2023-05-14T12:00:00",
+                    "%Y-%m-%dT%H:%M:%S",
                 ),
                 isin_code="abc123",
                 price=100.0,
                 name="Sample Fund",
-            )
+            ),
         ]
         assert loader.to_source_data() == expected_source_data

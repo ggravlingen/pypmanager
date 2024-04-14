@@ -352,7 +352,8 @@ class GeneralLedger:
             df_tmp[ColumnNameValues.TRANSACTION_DATE].astype(str).str[:10]
         )
         df_tmp[ColumnNameValues.TRANSACTION_DATE] = pd.to_datetime(
-            df_tmp[ColumnNameValues.TRANSACTION_DATE], format="%Y-%m-%d"
+            df_tmp[ColumnNameValues.TRANSACTION_DATE],
+            format="%Y-%m-%d",
         )
         df_tmp = df_tmp.set_index(ColumnNameValues.TRANSACTION_DATE)
         df_tmp.index = df_tmp.index.date

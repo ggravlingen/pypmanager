@@ -2,9 +2,7 @@
 
 from __future__ import annotations
 
-from typing import cast
-
-import pandas as pd
+from typing import TYPE_CHECKING, cast
 
 from pypmanager.loader_transaction.const import (
     ColumnNameValues,
@@ -14,6 +12,9 @@ from pypmanager.loader_transaction.const import (
 )
 
 from .base_loader import TransactionLoader
+
+if TYPE_CHECKING:
+    import pandas as pd
 
 
 def _replace_fee_name(row: pd.DataFrame) -> str:

@@ -15,7 +15,7 @@ from pypmanager.server.templates import (
 )
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_load_template() -> None:
     """Test function load_template."""
     function_result = await load_template(template_name="footnote.html")
@@ -23,7 +23,7 @@ async def test_load_template() -> None:
 
 
 @pytest.mark.parametrize(
-    "value, no_decimals, expected_output",
+    ("value", "no_decimals", "expected_output"),
     [
         (1234.5678, 2, "1,234.57"),
         (1234.5678, 0, "1,235"),
@@ -39,7 +39,7 @@ def test_format_decimals(value: Any, no_decimals: int, expected_output: str) -> 
 
 
 @pytest.mark.parametrize(
-    "value, expected_output",
+    ("value", "expected_output"),
     [
         (1234.5678, 1234.5678),
         (None, "–"),  # noqa: RUF001
@@ -47,7 +47,8 @@ def test_format_decimals(value: Any, no_decimals: int, expected_output: str) -> 
     ],
 )
 def test_format_none(
-    value: float | None | math.nan, expected_output: float | str
+    value: float | None | math.nan,
+    expected_output: float | str,
 ) -> None:
     """Test function format_none."""
     assert format_none(value) == expected_output

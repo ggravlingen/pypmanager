@@ -19,7 +19,7 @@ class MorningstarLoader(BaseMarketDataLoader):
     """Load data from Morningstar."""
 
     start_date = (datetime.now(UTC) - timedelta(days=LOAD_HISTORY_DAYS)).strftime(
-        "%Y-%m-%d"
+        "%Y-%m-%d",
     )
     end_date = datetime.now(UTC).strftime("%Y-%m-%d")
     currency = "SEK"
@@ -65,7 +65,7 @@ class MorningstarLoader(BaseMarketDataLoader):
                     isin_code=self.isin_code,
                     price=row["Value"],
                     name=self.name,
-                )
+                ),
             )
 
         return output_list
@@ -119,7 +119,7 @@ class MorningstarLoaderSHB(BaseMarketDataLoader):
                     isin_code=self.isin_code,
                     name=row["Namn"],
                     price=row["Kurs"],
-                )
+                ),
             )
 
         return output_data

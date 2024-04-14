@@ -3,12 +3,11 @@
 from __future__ import annotations
 
 from abc import abstractmethod
+import contextlib
 from dataclasses import dataclass
-from datetime import datetime
-import glob
-import os
+from pathlib import Path
 from secrets import randbelow
-from typing import cast
+from typing import TYPE_CHECKING, cast
 
 import pandas as pd
 
@@ -21,6 +20,9 @@ from .const import (
     CSVSeparator,
     TransactionTypeValues,
 )
+
+if TYPE_CHECKING:
+    from datetime import datetime
 
 FILTER_STATEMENT = (
     f"('{TransactionTypeValues.DIVIDEND}'"
@@ -134,12 +136,13 @@ def _cleanup_number(value: str | None) -> float | None:
     try:
         return float(value)
     except ValueError as err:
-        raise ValueError(f"Unable to parse {value}") from err
+        msg = f"Unable to parse {value}"
+        raise ValueError(msg) from err
 
 
-def _get_filename(file_path: str) -> str:
+def _get_filename(file_path: Path) -> str:
     """Return name of file."""
-    filename = os.path.basename(file_path).replace(".csv", "")
+    filename = file_path.name.replace(".csv", "")
     splitted_file_path = filename.split("-")
 
     if len(splitted_file_path) == 2:  # noqa: PLR2004
@@ -162,7 +165,7 @@ EMPTY_DF = pd.DataFrame(
         ColumnNameValues.COMMISSION,
         ColumnNameValues.CURRENCY,
         ColumnNameValues.ISIN_CODE,
-    ]
+    ],
 )
 
 
@@ -190,7 +193,8 @@ class TransactionLoader:
 
     def load_data_files(self: TransactionLoader) -> None:
         """Parse CSV-files and load them into a data frame."""
-        files = glob.glob(os.path.join(Settings.dir_data, self.file_pattern))
+        folder_path = Path(Settings.dir_data)
+        files = Path.glob(folder_path, self.file_pattern)
 
         dfs: list[pd.DataFrame] = []
         for file in files:
@@ -234,7 +238,7 @@ class TransactionLoader:
                 )
                 if x and x.strftime("%Y-%m-%d") == x.strftime("%Y-%m-%d")
                 else x
-            )
+            ),
         )
 
         # Sort by transaction date
@@ -268,7 +272,7 @@ class TransactionLoader:
         df_raw = self.df_final.copy()
 
         df_raw = df_raw.query(
-            f"{ColumnNameValues.TRANSACTION_TYPE} in {FILTER_STATEMENT}"
+            f"{ColumnNameValues.TRANSACTION_TYPE} in {FILTER_STATEMENT}",
         )
 
         self.df_final = df_raw
@@ -280,7 +284,8 @@ class TransactionLoader:
         for col in NUMBER_COLS:
             if col in df_raw.columns:
                 df_raw[col] = df_raw.apply(
-                    lambda x, _col=col: _cleanup_number(x[_col]), axis=1
+                    lambda x, _col=col: _cleanup_number(x[_col]),
+                    axis=1,
                 )
 
         for col in (
@@ -288,10 +293,8 @@ class TransactionLoader:
             ColumnNameValues.ISIN_CODE,
         ):  # Replace dashes with 0
             if col in df_raw.columns:
-                try:
+                with contextlib.suppress(AttributeError):
                     df_raw[col] = df_raw[col].str.replace("-", "").replace("", 0)
-                except AttributeError:
-                    pass
 
         self.df_final = df_raw
 
@@ -304,7 +307,8 @@ class TransactionLoader:
                 try:
                     df_raw[key] = df_raw[key].astype(val)
                 except ValueError as err:
-                    raise ValueError(f"Unable to parse {key}") from err
+                    msg = f"Unable to parse {key}"
+                    raise ValueError(msg) from err
 
         self.df_final = df_raw
 

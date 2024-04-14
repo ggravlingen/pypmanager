@@ -3,15 +3,17 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from io import BytesIO
 import json
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any, cast
 
 import requests
 
 from pypmanager.const import HttpResponseCodeLabels
 
-from .models import SourceData
+if TYPE_CHECKING:
+    from io import BytesIO
+
+    from .models import SourceData
 
 
 class BaseMarketDataLoader:
@@ -40,7 +42,8 @@ class BaseMarketDataLoader:
         if response.status_code == HttpResponseCodeLabels.OK:
             return cast(dict[str, Any], json.loads(response.text))
 
-        raise ValueError("Unable to load data")
+        msg = "Unable to load data"
+        raise ValueError(msg)
 
     @abstractmethod
     def get_response(self: BaseMarketDataLoader) -> None:

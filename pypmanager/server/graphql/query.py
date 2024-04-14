@@ -27,7 +27,7 @@ class Query:
                     date=row[ColumnNameValues.TRANSACTION_DATE],
                     broker=row[ColumnNameValues.BROKER],
                     source=row[ColumnNameValues.SOURCE],
-                )
+                ),
             )
 
         return output_data

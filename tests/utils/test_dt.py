@@ -8,7 +8,7 @@ import pytest
 from pypmanager.utils.dt import async_get_last_n_quarters, get_previous_quarter
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_async_get_last_n_quarters(
     freezer: FrozenDateTimeFactory,
 ) -> None:
@@ -22,7 +22,7 @@ async def test_async_get_last_n_quarters(
 
 
 @pytest.mark.parametrize(
-    "report_date, expected_date",
+    ("report_date", "expected_date"),
     [
         (date(2023, 12, 10), date(2023, 9, 30)),
         (date(2023, 9, 15), date(2023, 6, 30)),

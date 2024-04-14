@@ -33,10 +33,11 @@ class AvanzaLoader(BaseMarketDataLoader):
         return [
             SourceData(
                 report_date=datetime.strptime(  # noqa: DTZ007
-                    self.raw_response["navDate"], "%Y-%m-%dT%H:%M:%S"
+                    self.raw_response["navDate"],
+                    "%Y-%m-%dT%H:%M:%S",
                 ),
                 isin_code=self.isin_code,
                 price=self.raw_response["nav"],
                 name=self.raw_response["name"],
-            )
+            ),
         ]

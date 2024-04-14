@@ -15,7 +15,7 @@ from pypmanager.loader_transaction.const import TransactionTypeValues
 
 
 @pytest.mark.parametrize(
-    "row, expected",
+    ("row", "expected"),
     [
         # Test a buy transaction without a specified amount
         (
@@ -24,7 +24,7 @@ from pypmanager.loader_transaction.const import TransactionTypeValues
                     "no_traded": 10,
                     "price": 10,
                     "transaction_type": TransactionTypeValues.BUY,
-                }
+                },
             ),
             -100,
         ),
@@ -35,7 +35,7 @@ from pypmanager.loader_transaction.const import TransactionTypeValues
                     "no_traded": 10,
                     "price": 10,
                     "transaction_type": TransactionTypeValues.SELL,
-                }
+                },
             ),
             100,
         ),
@@ -47,7 +47,7 @@ from pypmanager.loader_transaction.const import TransactionTypeValues
                     "no_traded": -10,
                     "price": 10,
                     "transaction_type": TransactionTypeValues.BUY,
-                }
+                },
             ),
             -100,
         ),
@@ -65,7 +65,7 @@ def data_normalize_no_traded() -> pd.DataFrame:
 
 
 @pytest.mark.parametrize(
-    "trans_type, no_traded, expected",
+    ("trans_type", "no_traded", "expected"),
     [
         (TransactionTypeValues.BUY, 10, 10),
         (TransactionTypeValues.SELL, -5, -5),
@@ -74,7 +74,7 @@ def data_normalize_no_traded() -> pd.DataFrame:
 def test__normalize_no_traded(trans_type: str, no_traded: int, expected: int) -> None:
     """Test function _normalize_no_traded."""
     test_data = pd.DataFrame(
-        {"transaction_type": [trans_type], "no_traded": [no_traded]}
+        {"transaction_type": [trans_type], "no_traded": [no_traded]},
     )
     result = _normalize_no_traded(test_data.iloc[0])
 
@@ -82,14 +82,14 @@ def test__normalize_no_traded(trans_type: str, no_traded: int, expected: int) ->
 
 
 @pytest.mark.parametrize(
-    "number, expected_result",
+    ("number", "expected_result"),
     [
         ("-", 0),  # ok
         ("500 000 000.0", 500000000.0),  # ok
         ("500,0", 500.0),
     ],
 )
-def test_cleanup_number(number: str, expected_result: float | int) -> None:
+def test_cleanup_number(number: str, expected_result: int) -> None:
     """Test function _cleanup_number."""
     result = _cleanup_number(number)
 

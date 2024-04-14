@@ -2,9 +2,8 @@
 
 from __future__ import annotations
 
-from datetime import date
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 import warnings
 
 import pandas as pd
@@ -12,7 +11,10 @@ import pandas as pd
 from pypmanager.loader_transaction.const import ColumnNameValues, TransactionTypeValues
 from pypmanager.settings import Settings
 
-LOGGER = logging.Logger(__name__)
+if TYPE_CHECKING:
+    from datetime import date
+
+LOGGER = logging.getLogger(__name__)
 
 
 class CalculateAggregates:
@@ -72,7 +74,8 @@ class CalculateAggregates:
     transaction_cash_flow_local: float | None = None
 
     def __init__(
-        self: CalculateAggregates, security_transactions: pd.DataFrame
+        self: CalculateAggregates,
+        security_transactions: pd.DataFrame,
     ) -> None:
         """Init class."""
         self.calculated_transaction_list = []
@@ -275,7 +278,7 @@ class CalculateAggregates:
                 ColumnNameValues.TRANSACTION_CASH_FLOW: self.transaction_cash_flow,
                 ColumnNameValues.TRANSACTION_DATE: self.transaction_date,
                 ColumnNameValues.TRANSACTION_TYPE: self.transaction_type,
-            }
+            },
         )
 
 
