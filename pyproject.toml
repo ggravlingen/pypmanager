@@ -47,8 +47,11 @@ version = {file = "pypmanager/VERSION"}
 exclude = ["tests", "tests*"]
 
 [tool.pytest.ini_options]
-python_files="test_*.py"
 addopts="-W error"
+filterwarnings = [
+  # DeprecationWarning: 'typing.ByteString' is deprecated and slated for removal in Python 3.14
+  "ignore::DeprecationWarning:typing.ByteString"
+]
 
 [tool.pylint.MASTER]
 py-version = "3.11"
