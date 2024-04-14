@@ -21,29 +21,29 @@ class TypedSettings(BaseSettings):
 
     debug_name: str | None = None
 
-    dir_config: Path = Path("config")
+    dir_config: Path = Path("config").resolve()
 
     @property
     def dir_data(self: TypedSettings) -> Path:
         """Return data directory."""
         if self.is_demo:
-            return Path("data-demo")
+            return Path("data-demo").resolve()
 
-        return Path("data")
+        return Path("data").resolve()
 
-    dir_static: Path = Path("pypmanager/server/static")
+    dir_static: Path = Path("pypmanager/server/static").resolve()
 
     @property
     def file_market_data(self: TypedSettings) -> Path:
         """Return market data file."""
         folder_path = Path(self.dir_data)
-        return folder_path / "market_data.csv"
+        return (folder_path / "market_data.csv").resolve()
 
     @property
     def file_market_data_config(self: TypedSettings) -> Path:
         """Return market data file."""
         folder_path = Path(self.dir_config)
-        return folder_path / "market_data.yaml"
+        return (folder_path / "market_data.yaml").resolve()
 
     is_demo: bool = False
 
