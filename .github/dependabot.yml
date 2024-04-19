@@ -24,3 +24,8 @@ updates:
       pytest:
         patterns:
           - "pytest*"
+  - package-ecosystem: npm
+    directory: "/frontend"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
