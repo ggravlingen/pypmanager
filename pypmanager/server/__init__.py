@@ -7,6 +7,7 @@ from typing import cast
 
 from fastapi import FastAPI, Request, Response, WebSocket
 from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.staticfiles import StaticFiles
 
 from pypmanager.analytics import Portfolio
 from pypmanager.helpers import (
@@ -25,6 +26,8 @@ TypeGraphQLWebsocket = Callable[[WebSocket], Awaitable[None]]
 
 app.add_route("/graphql", cast(TypeGraphQL, graphql_app))
 app.add_websocket_route("/graphql", cast(TypeGraphQLWebsocket, graphql_app))
+
+app.mount("/static", StaticFiles(directory=Settings.dir_static), name="static")
 
 
 @app.get("/favicon.ico")
@@ -66,3 +69,9 @@ async def portfolio_history() -> str:
         template_name="historical_portfolio.html",
         context={"data": portfolio_data},
     )
+
+
+@app.get("/react", response_class=FileResponse)
+async def react_page() -> FileResponse:
+    """Return historical data."""
+    return FileResponse(f"{Settings.dir_templates}/app.html")
