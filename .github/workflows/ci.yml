@@ -46,10 +46,10 @@ jobs:
               - pypmanager/**/*.py
               - tests/**/*.py
               - pyproject.toml
-              - .github/**/*.yaml
               - .github/**/*.yml
             frontend:
               - frontend/*
+              - .github/**/*.yml
 
       - name: Generate partial Python venv restore key
         id: generate_python_cache_key
