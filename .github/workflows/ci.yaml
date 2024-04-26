@@ -32,7 +32,7 @@ jobs:
       python_cache_key: ${{ steps.generate_python_cache_key.outputs.key }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.1.3
+        uses: actions/checkout@v4.1.4
 
       - name: Filter for core changes
         uses: dorny/paths-filter@v3.0.2
@@ -69,7 +69,7 @@ jobs:
         python-version: ${{ fromJSON(needs.info.outputs.python_versions) }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.1.3
+        uses: actions/checkout@v4.1.4
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5.1.0
@@ -110,7 +110,7 @@ jobs:
     if: needs.info.outputs.run_pipeline == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.1.3
+        uses: actions/checkout@v4.1.4
         with:
           fetch-depth: "2"
       - name: Set up Python ${{ matrix.python-version }}
@@ -157,7 +157,7 @@ jobs:
     if: needs.info.outputs.run_pipeline == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.1.3
+        uses: actions/checkout@v4.1.4
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5.1.0
@@ -187,7 +187,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: Store Pull Request comment to be posted
-        uses: actions/upload-artifact@v4.3.2
+        uses: actions/upload-artifact@v4.3.3
         if: steps.coverage_comment.outputs.COMMENT_FILE_WRITTEN == 'true'
         with:
           # If you use a different name, update COMMENT_ARTIFACT_NAME accordingly
