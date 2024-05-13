@@ -11,7 +11,7 @@ dependencies    = [
   "fastapi==0.111.0",
   "humanize==4.9.0",
   "Jinja2==3.1.4",
-  "lxml==5.2.1",
+  "lxml==5.2.2",
   "pandas==2.2.2",
   "pyarrow==16.0.0",
   "pydantic-settings==2.2.1",
