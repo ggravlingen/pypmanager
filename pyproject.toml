@@ -33,7 +33,7 @@ test = [
   "pytest-timeout==2.3.1",
   "ruff==0.4.8",
   "types_PyYAML==6.0.12.20240311",
-  "types_requests==2.31.0.20240406",
+  "types_requests==2.32.0.20240602",
 ]
 
 [tool.setuptools]
