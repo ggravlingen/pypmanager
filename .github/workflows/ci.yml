@@ -227,3 +227,23 @@ jobs:
         run: |
           cd frontend
           yarn
+
+      - run: |
+          cd frontend
+          yarn eslint $(git diff --name-only HEAD | grep -E '\.(tsx)$' | xargs)
+        name: Run Eslint
+
+      - run: |
+          cd frontend
+          yarn prettier --check "**/*.tsx"
+        name: Run prettier
+
+      # - run: |
+      #     cd frontend
+      #     yarn test-ci
+      #   name: Run test pipeline
+
+      - run:  |
+          cd frontend
+          yarn typecheck
+        name: Run type hint checks

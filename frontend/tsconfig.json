@@ -6,7 +6,10 @@
     "strict": true,
     "esModuleInterop": true,
     "typeRoots": ["node_modules/@types", "./types"],
-    "types": ["react", "react-dom", "node"]
+    "types": ["react", "react-dom", "node"],
+    "plugins": [{
+      "name": "typescript-strict-plugin"
+    }]
   },
   "include": ["src/**/*"]
 }
