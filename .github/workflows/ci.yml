@@ -2,6 +2,7 @@ name: Code quality tests
 
 env:
   ALL_PYTHON_VERSIONS: "['3.12']"
+  ALL_NODE_VERSIONS: "['18']"
   CACHE_VERSION: 1
 
 on:
@@ -28,8 +29,10 @@ jobs:
     name: Collect information & changes data
     outputs:
       run_pipeline: ${{ steps.changes.outputs.core }}
+      run_pipeline_frontend: ${{ steps.changes.outputs.frontend }}
       python_versions: ${{ steps.info.outputs.python_versions }}
       python_cache_key: ${{ steps.generate_python_cache_key.outputs.key }}
+      node_versions: ${{ steps.info.outputs.node_versions }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.1.7
@@ -43,7 +46,9 @@ jobs:
               - pypmanager/**/*.py
               - tests/**/*.py
               - pyproject.toml
-              - .github/**/*.yaml
+              - .github/**/*.yml
+            frontend:
+              - frontend/*
               - .github/**/*.yml
 
       - name: Generate partial Python venv restore key
@@ -58,11 +63,14 @@ jobs:
           echo "python_versions: ${ALL_PYTHON_VERSIONS}"
           echo "python_versions=${ALL_PYTHON_VERSIONS}" >> $GITHUB_OUTPUT
 
+          echo "node_versions: ${ALL_NODE_VERSIONS}"
+          echo "node_verions=${ALL_NODE_VERSIONS}" >> $GITHUB_OUTPUT
+
   create-virtualenv:
     name: Setup environment
     runs-on: ubuntu-latest
     needs: info
-    timeout-minutes: 30
+    timeout-minutes: 5
     if: needs.info.outputs.run_pipeline == 'true'
     strategy:
       matrix:
@@ -103,7 +111,7 @@ jobs:
       - create-virtualenv
       - info
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 5
     strategy:
       matrix:
         python-version: ${{ fromJSON(needs.info.outputs.python_versions) }}
@@ -150,7 +158,7 @@ jobs:
       - info
       - create-virtualenv
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 5
     strategy:
       matrix:
         python-version: ${{ fromJSON(needs.info.outputs.python_versions) }}
@@ -194,3 +202,28 @@ jobs:
           name: python-coverage-comment-action
           # If you use a different name, update COMMENT_FILENAME accordingly
           path: python-coverage-comment-action.txt
+
+  qa-frontend:
+    name: Run test suite frontend
+    continue-on-error: true
+    needs:
+      - info
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      matrix:
+        node-version: ${{ fromJSON(needs.info.outputs.node_versions) }}
+    if: needs.info.outputs.run_pipeline_frontend == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.3
+
+      - name: Set up Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v4.0.2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install requirements
+        run: |
+          cd frontend
+          yarn
