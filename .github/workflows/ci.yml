@@ -64,7 +64,7 @@ jobs:
           echo "python_versions=${ALL_PYTHON_VERSIONS}" >> $GITHUB_OUTPUT
 
           echo "node_versions: ${ALL_NODE_VERSIONS}"
-          echo "node_verions=${ALL_NODE_VERSIONS}" >> $GITHUB_OUTPUT
+          echo "node_versions=${ALL_NODE_VERSIONS}" >> $GITHUB_OUTPUT
 
   create-virtualenv:
     name: Setup environment
