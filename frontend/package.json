@@ -33,7 +33,9 @@
     "typescript-strict-plugin": "2.4.4"
   },
   "scripts": {
-    "run-dev-ssr": "webpack --config webpack/config.dev.watch.tsx"
+    "run-dev-ssr": "webpack --config webpack/config.dev.watch.tsx",
+    "test-ci": "jest --ci --reporters=default --reporters=jest-junit --coverage",
+    "typecheck": "tsc --noEmit && tsc-strict --noEmit"
   },
   "prettier": {
     "arrowParens": "always",
