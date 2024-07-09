@@ -5,7 +5,7 @@ import gql from "graphql-tag";
 const QUERY = gql`
   query QueryAllGeneralLedger {
     allGeneralLedger {
-      reportDate
+      transactionDate
       broker
       source
       action
@@ -15,6 +15,12 @@ const QUERY = gql`
       averagePrice
       amount
       commission
+      cashFlow
+      fx
+      averageFxRate
+      account
+      credit
+      debit
     }
   }
 `;
