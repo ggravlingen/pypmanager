@@ -1,4 +1,10 @@
-import { Dataset, Menu, MenuOpen } from "@mui/icons-material";
+import {
+  DarkMode,
+  Dataset,
+  LightMode,
+  Menu,
+  MenuOpen,
+} from "@mui/icons-material";
 import {
   Drawer,
   IconButton,
@@ -12,6 +18,12 @@ import { Link } from "react-router-dom";
 
 const ExpandedNavigationBarWidth = 210;
 const CollapsedNavigationBarWidth = 40;
+const ListItemSx = {
+  paddingTop: "0px",
+  paddingLeft: "0px",
+  paddingBottom: "0px",
+  paddingRight: "0px",
+};
 
 /**
  * Defines the properties for the NavigationItem component.
@@ -22,7 +34,7 @@ const CollapsedNavigationBarWidth = 40;
  * to - The target URL for the navigation item. If provided, the item will be a Link component.
  */
 interface NavigationItemProps {
-  toggleDrawer: () => void;
+  handleClick: () => void;
   isExpanded: boolean;
   label: string;
   icon: ReactElement;
@@ -37,7 +49,7 @@ interface NavigationItemProps {
  * is called when the item is clicked, allowing the parent component to handle the state change.
  * The visibility of the label is controlled by the `isExpanded` prop.
  * @param props - The properties passed to the component.
- * @param props.toggleDrawer - A function to toggle the navigation drawer's open/closed state.
+ * @param props.handleClick - A function to toggle the navigation drawer's open/closed state.
  * @param props.isExpanded - Indicates whether the navigation drawer is currently expanded.
  * @param props.label - The text label for the navigation item.
  * @param props.icon - The icon component to display alongside the label.
@@ -45,7 +57,7 @@ interface NavigationItemProps {
  * @returns The NavigationItem component.
  */
 function NavigationItem({
-  toggleDrawer,
+  handleClick,
   isExpanded,
   label,
   icon,
@@ -62,16 +74,7 @@ function NavigationItem({
   );
 
   return (
-    <ListItem
-      button
-      onClick={toggleDrawer}
-      sx={{
-        paddingTop: "0px",
-        paddingLeft: "0px",
-        paddingBottom: "0px",
-        paddingRight: "0px",
-      }}
-    >
+    <ListItem onClick={handleClick} sx={ListItemSx}>
       {linkTo ? (
         <Link
           to={linkTo}
@@ -111,6 +114,13 @@ export default function NavigationBar() {
   // State to control the collapse/expand behavior
   const [isExpanded, setIsExpanded] = React.useState(false);
 
+  const [mode, setMode] = React.useState("light");
+
+  // Control the dark mode state
+  const toggleDarkMode = () => {
+    setMode(mode === "light" ? "dark" : "light");
+  };
+
   // Function to toggle the collapse/expand state
   const toggleDrawer = () => {
     setIsExpanded(!isExpanded);
@@ -135,13 +145,19 @@ export default function NavigationBar() {
     >
       <List sx={{ padding: 0 }}>
         <NavigationItem
-          toggleDrawer={toggleDrawer}
+          handleClick={toggleDrawer}
           isExpanded={isExpanded}
           label={"Portfolio Manager"}
           icon={isExpanded ? <MenuOpen /> : <Menu />}
         />
         <NavigationItem
-          toggleDrawer={toggleDrawer}
+          handleClick={toggleDarkMode}
+          isExpanded={isExpanded}
+          label={"Dark mode"}
+          icon={mode === "dark" ? <DarkMode /> : <LightMode />}
+        />
+        <NavigationItem
+          handleClick={toggleDrawer}
           isExpanded={isExpanded}
           label={"General ledger"}
           icon={<Dataset />}

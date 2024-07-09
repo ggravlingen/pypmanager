@@ -35,7 +35,7 @@ interface PaletteOptions extends _PaletteOptions {
   primary: _PaletteColor;
 }
 
-const Palette: PaletteOptions = {
+export const LightPalette: PaletteOptions = {
   common: {
     black: "#000",
     white: "#fff",
@@ -48,4 +48,15 @@ const Palette: PaletteOptions = {
   },
 };
 
-export default Palette;
+export const DarkPalette: PaletteOptions = {
+  common: {
+    black: "#121212",
+    white: "#e0e0e0",
+  },
+  primary: {
+    main: "#90caf9",
+    light: "#e3f2fd",
+    dark: "#42a5f5",
+    contrastText: "#000",
+  },
+};
