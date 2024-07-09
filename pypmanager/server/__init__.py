@@ -36,7 +36,7 @@ async def get_favicon() -> FileResponse:
     return FileResponse(f"{Settings.dir_static}/favicon.ico")
 
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/portfolio", response_class=HTMLResponse)
 async def index() -> str:
     """Present overview page."""
     holdings = await get_holdings()
@@ -71,7 +71,7 @@ async def portfolio_history() -> str:
     )
 
 
-@app.get("/app", response_class=FileResponse)
+@app.get("/", response_class=FileResponse)
 async def react_page() -> FileResponse:
     """Return historical data."""
     return FileResponse(f"{Settings.dir_templates}/app.html")
