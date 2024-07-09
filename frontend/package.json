@@ -47,7 +47,8 @@
     "test-ci": "jest --ci --reporters=default --reporters=jest-junit --coverage",
     "cicd-lint": "eslint 'src/**/*.tsx'",
     "cicd-typecheck": "tsc-strict --project tsconfig.json --noEmit",
-    "cicd-prettier": "yarn prettier --check '**/*.tsx' '**/*.html'"
+    "cicd-prettier": "yarn prettier --check '**/*.tsx' '**/*.html'",
+    "eslint-fix": "eslint --fix 'src/**/*.tsx'"
   },
   "prettier": {
     "arrowParens": "always",
