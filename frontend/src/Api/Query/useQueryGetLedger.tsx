@@ -1,6 +1,7 @@
-import { LedgerRow, ApolloClient } from "@Api";
 import { useQuery, QueryHookOptions, QueryResult } from "@apollo/client";
 import gql from "graphql-tag";
+import { LedgerRow } from "../Models/ledger";
+import ApolloClient from "../ApolloClient/Client";
 
 const QUERY = gql`
   query QueryAllGeneralLedger {
