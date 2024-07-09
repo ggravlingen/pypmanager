@@ -1,6 +1,6 @@
-import { useQuery, QueryHookOptions, QueryResult } from "@apollo/client";
-import gql from "graphql-tag";
 import { LedgerRow, LocalApolloClient } from "@Api";
+import { QueryHookOptions, QueryResult, useQuery } from "@apollo/client";
+import gql from "graphql-tag";
 
 const QUERY = gql`
   query QueryAllGeneralLedger {
@@ -25,7 +25,6 @@ interface AllAvailableReports {
 
 /**
  * Custom hook to perform a GraphQL query to fetch all general ledger entries.
- *
  * @returns The result of the Apollo useQuery hook, providing loading state, error information,
  * and the data of all general ledger entries as `AllAvailableReports`.
  */

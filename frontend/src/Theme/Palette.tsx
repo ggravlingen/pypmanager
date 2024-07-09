@@ -5,12 +5,10 @@ import { PaletteOptions as _PaletteOptions } from "@mui/material";
  *
  * This interface defines the structure for color shades used within a UI theme,
  * including light, main, dark variants, and a contrast text color for accessibility.
- *
- * @interface _PaletteColor
- * @property {string} light - The lighter variant of the color.
- * @property {string} main - The main color value, used as the primary color in UI components.
- * @property {string} dark - The darker variant of the color.
- * @property {string} contrastText - The color used for text that appears over the main color for better readability.
+ * light - The lighter variant of the color.
+ * main - The main color value, used as the primary color in UI components.
+ * dark - The darker variant of the color.
+ * contrastText - The color used for text that appears over the main color for better readability.
  */
 interface _PaletteColor {
   light: string;
@@ -26,15 +24,12 @@ interface CommonColors {
 
 /**
  * Extends the Material-UI PaletteOptions interface to include a custom definition for the primary color.
- *
- * @interface PaletteOptions
- * @extends {_PaletteOptions} Inherits properties from Material-UI's PaletteOptions.
+ * Inherits properties from Material-UI's PaletteOptions.
  */
 interface PaletteOptions extends _PaletteOptions {
   /**
    * Defines the primary color of the palette.
-   *
-   * @type {_PaletteColor} The type for defining the primary color, including main, light, dark, and contrastText shades.
+   * The type for defining the primary color, including main, light, dark, and contrastText shades.
    */
   common: CommonColors;
   primary: _PaletteColor;

@@ -1,4 +1,5 @@
 import { createTheme } from "@mui/material/styles";
+
 import Palette from "./Palette";
 
 const cellPadding = {

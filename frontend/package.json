@@ -36,6 +36,7 @@
     "eslint-plugin-import": "2.29.1",
     "eslint-plugin-jsdoc": "48.5.2",
     "eslint-plugin-react": "7.34.3",
+    "eslint-plugin-react-hooks": "4.6.2",
     "eslint-plugin-simple-import-sort": "12.1.1",
     "eslint-plugin-unused-imports": "3.2.0",
     "prettier": "3.3.2",
@@ -44,7 +45,7 @@
   "scripts": {
     "run-dev-ssr": "webpack --config webpack/config.dev.watch.tsx",
     "test-ci": "jest --ci --reporters=default --reporters=jest-junit --coverage",
-    "cicd-lint": "eslint --fix $(git diff --name-only HEAD | grep -E '\\.(tsx)$' | xargs)",
+    "cicd-lint": "eslint 'src/**/*.tsx'",
     "cicd-typecheck": "tsc-strict --project tsconfig.json --noEmit",
     "cicd-prettier": "yarn prettier --check '**/*.tsx' '**/*.html'"
   },

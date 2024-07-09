@@ -9,7 +9,7 @@ extends:
   - "eslint:recommended"
   - "plugin:react/recommended"
   - "plugin:@typescript-eslint/recommended"
-  - plugin:jsdoc/recommended-typescript-error"
+  - "plugin:jsdoc/recommended-typescript-error"
 parser: "@typescript-eslint/parser"
 parserOptions:
   ecmaFeatures:
@@ -19,7 +19,6 @@ parserOptions:
 plugins:
   - react
   - "@typescript-eslint"
-  - prettier
   - "react-hooks"
   - "unused-imports"
   - "simple-import-sort"

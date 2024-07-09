@@ -1,9 +1,8 @@
 /**
  * Formats a given date as a string in the format of "yyyy-mm-dd".
  * If the input is `undefined`, returns `null`.
- *
- * @param {Date | undefined} dateInput - The date to format, or `undefined`.
- * @returns {string | null} The formatted date as "yyyy-mm-dd", or `null` if input is `undefined`.
+ * @param dateInput - The date to format, or `undefined`.
+ * @returns The formatted date as "yyyy-mm-dd", or `null` if input is `undefined`.
  */
 export function formatDate(dateInput: Date | undefined): string | null {
   if (!dateInput) {
