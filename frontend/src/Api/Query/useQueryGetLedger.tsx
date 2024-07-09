@@ -8,6 +8,13 @@ const QUERY = gql`
       reportDate
       broker
       source
+      action
+      name
+      noTraded
+      aggBuyVolume
+      averagePrice
+      amount
+      commission
     }
   }
 `;
