@@ -3,13 +3,11 @@ import webpack from "webpack"; // to access built-in plugins
 import path from "path";
 
 const commonConfig: webpack.Configuration = {
-  context: path.resolve(__dirname, '..'),
+  context: path.resolve(__dirname, ".."),
   entry: ["./src/index.tsx"],
   resolve: {
     alias: {
-      "@Api": path.resolve(
-        "src/Api",
-      ),
+      "@Api": path.resolve("src/Api"),
     },
     // Keep js-files here to load node-modules properly
     extensions: [".js", ".tsx", ".ts", ".jsx", ".mjs"],
