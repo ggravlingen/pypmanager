@@ -10,8 +10,8 @@ import React from "react";
 interface QueryLoaderProps {
   loading: boolean;
   // Data can be anything
-   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-   data: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: any;
   error?: Error;
   children: React.ReactNode;
 }

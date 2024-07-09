@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import React from "react";
-import { HashRouter, Route,Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 
 import { NavigationBar, TableGeneralLedger } from "./components";
 
