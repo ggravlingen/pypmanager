@@ -17,7 +17,7 @@ export default function TableGeneralLedger(): JSX.Element {
 
   return (
     <QueryLoader loading={loading} data={data} error={error}>
-      <TableContainer component={Paper} style={{ maxHeight: "80vh" }}>
+      <TableContainer component={Paper} style={{ maxHeight: "100vh" }}>
         <Table stickyHeader>
           <TableHead>
             <TableRow>

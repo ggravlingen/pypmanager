@@ -19,6 +19,11 @@ interface _PaletteColor {
   contrastText: string;
 }
 
+interface CommonColors {
+  black: string;
+  white: string;
+}
+
 /**
  * Extends the Material-UI PaletteOptions interface to include a custom definition for the primary color.
  *
@@ -31,10 +36,15 @@ interface PaletteOptions extends _PaletteOptions {
    *
    * @type {_PaletteColor} The type for defining the primary color, including main, light, dark, and contrastText shades.
    */
+  common: CommonColors;
   primary: _PaletteColor;
 }
 
 const Palette: PaletteOptions = {
+  common: {
+    black: "#000",
+    white: "#fff",
+  },
   primary: {
     main: "#1976d2",
     light: "#42a5f5",
