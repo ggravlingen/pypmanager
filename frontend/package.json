@@ -40,7 +40,7 @@
   "scripts": {
     "run-dev-ssr": "webpack --config webpack/config.dev.watch.tsx",
     "test-ci": "jest --ci --reporters=default --reporters=jest-junit --coverage",
-    "typecheck": "tsc --noEmit && tsc-strict --noEmit"
+    "typecheck": "tsc-strict --project tsconfig.json --noEmit"
   },
   "prettier": {
     "arrowParens": "always",
