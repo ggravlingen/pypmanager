@@ -1,8 +1,10 @@
 {
+  "include": ["src"],
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "module": "commonjs",
     "jsx": "react",
+    "rootDir": ".",
     "strict": true,
     "esModuleInterop": true,
     "typeRoots": ["node_modules/@types", "./types"],
@@ -11,11 +13,10 @@
       {
         "name": "typescript-strict-plugin"
       }
-    ]
-  },
-  "baseUrl": "./src",
-  "include": ["src/**/*"],
-  "paths": {
-    "@Api": ["Api"]
+    ],
+    "baseUrl": "./src",
+    "paths": {
+      "@Api": ["Api"]
+    }
   }
 }
