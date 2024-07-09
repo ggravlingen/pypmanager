@@ -13,10 +13,10 @@
       {
         "name": "typescript-strict-plugin"
       }
-    ]
-  },
-  "baseUrl": "./src",
-  "paths": {
-    "@Api": ["Api"]
+    ],
+    "baseUrl": "./src",
+    "paths": {
+      "@Api": ["Api"]
+    }
   }
 }

@@ -1,7 +1,6 @@
 import { useQuery, QueryHookOptions, QueryResult } from "@apollo/client";
 import gql from "graphql-tag";
-import { LedgerRow } from "../Models/ledger";
-import ApolloClient from "../ApolloClient/Client";
+import { LedgerRow, LocalApolloClient } from "@Api";
 
 const QUERY = gql`
   query QueryAllGeneralLedger {
@@ -26,7 +25,7 @@ interface AllAvailableReports {
 export default function useQueryGetLedger(): QueryResult<AllAvailableReports> {
   const options: QueryHookOptions<AllAvailableReports> = {
     fetchPolicy: "network-only",
-    client: ApolloClient,
+    client: LocalApolloClient,
   };
 
   return useQuery<AllAvailableReports>(QUERY, options);
