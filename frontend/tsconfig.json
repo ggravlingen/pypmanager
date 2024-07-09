@@ -17,6 +17,7 @@
     "baseUrl": "./src",
     "paths": {
       "@Api": ["Api"],
+      "@Theme": ["Theme"],
       "@Utils": ["Utils"]
     }
   }

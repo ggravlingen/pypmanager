@@ -8,6 +8,7 @@ const commonConfig: webpack.Configuration = {
   resolve: {
     alias: {
       "@Api": path.resolve("src/Api"),
+      "@Theme": path.resolve("src/Theme"),
       "@Utils": path.resolve("src/Utils"),
     },
     // Keep js-files here to load node-modules properly
