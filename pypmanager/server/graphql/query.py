@@ -21,7 +21,7 @@ class Query:
 
         return [
             LedgerRow(
-                date=row[ColumnNameValues.TRANSACTION_DATE],
+                report_date=row[ColumnNameValues.TRANSACTION_DATE],
                 broker=row[ColumnNameValues.BROKER],
                 source=row[ColumnNameValues.SOURCE],
             )

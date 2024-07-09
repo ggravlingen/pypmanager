@@ -11,6 +11,6 @@ import strawberry
 class LedgerRow:
     """Represent a row in the general ledger."""
 
-    date: date
+    report_date: date
     broker: str
     source: str

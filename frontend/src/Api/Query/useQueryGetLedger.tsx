@@ -5,7 +5,7 @@ import { LedgerRow, LocalApolloClient } from "@Api";
 const QUERY = gql`
   query QueryAllGeneralLedger {
     allGeneralLedger {
-      date
+      reportDate
       broker
       source
     }

@@ -16,7 +16,8 @@
     ],
     "baseUrl": "./src",
     "paths": {
-      "@Api": ["Api"]
+      "@Api": ["Api"],
+      "@Utils": ["Utils"]
     }
   }
 }
