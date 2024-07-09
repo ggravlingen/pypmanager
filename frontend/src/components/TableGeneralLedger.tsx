@@ -41,13 +41,19 @@ export default function TableGeneralLedger(): JSX.Element {
               <TableCell align="right">Average price</TableCell>
               <TableCell align="right">Amount</TableCell>
               <TableCell align="right">Commission</TableCell>
+              <TableCell align="right">Cash flow</TableCell>
+              <TableCell align="right">FX</TableCell>
+              <TableCell align="right">Average FX rate</TableCell>
+              <TableCell align="right">Account</TableCell>
+              <TableCell align="right">Credit</TableCell>
+              <TableCell>Debit</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {data?.allGeneralLedger.map((row, index) => (
               <TableRow key={index}>
                 <TableCell align="right">
-                  {formatDate(row.reportDate)}
+                  {formatDate(row.transactionDate)}
                 </TableCell>
                 <TableCell>{row.broker}</TableCell>
                 <TableCell>{row.source}</TableCell>
@@ -67,6 +73,24 @@ export default function TableGeneralLedger(): JSX.Element {
                 </TableCell>
                 <TableCell align="right">
                   {formatNumber(row.commission, 0)}
+                </TableCell>
+                <TableCell align="right">
+                  {formatNumber(row.cashFlow, 0)}
+                </TableCell>
+                <TableCell align="right">
+                  {formatNumber(row.fx, 4)}
+                </TableCell>
+                <TableCell align="right">
+                  {formatNumber(row.averageFx, 4)}
+                </TableCell>
+                <TableCell>
+                  {row.account}
+                </TableCell>
+                <TableCell align="right">
+                  {formatNumber(row.credit, 0)}
+                </TableCell>
+                <TableCell align="right">
+                  {formatNumber(row.debit, 0)}
                 </TableCell>
               </TableRow>
             ))}

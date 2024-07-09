@@ -2,9 +2,6 @@
 
 from __future__ import annotations
 
-from typing import cast
-
-import pandas as pd
 import strawberry
 
 from pypmanager.helpers import get_general_ledger_as_dict
@@ -22,47 +19,24 @@ class Query:
         """Return all general ledger rows."""
         output_dict = get_general_ledger_as_dict()
 
-        output_list: list[LedgerRow] = []
-
-        for row in output_dict:
-            if pd.isna(row[ColumnNameValues.NO_TRADED]):
-                no_traded = None
-            else:
-                no_traded = cast(float, row[ColumnNameValues.NO_TRADED])
-
-            if pd.isna(row[ColumnNameValues.NO_HELD]):
-                no_held = None
-            else:
-                no_held = cast(float, row[ColumnNameValues.NO_HELD])
-
-            if pd.isna(row[ColumnNameValues.AVG_PRICE]):
-                avg_price = None
-            else:
-                avg_price = cast(float, row[ColumnNameValues.AVG_PRICE])
-
-            if pd.isna(row[ColumnNameValues.AMOUNT]):
-                amount = None
-            else:
-                amount = cast(float, row[ColumnNameValues.AMOUNT])
-
-            if pd.isna(row[ColumnNameValues.COMMISSION]):
-                commission = None
-            else:
-                commission = cast(float, row[ColumnNameValues.COMMISSION])
-
-            output_list.append(
-                LedgerRow(
-                    report_date=row[ColumnNameValues.TRANSACTION_DATE],
-                    broker=row[ColumnNameValues.BROKER],
-                    source=row[ColumnNameValues.SOURCE],
-                    action=row[ColumnNameValues.TRANSACTION_TYPE_INTERNAL],
-                    name=row[ColumnNameValues.NAME],
-                    no_traded=no_traded,
-                    agg_buy_volume=no_held,
-                    average_price=avg_price,
-                    amount=amount,
-                    commission=commission,
-                )
+        return [
+            LedgerRow(
+                transaction_date=row[ColumnNameValues.TRANSACTION_DATE],
+                broker=row[ColumnNameValues.BROKER],
+                source=row[ColumnNameValues.SOURCE],
+                action=row[ColumnNameValues.TRANSACTION_TYPE_INTERNAL],
+                name=row[ColumnNameValues.NAME],
+                no_traded=row[ColumnNameValues.NO_TRADED],
+                agg_buy_volume=row[ColumnNameValues.NO_HELD],
+                average_price=row[ColumnNameValues.AVG_PRICE],
+                amount=row[ColumnNameValues.AMOUNT],
+                commission=row[ColumnNameValues.COMMISSION],
+                cash_flow=row[ColumnNameValues.CASH_FLOW_LOCAL],
+                fx=row[ColumnNameValues.FX],
+                average_fx_rate=row[ColumnNameValues.AVG_FX],
+                credit=row[ColumnNameValues.CREDIT],
+                debit=row[ColumnNameValues.DEBIT],
+                account=row[ColumnNameValues.ACCOUNT],
             )
-
-        return output_list
+            for row in output_dict
+        ]

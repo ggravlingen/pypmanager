@@ -23,13 +23,6 @@ async def test_favicon() -> None:
 
 
 @pytest.mark.asyncio()
-async def test_ledger() -> None:
-    """Test endpoint /ledger."""
-    response = client.get("/ledger")
-    assert response.status_code == 200  # noqa: PLR2004
-
-
-@pytest.mark.asyncio()
 async def test_history() -> None:
     """Test endpoint /history."""
     response = client.get("/history")

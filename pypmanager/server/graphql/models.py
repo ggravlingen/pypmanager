@@ -11,7 +11,7 @@ import strawberry
 class LedgerRow:
     """Represent a row in the general ledger."""
 
-    report_date: date
+    transaction_date: date
     broker: str
     source: str
     action: str
@@ -21,3 +21,9 @@ class LedgerRow:
     average_price: float | None
     amount: float | None
     commission: float | None
+    cash_flow: float | None
+    fx: float | None
+    average_fx_rate: float | None
+    account: str
+    credit: float | None
+    debit: float | None

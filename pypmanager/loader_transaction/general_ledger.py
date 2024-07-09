@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
+import numpy as np
 import pandas as pd
 
 from .calculate_aggregates import calculate_results
@@ -366,5 +367,8 @@ class GeneralLedger:
             ],
             ascending=[True, True],
         )
+
+        # Make sure the dataframe does not contain None
+        df_tmp = df_tmp.replace({np.nan: None})
 
         self.output_df = df_tmp

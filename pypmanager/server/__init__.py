@@ -11,7 +11,6 @@ from fastapi.staticfiles import StaticFiles
 
 from pypmanager.analytics import Portfolio
 from pypmanager.helpers import (
-    get_general_ledger_as_dict,
     get_historical_portfolio,
     get_holdings,
 )
@@ -46,17 +45,6 @@ async def index() -> str:
     return await load_template(
         template_name="current_portfolio.html",
         context={"securities": holdings, "portfolio": portfolio},
-    )
-
-
-@app.get("/ledger", response_class=HTMLResponse)
-async def ledger() -> str:
-    """Return the general ledger."""
-    output_dict = get_general_ledger_as_dict()
-
-    return await load_template(
-        template_name="general_ledger.html",
-        context={"ledger": output_dict},
     )
 
 
