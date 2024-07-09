@@ -1,6 +1,6 @@
 import Dotenv from "dotenv-webpack";
-import webpack from "webpack"; // to access built-in plugins
 import path from "path";
+import webpack from "webpack"; // to access built-in plugins
 
 const commonConfig: webpack.Configuration = {
   context: path.resolve(__dirname, ".."),
@@ -8,6 +8,7 @@ const commonConfig: webpack.Configuration = {
   resolve: {
     alias: {
       "@Api": path.resolve("src/Api"),
+      "@ContextProvider": path.resolve("src/ContextProvider"),
       "@Theme": path.resolve("src/Theme"),
       "@Utils": path.resolve("src/Utils"),
     },

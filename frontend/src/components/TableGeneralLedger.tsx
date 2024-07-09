@@ -77,15 +77,11 @@ export default function TableGeneralLedger(): JSX.Element {
                 <TableCell align="right">
                   {formatNumber(row.cashFlow, 0)}
                 </TableCell>
-                <TableCell align="right">
-                  {formatNumber(row.fx, 4)}
-                </TableCell>
+                <TableCell align="right">{formatNumber(row.fx, 4)}</TableCell>
                 <TableCell align="right">
                   {formatNumber(row.averageFx, 4)}
                 </TableCell>
-                <TableCell>
-                  {row.account}
-                </TableCell>
+                <TableCell>{row.account}</TableCell>
                 <TableCell align="right">
                   {formatNumber(row.credit, 0)}
                 </TableCell>
