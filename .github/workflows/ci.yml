@@ -48,7 +48,7 @@ jobs:
               - pyproject.toml
               - .github/**/*.yml
             frontend:
-              - frontend/*
+              - frontend/**/*
               - .github/**/*.yml
 
       - name: Generate partial Python venv restore key
