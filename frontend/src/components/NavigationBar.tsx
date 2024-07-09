@@ -19,12 +19,14 @@ const CollapsedNavigationBarWidth = 40;
  * isExpanded - Indicates whether the navigation drawer is currently expanded.
  * label - The text label for the navigation item.
  * icon - The icon component to display alongside the label.
+ * to - The target URL for the navigation item. If provided, the item will be a Link component.
  */
 interface NavigationItemProps {
   toggleDrawer: () => void;
   isExpanded: boolean;
   label: string;
   icon: ReactElement;
+  linkTo?: string;
 }
 
 /**
@@ -39,6 +41,7 @@ interface NavigationItemProps {
  * @param props.isExpanded - Indicates whether the navigation drawer is currently expanded.
  * @param props.label - The text label for the navigation item.
  * @param props.icon - The icon component to display alongside the label.
+ * @param props.linkTo - The target URL for the navigation item.
  * @returns The NavigationItem component.
  */
 function NavigationItem({
@@ -46,9 +49,21 @@ function NavigationItem({
   isExpanded,
   label,
   icon,
+  linkTo,
 }: NavigationItemProps): JSX.Element {
+  // Conditionally render the ListItem as a link if the `to` prop is provided
+  const content = (
+    <>
+      <ListItemIcon sx={{ minWidth: "50px" }}>
+        <IconButton aria-label={label}>{icon}</IconButton>
+      </ListItemIcon>
+      {isExpanded && <ListItemText primary={label} />}
+    </>
+  );
+
   return (
     <ListItem
+      button
       onClick={toggleDrawer}
       sx={{
         paddingTop: "0px",
@@ -57,10 +72,22 @@ function NavigationItem({
         paddingRight: "0px",
       }}
     >
-      <ListItemIcon sx={{ minWidth: "50px" }}>
-        <IconButton aria-label="menu">{icon}</IconButton>
-      </ListItemIcon>
-      {isExpanded && <ListItemText primary={label} />}
+      {linkTo ? (
+        <Link
+          to={linkTo}
+          style={{
+            textDecoration: "none",
+            color: "inherit",
+            display: "flex",
+            alignItems: "center",
+            width: "100%",
+          }}
+        >
+          {content}
+        </Link>
+      ) : (
+        content
+      )}
     </ListItem>
   );
 }
@@ -113,23 +140,13 @@ export default function NavigationBar() {
           label={"Portfolio Manager"}
           icon={isExpanded ? <MenuOpen /> : <Menu />}
         />
-        <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
-          <ListItem
-            sx={{
-              paddingTop: "0px",
-              paddingLeft: "0px",
-              paddingBottom: "0px",
-              paddingRight: "0px",
-            }}
-          >
-            <ListItemIcon sx={{ minWidth: "50px" }}>
-              <IconButton aria-label="home">
-                <Dataset />
-              </IconButton>
-            </ListItemIcon>
-            {isExpanded && <ListItemText primary="General ledger" />}
-          </ListItem>
-        </Link>
+        <NavigationItem
+          toggleDrawer={toggleDrawer}
+          isExpanded={isExpanded}
+          label={"General ledger"}
+          icon={<Dataset />}
+          linkTo="/"
+        />
       </List>
     </Drawer>
   );
