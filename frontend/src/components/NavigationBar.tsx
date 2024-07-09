@@ -34,6 +34,7 @@ export default function NavigationBar() {
             ? ExpandedNavigationBarWidth
             : CollapsedNavigationBarWidth,
           boxSizing: "border-box",
+          overflowX: "hidden", // Add this line to hide horizontal scrollbar
         },
       }}
     >
