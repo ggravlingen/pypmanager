@@ -18,6 +18,7 @@
     "paths": {
       "@Api": ["Api"],
       "@ContextProvider": ["ContextProvider"],
+      "@Generic": ["GenericComponents"],
       "@Theme": ["Theme"],
       "@Utils": ["Utils"]
     }
