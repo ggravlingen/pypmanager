@@ -1,16 +1,16 @@
 import App from "./App";
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 
-const rootElement = document.getElementById("root");
+// Use 'Element | null' as the type for rootElement since document.getElementById can return null
+const rootElement: Element | null = document.getElementById("root");
 
-if (rootElement) {
-  const root = (ReactDOM as any).createRoot(rootElement);
+if (rootElement !== null) {
+  // Correctly typed usage of ReactDOM.createRoot according to React 18+ type definitions
+  const root: ReactDOM.Root = ReactDOM.createRoot(rootElement);
   root.render(
     <React.StrictMode>
       <App />
     </React.StrictMode>,
   );
-} else {
-  console.error("Root element 'root' not found in the document.");
 }
