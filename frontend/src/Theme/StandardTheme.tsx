@@ -1,13 +1,23 @@
 import { createTheme } from "@mui/material/styles";
 
+const cellPadding = {
+  paddingTop: "2px",
+  paddingBottom: "2px",
+  paddingLeft: "6px",
+  paddingRight: "6px",
+};
+
+enum FontSize {
+  TABLE_CELL = "12px",
+}
+
 const StandardTheme = createTheme({
   components: {
-    MuiTableHead: {
+    MuiTableRow: {
       styleOverrides: {
         root: {
-          backgroundColor: "#000000",
-          ".MuiTableCell-root": {
-            color: "#ffffff",
+          '&:nth-of-type(odd)': {
+            backgroundColor: "#f9f9f9",
           },
         },
       },
@@ -15,23 +25,22 @@ const StandardTheme = createTheme({
     MuiTableCell: {
       styleOverrides: {
         root: {
-          fontSize: "12px",
-          paddingTop: "6px",
-          paddingBottom: "6px",
-          paddingLeft: "6px",
-          paddingRight: "6px",
-        },
-      },
-    },
-    MuiTableRow: {
-      styleOverrides: {
-        root: {
-          "&:not(.MuiTableHead-root) > &:nth-of-type(odd)": {
-            backgroundColor: "#f9f9f9",
+          ...cellPadding,
+          // Remove lines between rows
+          borderBottom: "none !important",
+          fontSize: FontSize.TABLE_CELL,
+          "&:last-child": {
+            ...cellPadding,
           },
         },
+        head: {
+          fontSize: FontSize.TABLE_CELL,
+          backgroundColor: "#000",
+          color: "#fff",
+          },
       },
     },
+
   },
 });
 
