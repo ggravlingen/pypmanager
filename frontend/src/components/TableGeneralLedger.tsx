@@ -1,17 +1,27 @@
-import React from "react";
 import { QueryLoader, useQueryGetLedger } from "@Api";
 import {
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
 } from "@mui/material";
-
 import { formatDate, formatNumber } from "@Utils";
+import React from "react";
 
+/**
+ * TableGeneralLedger component that renders a table displaying general ledger data.
+ * It utilizes the `useQueryGetLedger` hook to fetch ledger data and handles loading,
+ * error states, and data rendering through the `QueryLoader` component.
+ *
+ * The table is designed to display various details about transactions including
+ * transaction date, broker, source, action, name, volume, held post trade,
+ * average price, amount, and commission. Data formatting is applied to numerical
+ * values for better readability.
+ * @returns A component that renders a table filled with general ledger data.
+ */
 export default function TableGeneralLedger(): JSX.Element {
   const { data, loading, error } = useQueryGetLedger();
 

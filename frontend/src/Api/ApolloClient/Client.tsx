@@ -1,12 +1,12 @@
 import {
-  type NormalizedCacheObject,
   ApolloClient as _ApolloClient,
   ApolloLink,
-  InMemoryCache,
-  type ServerError,
   HttpLink,
+  InMemoryCache,
+  type NormalizedCacheObject,
+  type ServerError,
 } from "@apollo/client";
-import { onError, ErrorResponse } from "@apollo/client/link/error";
+import { ErrorResponse, onError } from "@apollo/client/link/error";
 
 /**
  * Error handling for network errors in Apollo Client.
@@ -50,7 +50,6 @@ const _httpLink = new HttpLink({
  * that includes both error handling and HTTP communication functionalities.
  * The `_networkErrorLink` handles network errors globally, while the `_httpLink`
  * manages HTTP requests to the GraphQL server.
- *
  * @returns {_ApolloClient<NormalizedCacheObject>} The configured Apollo Client instance.
  */
 const ApolloClient: _ApolloClient<NormalizedCacheObject> = new _ApolloClient({
