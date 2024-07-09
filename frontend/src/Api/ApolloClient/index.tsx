@@ -1,3 +1,4 @@
 import LocalApolloClient from "./Client";
+import QueryLoader from "./Loader";
 
-export { LocalApolloClient };
+export { LocalApolloClient, QueryLoader };
