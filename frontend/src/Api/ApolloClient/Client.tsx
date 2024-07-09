@@ -19,7 +19,8 @@ const _networkErrorLink = onError(({ networkError }: ErrorResponse) => {
   if (networkError) {
     // Cast networkError to ServerError for more precise typing
     const netError = networkError as ServerError;
-    if ('statusCode' in netError) { // Ensure statusCode exists on netError
+    if ("statusCode" in netError) {
+      // Ensure statusCode exists on netError
       switch (netError.statusCode) {
         case 401:
         case 403:
