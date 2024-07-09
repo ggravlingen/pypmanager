@@ -21,6 +21,7 @@ export enum CellAlign {
 export enum CellDataType {
   DATE = "date",
   NUMBER = "number",
+  PER_CENT = "per_cent",
   STRING = "string",
 }
 
@@ -29,6 +30,7 @@ interface ColumnSetting {
   fieldPath: string;
   align: CellAlign;
   dataType: CellDataType;
+  noDecimals?: number;
 }
 
 interface BasicTableProps {
@@ -67,7 +69,9 @@ function getCellValue(
   if (columnSetting.dataType === CellDataType.DATE) {
     return formatDate(extractedValue);
   } else if (columnSetting.dataType === CellDataType.NUMBER) {
-    return formatNumber(extractedValue);
+    return formatNumber(extractedValue, columnSetting.noDecimals ?? 1, false);
+  } else if (columnSetting.dataType === CellDataType.PER_CENT) {
+    return formatNumber(extractedValue, columnSetting.noDecimals ?? 1, true);
   }
 
   return extractedValue;

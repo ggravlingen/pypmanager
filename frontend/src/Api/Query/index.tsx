@@ -1,3 +1,4 @@
 import useQueryGetLedger from "./useQueryGetLedger";
+import useQueryGetPortfolio from "./useQueryGetPortfolio";
 
-export { useQueryGetLedger };
+export { useQueryGetLedger, useQueryGetPortfolio };
