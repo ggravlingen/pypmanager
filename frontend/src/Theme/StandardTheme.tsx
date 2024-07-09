@@ -37,8 +37,8 @@ const StandardTheme = createTheme({
         },
         head: {
           fontSize: FontSize.TABLE_CELL,
-          backgroundColor: Palette.primary.main,
-          color: Palette.primary.contrastText,
+          backgroundColor: Palette.common.black,
+          color: Palette.common.white,
         },
       },
     },
