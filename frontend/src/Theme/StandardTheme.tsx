@@ -1,4 +1,5 @@
 import { createTheme } from "@mui/material/styles";
+import Palette from "./Palette";
 
 const cellPadding = {
   paddingTop: "2px",
@@ -12,6 +13,7 @@ enum FontSize {
 }
 
 const StandardTheme = createTheme({
+  palette: Palette,
   components: {
     MuiTableRow: {
       styleOverrides: {
@@ -35,8 +37,8 @@ const StandardTheme = createTheme({
         },
         head: {
           fontSize: FontSize.TABLE_CELL,
-          backgroundColor: "#000",
-          color: "#fff",
+          backgroundColor: Palette.primary.main,
+          color: Palette.primary.contrastText,
         },
       },
     },
