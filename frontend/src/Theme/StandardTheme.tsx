@@ -16,7 +16,7 @@ const StandardTheme = createTheme({
     MuiTableRow: {
       styleOverrides: {
         root: {
-          '&:nth-of-type(odd)': {
+          "&:nth-of-type(odd)": {
             backgroundColor: "#f9f9f9",
           },
         },
@@ -37,10 +37,9 @@ const StandardTheme = createTheme({
           fontSize: FontSize.TABLE_CELL,
           backgroundColor: "#000",
           color: "#fff",
-          },
+        },
       },
     },
-
   },
 });
 
