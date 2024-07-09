@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "module": "commonjs",
     "jsx": "react",
     "strict": true,
@@ -16,6 +16,6 @@
   "baseUrl": "./src",
   "include": ["src/**/*"],
   "paths": {
-    "@Api": ["Api"]
+    "@Api": ["Api/index"]
   }
 }

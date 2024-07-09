@@ -1,6 +1,6 @@
 import {
   type NormalizedCacheObject,
-  ApolloClient,
+  ApolloClient as _ApolloClient,
   ApolloLink,
   InMemoryCache,
   type ServerError,
@@ -51,13 +51,11 @@ const _httpLink = new HttpLink({
  * The `_networkErrorLink` handles network errors globally, while the `_httpLink`
  * manages HTTP requests to the GraphQL server.
  *
- * @returns {ApolloClient<NormalizedCacheObject>} The configured Apollo Client instance.
+ * @returns {_ApolloClient<NormalizedCacheObject>} The configured Apollo Client instance.
  */
-const LocalApolloClient: ApolloClient<NormalizedCacheObject> = new ApolloClient(
-  {
-    cache: new InMemoryCache(),
-    link: ApolloLink.from([_networkErrorLink, _httpLink]),
-  },
-);
+const ApolloClient: _ApolloClient<NormalizedCacheObject> = new _ApolloClient({
+  cache: new InMemoryCache(),
+  link: ApolloLink.from([_networkErrorLink, _httpLink]),
+});
 
-export default LocalApolloClient;
+export default ApolloClient;
