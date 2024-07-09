@@ -71,7 +71,7 @@ async def portfolio_history() -> str:
     )
 
 
-@app.get("/react", response_class=FileResponse)
+@app.get("/app", response_class=FileResponse)
 async def react_page() -> FileResponse:
     """Return historical data."""
     return FileResponse(f"{Settings.dir_templates}/app.html")

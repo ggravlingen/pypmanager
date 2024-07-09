@@ -8,8 +8,9 @@ import {
   ListItemText,
 } from "@mui/material";
 import { Dataset, Menu, MenuOpen } from "@mui/icons-material";
+import { Link } from 'react-router-dom';
 
-const ExpandedNavigationBarWidth = 240;
+const ExpandedNavigationBarWidth = 210;
 const CollapsedNavigationBarWidth = 40;
 
 export default function NavigationBar() {
@@ -48,13 +49,14 @@ export default function NavigationBar() {
             paddingRight: "0px",
           }}
         >
-          <ListItemIcon>
-            <IconButton aria-label="menu">
+          <ListItemIcon sx={{ minWidth: "50px"}}>
+          <IconButton aria-label="menu">
               {isExpanded ? <MenuOpen /> : <Menu />}
             </IconButton>
           </ListItemIcon>
           {isExpanded && <ListItemText primary="Portfolio Manager" />}
         </ListItem>
+        <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
         <ListItem
           sx={{
             paddingTop: "0px",
@@ -63,13 +65,13 @@ export default function NavigationBar() {
             paddingRight: "0px",
           }}
         >
-          <ListItemIcon>
+          <ListItemIcon sx={{ minWidth: "50px"}}>
             <IconButton aria-label="home">
               <Dataset />
             </IconButton>
           </ListItemIcon>
           {isExpanded && <ListItemText primary="General ledger" />}
-        </ListItem>
+        </ListItem></Link>
       </List>
     </Drawer>
   );
