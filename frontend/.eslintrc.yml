@@ -1,0 +1,35 @@
+env:
+  browser: true
+  es2020: true
+  amd: true
+  jest: true
+globals:
+  process: true
+extends:
+  - "eslint:recommended"
+  - "plugin:react/recommended"
+  - "plugin:@typescript-eslint/recommended"
+  - plugin:jsdoc/recommended-typescript-error"
+parser: "@typescript-eslint/parser"
+parserOptions:
+  ecmaFeatures:
+    jsx: true
+  ecmaVersion: 11
+  sourceType: module
+plugins:
+  - react
+  - "@typescript-eslint"
+  - prettier
+  - "react-hooks"
+  - "unused-imports"
+  - "simple-import-sort"
+  - jsdoc
+rules:
+  "react-hooks/rules-of-hooks": "error"
+  "react-hooks/exhaustive-deps": "warn"
+  "unused-imports/no-unused-imports": "error"
+  "simple-import-sort/imports": "error"
+  "simple-import-sort/exports": "error"
+settings:
+  react:
+    version: "detect"
