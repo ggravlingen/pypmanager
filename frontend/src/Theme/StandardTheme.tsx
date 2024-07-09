@@ -41,6 +41,7 @@ const StandardTheme = (mode: PaletteMode) => {
           },
           head: {
             fontSize: FontSize.TABLE_CELL,
+            fontWeight: "bold",
             backgroundColor: Palette.common.black,
             color: Palette.common.white,
           },

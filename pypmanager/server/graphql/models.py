@@ -27,3 +27,20 @@ class LedgerRow:
     account: str
     credit: float | None
     debit: float | None
+
+
+@strawberry.type
+class PortfolioContentRow:
+    """Represent a row in the portfolio content."""
+
+    name: str
+    date_market_value: str | None
+    invested_amount: float | None
+    market_value: float | None
+    current_holdings: float | None
+    current_price: float | None
+    average_price: float | None
+    return_pct: float | None
+    total_pnl: float
+    realized_pnl: float
+    unrealized_pnl: float

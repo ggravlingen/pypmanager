@@ -1,4 +1,5 @@
 import {
+  AccountBalance,
   DarkMode,
   Dataset,
   LightMode,
@@ -34,7 +35,7 @@ const ListItemSx = {
  * to - The target URL for the navigation item. If provided, the item will be a Link component.
  */
 interface NavigationItemProps {
-  handleClick: () => void;
+  handleClick?: () => void;
   isExpanded: boolean;
   label: string;
   icon: ReactElement;
@@ -157,11 +158,16 @@ export default function NavigationBar() {
           icon={mode === "dark" ? <DarkMode /> : <LightMode />}
         />
         <NavigationItem
-          handleClick={toggleDrawer}
+          isExpanded={isExpanded}
+          label={"Current portfolio"}
+          icon={<AccountBalance />}
+          linkTo="/"
+        />
+        <NavigationItem
           isExpanded={isExpanded}
           label={"General ledger"}
           icon={<Dataset />}
-          linkTo="/"
+          linkTo="/ledger"
         />
       </List>
     </Drawer>

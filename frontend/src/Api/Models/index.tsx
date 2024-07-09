@@ -1,3 +1,3 @@
 import { LedgerRow } from "./ledger";
-
-export { LedgerRow };
+import { PortfolioContentRow } from "./portfolio";
+export { LedgerRow, PortfolioContentRow };

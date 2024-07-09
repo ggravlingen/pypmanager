@@ -2,7 +2,11 @@ import { Box } from "@mui/material";
 import React from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
 
-import { NavigationBar, TableGeneralLedger } from "./components";
+import {
+  NavigationBar,
+  TableCurrentPortfolio,
+  TableGeneralLedger,
+} from "./components";
 
 /**
  * MainLayout component that defines the main structure of the application.
@@ -22,7 +26,8 @@ export default function MainLayout() {
         <NavigationBar />
         <Box style={{ flexGrow: 1 }}>
           <Routes>
-            <Route path="/" element={<TableGeneralLedger />} />
+            <Route path="/" element={<TableCurrentPortfolio />} />
+            <Route path="/ledger" element={<TableGeneralLedger />} />
           </Routes>
         </Box>
       </Box>
