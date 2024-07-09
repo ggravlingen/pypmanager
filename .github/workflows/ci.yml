@@ -236,6 +236,7 @@ jobs:
       - run: |
           cd frontend
           yarn prettier --check "**/*.tsx"
+          yarn prettier --check "**/*.html"
         name: Run prettier
 
       # - run: |
