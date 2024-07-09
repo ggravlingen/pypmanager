@@ -1,68 +1,91 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-    <head>
-        <title>Overview</title>
-        {% include 'common_css.html' %}
-    </head>
-    <body>
-        <div class="navigation">
-          {% include 'navigation.html' %}
-        </div>
-        <table>
-            <thead>
-              <tr>
-                <th align="left">Name</th>
-                <th align="right">Date</th>
-                <th align="right">Invested</th>
-                <th align="right">Market value</th>
-                <th align="right"># held</th>
-                <th align="right">Close</th>
-                <th align="right">Avg cost</th>
-                <th align="right">Return*</th>
-                <th>&nbsp;</th>
-                <th align="right">Total PnL</th>
-                <th align="right">of which realized</th>
-                <th align="right">of which unrealized</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for row in securities %}
-                <tr>
-                    <td data-name="{{ row.name }}"></td>
-                    <td data-date-value="{{ row.date_market_value|format_date }}"></td>
-                    <td data-monetary-value="{{ row.invested_amount|format_decimals(0) }}"></td>
-                    <td data-monetary-value="{{ row.market_value|format_decimals(0) }}"></td>
-                    <td data-monetary-value="{{ row.current_holdings|format_decimals(0) }}"></td>
-                    <td data-monetary-value="{{ row.current_price|format_decimals(1) }}"></td>
-                    <td data-monetary-value="{{ row.average_price|format_decimals(1) }}"></td>
-                    <td data-monetary-value="{{ row.return_pct|format_pct }}"></td>
-                    <td>&nbsp;</td>
-                    <td class="leftBorder" data-monetary-value="{{ row.total_pnl|format_decimals(0) }}"></td>
-                    <td data-monetary-value="{{ row.realized_pnl|format_decimals(0) }}"></td>
-                    <td data-monetary-value="{{ row.unrealized_pnl|format_decimals(0) }}"></td>
-                </tr>
-              {% endfor %}
+  <head>
+    <title>Overview</title>
+    {% include 'common_css.html' %}
+  </head>
+  <body>
+    <div class="navigation">{% include 'navigation.html' %}</div>
+    <table>
+      <thead>
+        <tr>
+          <th align="left">Name</th>
+          <th align="right">Date</th>
+          <th align="right">Invested</th>
+          <th align="right">Market value</th>
+          <th align="right"># held</th>
+          <th align="right">Close</th>
+          <th align="right">Avg cost</th>
+          <th align="right">Return*</th>
+          <th>&nbsp;</th>
+          <th align="right">Total PnL</th>
+          <th align="right">of which realized</th>
+          <th align="right">of which unrealized</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in securities %}
+        <tr>
+          <td data-name="{{ row.name }}"></td>
+          <td data-date-value="{{ row.date_market_value|format_date }}"></td>
+          <td
+            data-monetary-value="{{ row.invested_amount|format_decimals(0) }}"
+          ></td>
+          <td
+            data-monetary-value="{{ row.market_value|format_decimals(0) }}"
+          ></td>
+          <td
+            data-monetary-value="{{ row.current_holdings|format_decimals(0) }}"
+          ></td>
+          <td
+            data-monetary-value="{{ row.current_price|format_decimals(1) }}"
+          ></td>
+          <td
+            data-monetary-value="{{ row.average_price|format_decimals(1) }}"
+          ></td>
+          <td data-monetary-value="{{ row.return_pct|format_pct }}"></td>
+          <td>&nbsp;</td>
+          <td
+            class="leftBorder"
+            data-monetary-value="{{ row.total_pnl|format_decimals(0) }}"
+          ></td>
+          <td
+            data-monetary-value="{{ row.realized_pnl|format_decimals(0) }}"
+          ></td>
+          <td
+            data-monetary-value="{{ row.unrealized_pnl|format_decimals(0) }}"
+          ></td>
+        </tr>
+        {% endfor %}
 
-              <tr class="total">
-                <td>Total</td>
-                <td>&nbsp;</td>
-                <td data-monetary-value="{{ portfolio.invested_amount|format_decimals(0) }}"></td>
-                <td data-monetary-value="{{ portfolio.market_value|format_decimals(0) }}"></td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td data-monetary-value="{{ portfolio.return_pct|format_pct }}"></td>
-                <td>&nbsp;</td>
-                <td class="leftBorder" data-monetary-value="{{ portfolio.total_pnl|format_decimals(1) }}"></td>
-                <td data-monetary-value="{{ portfolio.realized_pnl|format_decimals(1) }}"></td>
-                <td data-monetary-value="{{ portfolio.unrealized_pnl|format_decimals(1) }}"></td>
-              </tr>
-            </tbody>
-          </table>
-          <br/>
-          <div class="footnote">
-            {% include 'footnote.html' %}
-          </div>
-        </div>
-    </body>
+        <tr class="total">
+          <td>Total</td>
+          <td>&nbsp;</td>
+          <td
+            data-monetary-value="{{ portfolio.invested_amount|format_decimals(0) }}"
+          ></td>
+          <td
+            data-monetary-value="{{ portfolio.market_value|format_decimals(0) }}"
+          ></td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td data-monetary-value="{{ portfolio.return_pct|format_pct }}"></td>
+          <td>&nbsp;</td>
+          <td
+            class="leftBorder"
+            data-monetary-value="{{ portfolio.total_pnl|format_decimals(1) }}"
+          ></td>
+          <td
+            data-monetary-value="{{ portfolio.realized_pnl|format_decimals(1) }}"
+          ></td>
+          <td
+            data-monetary-value="{{ portfolio.unrealized_pnl|format_decimals(1) }}"
+          ></td>
+        </tr>
+      </tbody>
+    </table>
+    <br />
+    <div class="footnote">{% include 'footnote.html' %}</div>
+  </body>
 </html>
