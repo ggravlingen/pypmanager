@@ -1,13 +1,14 @@
+import { Box } from "@mui/material";
 import { NavigationBar, TableGeneralLedger } from "./components";
 import React from "react";
 
 export default function MainLayout() {
   return (
-    <div style={{ display: "flex" }}>
+    <Box sx={{ display: "flex" }}>
       <NavigationBar />
-      <div style={{ flexGrow: 1 }}>
+      <Box style={{ flexGrow: 1 }}>
         <TableGeneralLedger />
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }
