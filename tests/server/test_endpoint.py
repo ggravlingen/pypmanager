@@ -23,13 +23,6 @@ async def test_favicon() -> None:
 
 
 @pytest.mark.asyncio()
-async def test_history() -> None:
-    """Test endpoint /history."""
-    response = client.get("/history")
-    assert response.status_code == 200  # noqa: PLR2004
-
-
-@pytest.mark.asyncio()
 async def test_graphql_endpoint() -> None:
     """Test endpoint /graphql."""
     query = """

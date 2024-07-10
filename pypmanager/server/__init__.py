@@ -6,14 +6,10 @@ from collections.abc import Awaitable, Callable
 from typing import cast
 
 from fastapi import FastAPI, Request, Response
-from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from pypmanager.helpers import (
-    get_historical_portfolio,
-)
 from pypmanager.server.graphql import graphql_app
-from pypmanager.server.templates import load_template
 from pypmanager.settings import Settings
 
 app = FastAPI()
@@ -31,18 +27,7 @@ async def get_favicon() -> FileResponse:
     return FileResponse(f"{Settings.dir_static}/favicon.ico")
 
 
-@app.get("/history", response_class=HTMLResponse)
-async def portfolio_history() -> str:
-    """Return historical data."""
-    portfolio_data = await get_historical_portfolio()
-
-    return await load_template(
-        template_name="historical_portfolio.html",
-        context={"data": portfolio_data},
-    )
-
-
 @app.get("/", response_class=FileResponse)
-async def react_page() -> FileResponse:
-    """Return historical data."""
-    return FileResponse(f"{Settings.dir_templates}/app.html")
+async def index_page() -> FileResponse:
+    """Return the index page."""
+    return FileResponse(f"{Settings.dir_templates}/index.html")
