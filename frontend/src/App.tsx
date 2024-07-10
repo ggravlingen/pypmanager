@@ -23,7 +23,12 @@ import {
  * and the main content area with defined routes.
  */
 export default function MainLayout() {
-  const [colorMode, setColorMode] = React.useState<PaletteMode>("light");
+  // Fetch color mode from the local storage
+  const storedColorMode = localStorage.getItem("colorMode") as PaletteMode;
+
+  const [colorMode, setColorMode] = React.useState<PaletteMode>(
+    storedColorMode || "light",
+  );
 
   return (
     <ThemeProvider theme={StandardTheme(colorMode)}>

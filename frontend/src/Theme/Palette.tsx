@@ -36,6 +36,11 @@ interface PaletteOptions extends _PaletteOptions {
 }
 
 export const LightPalette: PaletteOptions = {
+  mode: "light",
+  background: {
+    default: "#ffffff",
+    paper: "#fff",
+  },
   common: {
     black: "#000",
     white: "#fff",
@@ -49,14 +54,27 @@ export const LightPalette: PaletteOptions = {
 };
 
 export const DarkPalette: PaletteOptions = {
+  mode: "dark",
+  background: {
+    default: "#121212",
+    paper: "#1D1D1D",
+  },
   common: {
     black: "#121212",
     white: "#e0e0e0",
   },
   primary: {
-    main: "#90caf9",
+    main: "#0A0A0A",
     light: "#e3f2fd",
     dark: "#42a5f5",
     contrastText: "#000",
   },
+  secondary: {
+    main: "#1F1F1F",
+  },
+  text: {
+    primary: "#FFFFFF",
+    secondary: "#B0B0B0",
+  },
+  divider: "#2D2D2D",
 };

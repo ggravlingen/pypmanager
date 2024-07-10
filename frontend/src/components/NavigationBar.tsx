@@ -129,7 +129,10 @@ export default function NavigationBar({
 
   // Control the dark mode state
   const toggleDarkMode = () => {
-    setColorMode(colorMode === "light" ? "dark" : "light");
+    const newColorMode = colorMode === "light" ? "dark" : "light";
+
+    setColorMode(newColorMode);
+    localStorage.setItem("colorMode", newColorMode);
   };
 
   // Function to toggle the collapse/expand state
