@@ -1,5 +1,9 @@
-import useQueryGetHistoricalPortfolio from "./useQueryGetHistoricalPortfolio"
+import useQueryGetHistoricalPortfolio from "./useQueryGetHistoricalPortfolio";
 import useQueryGetLedger from "./useQueryGetLedger";
 import useQueryGetPortfolio from "./useQueryGetPortfolio";
 
-export { useQueryGetHistoricalPortfolio, useQueryGetLedger, useQueryGetPortfolio };
+export {
+  useQueryGetHistoricalPortfolio,
+  useQueryGetLedger,
+  useQueryGetPortfolio,
+};
