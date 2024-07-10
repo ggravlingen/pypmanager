@@ -18,8 +18,8 @@ from pypmanager.server.templates import (
 @pytest.mark.asyncio()
 async def test_load_template() -> None:
     """Test function load_template."""
-    function_result = await load_template(template_name="footnote.html")
-    assert "Excluding any realised profits" in function_result
+    function_result = await load_template(template_name="index.html")
+    assert "main.js" in function_result
 
 
 @pytest.mark.parametrize(
