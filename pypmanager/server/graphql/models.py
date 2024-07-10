@@ -55,4 +55,4 @@ class HistoricalPortfolioRow:
     market_value: float | None
     return_pct: float | None
     realized_pnl: float | None
-    unrealied_pnl: float | None
+    unrealized_pnl: float | None

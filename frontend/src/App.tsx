@@ -6,6 +6,7 @@ import {
   NavigationBar,
   TableCurrentPortfolio,
   TableGeneralLedger,
+  TableHistoricalPortfolio,
 } from "./components";
 
 /**
@@ -27,6 +28,7 @@ export default function MainLayout() {
         <Box style={{ flexGrow: 1 }}>
           <Routes>
             <Route path="/" element={<TableCurrentPortfolio />} />
+            <Route path="/history" element={<TableHistoricalPortfolio />} />
             <Route path="/ledger" element={<TableGeneralLedger />} />
           </Routes>
         </Box>
