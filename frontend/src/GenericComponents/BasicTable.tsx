@@ -111,6 +111,10 @@ export default function BasicTable({
     {},
   );
 
+  const showTableFooter = columnSettings.some(
+    (columnSetting) => columnSetting.showSubtotal,
+  );
+
   return (
     <TableContainer component={Paper} style={{ maxHeight: "100vh" }}>
       <Table stickyHeader>
@@ -140,22 +144,24 @@ export default function BasicTable({
             </TableRow>
           ))}
         </TableBody>
-        <TableFooter>
-          <TableRow>
-            {columnSettings.map((columnSetting, index) => (
-              <TableCell
-                key={columnSetting.fieldPath}
-                align={columnSetting.align}
-              >
-                {index === 0
-                  ? "Total"
-                  : columnSetting.showSubtotal
-                    ? formatNumber(sums[columnSetting.fieldPath], 0, false)
-                    : null}
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableFooter>
+        {showTableFooter && (
+          <TableFooter>
+            <TableRow>
+              {columnSettings.map((columnSetting, index) => (
+                <TableCell
+                  key={columnSetting.fieldPath}
+                  align={columnSetting.align}
+                >
+                  {index === 0
+                    ? "Total"
+                    : columnSetting.showSubtotal
+                      ? formatNumber(sums[columnSetting.fieldPath], 0, false)
+                      : null}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableFooter>
+        )}
       </Table>
     </TableContainer>
   );
