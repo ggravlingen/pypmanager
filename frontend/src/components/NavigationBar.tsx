@@ -17,7 +17,7 @@ import {
 import React, { ReactElement } from "react";
 import { Link } from "react-router-dom";
 
-const ExpandedNavigationBarWidth = 210;
+const ExpandedNavigationBarWidth = 185;
 const CollapsedNavigationBarWidth = 40;
 const ListItemSx = {
   paddingTop: "0px",
@@ -67,7 +67,7 @@ function NavigationItem({
   // Conditionally render the ListItem as a link if the `to` prop is provided
   const content = (
     <>
-      <ListItemIcon sx={{ minWidth: "50px" }}>
+      <ListItemIcon sx={{ minWidth: "35px" }}>
         <IconButton aria-label={label}>{icon}</IconButton>
       </ListItemIcon>
       {isExpanded && <ListItemText primary={label} />}
@@ -115,6 +115,8 @@ export default function NavigationBar() {
   // State to control the collapse/expand behavior
   const [isExpanded, setIsExpanded] = React.useState(false);
 
+  const IconSX = { color: `common.black` };
+
   const [mode, setMode] = React.useState("light");
 
   // Control the dark mode state
@@ -149,24 +151,30 @@ export default function NavigationBar() {
           handleClick={toggleDrawer}
           isExpanded={isExpanded}
           label={"Portfolio Manager"}
-          icon={isExpanded ? <MenuOpen /> : <Menu />}
+          icon={isExpanded ? <MenuOpen sx={IconSX} /> : <Menu sx={IconSX} />}
         />
         <NavigationItem
           handleClick={toggleDarkMode}
           isExpanded={isExpanded}
           label={"Dark mode"}
-          icon={mode === "dark" ? <DarkMode /> : <LightMode />}
+          icon={
+            mode === "dark" ? (
+              <DarkMode sx={IconSX} />
+            ) : (
+              <LightMode sx={IconSX} />
+            )
+          }
         />
         <NavigationItem
           isExpanded={isExpanded}
           label={"Current portfolio"}
-          icon={<AccountBalance />}
+          icon={<AccountBalance sx={IconSX} />}
           linkTo="/"
         />
         <NavigationItem
           isExpanded={isExpanded}
           label={"General ledger"}
-          icon={<Dataset />}
+          icon={<Dataset sx={IconSX} />}
           linkTo="/ledger"
         />
       </List>
