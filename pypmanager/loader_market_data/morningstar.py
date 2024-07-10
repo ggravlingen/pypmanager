@@ -75,7 +75,7 @@ class MorningstarLoaderSHB(BaseMarketDataLoader):
     Even though the endpoint says xlsx, data is really returned as a HTML table.
     """
 
-    url = "https://secure.msse.se/shb/sv.se/history/onefund.xlsx"
+    url = "https://handelsbanken.fondlista.se/shb/sv/history/onefund.xls"
 
     @property
     def full_url(self: MorningstarLoaderSHB) -> str:
@@ -99,17 +99,14 @@ class MorningstarLoaderSHB(BaseMarketDataLoader):
     def to_source_data(self: MorningstarLoaderSHB) -> list[SourceData]:
         """Convert to SourceData."""
         output_data: list[SourceData] = []
-        df_tables = pd.read_html(
+        df_tables = pd.read_excel(
             self.raw_response_io,
             thousands=" ",
             decimal=",",
             parse_dates=True,
         )
 
-        # There is only one table
-        data_table = df_tables[0]
-
-        for _, row in data_table.iterrows():
+        for _, row in df_tables.iterrows():
             output_data.append(
                 SourceData(
                     report_date=datetime.strptime(row["Datum"], "%Y-%m-%d"),  # noqa: DTZ007
