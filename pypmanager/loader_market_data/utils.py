@@ -80,7 +80,12 @@ def _upsert_df(data: list[SourceData], source_name: str) -> None:
     for column in merged_df.columns:
         if column.endswith("_update"):
             original_column = column[:-7]  # Remove the '_update' suffix
-            merged_df[original_column].update(merged_df.pop(column))
+
+            # Directly assign the values from the update column to the original column
+            merged_df[original_column] = merged_df[column]
+
+            # Drop the '_update' column since its values have been transferred
+            merged_df = merged_df.drop(columns=[column])
 
     merged_df = merged_df.sort_values(["isin_code", "report_date"])
 
