@@ -45,6 +45,12 @@ const StandardTheme = (mode: PaletteMode) => {
             backgroundColor: Palette.common.black,
             color: Palette.common.white,
           },
+          footer: {
+            fontSize: FontSize.TABLE_CELL,
+            backgroundColor: Palette.common.white,
+            color: Palette.common.black,
+            borderTop: `1px solid ${Palette.common.black}`,
+          },
         },
       },
     },
