@@ -105,7 +105,7 @@ function NavigationItem({
 
 interface NavigationBarProps {
   colorMode: string;
-  setColorMode: React.Dispatch<React.SetStateAction<PaletteMode>>
+  setColorMode: React.Dispatch<React.SetStateAction<PaletteMode>>;
 }
 
 /**
