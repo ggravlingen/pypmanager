@@ -17,11 +17,6 @@ interface _PaletteColor {
   contrastText: string;
 }
 
-interface CommonColors {
-  black: string;
-  white: string;
-}
-
 /**
  * Extends the Material-UI PaletteOptions interface to include a custom definition for the primary color.
  * Inherits properties from Material-UI's PaletteOptions.
@@ -31,50 +26,90 @@ interface PaletteOptions extends _PaletteOptions {
    * Defines the primary color of the palette.
    * The type for defining the primary color, including main, light, dark, and contrastText shades.
    */
-  common: CommonColors;
+  // common: CommonColors;
   primary: _PaletteColor;
+  secondary: _PaletteColor;
+  background: {
+    default: string;
+    paper: string;
+  };
+  surface: {
+    default: string;
+  };
+  text: {
+    primary: string;
+    secondary: string;
+    disabled: string;
+    hint: string;
+  };
 }
 
 export const LightPalette: PaletteOptions = {
   mode: "light",
-  background: {
-    default: "#ffffff",
-    paper: "#fff",
-  },
-  common: {
-    black: "#000",
-    white: "#fff",
-  },
   primary: {
-    main: "#1976d2",
-    light: "#42a5f5",
-    dark: "#1565c0",
+    main: "#005f99",
+    light: "#4a90d9",
+    dark: "#003f66",
     contrastText: "#ffffff",
+  },
+  secondary: {
+    main: "#adb5bd",
+    light: "#d3d9df",
+    dark: "#7b838b",
+    contrastText: "#000000",
+  },
+  background: {
+    default: "#f8f9fa",
+    paper: "#ffffff",
+  },
+  surface: {
+    default: "#ffffff",
+  },
+  error: {
+    main: "#d00000",
+    light: "#ff5f5f",
+    dark: "#9b0000",
+    contrastText: "#ffffff",
+  },
+  text: {
+    primary: "#000000",
+    secondary: "#495057",
+    disabled: "#adb5bd",
+    hint: "#6c757d",
   },
 };
 
 export const DarkPalette: PaletteOptions = {
   mode: "dark",
-  background: {
-    default: "#121212",
-    paper: "#1D1D1D",
-  },
-  common: {
-    black: "#121212",
-    white: "#e0e0e0",
-  },
   primary: {
-    main: "#0A0A0A",
-    light: "#e3f2fd",
-    dark: "#42a5f5",
-    contrastText: "#000",
+    main: "#2d6a4f", // Dark Green
+    light: "#52b788", // Lighter Green for hover states
+    dark: "#1b4332", // Darker Green for depth
+    contrastText: "#ffffff",
   },
   secondary: {
-    main: "#1F1F1F",
+    main: "#7b838b",
+    light: "#a1a9b0",
+    dark: "#52575d",
+    contrastText: "#ffffff",
+  },
+  background: {
+    default: "#121212",
+    paper: "#1e1e1e",
+  },
+  surface: {
+    default: "#1e1e1e",
+  },
+  error: {
+    main: "#ff5f5f",
+    light: "#ff9d9d",
+    dark: "#d00000",
+    contrastText: "#000000",
   },
   text: {
-    primary: "#FFFFFF",
-    secondary: "#B0B0B0",
+    primary: "#ffffff",
+    secondary: "#b0b0b0",
+    disabled: "#757575",
+    hint: "#9e9e9e",
   },
-  divider: "#2D2D2D",
 };

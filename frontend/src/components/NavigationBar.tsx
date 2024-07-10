@@ -125,7 +125,10 @@ export default function NavigationBar({
   // State to control the collapse/expand behavior
   const [isExpanded, setIsExpanded] = React.useState(false);
 
-  const IconSX = { color: `common.black` };
+  const IconSX =
+    colorMode === "light"
+      ? { color: `primary.main` }
+      : { color: `common.white` };
 
   // Control the dark mode state
   const toggleDarkMode = () => {
