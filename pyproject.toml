@@ -48,8 +48,9 @@ version = {file = "pypmanager/VERSION"}
 exclude = ["tests", "tests*"]
 
 [tool.pytest.ini_options]
-# addopts="-W error"
-filterwarnings = []
+filterwarnings = [
+    "ignore:'typing.ByteString' is deprecated and slated for removal in Python 3.14",
+]
 
 [tool.pylint.MASTER]
 py-version = "3.12"
@@ -73,7 +74,6 @@ good-names = [
     "df", # DataFrame
     "i",
     "j",
-
 ]
 
 [tool.pylint.REPORTS]
