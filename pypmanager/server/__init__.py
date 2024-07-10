@@ -9,10 +9,8 @@ from fastapi import FastAPI, Request, Response, WebSocket
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
-from pypmanager.analytics import Portfolio
 from pypmanager.helpers import (
     get_historical_portfolio,
-    get_holdings,
 )
 from pypmanager.server.graphql import graphql_app
 from pypmanager.server.templates import load_template
@@ -33,19 +31,6 @@ app.mount("/static", StaticFiles(directory=Settings.dir_static), name="static")
 async def get_favicon() -> FileResponse:
     """Return favicon."""
     return FileResponse(f"{Settings.dir_static}/favicon.ico")
-
-
-@app.get("/portfolio", response_class=HTMLResponse)
-async def index() -> str:
-    """Present overview page."""
-    holdings = await get_holdings()
-
-    portfolio = Portfolio(holdings=holdings)
-
-    return await load_template(
-        template_name="current_portfolio.html",
-        context={"securities": holdings, "portfolio": portfolio},
-    )
 
 
 @app.get("/history", response_class=HTMLResponse)
