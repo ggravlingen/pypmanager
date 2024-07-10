@@ -10,6 +10,7 @@ const cellPadding = {
 };
 
 enum FontSize {
+  TOOLTIP = "14px",
   TABLE_CELL = "12px",
 }
 
@@ -50,6 +51,15 @@ const StandardTheme = (mode: PaletteMode) => {
             backgroundColor: Palette.common.white,
             color: Palette.common.black,
             borderTop: `1px solid ${Palette.common.black}`,
+          },
+        },
+      },
+      MuiTooltip: {
+        styleOverrides: {
+          tooltip: {
+            fontSize: FontSize.TOOLTIP,
+            backgroundColor: Palette.common.black,
+            color: Palette.common.white,
           },
         },
       },
