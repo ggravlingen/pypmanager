@@ -35,7 +35,6 @@ interface ColumnSetting {
   showSubtotal?: boolean;
 }
 
-
 interface BasicTableProps {
   // We must use any[] here because the data can be of any type
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -95,20 +94,22 @@ export default function BasicTable({
   data,
   columnSettings,
 }: BasicTableProps): JSX.Element | null {
-
-  if(data === undefined){
+  if (data === undefined) {
     return null;
   }
 
-  const sums = columnSettings.reduce<Record<string, number>>((acc, columnSetting) => {
-    if (columnSetting.showSubtotal) {
-      acc[columnSetting.fieldPath] = data.reduce((sum, record) => {
-        const value = extractDataFromRecord(record, columnSetting.fieldPath);
-        return sum + (typeof value === 'number' ? value : 0); // Ensure value is a number
-      }, 0);
-    }
-    return acc;
-  }, {});
+  const sums = columnSettings.reduce<Record<string, number>>(
+    (acc, columnSetting) => {
+      if (columnSetting.showSubtotal) {
+        acc[columnSetting.fieldPath] = data.reduce((sum, record) => {
+          const value = extractDataFromRecord(record, columnSetting.fieldPath);
+          return sum + (typeof value === "number" ? value : 0); // Ensure value is a number
+        }, 0);
+      }
+      return acc;
+    },
+    {},
+  );
 
   return (
     <TableContainer component={Paper} style={{ maxHeight: "100vh" }}>
