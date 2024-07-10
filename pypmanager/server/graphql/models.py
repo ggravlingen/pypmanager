@@ -31,7 +31,7 @@ class LedgerRow:
 
 @strawberry.type
 class PortfolioContentRow:
-    """Represent a row in the portfolio content."""
+    """Represent a row in the current portfolio content."""
 
     name: str
     date_market_value: str | None
@@ -44,3 +44,15 @@ class PortfolioContentRow:
     total_pnl: float
     realized_pnl: float
     unrealized_pnl: float
+
+
+@strawberry.type
+class HistoricalPortfolioRow:
+    """Represent a row in the historical portfolio content."""
+
+    report_date: date
+    invested_amount: float | None
+    market_value: float | None
+    return_pct: float | None
+    realized_pnl: float | None
+    unrealied_pnl: float | None

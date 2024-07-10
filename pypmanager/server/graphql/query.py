@@ -6,10 +6,14 @@ from typing import cast
 
 import strawberry
 
-from pypmanager.helpers import get_general_ledger_as_dict, get_holdings
+from pypmanager.helpers import (
+    get_general_ledger_as_dict,
+    get_historical_portfolio,
+    get_holdings,
+)
 from pypmanager.loader_transaction.const import ColumnNameValues
 
-from .models import LedgerRow, PortfolioContentRow
+from .models import HistoricalPortfolioRow, LedgerRow, PortfolioContentRow
 
 
 @strawberry.type
@@ -45,7 +49,7 @@ class Query:
 
     @strawberry.field
     async def current_portfolio(self: Query) -> list[PortfolioContentRow]:
-        """Return all general ledger rows."""
+        """Return the current state of the portfolio."""
         holdings = await get_holdings()
 
         return [
@@ -63,4 +67,21 @@ class Query:
                 unrealized_pnl=holding.unrealized_pnl,
             )
             for holding in holdings
+        ]
+
+    @strawberry.field
+    async def historical_portfolio(self: Query) -> list[HistoricalPortfolioRow]:
+        """Return historical portfolio data."""
+        historical_portfolio = await get_historical_portfolio()
+
+        return [
+            HistoricalPortfolioRow(
+                report_date=row.report_date,
+                invested_amount=row.portfolio.invested_amount,
+                market_value=row.portfolio.market_value,
+                return_pct=row.portfolio.return_pct,
+                realized_pnl=row.portfolio.realized_pnl,
+                unrealied_pnl=row.portfolio.unrealized_pnl,
+            )
+            for row in historical_portfolio
         ]
