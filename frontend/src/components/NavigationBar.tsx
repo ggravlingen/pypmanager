@@ -5,6 +5,7 @@ import {
   LightMode,
   Menu,
   MenuOpen,
+  ShowChart,
 } from "@mui/icons-material";
 import {
   Drawer,
@@ -175,6 +176,12 @@ export default function NavigationBar() {
           label={"Current portfolio"}
           icon={<AccountBalance sx={IconSX} />}
           linkTo="/"
+        />
+        <NavigationItem
+          isExpanded={isExpanded}
+          label={"Historical portfolio"}
+          icon={<ShowChart sx={IconSX} />}
+          linkTo="/history"
         />
         <NavigationItem
           isExpanded={isExpanded}

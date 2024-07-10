@@ -81,7 +81,7 @@ class Query:
                 market_value=row.portfolio.market_value,
                 return_pct=row.portfolio.return_pct,
                 realized_pnl=row.portfolio.realized_pnl,
-                unrealied_pnl=row.portfolio.unrealized_pnl,
+                unrealized_pnl=row.portfolio.unrealized_pnl,
             )
             for row in historical_portfolio
         ]

@@ -6,10 +6,9 @@ const QUERY = gql`
   query QueryHistoricalPortfolio {
     historicalPortfolio {
       reportDate
-      invested_amount
+      investedAmount
       marketValue
       returnPct
-      totalPnl
       realizedPnl
       unrealizedPnl
     }
