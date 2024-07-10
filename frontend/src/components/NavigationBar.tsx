@@ -14,6 +14,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  PaletteMode,
   Tooltip,
 } from "@mui/material";
 import React, { ReactElement } from "react";
@@ -102,32 +103,33 @@ function NavigationItem({
   );
 }
 
+interface NavigationBarProps {
+  colorMode: string;
+  setColorMode: React.Dispatch<React.SetStateAction<PaletteMode>>;
+}
+
 /**
- * NavigationBar component that renders the application's navigation bar.
+ * Represents the navigation bar component of the application.
  *
- * This component uses a Drawer from Material-UI to create a sidebar that can be
- * collapsed or expanded. The state `isExpanded` controls the width of the Drawer,
- * allowing for a more flexible UI. The `toggleDrawer` function toggles this state,
- * effectively collapsing or expanding the navigation bar.
- *
- * Inside the Drawer, a List component is used to render individual navigation items.
- * The first item is a custom `NavigationItem` component that toggles the Drawer's state.
- * Additional items can be added as `ListItem` components wrapped in `Link` components
- * for navigation. The `ListItemIcon` and `ListItemText` components are used to render
- * the icons and labels for each navigation item, respectively.
- * @returns The NavigationBar component with collapsible behavior and navigation links.
+ * This component is responsible for rendering the navigation bar, which includes
+ * functionality for toggling the color mode of the application (e.g., light or dark mode).
+ * @param props The props passed to the NavigationBar component.
+ * @param props.colorMode The current color mode of the application.
+ * @param props.setColorMode A function to set the color mode of the application.
+ * @returns The NavigationBar component.
  */
-export default function NavigationBar() {
+export default function NavigationBar({
+  colorMode,
+  setColorMode,
+}: NavigationBarProps) {
   // State to control the collapse/expand behavior
   const [isExpanded, setIsExpanded] = React.useState(false);
 
   const IconSX = { color: `common.black` };
 
-  const [mode, setMode] = React.useState("light");
-
   // Control the dark mode state
   const toggleDarkMode = () => {
-    setMode(mode === "light" ? "dark" : "light");
+    setColorMode(colorMode === "light" ? "dark" : "light");
   };
 
   // Function to toggle the collapse/expand state
@@ -162,9 +164,11 @@ export default function NavigationBar() {
         <NavigationItem
           handleClick={toggleDarkMode}
           isExpanded={isExpanded}
-          label={mode === "dark" ? "Toggle light mode" : "Toggle dark mode"}
+          label={
+            colorMode === "dark" ? "Toggle light mode" : "Toggle dark mode"
+          }
           icon={
-            mode === "dark" ? (
+            colorMode === "dark" ? (
               <DarkMode sx={IconSX} />
             ) : (
               <LightMode sx={IconSX} />

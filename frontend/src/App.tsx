@@ -1,4 +1,6 @@
-import { Box } from "@mui/material";
+import { Box, PaletteMode } from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { StandardTheme } from "@Theme";
 import React from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
 
@@ -21,18 +23,23 @@ import {
  * and the main content area with defined routes.
  */
 export default function MainLayout() {
+  const [colorMode, setColorMode] = React.useState<PaletteMode>("light");
+
   return (
-    <HashRouter>
-      <Box sx={{ display: "flex" }}>
-        <NavigationBar />
-        <Box style={{ flexGrow: 1 }}>
-          <Routes>
-            <Route path="/" element={<TableCurrentPortfolio />} />
-            <Route path="/history" element={<TableHistoricalPortfolio />} />
-            <Route path="/ledger" element={<TableGeneralLedger />} />
-          </Routes>
+    <ThemeProvider theme={StandardTheme(colorMode)}>
+      <CssBaseline />
+      <HashRouter>
+        <Box sx={{ display: "flex" }}>
+          <NavigationBar colorMode={colorMode} setColorMode={setColorMode} />
+          <Box style={{ flexGrow: 1 }}>
+            <Routes>
+              <Route path="/" element={<TableCurrentPortfolio />} />
+              <Route path="/history" element={<TableHistoricalPortfolio />} />
+              <Route path="/ledger" element={<TableGeneralLedger />} />
+            </Routes>
+          </Box>
         </Box>
-      </Box>
-    </HashRouter>
+      </HashRouter>
+    </ThemeProvider>
   );
 }
