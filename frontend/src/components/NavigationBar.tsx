@@ -13,6 +13,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Tooltip,
 } from "@mui/material";
 import React, { ReactElement } from "react";
 import { Link } from "react-router-dom";
@@ -64,7 +65,9 @@ function NavigationItem({
   icon,
   linkTo,
 }: NavigationItemProps): JSX.Element {
-  // Conditionally render the ListItem as a link if the `to` prop is provided
+  const constTooltipLabel =
+    label === "Portfolio Manager" ? "Open navigation" : label;
+
   const content = (
     <>
       <ListItemIcon sx={{ minWidth: "35px" }}>
@@ -75,24 +78,26 @@ function NavigationItem({
   );
 
   return (
-    <ListItem onClick={handleClick} sx={ListItemSx}>
-      {linkTo ? (
-        <Link
-          to={linkTo}
-          style={{
-            textDecoration: "none",
-            color: "inherit",
-            display: "flex",
-            alignItems: "center",
-            width: "100%",
-          }}
-        >
-          {content}
-        </Link>
-      ) : (
-        content
-      )}
-    </ListItem>
+    <Tooltip title={constTooltipLabel} placement="right" arrow>
+      <ListItem onClick={handleClick} sx={ListItemSx}>
+        {linkTo ? (
+          <Link
+            to={linkTo}
+            style={{
+              textDecoration: "none",
+              color: "inherit",
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            {content}
+          </Link>
+        ) : (
+          content
+        )}
+      </ListItem>
+    </Tooltip>
   );
 }
 
@@ -156,7 +161,7 @@ export default function NavigationBar() {
         <NavigationItem
           handleClick={toggleDarkMode}
           isExpanded={isExpanded}
-          label={"Dark mode"}
+          label={mode === "dark" ? "Toggle light mode" : "Toggle dark mode"}
           icon={
             mode === "dark" ? (
               <DarkMode sx={IconSX} />
