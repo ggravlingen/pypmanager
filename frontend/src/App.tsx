@@ -23,7 +23,6 @@ import {
  * and the main content area with defined routes.
  */
 export default function MainLayout() {
-
   // Fetch color mode from the local storage
   const storedColorMode = localStorage.getItem("colorMode") as PaletteMode;
 
