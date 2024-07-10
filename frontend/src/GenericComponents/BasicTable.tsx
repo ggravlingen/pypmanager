@@ -4,6 +4,7 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TableFooter,
   TableHead,
   TableRow,
 } from "@mui/material";
@@ -31,7 +32,9 @@ interface ColumnSetting {
   align: CellAlign;
   dataType: CellDataType;
   noDecimals?: number;
+  showSubtotal?: boolean;
 }
+
 
 interface BasicTableProps {
   // We must use any[] here because the data can be of any type
@@ -91,7 +94,22 @@ function getCellValue(
 export default function BasicTable({
   data,
   columnSettings,
-}: BasicTableProps): JSX.Element {
+}: BasicTableProps): JSX.Element | null {
+
+  if(data === undefined){
+    return null;
+  }
+
+  const sums = columnSettings.reduce<Record<string, number>>((acc, columnSetting) => {
+    if (columnSetting.showSubtotal) {
+      acc[columnSetting.fieldPath] = data.reduce((sum, record) => {
+        const value = extractDataFromRecord(record, columnSetting.fieldPath);
+        return sum + (typeof value === 'number' ? value : 0); // Ensure value is a number
+      }, 0);
+    }
+    return acc;
+  }, {});
+
   return (
     <TableContainer component={Paper} style={{ maxHeight: "100vh" }}>
       <Table stickyHeader>
@@ -113,7 +131,7 @@ export default function BasicTable({
               {columnSettings.map((columnSetting) => (
                 <TableCell
                   key={columnSetting.fieldPath}
-                  align={columnSetting.align || "left"}
+                  align={columnSetting.align}
                 >
                   {getCellValue(columnSetting, row)}
                 </TableCell>
@@ -121,6 +139,22 @@ export default function BasicTable({
             </TableRow>
           ))}
         </TableBody>
+        <TableFooter>
+          <TableRow>
+            {columnSettings.map((columnSetting, index) => (
+              <TableCell
+                key={columnSetting.fieldPath}
+                align={columnSetting.align}
+              >
+                {index === 0
+                  ? "Total"
+                  : columnSetting.showSubtotal
+                    ? formatNumber(sums[columnSetting.fieldPath], 0, false)
+                    : null}
+              </TableCell>
+            ))}
+          </TableRow>
+        </TableFooter>
       </Table>
     </TableContainer>
   );

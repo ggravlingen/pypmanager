@@ -21,6 +21,7 @@ const columnSettings = [
     align: CellAlign.RIGHT,
     dataType: CellDataType.NUMBER,
     noDecimals: 0,
+    showSubtotal: true,
   },
   {
     fieldPath: "marketValue",
@@ -28,6 +29,7 @@ const columnSettings = [
     align: CellAlign.RIGHT,
     dataType: CellDataType.NUMBER,
     noDecimals: 0,
+    showSubtotal: true,
   },
   {
     fieldPath: "currentHoldings",
@@ -62,6 +64,7 @@ const columnSettings = [
     align: CellAlign.RIGHT,
     dataType: CellDataType.NUMBER,
     noDecimals: 0,
+    showSubtotal: true,
   },
   {
     fieldPath: "realizedPnl",
@@ -69,6 +72,7 @@ const columnSettings = [
     align: CellAlign.RIGHT,
     dataType: CellDataType.NUMBER,
     noDecimals: 0,
+    showSubtotal: true,
   },
   {
     fieldPath: "unrealizedPnl",
@@ -76,6 +80,7 @@ const columnSettings = [
     align: CellAlign.RIGHT,
     dataType: CellDataType.NUMBER,
     noDecimals: 0,
+    showSubtotal: true,
   },
 ];
 
