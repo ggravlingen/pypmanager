@@ -24,7 +24,7 @@ const StandardTheme = (mode: PaletteMode) => {
         styleOverrides: {
           root: {
             "&:nth-of-type(odd)": {
-              backgroundColor: "#f9f9f9",
+              backgroundColor: Palette.background.default,
             },
           },
         },
@@ -43,14 +43,14 @@ const StandardTheme = (mode: PaletteMode) => {
           head: {
             fontSize: FontSize.TABLE_CELL,
             fontWeight: "bold",
-            backgroundColor: Palette.common.black,
-            color: Palette.common.white,
+            backgroundColor: Palette.primary.main,
+            color: Palette.primary.contrastText,
           },
           footer: {
             fontSize: FontSize.TABLE_CELL,
-            backgroundColor: Palette.common.white,
-            color: Palette.common.black,
-            borderTop: `1px solid ${Palette.common.black}`,
+            backgroundColor: Palette.background.paper,
+            color: Palette.text.primary,
+            borderTop: `1px solid ${Palette.primary.main}`,
           },
         },
       },
@@ -58,8 +58,8 @@ const StandardTheme = (mode: PaletteMode) => {
         styleOverrides: {
           tooltip: {
             fontSize: FontSize.TOOLTIP,
-            backgroundColor: Palette.common.black,
-            color: Palette.common.white,
+            backgroundColor: Palette.primary.main,
+            color: Palette.primary.contrastText,
           },
         },
       },
