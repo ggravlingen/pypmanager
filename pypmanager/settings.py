@@ -35,10 +35,10 @@ class TypedSettings(BaseSettings):
     dir_templates: Path = Path("frontend/templates").resolve()
 
     @property
-    def file_market_data(self: TypedSettings) -> Path:
+    def dir_market_data(self: TypedSettings) -> Path:
         """Return market data file."""
         folder_path = Path(self.dir_data)
-        return (folder_path / "market_data.csv").resolve()
+        return (folder_path / "market_data").resolve()
 
     @property
     def file_market_data_config(self: TypedSettings) -> Path:

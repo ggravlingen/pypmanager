@@ -12,6 +12,7 @@ from typing import cast
 import pandas as pd
 
 from pypmanager.loader_transaction.const import AccountNameValues, ColumnNameValues
+from pypmanager.settings import Settings
 
 from .security import MutualFund
 
@@ -53,6 +54,17 @@ class Holding:
         self.calculated_data = df_all_data
 
     @cached_property
+    def df_market_data(self: Holding) -> pd.DataFrame:
+        """Return market data."""
+        all_data_frames = []  # List to hold all the data frames
+
+        for file in Settings.dir_market_data.glob("*.csv"):
+            df_market_data = pd.read_csv(file, sep=";", index_col="report_date")
+            all_data_frames.append(df_market_data)
+
+        return pd.concat(all_data_frames, ignore_index=False)
+
+    @cached_property
     def current_holdings(self: Holding) -> float | None:
         """
         Return the number of securities currently held.
@@ -78,6 +90,7 @@ class Holding:
         """Return information on the security."""
         if self._security_info is None:  # Hit these calculations only once
             self._security_info = MutualFund(
+                df_market_data=self.df_market_data,
                 isin_code=self.isin_code,
                 name=self.name,
                 report_date=self.report_date,

@@ -53,10 +53,12 @@ def _upsert_df(data: list[SourceData], source_name: str) -> None:
     upsert_df["date_added_utc"] = datetime.now(UTC)
     upsert_df["source"] = source_name
 
+    file_market_data = Settings.dir_market_data / f"{source_name}.csv"
+
     # Check if the CSV file exists
     try:
         existing_df = pd.read_csv(
-            Settings.file_market_data,
+            file_market_data,
             sep=";",
             parse_dates=["report_date"],
         )
@@ -87,4 +89,4 @@ def _upsert_df(data: list[SourceData], source_name: str) -> None:
     merged_df = merged_df.sort_values(["isin_code", "report_date"])
 
     # Write the merged DataFrame back to the CSV file
-    merged_df.to_csv(Settings.file_market_data, index=False, sep=";")
+    merged_df.to_csv(file_market_data, index=False, sep=";")

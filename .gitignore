@@ -129,7 +129,7 @@ dmypy.json
 .pyre/
 
 # Don't store user data on Github
-data/*.csv
+data/**/*.csv
 data/*.yaml
 
 *.xlsx

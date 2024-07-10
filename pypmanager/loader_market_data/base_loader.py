@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 import json
 from typing import TYPE_CHECKING, Any, cast
 
@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from .models import SourceData
 
 
-class BaseMarketDataLoader:
+class BaseMarketDataLoader(ABC):
     """Base class for market data loading."""
 
     raw_response: dict[str, Any]

@@ -7,8 +7,6 @@ from typing import cast
 
 import pandas as pd
 
-from pypmanager.settings import Settings
-
 
 class MutualFund:
     """A mutual fund."""
@@ -17,6 +15,7 @@ class MutualFund:
 
     def __init__(
         self: MutualFund,
+        df_market_data: pd.DataFrame,
         isin_code: str | None = None,
         name: str | None = None,
         report_date: date | None = None,
@@ -25,21 +24,16 @@ class MutualFund:
         self.isin_code = isin_code
         self.name = name
         self.report_date = report_date
+        self.df_market_data = df_market_data
 
         self._load_data()
 
     def _load_data(self: MutualFund) -> None:
         """Load market data."""
-        df_market_data = pd.read_csv(
-            Settings.file_market_data,
-            sep=";",
-            index_col="report_date",
-        )
-
         if self.isin_code:
-            df_filtered = df_market_data.query(f"isin_code == '{self.isin_code}'")
+            df_filtered = self.df_market_data.query(f"isin_code == '{self.isin_code}'")
         else:
-            df_filtered = df_market_data.query(f"name == '{self.name}'")
+            df_filtered = self.df_market_data.query(f"name == '{self.name}'")
 
         self.filtered_df = df_filtered.sort_values("report_date")
 
