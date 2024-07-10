@@ -128,7 +128,7 @@ export default function NavigationBar({
   const IconSX =
     colorMode === "light"
       ? { color: `primary.main` }
-      : { color: `common.white` };
+      : { color: `primary.contrastText` };
 
   // Control the dark mode state
   const toggleDarkMode = () => {
