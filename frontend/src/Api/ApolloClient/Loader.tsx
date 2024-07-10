@@ -1,3 +1,4 @@
+import { Box, Skeleton } from "@mui/material";
 import React from "react";
 
 /**
@@ -36,7 +37,18 @@ export default function QueryLoader({
   children,
 }: QueryLoaderProps): JSX.Element {
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <Skeleton width={150} height={150} />
+      </Box>
+    );
   }
 
   if (error) {
