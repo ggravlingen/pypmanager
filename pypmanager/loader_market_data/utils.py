@@ -6,7 +6,6 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from numpy import datetime64
 import pandas as pd
 import yaml
 
@@ -54,7 +53,6 @@ def _upsert_df(data: list[SourceData], source_name: str) -> None:
     upsert_df["date_added_utc"] = datetime.now(UTC)
     upsert_df["source"] = source_name
 
-    column_dtypes = {"report_date": datetime64}
     # Check if the CSV file exists
     try:
         existing_df = pd.read_csv(
@@ -65,7 +63,6 @@ def _upsert_df(data: list[SourceData], source_name: str) -> None:
     except FileNotFoundError:
         existing_df = pd.DataFrame(
             columns=["isin_code", "price", "report_date", "name", "date_added_utc"],
-            dtype=column_dtypes,
         )
 
     # Merge the existing DataFrame and the upsert DataFrame
