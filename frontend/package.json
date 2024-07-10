@@ -48,7 +48,8 @@
     "cicd-lint": "eslint 'src/**/*.tsx'",
     "cicd-typecheck": "tsc-strict --project tsconfig.json --noEmit",
     "cicd-prettier": "yarn prettier --check '**/*.tsx' '**/*.html'",
-    "eslint-fix": "eslint --fix 'src/**/*.tsx'"
+    "eslint-fix": "eslint --fix 'src/**/*.tsx'",
+    "prettier-fix": "prettier . --write"
   },
   "prettier": {
     "arrowParens": "always",
