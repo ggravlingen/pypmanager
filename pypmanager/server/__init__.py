@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Awaitable, Callable
 from typing import cast
 
-from fastapi import FastAPI, Request, Response, WebSocket
+from fastapi import FastAPI, Request, Response
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -19,10 +19,8 @@ from pypmanager.settings import Settings
 app = FastAPI()
 
 TypeGraphQL = Callable[[Request], Awaitable[Response] | Response]
-TypeGraphQLWebsocket = Callable[[WebSocket], Awaitable[None]]
 
 app.add_route("/graphql", cast(TypeGraphQL, graphql_app))
-app.add_websocket_route("/graphql", cast(TypeGraphQLWebsocket, graphql_app))
 
 app.mount("/static", StaticFiles(directory=Settings.dir_static), name="static")
 
