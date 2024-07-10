@@ -9,7 +9,6 @@ import App from "./App";
 const rootElement: Element | null = document.getElementById("root");
 
 if (rootElement !== null) {
-  // Correctly typed usage of ReactDOM.createRoot according to React 18+ type definitions
   const root: ReactDOM.Root = ReactDOM.createRoot(rootElement);
   root.render(
     <React.StrictMode>
