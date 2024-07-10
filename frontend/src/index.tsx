@@ -1,4 +1,4 @@
-import { ThemeProvider } from "@mui/material";
+import { CssBaseline,ThemeProvider } from "@mui/material";
 import { StandardTheme } from "@Theme";
 import React from "react";
 import ReactDOM from "react-dom/client";
@@ -13,6 +13,7 @@ if (rootElement !== null) {
   const root: ReactDOM.Root = ReactDOM.createRoot(rootElement);
   root.render(
     <React.StrictMode>
+        <CssBaseline />
       <ThemeProvider theme={StandardTheme("light")}>
         <App />
       </ThemeProvider>
