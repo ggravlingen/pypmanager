@@ -8,10 +8,10 @@ from typing import Any
 
 import requests
 
-from pypmanager.const import HttpResponseCodeLabels
 from pypmanager.loader_market_data.const import LOAD_HISTORY_DAYS
 
 from .base_loader import BaseMarketDataLoader
+from .const import HttpResponseCodeLabels
 from .models import SourceData
 
 

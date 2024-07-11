@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Any, cast
 
 import requests
 
-from pypmanager.const import HttpResponseCodeLabels
+from .const import HttpResponseCodeLabels
 
 if TYPE_CHECKING:
     from io import BytesIO

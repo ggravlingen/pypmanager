@@ -8,10 +8,8 @@ from io import BytesIO
 import pandas as pd
 import requests
 
-from pypmanager.const import HttpResponseCodeLabels
-
 from .base_loader import BaseMarketDataLoader
-from .const import LOAD_HISTORY_DAYS, LOGGER
+from .const import LOAD_HISTORY_DAYS, LOGGER, HttpResponseCodeLabels
 from .models import SourceData
 
 
