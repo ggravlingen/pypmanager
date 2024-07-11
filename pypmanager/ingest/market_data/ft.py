@@ -8,7 +8,7 @@ from typing import Any
 
 import requests
 
-from pypmanager.loader_market_data.const import LOAD_HISTORY_DAYS
+from pypmanager.ingest.market_data.const import LOAD_HISTORY_DAYS
 
 from .base_loader import BaseMarketDataLoader
 from .const import HttpResponseCodeLabels
