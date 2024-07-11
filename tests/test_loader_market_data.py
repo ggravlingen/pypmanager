@@ -4,8 +4,8 @@ from datetime import datetime
 import json
 from unittest import mock
 
-from pypmanager.loader_market_data.avanza import AvanzaLoader
-from pypmanager.loader_market_data.models import SourceData
+from pypmanager.ingest.market_data.avanza import AvanzaLoader
+from pypmanager.ingest.market_data.models import SourceData
 
 
 def test_avanza_loader() -> None:
@@ -16,7 +16,7 @@ def test_avanza_loader() -> None:
         "name": "Sample Fund",
     }
     with mock.patch(
-        "pypmanager.loader_market_data.base_loader.requests.get",
+        "pypmanager.ingest.market_data.base_loader.requests.get",
     ) as mock_get:
         mock_response = mock_get.return_value
         mock_response.status_code = 200
