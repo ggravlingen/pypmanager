@@ -1,5 +1,8 @@
 """Tests for the general ledger."""
 
+import pandas as pd
+
+from pypmanager.general_ledger import GeneralLedger
 from pypmanager.general_ledger.transation_macro import _amend_row
 from pypmanager.ingest.transaction import (
     AccountNameValues,
@@ -198,3 +201,12 @@ def test_amend_row__sell() -> None:
     result = _amend_row(input_row)
 
     assert result == expected_result
+
+
+def test_class_general_ledger(df_transaction_data_factory: pd.DataFrame) -> None:
+    """Test functionality of GeneralLedger."""
+    fixture_df_transaction_data = df_transaction_data_factory(no_rows=1)
+
+    ledger = GeneralLedger(transactions=fixture_df_transaction_data)
+
+    assert len(ledger.transactions) == 1

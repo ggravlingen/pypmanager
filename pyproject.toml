@@ -171,8 +171,11 @@ known-first-party = [
 
 [tool.ruff.lint.per-file-ignores]
 
-# Allow using assert in tests
-"tests/*" = ["S101"]
+
+"tests/*" = [
+ "S101",  # Use of `assert` detected
+ "PLR2004",  # Magic value used in comparison, consider replacing with a constant variable
+]
 
 [tool.coverage.run]
 branch = true
