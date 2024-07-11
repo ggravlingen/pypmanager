@@ -35,11 +35,6 @@ class WeekDayEnumValues(IntEnum):
     SUN = 6
 
 
-def _get_current_date() -> date:
-    """Return today's date."""
-    return datetime.now(UTC).date()
-
-
 def get_previous_quarter(report_date: date) -> date:
     """Return the previous quarter."""
     if report_date.month < MonthEnumValues.APR:
@@ -56,7 +51,7 @@ def get_previous_quarter(report_date: date) -> date:
 
 async def async_get_last_n_quarters(no_quarters: int) -> list[date]:
     """Return a list of fiscal quarter ends."""
-    current_date = _get_current_date()
+    current_date = datetime.now(UTC).date()
     last_quarter = get_previous_quarter(report_date=current_date)
     quarter_ends: list[date] = []
 
