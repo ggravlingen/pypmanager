@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
-from pypmanager.loader_transaction.calculate_aggregates import CalculateAggregates
+from pypmanager.general_ledger.calculate_aggregates import CalculateAggregates
 from pypmanager.loader_transaction.const import ColumnNameValues, TransactionTypeValues
 
 

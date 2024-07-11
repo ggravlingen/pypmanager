@@ -1,11 +1,11 @@
 """Tests for the general ledger."""
 
+from pypmanager.general_ledger.transation_macro import _amend_row
 from pypmanager.loader_transaction.const import (
     AccountNameValues,
     ColumnNameValues,
     TransactionTypeValues,
 )
-from pypmanager.loader_transaction.general_ledger import _amend_row
 
 
 def test_amend_row__buy() -> None:

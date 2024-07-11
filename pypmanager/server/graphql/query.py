@@ -6,8 +6,8 @@ from typing import cast
 
 import strawberry
 
+from pypmanager.general_ledger import get_general_ledger_as_dict
 from pypmanager.helpers import (
-    get_general_ledger_as_dict,
     get_historical_portfolio,
     get_holdings,
 )

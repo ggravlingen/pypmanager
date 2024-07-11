@@ -4,12 +4,10 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING, Any
-import warnings
 
 import pandas as pd
 
 from pypmanager.loader_transaction.const import ColumnNameValues, TransactionTypeValues
-from pypmanager.settings import Settings
 
 if TYPE_CHECKING:
     from datetime import date
@@ -280,24 +278,3 @@ class CalculateAggregates:
                 ColumnNameValues.TRANSACTION_TYPE: self.transaction_type,
             },
         )
-
-
-def calculate_results(data: pd.DataFrame) -> pd.DataFrame:
-    """Calculate the general ledger."""
-    all_securities_name = data.name.unique()
-
-    dfs: list[pd.DataFrame] = []
-
-    for name in all_securities_name:
-        if Settings.debug_name and Settings.debug_name not in name:
-            continue
-
-        df_data = data.query(f"name == '{name}'")
-        df_result = CalculateAggregates(df_data).output_data
-
-        dfs.append(df_result)
-
-    with warnings.catch_warnings():
-        warnings.simplefilter(action="ignore", category=FutureWarning)
-
-        return pd.concat(dfs, ignore_index=False)
