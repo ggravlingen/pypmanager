@@ -14,13 +14,8 @@ import yaml
 from pypmanager.analytics.holding import Holding
 from pypmanager.analytics.portfolio import Portfolio
 from pypmanager.error import DataError
+from pypmanager.general_ledger import get_general_ledger
 from pypmanager.loader_market_data.models import Sources
-from pypmanager.loader_transaction import (
-    AvanzaLoader,
-    GeneralLedger,
-    GenericLoader,
-    LysaLoader,
-)
 from pypmanager.loader_transaction.const import ColumnNameValues
 from pypmanager.settings import Settings
 from pypmanager.utils.dt import async_get_last_n_quarters
@@ -125,41 +120,6 @@ class UpdateMarketDataCsv:
 
         # Write the merged DataFrame back to the CSV file
         df_final_output.to_csv(self.file_market_data, index=False, sep=";")
-
-
-def load_transaction_files(report_date: datetime | None = None) -> pd.DataFrame:
-    """Load all transaction files into a Dataframe."""
-    return cast(
-        pd.DataFrame,
-        pd.concat(
-            [
-                GenericLoader(report_date).df_final,
-                AvanzaLoader(report_date).df_final,
-                LysaLoader(report_date).df_final,
-            ],
-        ),
-    )
-
-
-def get_general_ledger(report_date: datetime | None = None) -> pd.DataFrame:
-    """Return the general ledger."""
-    all_data = load_transaction_files(report_date=report_date)
-    return GeneralLedger(transactions=all_data).output_df
-
-
-def get_general_ledger_as_dict() -> list[dict[str, Any]]:
-    """Get the general ledger converted to dict."""
-    df_general_ledger = get_general_ledger()
-    df_general_ledger = df_general_ledger.sort_values(
-        [
-            ColumnNameValues.TRANSACTION_DATE,
-            ColumnNameValues.NAME,
-        ],
-        ascending=False,
-    )
-    output_dict = df_general_ledger.reset_index().to_dict(orient="records")
-
-    return cast(list[dict[str, Any]], output_dict)
 
 
 async def get_holdings(report_date: date | None = None) -> list[Holding]:
