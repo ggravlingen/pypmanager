@@ -5,13 +5,13 @@ from __future__ import annotations
 import pandas as pd
 import pytest
 
-from pypmanager.loader_transaction.base_loader import (
+from pypmanager.ingest.transaction import TransactionTypeValues
+from pypmanager.ingest.transaction.base_loader import (
     TransactionLoader,
     _cleanup_number,
     _normalize_amount,
     _normalize_no_traded,
 )
-from pypmanager.loader_transaction.const import TransactionTypeValues
 
 
 @pytest.mark.parametrize(

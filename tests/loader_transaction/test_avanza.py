@@ -2,7 +2,7 @@
 
 from unittest.mock import patch
 
-from pypmanager.loader_transaction.avanza import AvanzaLoader
+from pypmanager.ingest.transaction.avanza import AvanzaLoader
 from pypmanager.settings import TypedSettings
 
 

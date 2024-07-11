@@ -4,14 +4,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, cast
 
-from pypmanager.loader_transaction.const import (
+from .base_loader import TransactionLoader
+from .const import (
     ColumnNameValues,
     CSVSeparator,
     CurrencyValues,
     TransactionTypeValues,
 )
-
-from .base_loader import TransactionLoader
 
 if TYPE_CHECKING:
     import pandas as pd

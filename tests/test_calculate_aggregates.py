@@ -7,7 +7,7 @@ import pandas as pd
 from pandas.testing import assert_frame_equal
 
 from pypmanager.general_ledger.calculate_aggregates import CalculateAggregates
-from pypmanager.loader_transaction.const import ColumnNameValues, TransactionTypeValues
+from pypmanager.ingest.transaction import ColumnNameValues, TransactionTypeValues
 
 
 def test_interest_transaction() -> None:

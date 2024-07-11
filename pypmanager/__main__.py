@@ -3,7 +3,7 @@
 import argparse
 import asyncio
 
-from pypmanager.ingest import async_download_market_data
+from pypmanager.ingest.market_data import async_download_market_data
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Analyse portfolio data.")

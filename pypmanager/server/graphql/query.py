@@ -11,7 +11,7 @@ from pypmanager.helpers import (
     get_historical_portfolio,
     get_holdings,
 )
-from pypmanager.loader_transaction.const import ColumnNameValues
+from pypmanager.ingest.transaction import ColumnNameValues
 
 from .models import HistoricalPortfolioRow, LedgerRow, PortfolioContentRow
 

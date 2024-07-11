@@ -1,7 +1,7 @@
 """Tests for the general ledger."""
 
 from pypmanager.general_ledger.transation_macro import _amend_row
-from pypmanager.loader_transaction.const import (
+from pypmanager.ingest.transaction import (
     AccountNameValues,
     ColumnNameValues,
     TransactionTypeValues,

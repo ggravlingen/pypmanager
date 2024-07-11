@@ -8,7 +8,7 @@ import warnings
 import numpy as np
 import pandas as pd
 
-from pypmanager.loader_transaction.const import ColumnNameValues
+from pypmanager.ingest.transaction import ColumnNameValues
 from pypmanager.settings import Settings
 
 from .calculate_aggregates import CalculateAggregates

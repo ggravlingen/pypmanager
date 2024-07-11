@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from pypmanager.loader_transaction.const import (
+from pypmanager.ingest.transaction import (
     AccountNameValues,
     ColumnNameValues,
     TransactionTypeValues,

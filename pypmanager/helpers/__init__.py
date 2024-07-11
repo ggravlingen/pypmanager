@@ -10,7 +10,7 @@ from typing import cast
 from pypmanager.analytics.holding import Holding
 from pypmanager.analytics.portfolio import Portfolio
 from pypmanager.general_ledger import get_general_ledger
-from pypmanager.loader_transaction.const import ColumnNameValues
+from pypmanager.ingest.transaction import ColumnNameValues
 from pypmanager.utils.dt import async_get_last_n_quarters
 
 LOGGER = logging.getLogger(__package__)
