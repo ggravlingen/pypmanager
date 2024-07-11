@@ -1,4 +1,4 @@
-"""Market data ingestion tools."""
+"""Market data ingestion code."""
 
 from .helpers import async_download_market_data
 

@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Any
 
 import pandas as pd
 
-from pypmanager.loader_transaction.const import ColumnNameValues, TransactionTypeValues
+from pypmanager.ingest.transaction import ColumnNameValues, TransactionTypeValues
 
 if TYPE_CHECKING:
     from datetime import date

@@ -4,9 +4,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from pypmanager.loader_transaction.const import ColumnNameValues, TransactionTypeValues
-
 from .base_loader import TransactionLoader
+from .const import ColumnNameValues, TransactionTypeValues
 
 if TYPE_CHECKING:
     import pandas as pd

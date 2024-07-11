@@ -11,7 +11,7 @@ from typing import cast
 
 import pandas as pd
 
-from pypmanager.loader_transaction.const import AccountNameValues, ColumnNameValues
+from pypmanager.ingest.transaction import AccountNameValues, ColumnNameValues
 from pypmanager.settings import Settings
 
 from .security import MutualFund

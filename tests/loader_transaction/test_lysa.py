@@ -5,8 +5,8 @@ from unittest.mock import patch
 import pandas as pd
 import pytest
 
-from pypmanager.loader_transaction.const import ColumnNameValues, TransactionTypeValues
-from pypmanager.loader_transaction.lysa import LysaLoader, _replace_fee_name
+from pypmanager.ingest.transaction import ColumnNameValues, TransactionTypeValues
+from pypmanager.ingest.transaction.lysa import LysaLoader, _replace_fee_name
 from pypmanager.settings import TypedSettings
 
 

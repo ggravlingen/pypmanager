@@ -2,7 +2,7 @@
 
 from unittest.mock import patch
 
-from pypmanager.loader_transaction.generic import GenericLoader
+from pypmanager.ingest.transaction.generic import GenericLoader
 from pypmanager.settings import TypedSettings
 
 
