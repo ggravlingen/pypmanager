@@ -1,60 +1,60 @@
 ---
 sources:
   - isin_code: LU0051755006
-    loader_class: pypmanager.loader_market_data.morningstar.MorningstarLoader
+    loader_class: MorningstarLoader
     lookup_key: F0GBR04SN7
     name: JPM China A (dist) USD
   - isin_code: SE0009268584
-    loader_class: pypmanager.loader_market_data.morningstar.MorningstarLoader
+    loader_class: MorningstarLoader
     lookup_key: F00000YG5V
     name: Lysa Aktier C
   - isin_code: SE0013720000
-    loader_class: pypmanager.loader_market_data.morningstar.MorningstarLoader
+    loader_class: MorningstarLoader
     lookup_key: F000014U6O
     name: Aktiespararna Direktavkastning B
   - isin_code: SE0017231947
-    loader_class: pypmanager.loader_market_data.morningstar.MorningstarLoader
+    loader_class: MorningstarLoader
     lookup_key: F00001DFD6
     name: Lysa Sweden Equity Broad B
   - isin_code: SE0009268394
-    loader_class: pypmanager.loader_market_data.morningstar.MorningstarLoader
+    loader_class: MorningstarLoader
     lookup_key: F00000YG5U
     name: Lysa R�ntor C
   - isin_code: SE0000671919
-    loader_class: pypmanager.loader_market_data.morningstar.MorningstarLoader
+    loader_class: MorningstarLoader
     lookup_key: F0GBR04M88
     name: Storebrand Global All Countries A SEK
   - isin_code: SE0004297927
-    loader_class: pypmanager.loader_market_data.morningstar.MorningstarLoader
+    loader_class: MorningstarLoader
     lookup_key: F00000NBM7
     name: Spiltan Aktiefond Investmentbolag
   - isin_code: SE0003788587
-    loader_class: pypmanager.loader_market_data.morningstar.MorningstarLoaderSHB
+    loader_class: MorningstarLoaderSHB
     lookup_key: shb0000025
   - isin_code: SE0014453221
-    loader_class: pypmanager.loader_market_data.ft.FTLoader
+    loader_class: FTLoader
     lookup_key: "601933686"
   - isin_code: SE0005965662
-    loader_class: pypmanager.loader_market_data.ft.FTLoader
+    loader_class: FTLoader
     lookup_key: "535679922"
   - isin_code: SE0014956850
-    loader_class: pypmanager.loader_market_data.ft.FTLoader
+    loader_class: FTLoader
     lookup_key: "679312906"
   - isin_code: SE0005188836
-    loader_class: pypmanager.loader_market_data.ft.FTLoader
+    loader_class: FTLoader
     lookup_key: "535619835"
   - isin_code: SE0005796331
-    loader_class: pypmanager.loader_market_data.ft.FTLoader
+    loader_class: FTLoader
     lookup_key: "535627197"
   - isin_code: SE0016798805
-    loader_class: pypmanager.loader_market_data.ft.FTLoader
+    loader_class: FTLoader
     lookup_key: "681984998"
   - isin_code: SE0003455658
-    loader_class: pypmanager.loader_market_data.ft.FTLoader
+    loader_class: FTLoader
     lookup_key: "535686415"
   - isin_code: SE0008129985
-    loader_class: pypmanager.loader_market_data.ft.FTLoader
+    loader_class: FTLoader
     lookup_key: "535691067"
   - isin_code: SE0000529992
-    loader_class: pypmanager.loader_market_data.ft.FTLoader
+    loader_class: FTLoader
     lookup_key: "535673247"
