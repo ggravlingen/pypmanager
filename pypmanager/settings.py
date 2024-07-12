@@ -21,8 +21,6 @@ class TypedSettings(BaseSettings):
 
     debug_name: str | None = None
 
-    dir_config: Path = Path("config").resolve()
-
     @property
     def dir_data(self: TypedSettings) -> Path:
         """Return data directory."""
@@ -31,6 +29,7 @@ class TypedSettings(BaseSettings):
 
         return Path("data").resolve()
 
+    dir_config: Path = Path("pypmanager/configuration").resolve()
     dir_static: Path = Path("frontend/static").resolve()
     dir_templates: Path = Path("frontend/templates").resolve()
 

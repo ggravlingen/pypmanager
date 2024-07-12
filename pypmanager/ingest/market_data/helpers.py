@@ -120,13 +120,12 @@ async def async_download_market_data() -> None:
     sources = _load_sources()
 
     for idx, source in enumerate(sources):
-        LOGGER.info(
-            f"{idx}: Parsing {source.isin_code} using "
-            f"{source.loader_class.replace('pypmanager.loader_market_data.', '')}",
-        )
+        LOGGER.info(f"{idx}: Parsing {source.isin_code} using {source.loader_class}")
+
+        loader_class_full_path = f"pypmanager.ingest.market_data.{source.loader_class}"
 
         try:
-            data_loader_klass = _class_importer(source.loader_class)
+            data_loader_klass = _class_importer(loader_class_full_path)
         except AttributeError as err:
             msg = "Unable to load data"
             raise DataError(msg, err) from err
