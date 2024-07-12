@@ -5,7 +5,7 @@ sources:
     lookup_key: F0GBR04SN7
     name: JPM China A (dist) USD
   - isin_code: SE0009268584
-    loader_class: morningstar.MorningstarLoader
+    loader_class: MorningstarLoader
     lookup_key: F00000YG5V
     name: Lysa Aktier C
   - isin_code: SE0013720000
