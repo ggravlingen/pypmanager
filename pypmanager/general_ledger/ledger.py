@@ -12,7 +12,7 @@ from pypmanager.ingest.transaction import ColumnNameValues
 from pypmanager.settings import Settings
 
 from .calculate_aggregates import CalculateAggregates
-from .transation_macro import _amend_row
+from .transaction_macro import _amend_row
 
 
 def calculate_results(data: pd.DataFrame) -> pd.DataFrame:

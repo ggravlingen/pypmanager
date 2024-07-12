@@ -3,7 +3,7 @@
 import pandas as pd
 
 from pypmanager.general_ledger import GeneralLedger
-from pypmanager.general_ledger.transation_macro import _amend_row
+from pypmanager.general_ledger.transaction_macro import _amend_row
 from pypmanager.ingest.transaction import (
     AccountNameValues,
     ColumnNameValues,
