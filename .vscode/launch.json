@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: FastAPI",
+            "name": "FastAPI",
             "type": "debugpy",
             "request": "launch",
             "module": "uvicorn",
@@ -12,6 +12,14 @@
                 "8001",
                 "pypmanager.api:app",
             ],
+            "justMyCode": true
+        },
+        {
+            "name": "Scheduler",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/pypmanager/cron/__main__.py",
+            "args": [],
             "justMyCode": true
         }
     ]
