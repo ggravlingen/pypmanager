@@ -1,4 +1,4 @@
-"""Server."""
+"""FastAPI server."""
 
 from __future__ import annotations
 
@@ -9,8 +9,9 @@ from fastapi import FastAPI, Request, Response
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from pypmanager.server.graphql import graphql_app
 from pypmanager.settings import Settings
+
+from .graphql import graphql_app
 
 app = FastAPI()
 

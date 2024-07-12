@@ -3,7 +3,7 @@
 from fastapi.testclient import TestClient
 import pytest
 
-from pypmanager.server import app
+from pypmanager.api import app
 
 client = TestClient(app)
 

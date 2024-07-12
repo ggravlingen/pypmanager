@@ -3,16 +3,15 @@
     "configurations": [
         {
             "name": "Python: FastAPI",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "uvicorn",
             "args": [
                 "--reload",
                 "--port",
                 "8001",
-                "pypmanager.server:app",
+                "pypmanager.api:app",
             ],
-            "jinja": true,
             "justMyCode": true
         }
     ]
