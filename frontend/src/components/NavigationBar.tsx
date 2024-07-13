@@ -199,6 +199,12 @@ export default function NavigationBar({
           icon={<Dataset sx={IconSX} />}
           linkTo="/ledger"
         />
+        <NavigationItem
+          isExpanded={isExpanded}
+          label={"Transaction list"}
+          icon={<Dataset sx={IconSX} />}
+          linkTo="/transaction"
+        />
       </List>
     </Drawer>
   );
