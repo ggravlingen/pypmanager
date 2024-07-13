@@ -96,7 +96,6 @@ class Query:
     async def all_transaction(self: Query) -> list[TransactionRow]:
         """Return all transactions."""
         transaction_list = load_transaction_files(sort_by_date_descending=True)
-
         transaction_list = transaction_list.replace({np.nan: None})
 
         return [
