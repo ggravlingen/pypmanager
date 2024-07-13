@@ -5,13 +5,13 @@ from __future__ import annotations
 import asyncio
 import logging
 from typing import TYPE_CHECKING, Any
-from zoneinfo import ZoneInfo
 
 from apscheduler.events import EVENT_JOB_ERROR, EVENT_JOB_EXECUTED, JobExecutionEvent
 from apscheduler.executors.pool import ThreadPoolExecutor
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from pypmanager.ingest.market_data.helpers import async_download_market_data
+from pypmanager.settings import Settings
 
 LOGGER = logging.getLogger(__name__)
 
@@ -41,7 +41,7 @@ async def run_main() -> None:
         executors={
             "threadpool": ThreadPoolExecutor(max_workers=1),
         },
-        timezone=ZoneInfo("Europe/Stockholm"),
+        timezone=Settings.system_time_zone,
     )
     scheduler.add_listener(event_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR)
 

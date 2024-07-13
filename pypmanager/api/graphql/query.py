@@ -9,7 +9,10 @@ import strawberry
 
 from pypmanager.analytics import async_get_historical_portfolio, async_get_holdings
 from pypmanager.general_ledger import get_general_ledger_as_dict
-from pypmanager.ingest.transaction import ColumnNameValues, load_transaction_files
+from pypmanager.ingest.transaction import (
+    ColumnNameValues,
+    load_transaction_files,
+)
 
 from .models import (
     HistoricalPortfolioRow,
@@ -92,7 +95,7 @@ class Query:
     @strawberry.field
     async def all_transaction(self: Query) -> list[TransactionRow]:
         """Return all transactions."""
-        transaction_list = load_transaction_files()
+        transaction_list = load_transaction_files(sort_by_date_descending=True)
 
         transaction_list = transaction_list.replace({np.nan: None})
 

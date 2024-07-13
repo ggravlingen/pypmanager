@@ -5,6 +5,7 @@ from __future__ import annotations
 from abc import abstractmethod
 import contextlib
 from dataclasses import dataclass
+from datetime import UTC
 from pathlib import Path
 from secrets import randbelow
 from typing import TYPE_CHECKING, cast
@@ -229,16 +230,24 @@ class TransactionLoader:
             df_raw = df_raw.query(f"index <= '{self.report_date}'")
 
         # Apply randomness to time in order to have unique indices
-        df_raw.index = pd.to_datetime(df_raw.index).map(
-            lambda x: (
-                x.replace(
-                    hour=randbelow(23),
-                    minute=randbelow(59),
-                    microsecond=randbelow(999999),
-                )
-                if x and x.strftime("%Y-%m-%d") == x.strftime("%Y-%m-%d")
-                else x
-            ),
+        df_raw.index = (
+            pd.to_datetime(df_raw.index)
+            .map(
+                lambda x: (
+                    x.replace(
+                        hour=randbelow(23),
+                        minute=randbelow(59),
+                        microsecond=randbelow(999999),
+                    )
+                    if x and x.strftime("%Y-%m-%d") == x.strftime("%Y-%m-%d")
+                    else x
+                ),
+            )
+            # Convert aware datetimes to naive by removing any timezone information
+            .tz_localize(None, ambiguous="infer", nonexistent="shift_forward")
+            # Then localize to the system's timezone
+            .tz_localize(UTC)
+            .tz_convert(Settings.system_time_zone)
         )
 
         # Sort by transaction date

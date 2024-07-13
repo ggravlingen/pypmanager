@@ -5,7 +5,10 @@ from typing import Any, cast
 
 import pandas as pd
 
-from pypmanager.ingest.transaction import ColumnNameValues, load_transaction_files
+from pypmanager.ingest.transaction import (
+    ColumnNameValues,
+    load_transaction_files,
+)
 
 from .ledger import GeneralLedger
 
