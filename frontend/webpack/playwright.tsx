@@ -8,7 +8,7 @@ export default merge(commonConfig, {
   mode: "development",
   output: {
     clean: true,
-    path: path.resolve(__dirname, "static"),
+    path: path.resolve(__dirname, "../", "static"),
     filename: "main.js",
   },
 });

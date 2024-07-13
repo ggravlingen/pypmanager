@@ -8,8 +8,17 @@ const FRONTEND_DIR = path.join(__dirname, "../");
 const TEMPLATE_DIR = path.join(FRONTEND_DIR, "templates");
 const STATIC_DIR = path.join(FRONTEND_DIR, "static");
 
+console.log("Serving files from:");
+console.log(FRONTEND_DIR);
+console.log(TEMPLATE_DIR);
+console.log(STATIC_DIR);
+console.log("---");
+
 const app = express();
 const server = http.createServer(app);
+
+// Serving the files in the static folder
+app.use("/static", express.static(STATIC_DIR));
 
 // Middleware for logging requests
 app.use((req, res, next) => {
@@ -19,11 +28,8 @@ app.use((req, res, next) => {
   next(); // Continue to the next middleware or route handler
 });
 
-// Serving the files in the static folder
-app.use("/static", express.static(STATIC_DIR));
-
 app.get("/", (req, res) => {
-  res.sendFile(path.join(TEMPLATE_DIR, "index.html"), (e) => {
+  res.sendFile(path.join(TEMPLATE_DIR, "index.html"), (error) => {
     if (error) {
       console.error("Error sending file:", error);
     }
