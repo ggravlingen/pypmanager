@@ -23,3 +23,7 @@ yarn-debug.log*
 yarn-error.log*
 
 static/main.js
+
+html-report
+test-results
+tests/logs
