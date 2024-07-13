@@ -22,12 +22,12 @@ app.use('/static', express.static(STATIC_DIR));
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(TEMPLATE_DIR, "index.html"), (e) => {
-    if (e) {
-      console.log("Error sending file:", e);
+    if (error) {
+      console.error("Error sending file:", error);
     }
   });
 });
 
 server.listen(3000, () => {
-  console.log("Server is running on port 3000");
+  console.log("A simple server is running on port 3000");
 });
