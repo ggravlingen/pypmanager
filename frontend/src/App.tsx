@@ -12,6 +12,30 @@ import {
   TableHistoricalPortfolio,
 } from "./components";
 
+interface RouteListProps {
+  path: string;
+  element: React.ReactElement;
+}
+
+const ROUTE_LIST: RouteListProps[] = [
+  {
+    path:"/",
+    element: <TableCurrentPortfolio />
+  },
+  {
+    path:"/transaction",
+    element: <TableAllTransaction />
+  },
+  {
+    path:"/history",
+    element: <TableHistoricalPortfolio />
+  },
+  {
+    path:"/ledger",
+    element: <TableGeneralLedger />
+  },
+]
+
 /**
  * MainLayout component that defines the main structure of the application.
  * It sets up a HashRouter for navigation, a NavigationBar for navigating between pages,
@@ -39,10 +63,9 @@ export default function MainLayout() {
           <NavigationBar colorMode={colorMode} setColorMode={setColorMode} />
           <Box style={{ flexGrow: 1 }}>
             <Routes>
-              <Route path="/" element={<TableCurrentPortfolio />} />
-              <Route path="/history" element={<TableHistoricalPortfolio />} />
-              <Route path="/ledger" element={<TableGeneralLedger />} />
-              <Route path="/transaction" element={<TableAllTransaction />} />
+              {ROUTE_LIST.map(({ path, element }) => (
+                <Route key={path} path={path} element={element} />
+              ))}
             </Routes>
           </Box>
         </Box>
