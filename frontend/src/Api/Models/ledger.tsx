@@ -13,7 +13,6 @@ export interface BaseTransactionRow {
   fx?: number;
 }
 
-
 export interface TransactionRow extends BaseTransactionRow {
   price?: number;
 }

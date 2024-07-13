@@ -9,7 +9,7 @@ import {
   TableAllTransaction,
   TableCurrentPortfolio,
   TableGeneralLedger,
-  TableHistoricalPortfolio
+  TableHistoricalPortfolio,
 } from "./components";
 
 /**

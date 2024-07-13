@@ -63,7 +63,6 @@ const columnSettings = [
   },
 ];
 
-
 /**
  * Renders a table component displaying all historical transactions.
  * @returns The JSX element representing the table component.
@@ -73,10 +72,7 @@ export default function TableAllTransaction(): JSX.Element {
 
   return (
     <QueryLoader loading={loading} data={data} error={error}>
-      <BasicTable
-        data={data?.allTransaction}
-        columnSettings={columnSettings}
-      />
+      <BasicTable data={data?.allTransaction} columnSettings={columnSettings} />
     </QueryLoader>
   );
 }
