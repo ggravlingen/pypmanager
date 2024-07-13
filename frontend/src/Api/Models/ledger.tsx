@@ -1,19 +1,27 @@
 /**
  * LedgerRow represents a single row in a ledger.
  */
-export interface LedgerRow {
+
+export interface BaseTransactionRow {
   transactionDate?: Date;
   broker?: string;
   source?: string;
   action?: string;
   name?: string;
   noTraded?: number;
+  commission?: number;
+  fx?: number;
+}
+
+export interface TransactionRow extends BaseTransactionRow {
+  price?: number;
+}
+
+export interface LedgerRow extends BaseTransactionRow {
   aggBuyVolume?: number;
   averagePrice?: number;
   amount?: number;
-  commission?: number;
   cashFlow?: number;
-  fx?: number;
   averageFx?: number;
   account?: string;
   credit?: number;

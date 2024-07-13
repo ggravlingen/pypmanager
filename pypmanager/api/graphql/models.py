@@ -8,8 +8,8 @@ import strawberry
 
 
 @strawberry.type
-class LedgerRow:
-    """Represent a row in the general ledger."""
+class BaseTransactionRow:
+    """Represent a base transaction row."""
 
     transaction_date: date
     broker: str
@@ -17,12 +17,25 @@ class LedgerRow:
     action: str
     name: str
     no_traded: float | None
+    commission: float | None
+    fx: float | None
+
+
+@strawberry.type
+class TransactionRow(BaseTransactionRow):
+    """Represent a transaction row."""
+
+    price: float | None
+
+
+@strawberry.type
+class LedgerRow(BaseTransactionRow):
+    """Represent a row in the general ledger."""
+
     agg_buy_volume: float | None
     average_price: float | None
     amount: float | None
-    commission: float | None
     cash_flow: float | None
-    fx: float | None
     average_fx_rate: float | None
     account: str
     credit: float | None

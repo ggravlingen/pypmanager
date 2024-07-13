@@ -6,6 +6,7 @@ import { HashRouter, Route, Routes } from "react-router-dom";
 
 import {
   NavigationBar,
+  TableAllTransaction,
   TableCurrentPortfolio,
   TableGeneralLedger,
   TableHistoricalPortfolio,
@@ -41,6 +42,7 @@ export default function MainLayout() {
               <Route path="/" element={<TableCurrentPortfolio />} />
               <Route path="/history" element={<TableHistoricalPortfolio />} />
               <Route path="/ledger" element={<TableGeneralLedger />} />
+              <Route path="/transaction" element={<TableAllTransaction />} />
             </Routes>
           </Box>
         </Box>
