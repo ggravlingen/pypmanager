@@ -19,22 +19,22 @@ interface RouteListProps {
 
 const ROUTE_LIST: RouteListProps[] = [
   {
-    path:"/",
-    element: <TableCurrentPortfolio />
+    path: "/",
+    element: <TableCurrentPortfolio />,
   },
   {
-    path:"/transaction",
-    element: <TableAllTransaction />
+    path: "/transaction",
+    element: <TableAllTransaction />,
   },
   {
-    path:"/history",
-    element: <TableHistoricalPortfolio />
+    path: "/history",
+    element: <TableHistoricalPortfolio />,
   },
   {
-    path:"/ledger",
-    element: <TableGeneralLedger />
+    path: "/ledger",
+    element: <TableGeneralLedger />,
   },
-]
+];
 
 /**
  * MainLayout component that defines the main structure of the application.
