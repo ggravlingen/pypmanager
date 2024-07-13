@@ -29,7 +29,7 @@ def _mock_transaction_list(
 
 @pytest.mark.asyncio()
 @pytest.mark.usefixtures("_mock_transaction_list")
-async def test_graphql_endpoint() -> None:
+async def test_graphql_query__all_general_ledger() -> None:
     """Test endpoint /graphql."""
     query = """
     {
