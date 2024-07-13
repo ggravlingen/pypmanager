@@ -40,6 +40,7 @@
     "eslint-plugin-react-hooks": "4.6.2",
     "eslint-plugin-simple-import-sort": "12.1.1",
     "eslint-plugin-unused-imports": "3.2.0",
+    "express": "4.19.2",
     "msw": "2.3.1",
     "playwright-msw": "3.0.1",
     "prettier": "3.3.2",
@@ -51,7 +52,8 @@
     "cicd-lint": "eslint 'src/**/*.tsx'",
     "cicd-typecheck": "tsc-strict --project tsconfig.json --noEmit",
     "cicd-prettier": "yarn prettier --check '**/*.tsx' '**/*.html'",
-    "fix": "eslint --fix 'src/**/*.tsx' && prettier . --write"
+    "fix": "eslint --fix 'src/**/*.tsx' && prettier . --write",
+    "node-server": "node ./tests/server.js"
   },
   "prettier": {
     "arrowParens": "always",
