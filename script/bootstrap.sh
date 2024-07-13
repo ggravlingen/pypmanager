@@ -9,3 +9,10 @@ cd "$(dirname "$0")/../"
 echo "Installing internal dependencies..."
 
 python3 -m pip install -e .'[test]'
+
+# Setup frontend and install Playwright
+cd frontend
+
+yarn
+
+../script/setup-playwright.sh

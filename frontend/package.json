@@ -29,6 +29,7 @@
     "webpack-merge": "6.0.1"
   },
   "devDependencies": {
+    "@playwright/test": "1.45.1",
     "@types/node": "20.14.10",
     "@typescript-eslint/eslint-plugin": "7.16.0",
     "@typescript-eslint/parser": "7.16.0",
@@ -39,6 +40,8 @@
     "eslint-plugin-react-hooks": "4.6.2",
     "eslint-plugin-simple-import-sort": "12.1.1",
     "eslint-plugin-unused-imports": "3.2.0",
+    "msw": "2.3.1",
+    "playwright-msw": "3.0.1",
     "prettier": "3.3.2",
     "typescript-strict-plugin": "2.4.4"
   },
