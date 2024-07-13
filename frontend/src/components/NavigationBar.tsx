@@ -3,6 +3,7 @@ import {
   DarkMode,
   Dataset,
   LightMode,
+  List as ListIcon,
   Menu,
   MenuOpen,
   ShowChart,
@@ -202,7 +203,7 @@ export default function NavigationBar({
         <NavigationItem
           isExpanded={isExpanded}
           label={"Transaction list"}
-          icon={<Dataset sx={IconSX} />}
+          icon={<ListIcon sx={IconSX} />}
           linkTo="/transaction"
         />
       </List>
