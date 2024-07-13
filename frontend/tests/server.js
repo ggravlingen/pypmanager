@@ -13,12 +13,14 @@ const server = http.createServer(app);
 
 // Middleware for logging requests
 app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} request to ${req.url}`);
+  console.log(
+    `${new Date().toISOString()} - ${req.method} request to ${req.url}`,
+  );
   next(); // Continue to the next middleware or route handler
 });
 
 // Serving the files in the static folder
-app.use('/static', express.static(STATIC_DIR));
+app.use("/static", express.static(STATIC_DIR));
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(TEMPLATE_DIR, "index.html"), (e) => {
