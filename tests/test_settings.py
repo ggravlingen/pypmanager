@@ -19,6 +19,12 @@ def test_dir_data_not_demo() -> None:
     assert "data" in settings.dir_data.name
 
 
+def test_dir_market_data() -> None:
+    """Test property dir_market_data."""
+    settings = TypedSettings()
+    assert "market_data" in settings.dir_market_data.name
+
+
 def test_file_market_data_config() -> None:
     """Test property file_market_data_config."""
     settings = TypedSettings()
