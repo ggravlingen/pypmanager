@@ -32,3 +32,32 @@ def get_general_ledger_as_dict() -> list[dict[str, Any]]:
     output_dict = df_general_ledger.reset_index().to_dict(orient="records")
 
     return cast(list[dict[str, Any]], output_dict)
+
+
+async def async_aggregate_ledger_by_year() -> pd.DataFrame:
+    """Aggregate the general ledger by year."""
+    df_general_ledger = get_general_ledger()
+
+    new_date_column = f"{ColumnNameValues.TRANSACTION_DATE.value}_2"
+
+    # Filter all income statement records
+    filtered_df = df_general_ledger[
+        df_general_ledger[ColumnNameValues.ACCOUNT.value].str.startswith("is_")
+    ]
+
+    filtered_df_copy = filtered_df.copy()
+
+    filtered_df_copy[new_date_column] = pd.to_datetime(filtered_df_copy.index)
+
+    filtered_df_copy["year"] = filtered_df_copy[new_date_column].dt.year
+
+    filtered_df_copy["net"] = (
+        filtered_df_copy[ColumnNameValues.CREDIT]
+        - filtered_df_copy[ColumnNameValues.DEBIT]
+    )
+
+    return (
+        filtered_df_copy.groupby(["year", ColumnNameValues.ACCOUNT.value])["net"]
+        .sum()
+        .reset_index()
+    )
