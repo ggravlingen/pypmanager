@@ -180,9 +180,6 @@ jobs:
           key: >-
             ${{ runner.os }}-${{ steps.python.outputs.python-version }}-${{
             needs.info.outputs.python_cache_key }}
-      - name: Copy fixtures
-        run: |
-          cp tests/fixtures/* data/
       - name: Run tests
         run: |
           source .venv/bin/activate
