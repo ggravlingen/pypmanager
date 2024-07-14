@@ -11,6 +11,7 @@ import pandas as pd
 
 # Disable logger
 logging.getLogger("urllib3.connectionpool").setLevel(logging.CRITICAL)
+logging.getLogger("asyncio").setLevel(logging.WARNING)
 
 
 class VerboseFormatter(logging.Formatter):
