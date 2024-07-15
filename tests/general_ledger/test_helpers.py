@@ -10,5 +10,5 @@ from pypmanager.general_ledger import async_aggregate_ledger_by_year
 async def test_async_aggregate_ledger_by_year() -> None:
     """Test function async_aggregate_ledger_by_year."""
     ledger = await async_aggregate_ledger_by_year()
-    assert ledger.columns.to_list() == ["year", "ledger_account", "net"]
+    assert ledger.columns.to_list() == ["ledger_account", 2021]
     assert len(ledger) == 1

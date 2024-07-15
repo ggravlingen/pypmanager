@@ -78,6 +78,27 @@ class DataFactory:
         )
         return self
 
+    def sell(self) -> DataFactory:
+        """Add a sell transaction."""
+        self.transaction_list.append(
+            {
+                "transaction_date": datetime(
+                    2021, 2, 1, tzinfo=Settings.system_time_zone
+                ),
+                "transaction_type": TransactionTypeValues.SELL.value,
+                "name": "Company A",
+                "isin_code": "US1234567890",
+                "no_traded": 10.0,
+                "price": 15.0,
+                "commission": 0.0,
+                "currency": "SEK",
+                "broker": "Broker A",
+                "fx": 1.0,
+                "source": "Test data",
+            }
+        )
+        return self
+
     @property
     def df_transaction_list(self) -> pd.DataFrame:
         """Return the transaction list as a DataFrame."""
