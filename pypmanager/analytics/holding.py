@@ -62,6 +62,10 @@ class Holding:
             df_market_data = pd.read_csv(file, sep=";", index_col="report_date")
             all_data_frames.append(df_market_data)
 
+        if not all_data_frames:
+            LOGGER.error("No market data found.")
+            return pd.DataFrame()
+
         return pd.concat(all_data_frames, ignore_index=False)
 
     @cached_property
