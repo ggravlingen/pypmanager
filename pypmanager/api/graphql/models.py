@@ -69,3 +69,12 @@ class HistoricalPortfolioRow:
     return_pct: float | None
     realized_pnl: float | None
     unrealized_pnl: float | None
+
+
+@strawberry.type
+class ResultStatementRow:
+    """Represent a row in the result statement."""
+
+    item_name: str
+    year_list: list[int]
+    amount_list: list[float]
