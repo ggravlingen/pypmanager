@@ -1,18 +1,47 @@
 """Tests for graphql."""
 
+from __future__ import annotations
+
 from datetime import date
+from typing import TYPE_CHECKING, Any
+from unittest.mock import patch
 
 from fastapi.testclient import TestClient
-from freezegun.api import FrozenDateTimeFactory
 import pytest
 
 from pypmanager.api import app
 
+if TYPE_CHECKING:
+    from collections.abc import Generator
+
+    from freezegun.api import FrozenDateTimeFactory
+
+    from tests.conftest import DataFactory
+
 client = TestClient(app)
 
 
+@pytest.fixture(scope="module")
+def _mock_transaction_list_graphql(
+    data_factory: DataFactory,
+) -> Generator[Any, Any, Any]:
+    """Mock transaction list."""
+    mocked_transactions = data_factory.buy().sell().df_transaction_list
+    with (
+        patch(
+            "pypmanager.general_ledger.helpers.load_transaction_files",
+            return_value=mocked_transactions,
+        ),
+        patch(
+            "pypmanager.api.graphql.query.load_transaction_files",
+            return_value=mocked_transactions,
+        ),
+    ):
+        yield
+
+
 @pytest.mark.asyncio()
-@pytest.mark.usefixtures("_mock_transaction_list")
+@pytest.mark.usefixtures("_mock_transaction_list_graphql")
 async def test_graphql_query__all_general_ledger() -> None:
     """Test query allGeneralLedger."""
     query = """
@@ -39,11 +68,11 @@ async def test_graphql_query__all_general_ledger() -> None:
     """
     response = client.post("/graphql", json={"query": query})
     assert response.status_code == 200
-    assert len(response.json()["data"]["allGeneralLedger"]) == 2
+    assert len(response.json()["data"]["allGeneralLedger"]) == 6
 
 
 @pytest.mark.asyncio()
-@pytest.mark.usefixtures("_mock_transaction_list")
+@pytest.mark.usefixtures("_mock_transaction_list_graphql")
 async def test_graphql_query__current_portfolio() -> None:
     """Test query currentPortfolio."""
     query = """
@@ -68,7 +97,7 @@ async def test_graphql_query__current_portfolio() -> None:
 
 
 @pytest.mark.asyncio()
-@pytest.mark.usefixtures("_mock_transaction_list")
+@pytest.mark.usefixtures("_mock_transaction_list_graphql")
 async def test_graphql_query__historical_portfolio(
     freezer: FrozenDateTimeFactory,
 ) -> None:
@@ -93,7 +122,7 @@ async def test_graphql_query__historical_portfolio(
 
 
 @pytest.mark.asyncio()
-@pytest.mark.usefixtures("_mock_transaction_list")
+@pytest.mark.usefixtures("_mock_transaction_list_graphql")
 async def test_graphql_query__all_transaction() -> None:
     """Test query allTransaction."""
     query = """
@@ -113,11 +142,11 @@ async def test_graphql_query__all_transaction() -> None:
     """
     response = client.post("/graphql", json={"query": query})
     assert response.status_code == 200
-    assert len(response.json()["data"]["allTransaction"]) == 1
+    assert len(response.json()["data"]["allTransaction"]) == 2
 
 
 @pytest.mark.asyncio()
-@pytest.mark.usefixtures("_mock_transactions_general_ledger")
+@pytest.mark.usefixtures("_mock_transaction_list_graphql")
 async def test_graphql_query__result_statement() -> None:
     """Test query resultStatement."""
     query = """

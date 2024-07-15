@@ -77,4 +77,4 @@ class ResultStatementRow:
 
     item_name: str
     year_list: list[int]
-    amount_list: list[float]
+    amount_list: list[float | None]

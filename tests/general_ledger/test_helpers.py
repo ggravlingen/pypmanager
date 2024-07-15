@@ -1,14 +1,30 @@
 """Test helpers."""
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+from unittest.mock import patch
+
 import pytest
 
 from pypmanager.general_ledger import async_aggregate_ledger_by_year
 
+if TYPE_CHECKING:
+    from tests.conftest import DataFactory
+
 
 @pytest.mark.asyncio()
-@pytest.mark.usefixtures("_mock_transactions_general_ledger")
-async def test_async_aggregate_ledger_by_year() -> None:
+async def test_async_aggregate_ledger_by_year(
+    data_factory: DataFactory,
+) -> None:
     """Test function async_aggregate_ledger_by_year."""
-    ledger = await async_aggregate_ledger_by_year()
-    assert ledger.columns.to_list() == ["year", "ledger_account", "net"]
-    assert len(ledger) == 1
+    mocked_transactions = data_factory.buy().sell().df_transaction_list
+    with (
+        patch(
+            "pypmanager.general_ledger.helpers.load_transaction_files",
+            return_value=mocked_transactions,
+        ),
+    ):
+        ledger = await async_aggregate_ledger_by_year()
+        assert ledger.columns.to_list() == ["ledger_account", 2021]
+        assert len(ledger) == 1
