@@ -51,13 +51,17 @@ async def async_aggregate_ledger_by_year() -> pd.DataFrame:
 
     filtered_df_copy["year"] = filtered_df_copy[new_date_column].dt.year
 
-    filtered_df_copy["net"] = (
-        filtered_df_copy[ColumnNameValues.CREDIT]
-        - filtered_df_copy[ColumnNameValues.DEBIT]
-    )
-
-    return (
-        filtered_df_copy.groupby(["year", ColumnNameValues.ACCOUNT.value])["net"]
+    df_grouped_data = (
+        filtered_df_copy.groupby(["year", ColumnNameValues.ACCOUNT.value])[
+            ColumnNameValues.CREDIT.value
+        ]
         .sum()
         .reset_index()
     )
+
+    return df_grouped_data.pivot_table(
+        values=ColumnNameValues.CREDIT.value,
+        index=ColumnNameValues.ACCOUNT.value,
+        columns="year",
+        fill_value=None,
+    ).reset_index()

@@ -14,6 +14,7 @@ from pypmanager.ingest.transaction import (
     ColumnNameValues,
     load_transaction_files,
 )
+from pypmanager.ingest.transaction.const import AccountNameValues
 
 from .models import (
     HistoricalPortfolioRow,
@@ -121,16 +122,31 @@ class Query:
         ledger_by_year = await async_aggregate_ledger_by_year()
         output_list: list[ResultStatementRow] = []
 
-        for item_name in ("is_trading",):
+        year_list = [
+            column for column in ledger_by_year.columns if column != "ledger_account"
+        ]
+
+        for item_name in (
+            AccountNameValues.IS_INTEREST.value,
+            AccountNameValues.IS_DIVIDEND.value,
+            AccountNameValues.IS_PNL.value,
+        ):
             filtered_ledger = ledger_by_year[
                 ledger_by_year["ledger_account"] == item_name
-            ]
+            ].reset_index()
+
+            if filtered_ledger.empty:
+                continue
+
+            filtered_ledger = filtered_ledger.replace({0: None, np.nan: None})
+
+            values_list = filtered_ledger.loc[0, year_list].tolist()
 
             output_list.append(
                 ResultStatementRow(
                     item_name=item_name,
-                    year_list=filtered_ledger.year.tolist(),
-                    amount_list=filtered_ledger.net.tolist(),
+                    year_list=year_list,
+                    amount_list=values_list,
                 )
             )
 
