@@ -1,18 +1,20 @@
 """Tests for the general ledger."""
 
-from collections.abc import Callable
+from __future__ import annotations
 
-import pandas as pd
+from typing import TYPE_CHECKING
 
 from pypmanager.general_ledger import GeneralLedger
 
+if TYPE_CHECKING:
+    from tests.conftest import DataFactory
+
 
 def test_class_general_ledger(
-    df_transaction_data_factory: Callable[[int], pd.DataFrame],
+    data_factory: DataFactory,
 ) -> None:
     """Test functionality of GeneralLedger."""
-    fixture_df_transaction_data = df_transaction_data_factory(no_rows=1)
-
-    ledger = GeneralLedger(transactions=fixture_df_transaction_data)
+    mocked_transactions = data_factory.buy().df_transaction_list
+    ledger = GeneralLedger(transactions=mocked_transactions)
 
     assert len(ledger.transactions) == 1
