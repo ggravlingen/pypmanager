@@ -44,7 +44,7 @@
     "express": "4.19.2",
     "msw": "2.3.1",
     "playwright-msw": "3.0.1",
-    "prettier": "3.3.2",
+    "prettier": "3.3.3",
     "typescript-strict-plugin": "2.4.4"
   },
   "scripts": {
