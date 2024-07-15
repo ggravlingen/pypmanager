@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 from datetime import datetime
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
-from unittest.mock import patch
+from unittest.mock import PropertyMock, patch
 
 import numpy as np
 import pandas as pd
@@ -16,10 +17,20 @@ from pypmanager.ingest.transaction.base_loader import (
     _normalize_no_traded,
 )
 from pypmanager.ingest.transaction.const import ColumnNameValues, TransactionTypeValues
-from pypmanager.settings import Settings
+from pypmanager.settings import Settings, TypedSettings
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Generator
+
+
+@pytest.fixture(scope="session", autouse=True)
+def _mock_dir_market_data() -> Generator[Any, Any, Any]:
+    """Return the path to the market data."""
+    with patch.object(
+        TypedSettings, "dir_market_data", new_callable=PropertyMock
+    ) as mock_dir:
+        mock_dir.return_value = Path("tests/fixtures/market_data").resolve()
+        yield
 
 
 class DataFactory:
