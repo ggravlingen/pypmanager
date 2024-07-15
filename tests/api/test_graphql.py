@@ -26,7 +26,7 @@ def _mock_transaction_list_graphql(
     data_factory: DataFactory,
 ) -> Generator[Any, Any, Any]:
     """Mock transaction list."""
-    mocked_transactions = data_factory.buy().df_transaction_list
+    mocked_transactions = data_factory.buy().sell().df_transaction_list
     with (
         patch(
             "pypmanager.general_ledger.helpers.load_transaction_files",
@@ -68,7 +68,7 @@ async def test_graphql_query__all_general_ledger() -> None:
     """
     response = client.post("/graphql", json={"query": query})
     assert response.status_code == 200
-    assert len(response.json()["data"]["allGeneralLedger"]) == 2
+    assert len(response.json()["data"]["allGeneralLedger"]) == 6
 
 
 @pytest.mark.asyncio()
@@ -142,7 +142,7 @@ async def test_graphql_query__all_transaction() -> None:
     """
     response = client.post("/graphql", json={"query": query})
     assert response.status_code == 200
-    assert len(response.json()["data"]["allTransaction"]) == 1
+    assert len(response.json()["data"]["allTransaction"]) == 2
 
 
 @pytest.mark.asyncio()
