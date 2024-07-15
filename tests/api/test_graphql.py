@@ -23,10 +23,11 @@ client = TestClient(app)
 
 @pytest.fixture(scope="module")
 def _mock_transaction_list_graphql(
-    data_factory: DataFactory,
+    data_factory: type[DataFactory],
 ) -> Generator[Any, Any, Any]:
     """Mock transaction list."""
-    mocked_transactions = data_factory.buy().sell().df_transaction_list
+    factory = data_factory()
+    mocked_transactions = factory.buy().sell().df_transaction_list
     with (
         patch(
             "pypmanager.general_ledger.helpers.load_transaction_files",

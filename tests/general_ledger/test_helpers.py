@@ -15,10 +15,11 @@ if TYPE_CHECKING:
 
 @pytest.mark.asyncio()
 async def test_async_aggregate_ledger_by_year(
-    data_factory: DataFactory,
+    data_factory: type[DataFactory],
 ) -> None:
     """Test function async_aggregate_ledger_by_year."""
-    mocked_transactions = data_factory.buy().sell().df_transaction_list
+    factory = data_factory()
+    mocked_transactions = factory.buy().sell().df_transaction_list
     with (
         patch(
             "pypmanager.general_ledger.helpers.load_transaction_files",
