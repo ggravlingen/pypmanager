@@ -9,6 +9,7 @@ import strawberry
 
 from pypmanager.analytics import async_get_historical_portfolio, async_get_holdings
 from pypmanager.general_ledger import get_general_ledger_as_dict
+from pypmanager.general_ledger.helpers import async_aggregate_ledger_by_year
 from pypmanager.ingest.transaction import (
     ColumnNameValues,
     load_transaction_files,
@@ -18,6 +19,7 @@ from .models import (
     HistoricalPortfolioRow,
     LedgerRow,
     PortfolioContentRow,
+    ResultStatementRow,
     TransactionRow,
 )
 
@@ -112,3 +114,24 @@ class Query:
             )
             for index, row in transaction_list.iterrows()
         ]
+
+    @strawberry.field
+    async def result_statement(self: Query) -> list[ResultStatementRow]:
+        """Return the result statement."""
+        ledger_by_year = await async_aggregate_ledger_by_year()
+        output_list: list[ResultStatementRow] = []
+
+        for item_name in ("is_trading",):
+            filtered_ledger = ledger_by_year[
+                ledger_by_year["ledger_account"] == item_name
+            ]
+
+            output_list.append(
+                ResultStatementRow(
+                    item_name=item_name,
+                    year_list=filtered_ledger.year.tolist(),
+                    amount_list=filtered_ledger.net.tolist(),
+                )
+            )
+
+        return output_list
