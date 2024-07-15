@@ -169,25 +169,6 @@ def transaction_data_factory() -> Callable[[int], pd.DataFrame]:
 
 
 @pytest.fixture
-def _mock_transactions_general_ledger(
-    df_transaction_data_factory: Callable[[int], pd.DataFrame],
-) -> Generator[None, Any, None]:
-    """Mock the transaction list."""
-    mocked_transactions = df_transaction_data_factory(no_rows=10)
-
-    # make the transaction_date field into the index
-    mocked_transactions.index = mocked_transactions["transaction_date"]
-
-    with (
-        patch(
-            "pypmanager.general_ledger.helpers.load_transaction_files",
-            return_value=mocked_transactions,
-        ),
-    ):
-        yield
-
-
-@pytest.fixture
 def _mock_transaction_list(
     df_transaction_data_factory: Callable[[int], pd.DataFrame],
 ) -> Generator[None, Any, None]:
