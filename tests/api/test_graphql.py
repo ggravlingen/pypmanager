@@ -141,3 +141,21 @@ async def test_graphql_query__all_transaction() -> None:
     response = client.post("/graphql", json={"query": query})
     assert response.status_code == 200
     assert len(response.json()["data"]["allTransaction"]) == 1
+
+
+@pytest.mark.asyncio()
+@pytest.mark.usefixtures("_mock_transactions_general_ledger")
+async def test_graphql_query__result_statement() -> None:
+    """Test query resultStatement."""
+    query = """
+    {
+        resultStatement {
+            itemName
+            yearList
+            amountList
+        }
+    }
+    """
+    response = client.post("/graphql", json={"query": query})
+    assert response.status_code == 200
+    assert len(response.json()["data"]["resultStatement"]) == 1
