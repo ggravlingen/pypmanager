@@ -116,6 +116,6 @@ class DataFactory:
 
 
 @pytest.fixture(name="data_factory", scope="session")
-def data_factory() -> type[DataFactory]:
+def data_factory() -> DataFactory:
     """Return a factory to mock transaction data."""
-    return DataFactory()
+    return DataFactory

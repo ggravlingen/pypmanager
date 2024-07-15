@@ -11,10 +11,11 @@ if TYPE_CHECKING:
 
 
 def test_class_general_ledger(
-    data_factory: DataFactory,
+    data_factory: type[DataFactory],
 ) -> None:
     """Test functionality of GeneralLedger."""
-    mocked_transactions = data_factory.buy().df_transaction_list
+    factory = data_factory()
+    mocked_transactions = factory.buy().df_transaction_list
     ledger = GeneralLedger(transactions=mocked_transactions)
 
     assert len(ledger.transactions) == 1
