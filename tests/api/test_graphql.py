@@ -1,41 +1,14 @@
 """Tests for graphql."""
 
-from collections.abc import Callable, Generator
 from datetime import date
-from typing import Any
-from unittest.mock import patch
 
 from fastapi.testclient import TestClient
 from freezegun.api import FrozenDateTimeFactory
-import pandas as pd
 import pytest
 
 from pypmanager.api import app
 
 client = TestClient(app)
-
-
-@pytest.fixture
-def _mock_transaction_list(
-    df_transaction_data_factory: Callable[[int], pd.DataFrame],
-) -> Generator[None, Any, None]:
-    """Mock the transaction list."""
-    mocked_transactions = df_transaction_data_factory(no_rows=1)
-
-    # make the transaction_date field into the index
-    mocked_transactions.index = mocked_transactions["transaction_date"]
-
-    with (
-        patch(
-            "pypmanager.general_ledger.helpers.load_transaction_files",
-            return_value=mocked_transactions,
-        ),
-        patch(
-            "pypmanager.api.graphql.query.load_transaction_files",
-            return_value=mocked_transactions,
-        ),
-    ):
-        yield
 
 
 @pytest.mark.asyncio()
