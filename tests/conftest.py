@@ -11,7 +11,7 @@ import pytest
 from pypmanager.ingest.transaction.const import TransactionTypeValues
 
 
-@pytest.fixture(name="df_transaction_data_factory")
+@pytest.fixture(name="df_transaction_data_factory", scope="session")
 def transaction_data_factory() -> Callable[[int], pd.DataFrame]:
     """Return a factory function for generating test data."""
 
@@ -70,6 +70,29 @@ def _mock_transactions_general_ledger(
     with (
         patch(
             "pypmanager.general_ledger.helpers.load_transaction_files",
+            return_value=mocked_transactions,
+        ),
+    ):
+        yield
+
+
+@pytest.fixture
+def _mock_transaction_list(
+    df_transaction_data_factory: Callable[[int], pd.DataFrame],
+) -> Generator[None, Any, None]:
+    """Mock the transaction list."""
+    mocked_transactions = df_transaction_data_factory(no_rows=1)
+
+    # make the transaction_date field into the index
+    mocked_transactions.index = mocked_transactions["transaction_date"]
+
+    with (
+        patch(
+            "pypmanager.general_ledger.helpers.load_transaction_files",
+            return_value=mocked_transactions,
+        ),
+        patch(
+            "pypmanager.api.graphql.query.load_transaction_files",
             return_value=mocked_transactions,
         ),
     ):
