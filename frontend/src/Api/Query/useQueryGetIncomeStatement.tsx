@@ -13,7 +13,7 @@ const QUERY = gql`
 `;
 
 interface ResultStatementData {
-  allGeneralLedger: ResultStatementRow[];
+  resultStatement: ResultStatementRow[];
 }
 
 /**

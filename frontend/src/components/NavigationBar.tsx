@@ -2,6 +2,7 @@ import {
   AccountBalance,
   DarkMode,
   Dataset,
+  Leaderboard,
   LightMode,
   List as ListIcon,
   Menu,
@@ -187,6 +188,12 @@ export default function NavigationBar({
           label={"Current portfolio"}
           icon={<AccountBalance sx={IconSX} />}
           linkTo="/"
+        />
+        <NavigationItem
+          isExpanded={isExpanded}
+          label={"Income statement"}
+          icon={<Leaderboard sx={IconSX} />}
+          linkTo="/income_statement"
         />
         <NavigationItem
           isExpanded={isExpanded}
