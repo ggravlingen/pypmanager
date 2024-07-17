@@ -7,8 +7,8 @@ import pandas as pd
 
 from pypmanager.ingest.transaction import (
     ColumnNameValues,
+    TransactionRegistry,
 )
-from pypmanager.ingest.transaction.helpers import TransactionRegistry
 
 from .ledger import GeneralLedger
 

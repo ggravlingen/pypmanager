@@ -4,7 +4,7 @@ from unittest.mock import patch
 
 import pytest
 
-from pypmanager.ingest.transaction.helpers import TransactionRegistry
+from pypmanager.ingest.transaction import TransactionRegistry
 
 from tests.conftest import DataFactory
 
@@ -18,7 +18,7 @@ async def test_transaction_registry(
     mocked_transactions = factory.buy().sell().df_transaction_list
     with (
         patch(
-            "pypmanager.ingest.transaction.helpers.TransactionRegistry."
+            "pypmanager.ingest.transaction.transaction_registry.TransactionRegistry."
             "_load_transaction_files",
             return_value=mocked_transactions,
         ),

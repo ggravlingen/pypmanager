@@ -4,6 +4,7 @@ from .avanza import AvanzaLoader
 from .const import AccountNameValues, ColumnNameValues, TransactionTypeValues
 from .generic import GenericLoader
 from .lysa import LysaLoader
+from .transaction_registry import TransactionRegistry
 
 __all__ = [
     "AccountNameValues",
@@ -12,4 +13,5 @@ __all__ = [
     "GenericLoader",
     "ColumnNameValues",
     "TransactionTypeValues",
+    "TransactionRegistry",
 ]
