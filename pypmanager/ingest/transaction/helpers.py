@@ -3,23 +3,23 @@
 from __future__ import annotations
 
 import contextlib
+from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 import pandas as pd
 
 from pypmanager.ingest.transaction.base_loader import (
-    FILTER_STATEMENT,
-    REPLACE_CONFIG,
     _cleanup_number,
     _normalize_amount,
     _normalize_fx,
     _normalize_no_traded,
 )
 from pypmanager.ingest.transaction.const import (
-    DTYPES_MAP,
     NUMBER_COLS,
     ColumnNameValues,
+    TransactionTypeValues,
 )
+from pypmanager.settings import Settings
 
 from .avanza import AvanzaLoader
 from .generic import GenericLoader
@@ -27,6 +27,74 @@ from .lysa import LysaLoader
 
 if TYPE_CHECKING:
     from datetime import datetime
+
+
+DTYPES_MAP: dict[str, type[str | float] | str] = {
+    # ColumnNameValues.TRANSACTION_DATE.value is handled in the class
+    ColumnNameValues.ACCOUNT.value: str,
+    ColumnNameValues.TRANSACTION_TYPE.value: str,
+    ColumnNameValues.NAME.value: str,
+    ColumnNameValues.NO_TRADED.value: float,
+    ColumnNameValues.PRICE.value: float,
+    ColumnNameValues.AMOUNT.value: float,
+    ColumnNameValues.COMMISSION.value: float,
+    ColumnNameValues.CURRENCY.value: str,
+    ColumnNameValues.ISIN_CODE.value: str,
+    ColumnNameValues.FX.value: float,
+}
+
+FILTER_STATEMENT = (
+    f"('{TransactionTypeValues.DIVIDEND}'"
+    f",'{TransactionTypeValues.FEE}'"
+    f",'{TransactionTypeValues.FEE_CREDIT}'"
+    f",'{TransactionTypeValues.INTEREST}'"
+    f",'{TransactionTypeValues.DEPOSIT}'"
+    f",'{TransactionTypeValues.CASHBACK}'"
+    f",'{TransactionTypeValues.WITHDRAW}'"
+    f",'{TransactionTypeValues.TAX}'"
+    f",'{TransactionTypeValues.BUY}'"
+    f",'{TransactionTypeValues.SELL}',)"
+)
+
+
+@dataclass
+class ReplaceConfig:
+    """Configuration to replace values."""
+
+    search: list[str]
+    target: str
+
+
+REPLACE_CONFIG = [
+    ReplaceConfig(
+        search=["Köp", "Switch buy", "Buy"],
+        target=TransactionTypeValues.BUY.value,
+    ),
+    ReplaceConfig(
+        search=["Sälj", "Switch sell", "Sell"],
+        target=TransactionTypeValues.SELL.value,
+    ),
+    ReplaceConfig(
+        search=["Räntor"],
+        target=TransactionTypeValues.INTEREST.value,
+    ),
+    ReplaceConfig(
+        search=["Preliminärskatt"],
+        target=TransactionTypeValues.TAX.value,
+    ),
+    ReplaceConfig(
+        search=["Utdelning"],
+        target=TransactionTypeValues.DIVIDEND.value,
+    ),
+    ReplaceConfig(
+        search=["Fee", "Plattformsavgift"],
+        target=TransactionTypeValues.FEE.value,
+    ),
+    ReplaceConfig(
+        search=["Deposit", "Insättning"],
+        target=TransactionTypeValues.DEPOSIT.value,
+    ),
+]
 
 
 class TransactionRegistry:
@@ -48,12 +116,15 @@ class TransactionRegistry:
 
         self.df_all_transactions = self._load_transaction_files()
 
+        self._normalise_transaction_date()
         self._set_index()
         self._normalize_transaction_type()
-        self._filter_transactions()
+        # Cleanup must be done before converting data types
         self._cleanup_df()
         self._convert_data_types()
+        self._filter_transactions()
         self._normalize_data()
+        self._sort_transactions()
 
         if sort_by_date_descending:
             self.df_all_transactions.sort_index(ascending=False)
@@ -66,12 +137,37 @@ class TransactionRegistry:
 
         return pd.concat([df_generic, df_avanza, df_lysa])
 
+    def _normalise_transaction_date(self: TransactionRegistry) -> None:
+        """Make transaction date aware using system time zone."""
+        df_raw = self.df_all_transactions.copy()
+
+        # Convert all datetime objects to UTC
+        df_raw[ColumnNameValues.TRANSACTION_DATE.value] = (
+            df_raw[ColumnNameValues.TRANSACTION_DATE.value]
+            .dt.tz_localize(None)
+            .dt.tz_localize(Settings.system_time_zone)
+        )
+
+        self.df_all_transactions = df_raw
+
+    def _convert_data_types(self: TransactionRegistry) -> None:
+        """Convert columns to correct data types."""
+        df_raw = self.df_all_transactions.copy()
+        for key, val in DTYPES_MAP.items():
+            if key in df_raw.columns:
+                try:
+                    df_raw[key] = df_raw[key].astype(val)
+                except ValueError as err:
+                    msg = f"Unable to parse {key}"
+                    raise ValueError(msg) from err
+
+        self.df_all_transactions = df_raw
+
     def _set_index(self: TransactionRegistry) -> None:
         """Set index."""
         df_raw = self.df_all_transactions.copy()
 
-        if ColumnNameValues.TRANSACTION_DATE.value in df_raw.columns:
-            df_raw = df_raw.set_index(ColumnNameValues.TRANSACTION_DATE.value)
+        df_raw = df_raw.set_index(ColumnNameValues.TRANSACTION_DATE.value)
 
         self.df_all_transactions = df_raw
 
@@ -122,20 +218,6 @@ class TransactionRegistry:
 
         self.df_all_transactions = df_raw
 
-    def _convert_data_types(self: TransactionRegistry) -> None:
-        """Convert columns to correct data types."""
-        df_raw = self.df_all_transactions.copy()
-
-        for key, val in DTYPES_MAP.items():
-            if key in df_raw.columns:
-                try:
-                    df_raw[key] = df_raw[key].astype(val)
-                except ValueError as err:
-                    msg = f"Unable to parse {key}"
-                    raise ValueError(msg) from err
-
-        self.df_all_transactions = df_raw
-
     def _normalize_data(self: TransactionRegistry) -> None:
         """Make sure data is calculated in the same way."""
         df_raw = self.df_all_transactions.copy()
@@ -143,6 +225,14 @@ class TransactionRegistry:
         df_raw[ColumnNameValues.NO_TRADED] = df_raw.apply(_normalize_no_traded, axis=1)
         df_raw[ColumnNameValues.AMOUNT] = df_raw.apply(_normalize_amount, axis=1)
         df_raw[ColumnNameValues.FX] = df_raw.apply(_normalize_fx, axis=1)
+
+        self.df_all_transactions = df_raw
+
+    def _sort_transactions(self: TransactionRegistry) -> None:
+        """Sort transactions."""
+        df_raw = self.df_all_transactions.copy()
+
+        df_raw = df_raw.sort_index()
 
         self.df_all_transactions = df_raw
 

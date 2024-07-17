@@ -83,19 +83,6 @@ class CSVSeparator(StrEnum):
     SEMI_COLON = ";"
 
 
-DTYPES_MAP: dict[str, type[str | float]] = {
-    ColumnNameValues.ACCOUNT: str,
-    ColumnNameValues.TRANSACTION_TYPE: str,
-    ColumnNameValues.NAME: str,
-    ColumnNameValues.NO_TRADED: float,
-    ColumnNameValues.PRICE: float,
-    ColumnNameValues.AMOUNT: float,
-    ColumnNameValues.COMMISSION: float,
-    ColumnNameValues.CURRENCY: str,
-    ColumnNameValues.ISIN_CODE: str,
-    ColumnNameValues.FX: float,
-}
-
 NUMBER_COLS = [
     ColumnNameValues.AMOUNT,
     ColumnNameValues.COMMISSION,
