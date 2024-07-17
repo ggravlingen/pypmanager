@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING
 
 import pandas as pd
 
@@ -13,73 +13,10 @@ from pypmanager.settings import Settings
 from .const import (
     ColumnNameValues,
     CSVSeparator,
-    TransactionTypeValues,
 )
 
 if TYPE_CHECKING:
     from datetime import datetime
-
-
-def _normalize_amount(row: pd.DataFrame) -> float:
-    """Calculate amount if nan."""
-    if row[ColumnNameValues.TRANSACTION_TYPE] in [
-        TransactionTypeValues.CASHBACK,
-        TransactionTypeValues.FEE,
-    ]:
-        amount = row[ColumnNameValues.AMOUNT]
-    else:
-        amount = row[ColumnNameValues.NO_TRADED] * row[ColumnNameValues.PRICE]
-
-    # Buy and tax is a negative cash flow for us
-    if row.transaction_type in [
-        TransactionTypeValues.BUY,
-        TransactionTypeValues.TAX,
-        TransactionTypeValues.FEE,
-    ]:
-        amount = abs(amount) * -1
-    else:
-        amount = abs(amount)
-
-    return cast(float, amount)
-
-
-def _normalize_no_traded(row: pd.DataFrame) -> float:
-    """Calculate number of units traded."""
-    if row.transaction_type == TransactionTypeValues.BUY:
-        no_traded = row[ColumnNameValues.NO_TRADED]
-    else:
-        no_traded = abs(row[ColumnNameValues.NO_TRADED]) * -1
-
-    return cast(float, no_traded)
-
-
-def _normalize_fx(row: pd.DataFrame) -> float:
-    """Set FX rate to a value."""
-    if ColumnNameValues.FX not in row:
-        return 1.00
-
-    if pd.isna(row[ColumnNameValues.FX]):
-        return 1.00
-
-    return cast(float, row[ColumnNameValues.FX])
-
-
-def _cleanup_number(value: str | None) -> float | None:
-    """Make sure values are converted to floats."""
-    if value is None:
-        return None
-
-    if (value := f"{value}") == "-":
-        return 0
-
-    value = value.replace(",", ".")
-    value = value.replace(" ", "")
-
-    try:
-        return float(value)
-    except ValueError as err:
-        msg = f"Unable to parse {value}"
-        raise ValueError(msg) from err
 
 
 def _get_filename(file_path: Path) -> str:
