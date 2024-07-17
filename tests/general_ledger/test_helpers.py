@@ -22,7 +22,8 @@ async def test_async_aggregate_ledger_by_year(
     mocked_transactions = factory.buy().sell().df_transaction_list
     with (
         patch(
-            "pypmanager.general_ledger.helpers.load_transaction_files",
+            "pypmanager.ingest.transaction.helpers.TransactionRegistry."
+            "_load_transaction_files",
             return_value=mocked_transactions,
         ),
     ):

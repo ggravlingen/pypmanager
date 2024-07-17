@@ -75,7 +75,7 @@ class GeneralLedger:
             format="%Y-%m-%d",
         )
         df_tmp = df_tmp.set_index(ColumnNameValues.TRANSACTION_DATE)
-        df_tmp.index = df_tmp.index.date
+        df_tmp.index = df_tmp.index
 
         # Sort by transaction date
         df_tmp = df_tmp.rename_axis(ColumnNameValues.TRANSACTION_DATE).sort_values(
