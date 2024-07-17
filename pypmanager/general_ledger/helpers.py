@@ -7,21 +7,21 @@ import pandas as pd
 
 from pypmanager.ingest.transaction import (
     ColumnNameValues,
-    load_transaction_files,
 )
+from pypmanager.ingest.transaction.helpers import TransactionRegistry
 
 from .ledger import GeneralLedger
 
 
-def get_general_ledger(report_date: datetime | None = None) -> pd.DataFrame:
+async def async_get_general_ledger(report_date: datetime | None = None) -> pd.DataFrame:
     """Return the general ledger."""
-    all_data = load_transaction_files(report_date=report_date)
+    all_data = await TransactionRegistry(report_date=report_date).async_get_registry()
     return GeneralLedger(transactions=all_data).output_df
 
 
-def get_general_ledger_as_dict() -> list[dict[str, Any]]:
+async def async_get_general_ledger_as_dict() -> list[dict[str, Any]]:
     """Get the general ledger converted to dict."""
-    df_general_ledger = get_general_ledger()
+    df_general_ledger = await async_get_general_ledger()
     df_general_ledger = df_general_ledger.sort_values(
         [
             ColumnNameValues.TRANSACTION_DATE,
@@ -36,7 +36,7 @@ def get_general_ledger_as_dict() -> list[dict[str, Any]]:
 
 async def async_aggregate_ledger_by_year() -> pd.DataFrame:
     """Aggregate the general ledger by year."""
-    df_general_ledger = get_general_ledger()
+    df_general_ledger = await async_get_general_ledger()
 
     new_date_column = f"{ColumnNameValues.TRANSACTION_DATE.value}_2"
 

@@ -8,13 +8,15 @@ import numpy as np
 import strawberry
 
 from pypmanager.analytics import async_get_historical_portfolio, async_get_holdings
-from pypmanager.general_ledger import get_general_ledger_as_dict
-from pypmanager.general_ledger.helpers import async_aggregate_ledger_by_year
+from pypmanager.general_ledger import (
+    async_aggregate_ledger_by_year,
+    async_get_general_ledger_as_dict,
+)
 from pypmanager.ingest.transaction import (
     ColumnNameValues,
-    load_transaction_files,
 )
 from pypmanager.ingest.transaction.const import AccountNameValues
+from pypmanager.ingest.transaction.helpers import TransactionRegistry
 
 from .models import (
     HistoricalPortfolioRow,
@@ -32,7 +34,7 @@ class Query:
     @strawberry.field
     async def all_general_ledger(self: Query) -> list[LedgerRow]:
         """Return all general ledger rows."""
-        output_dict = get_general_ledger_as_dict()
+        output_dict = await async_get_general_ledger_as_dict()
 
         return [
             LedgerRow(
@@ -98,7 +100,9 @@ class Query:
     @strawberry.field
     async def all_transaction(self: Query) -> list[TransactionRow]:
         """Return all transactions."""
-        transaction_list = load_transaction_files(sort_by_date_descending=True)
+        transaction_list = await TransactionRegistry(
+            sort_by_date_descending=True
+        ).async_get_registry()
         transaction_list = transaction_list.replace({np.nan: None})
 
         return [

@@ -1,26 +1,21 @@
-"""Tests for the general ledger."""
+"""Test helpers."""
 
-from __future__ import annotations
-
-from typing import TYPE_CHECKING
 from unittest.mock import patch
 
 import pytest
 
-from pypmanager.general_ledger import GeneralLedger
 from pypmanager.ingest.transaction.helpers import TransactionRegistry
 
-if TYPE_CHECKING:
-    from tests.conftest import DataFactory
+from tests.conftest import DataFactory
 
 
 @pytest.mark.asyncio()
-async def test_class_general_ledger(
+async def test_transaction_registry(
     data_factory: type[DataFactory],
 ) -> None:
-    """Test functionality of GeneralLedger."""
+    """Test function async_aggregate_ledger_by_year."""
     factory = data_factory()
-    mocked_transactions = factory.buy().df_transaction_list
+    mocked_transactions = factory.buy().sell().df_transaction_list
     with (
         patch(
             "pypmanager.ingest.transaction.helpers.TransactionRegistry."
@@ -29,6 +24,4 @@ async def test_class_general_ledger(
         ),
     ):
         registry = await TransactionRegistry().async_get_registry()
-        ledger = GeneralLedger(transactions=registry)
-
-        assert len(ledger.transactions) == 1
+        assert len(registry) == 2

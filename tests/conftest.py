@@ -10,12 +10,7 @@ from unittest.mock import PropertyMock, patch
 import pandas as pd
 import pytest
 
-from pypmanager.ingest.transaction.base_loader import (
-    _normalize_amount,
-    _normalize_fx,
-    _normalize_no_traded,
-)
-from pypmanager.ingest.transaction.const import ColumnNameValues, TransactionTypeValues
+from pypmanager.ingest.transaction.const import TransactionTypeValues
 from pypmanager.settings import Settings, TypedSettings
 
 if TYPE_CHECKING:
@@ -101,18 +96,7 @@ class DataFactory:
     @property
     def df_transaction_list(self) -> pd.DataFrame:
         """Return the transaction list as a DataFrame."""
-        df_data = pd.DataFrame(self.transaction_list)
-        df_data[ColumnNameValues.NO_TRADED] = df_data.apply(
-            _normalize_no_traded, axis=1
-        )
-        df_data[ColumnNameValues.AMOUNT] = df_data.apply(_normalize_amount, axis=1)
-        df_data[ColumnNameValues.FX] = df_data.apply(_normalize_fx, axis=1)
-
-        # Make the transaction_date field into the index
-        df_data.index = df_data["transaction_date"]
-
-        # Drop field transaction_date
-        return df_data.drop(columns=["transaction_date"])
+        return pd.DataFrame(self.transaction_list)
 
 
 @pytest.fixture(name="data_factory", scope="session")
