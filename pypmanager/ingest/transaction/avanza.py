@@ -46,6 +46,7 @@ class AvanzaLoader(TransactionLoader):
     }
 
     file_pattern = "avanza*.csv"
+    date_format_pattern = "%Y-%m-%d"
 
     def pre_process_df(self: AvanzaLoader) -> None:
         """Broker specific manipulation of the data frame."""

@@ -38,6 +38,7 @@ class LysaLoader(TransactionLoader):
 
     csv_separator = CSVSeparator.COMMA
     file_pattern = "lysa*.csv"
+    date_format_pattern = "%Y-%m-%dT%H:%M:%S.%fZ"
 
     def pre_process_df(self: LysaLoader) -> None:
         """Load CSV."""

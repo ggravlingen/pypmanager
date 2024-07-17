@@ -26,6 +26,7 @@ class GenericLoader(TransactionLoader):
     """Data loader for misc data."""
 
     file_pattern = "other*.csv"
+    date_format_pattern = "%Y-%m-%d"
 
     def pre_process_df(self: GenericLoader) -> None:
         """Load CSV."""
