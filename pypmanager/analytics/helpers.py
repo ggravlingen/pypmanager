@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import UTC, date, datetime
+from datetime import date, datetime
 import logging
 from typing import cast
 
@@ -51,7 +51,7 @@ class PortfolioSnapshot:
 async def async_get_historical_portfolio() -> list[PortfolioSnapshot]:
     """Return a list of historical portfolios."""
     quarter_list = await async_get_last_n_quarters(no_quarters=8)
-    quarter_list.append(datetime.now(UTC).date())
+    quarter_list.append(datetime.now(Settings.system_time_zone))
 
     portfolio_data: list[PortfolioSnapshot] = []
     for report_date in quarter_list:
