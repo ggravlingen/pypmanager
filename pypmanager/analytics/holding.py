@@ -3,12 +3,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, datetime
 from functools import cached_property
 import logging
 import math
 from typing import cast
 
+import numpy as np
 import pandas as pd
 
 from pypmanager.ingest.transaction import AccountNameValues, ColumnNameValues
@@ -26,7 +27,7 @@ class Holding:
     df_general_ledger: pd.DataFrame
     name: str
     calculated_data: pd.DataFrame | None = None
-    report_date: date | None = None
+    report_date: datetime | None = None
 
     # Caching
     _security_info: MutualFund | None = None
@@ -47,7 +48,10 @@ class Holding:
         )
 
         if self.report_date is not None:
-            df_all_data = df_all_data.loc[(df_all_data.index <= self.report_date)]
+            report_date_datetime64 = np.datetime64(
+                pd.to_datetime(self.report_date.date())
+            )
+            df_all_data = df_all_data.loc[(df_all_data.index <= report_date_datetime64)]
 
         self.df_general_ledger = df_all_data
 

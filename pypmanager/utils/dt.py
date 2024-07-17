@@ -1,7 +1,9 @@
 """Date utilities."""
 
-from datetime import UTC, date, datetime, timedelta
+from datetime import datetime, timedelta
 from enum import IntEnum
+
+from pypmanager.settings import Settings
 
 QUARTER_ENDS = [(3, 31), (6, 30), (9, 30), (12, 31)]
 
@@ -35,25 +37,25 @@ class WeekDayEnumValues(IntEnum):
     SUN = 6
 
 
-def get_previous_quarter(report_date: date) -> date:
+def get_previous_quarter(report_date: datetime) -> datetime:
     """Return the previous quarter."""
     if report_date.month < MonthEnumValues.APR:
-        return date(report_date.year - 1, 12, 31)
+        return datetime(report_date.year - 1, 12, 31, tzinfo=Settings.system_time_zone)
 
     if report_date.month < MonthEnumValues.JUL:
-        return date(report_date.year, 3, 31)
+        return datetime(report_date.year, 3, 31, tzinfo=Settings.system_time_zone)
 
     if report_date.month < MonthEnumValues.OCT:
-        return date(report_date.year, 6, 30)
+        return datetime(report_date.year, 6, 30, tzinfo=Settings.system_time_zone)
 
-    return date(report_date.year, 9, 30)
+    return datetime(report_date.year, 9, 30, tzinfo=Settings.system_time_zone)
 
 
-async def async_get_last_n_quarters(no_quarters: int) -> list[date]:
+async def async_get_last_n_quarters(no_quarters: int) -> list[datetime]:
     """Return a list of fiscal quarter ends."""
-    current_date = datetime.now(UTC).date()
+    current_date = datetime.now(tz=Settings.system_time_zone)
     last_quarter = get_previous_quarter(report_date=current_date)
-    quarter_ends: list[date] = []
+    quarter_ends: list[datetime] = []
 
     quarter_ends.append(last_quarter)
 
