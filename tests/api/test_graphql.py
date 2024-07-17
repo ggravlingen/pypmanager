@@ -30,7 +30,7 @@ def _mock_transaction_list_graphql(
     mocked_transactions = factory.buy().sell().df_transaction_list
     with (
         patch(
-            "pypmanager.ingest.transaction.helpers.TransactionRegistry."
+            "pypmanager.ingest.transaction.transaction_registry.TransactionRegistry."
             "_load_transaction_files",
             return_value=mocked_transactions,
         ),
