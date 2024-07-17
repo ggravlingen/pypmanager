@@ -182,9 +182,6 @@ class TransactionRegistry:
         self._normalize_data()
         self._sort_transactions()
 
-        if sort_by_date_descending:
-            self.df_all_transactions.sort_index(ascending=False)
-
     def _load_transaction_files(self: TransactionRegistry) -> pd.DataFrame:
         """Load transaction files and return a sorted DataFrame."""
         df_generic = GenericLoader(self.report_date).df_final
@@ -288,7 +285,10 @@ class TransactionRegistry:
         """Sort transactions."""
         df_raw = self.df_all_transactions.copy()
 
-        df_raw = df_raw.sort_index()
+        if self.sort_by_date_descending:
+            df_raw = df_raw.sort_index(ascending=False)
+        else:
+            df_raw = df_raw.sort_index()
 
         self.df_all_transactions = df_raw
 
