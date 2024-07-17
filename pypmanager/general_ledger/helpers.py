@@ -34,6 +34,17 @@ async def async_get_general_ledger_as_dict() -> list[dict[str, Any]]:
     return cast(list[dict[str, Any]], output_dict)
 
 
+def _calculate_result(row: pd.DataFrame) -> float:
+    """Calculate the result."""
+    if row[ColumnNameValues.CREDIT.value] is not None:
+        return cast(float, row[ColumnNameValues.CREDIT.value])
+
+    if row[ColumnNameValues.DEBIT.value] is not None:
+        return -cast(float, row[ColumnNameValues.DEBIT.value])
+
+    return 0.0
+
+
 async def async_aggregate_ledger_by_year() -> pd.DataFrame:
     """Aggregate the general ledger by year."""
     df_general_ledger = await async_get_general_ledger()
@@ -51,16 +62,18 @@ async def async_aggregate_ledger_by_year() -> pd.DataFrame:
 
     filtered_df_copy["year"] = filtered_df_copy[new_date_column].dt.year
 
+    filtered_df_copy["result_value"] = filtered_df_copy.apply(_calculate_result, axis=1)
+
     df_grouped_data = (
         filtered_df_copy.groupby(["year", ColumnNameValues.ACCOUNT.value])[
-            ColumnNameValues.CREDIT.value
+            "result_value"
         ]
         .sum()
         .reset_index()
     )
 
     return df_grouped_data.pivot_table(
-        values=ColumnNameValues.CREDIT.value,
+        values="result_value",
         index=ColumnNameValues.ACCOUNT.value,
         columns="year",
         fill_value=None,
