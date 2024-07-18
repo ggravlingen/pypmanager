@@ -19,9 +19,11 @@ async def async_get_general_ledger(report_date: datetime | None = None) -> pd.Da
     return GeneralLedger(transactions=all_data).output_df
 
 
-async def async_get_general_ledger_as_dict() -> list[dict[str, Any]]:
+async def async_get_general_ledger_as_dict(
+    report_date: datetime | None = None,
+) -> list[dict[str, Any]]:
     """Get the general ledger converted to dict."""
-    df_general_ledger = await async_get_general_ledger()
+    df_general_ledger = await async_get_general_ledger(report_date=report_date)
     df_general_ledger = df_general_ledger.sort_values(
         [
             ColumnNameValues.TRANSACTION_DATE,
