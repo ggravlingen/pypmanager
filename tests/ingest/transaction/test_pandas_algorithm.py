@@ -96,3 +96,24 @@ def test__normalize_fx(input_data: pd.DataFrame, expected: float) -> None:
 def test_normalize_amount(row: pd.Series, expected: int) -> None:
     """Test function _normalize_amount."""
     assert PandasAlgorithm.normalize_amount(row) == expected
+
+
+@pytest.mark.parametrize(
+    ("number", "expected_result"),
+    [
+        (None, None),
+        ("-", 0),
+        ("500 000 000.0", 500000000.0),
+        ("500,0", 500.0),
+    ],
+)
+def test_cleanup_number(number: str | None, expected_result: float | None) -> None:
+    """Test function _cleanup_number."""
+    result = PandasAlgorithm.cleanup_number(number)
+    assert result == expected_result
+
+
+def test_cleanup_number__raise_value_error() -> None:
+    """Test function _cleanup_number for invalid number."""
+    with pytest.raises(ValueError, match="Unable to parse abc"):
+        PandasAlgorithm.cleanup_number("abc")
