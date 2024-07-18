@@ -10,26 +10,20 @@ const columnSettings = [
     dataType: CellDataType.DATE,
   },
   {
-    headerName: "Broker",
-    fieldPath: "Broker",
-    align: CellAlign.LEFT,
-    dataType: CellDataType.STRING,
-  },
-  {
     headerName: "Source",
     fieldPath: "source",
     align: CellAlign.LEFT,
     dataType: CellDataType.STRING,
   },
   {
-    headerName: "Action",
-    fieldPath: "action",
+    headerName: "Security",
+    fieldPath: "name",
     align: CellAlign.LEFT,
     dataType: CellDataType.STRING,
   },
   {
-    headerName: "Security",
-    fieldPath: "name",
+    headerName: "Action",
+    fieldPath: "action",
     align: CellAlign.LEFT,
     dataType: CellDataType.STRING,
   },
@@ -66,13 +60,6 @@ const columnSettings = [
     align: CellAlign.RIGHT,
     dataType: CellDataType.NUMBER,
     noDecimal: 0,
-  },
-  {
-    headerName: "FX rate",
-    fieldPath: "fx",
-    align: CellAlign.RIGHT,
-    dataType: CellDataType.NUMBER,
-    noDecimal: 4,
   },
 ];
 
