@@ -114,6 +114,19 @@ def _normalize_amount(row: pd.DataFrame) -> float:
     return cast(float, amount)
 
 
+def _calculate_cash_flow_nominal(row: pd.DataFrame) -> float:
+    """Calculate cash flow."""
+    if (amount := cast(float | None, row[ColumnNameValues.AMOUNT.value])) is None:
+        return 0.0
+
+    if row[ColumnNameValues.COMMISSION.value] is None:
+        commission = 0.0
+    else:
+        commission = cast(float, row[ColumnNameValues.COMMISSION.value])
+
+    return amount + commission
+
+
 def _normalize_no_traded(row: pd.DataFrame) -> float:
     """Calculate number of units traded."""
     if row.transaction_type == TransactionTypeValues.BUY:
@@ -278,6 +291,9 @@ class TransactionRegistry:
         df_raw[ColumnNameValues.NO_TRADED] = df_raw.apply(_normalize_no_traded, axis=1)
         df_raw[ColumnNameValues.AMOUNT] = df_raw.apply(_normalize_amount, axis=1)
         df_raw[ColumnNameValues.FX] = df_raw.apply(_normalize_fx, axis=1)
+        df_raw[ColumnNameValues.CASH_CLOW_NOMAL.value] = df_raw.apply(
+            _calculate_cash_flow_nominal, axis=1
+        )
 
         self.df_all_transactions = df_raw
 

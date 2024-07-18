@@ -51,6 +51,7 @@ class ColumnNameValues(StrEnum):
     BROKER = "broker"
     COMMISSION = "commission"
     CASH_FLOW_LOCAL = "cash_flow_base_ccy"
+    CASH_CLOW_NOMAL = "cash_flow_nominal_ccy"
     CURRENCY = "currency"
     CREDIT = "credit"
     DEBIT = "debit"
