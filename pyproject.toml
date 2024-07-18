@@ -192,3 +192,7 @@ omit = [
   "pypmanager/error.py",
   "pypmanager/analytics/__init__.py",
 ]
+exclude_lines = [
+  'if TYPE_CHECKING:',
+  'pragma: no cover'
+]
