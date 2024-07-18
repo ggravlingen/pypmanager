@@ -128,17 +128,6 @@ def _calculate_cash_flow_nominal(row: pd.DataFrame) -> float:
     return amount + commission
 
 
-def _normalize_fx(row: pd.DataFrame) -> float:
-    """Set FX rate to a value."""
-    if ColumnNameValues.FX not in row:
-        return 1.00
-
-    if pd.isna(row[ColumnNameValues.FX]):
-        return 1.00
-
-    return cast(float, row[ColumnNameValues.FX])
-
-
 def _cleanup_number(value: str | None) -> float | None:
     """Make sure values are converted to floats."""
     if value is None:
@@ -279,11 +268,13 @@ class TransactionRegistry:
         """Make sure data is calculated in the same way."""
         df_raw = self.df_all_transactions.copy()
 
-        df_raw[ColumnNameValues.NO_TRADED] = df_raw.apply(
+        df_raw[ColumnNameValues.NO_TRADED.value] = df_raw.apply(
             PandasAlgorithm.normalize_no_traded, axis=1
         )
-        df_raw[ColumnNameValues.AMOUNT] = df_raw.apply(_normalize_amount, axis=1)
-        df_raw[ColumnNameValues.FX] = df_raw.apply(_normalize_fx, axis=1)
+        df_raw[ColumnNameValues.AMOUNT.value] = df_raw.apply(_normalize_amount, axis=1)
+        df_raw[ColumnNameValues.FX.value] = df_raw.apply(
+            PandasAlgorithm.normalize_fx, axis=1
+        )
         df_raw[ColumnNameValues.CASH_CLOW_NOMAL.value] = df_raw.apply(
             _calculate_cash_flow_nominal, axis=1
         )
