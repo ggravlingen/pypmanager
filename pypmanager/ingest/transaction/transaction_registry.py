@@ -18,6 +18,7 @@ from pypmanager.settings import Settings
 from .avanza import AvanzaLoader
 from .generic import GenericLoader
 from .lysa import LysaLoader
+from .pandas_algorithm import PandasAlgorithm
 
 if TYPE_CHECKING:
     from datetime import datetime
@@ -125,16 +126,6 @@ def _calculate_cash_flow_nominal(row: pd.DataFrame) -> float:
         commission = cast(float, row[ColumnNameValues.COMMISSION.value])
 
     return amount + commission
-
-
-def _normalize_no_traded(row: pd.DataFrame) -> float:
-    """Calculate number of units traded."""
-    if row.transaction_type == TransactionTypeValues.BUY:
-        no_traded = row[ColumnNameValues.NO_TRADED]
-    else:
-        no_traded = abs(row[ColumnNameValues.NO_TRADED]) * -1
-
-    return cast(float, no_traded)
 
 
 def _normalize_fx(row: pd.DataFrame) -> float:
@@ -288,7 +279,9 @@ class TransactionRegistry:
         """Make sure data is calculated in the same way."""
         df_raw = self.df_all_transactions.copy()
 
-        df_raw[ColumnNameValues.NO_TRADED] = df_raw.apply(_normalize_no_traded, axis=1)
+        df_raw[ColumnNameValues.NO_TRADED] = df_raw.apply(
+            PandasAlgorithm.normalize_no_traded, axis=1
+        )
         df_raw[ColumnNameValues.AMOUNT] = df_raw.apply(_normalize_amount, axis=1)
         df_raw[ColumnNameValues.FX] = df_raw.apply(_normalize_fx, axis=1)
         df_raw[ColumnNameValues.CASH_CLOW_NOMAL.value] = df_raw.apply(
