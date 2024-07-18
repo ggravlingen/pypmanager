@@ -125,7 +125,7 @@ class Query:
                     # It makes more sense to use the absolute value of the commission in
                     # this context
                     commission=commission,
-                    cash_flow=row[ColumnNameValues.CASH_CLOW_NOMAL.value],
+                    cash_flow=row[ColumnNameValues.CASH_FLOW_NOMINAL.value],
                     fx=row[ColumnNameValues.FX.value],
                 )
             )
