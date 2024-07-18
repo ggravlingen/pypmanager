@@ -5,58 +5,12 @@ from __future__ import annotations
 import pandas as pd
 import pytest
 
-from pypmanager.ingest.transaction import TransactionTypeValues
 from pypmanager.ingest.transaction.base_loader import (
     TransactionLoader,
 )
 from pypmanager.ingest.transaction.transaction_registry import (
     _cleanup_number,
-    _normalize_amount,
 )
-
-
-@pytest.mark.parametrize(
-    ("row", "expected"),
-    [
-        # Test a buy transaction without a specified amount
-        (
-            pd.Series(
-                {
-                    "no_traded": 10,
-                    "price": 10,
-                    "transaction_type": TransactionTypeValues.BUY,
-                },
-            ),
-            -100,
-        ),
-        # Test a sell transaction without a specified amount
-        (
-            pd.Series(
-                {
-                    "no_traded": 10,
-                    "price": 10,
-                    "transaction_type": TransactionTypeValues.SELL,
-                },
-            ),
-            100,
-        ),
-        # Test a buy transaction without a specified amount and a negative number of
-        # traded units
-        (
-            pd.Series(
-                {
-                    "no_traded": -10,
-                    "price": 10,
-                    "transaction_type": TransactionTypeValues.BUY,
-                },
-            ),
-            -100,
-        ),
-    ],
-)
-def test_normalize_amount(row: pd.Series, expected: int) -> None:
-    """Test function _normalize_amount."""
-    assert _normalize_amount(row) == expected
 
 
 @pytest.fixture
