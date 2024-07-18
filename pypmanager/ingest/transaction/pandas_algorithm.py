@@ -13,6 +13,19 @@ class PandasAlgorithm:
     """Pandas algorithm for transaction data."""
 
     @staticmethod
+    def calculate_cash_flow_nominal(row: pd.DataFrame) -> float:
+        """Calculate nominal total cash flow for a transaction."""
+        if (amount := cast(float | None, row[ColumnNameValues.AMOUNT.value])) is None:
+            return 0.0
+
+        if row[ColumnNameValues.COMMISSION.value] is None:
+            commission = 0.0
+        else:
+            commission = cast(float, row[ColumnNameValues.COMMISSION.value])
+
+        return amount + commission
+
+    @staticmethod
     def cleanup_number(value: str | None) -> float | None:
         """Make sure values are converted to floats."""
         if value is None:

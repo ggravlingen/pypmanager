@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import contextlib
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING
 
 import pandas as pd
 
@@ -90,19 +90,6 @@ REPLACE_CONFIG = [
         target=TransactionTypeValues.DEPOSIT.value,
     ),
 ]
-
-
-def _calculate_cash_flow_nominal(row: pd.DataFrame) -> float:
-    """Calculate cash flow."""
-    if (amount := cast(float | None, row[ColumnNameValues.AMOUNT.value])) is None:
-        return 0.0
-
-    if row[ColumnNameValues.COMMISSION.value] is None:
-        commission = 0.0
-    else:
-        commission = cast(float, row[ColumnNameValues.COMMISSION.value])
-
-    return amount + commission
 
 
 class TransactionRegistry:
@@ -237,7 +224,7 @@ class TransactionRegistry:
             PandasAlgorithm.normalize_fx, axis=1
         )
         df_raw[ColumnNameValues.CASH_CLOW_NOMAL.value] = df_raw.apply(
-            _calculate_cash_flow_nominal, axis=1
+            PandasAlgorithm.calculate_cash_flow_nominal, axis=1
         )
 
         self.df_all_transactions = df_raw
