@@ -105,24 +105,32 @@ class Query:
         ).async_get_registry()
         transaction_list = transaction_list.replace({np.nan: None})
 
-        return [
-            TransactionRow(
-                transaction_date=index,
-                broker=row[ColumnNameValues.BROKER.value],
-                source=row[ColumnNameValues.SOURCE.value],
-                action=row[ColumnNameValues.TRANSACTION_TYPE.value],
-                name=row[ColumnNameValues.NAME.value],
-                no_traded=row[ColumnNameValues.NO_TRADED.value],
-                currency=row[ColumnNameValues.CURRENCY.value],
-                price=row[ColumnNameValues.PRICE.value],
-                # It makes more sense to use the absolute value of the commission in
-                # this context
-                commission=abs(row[ColumnNameValues.COMMISSION.value]),
-                cash_flow=row[ColumnNameValues.AMOUNT.value],
-                fx=row[ColumnNameValues.FX.value],
+        output_list: list[TransactionRow] = []
+        for index, row in transaction_list.iterrows():
+            if row[ColumnNameValues.COMMISSION.value] is not None:
+                commission = abs(row[ColumnNameValues.COMMISSION.value])
+            else:
+                commission = None
+
+            output_list.append(
+                TransactionRow(
+                    transaction_date=index,
+                    broker=row[ColumnNameValues.BROKER.value],
+                    source=row[ColumnNameValues.SOURCE.value],
+                    action=row[ColumnNameValues.TRANSACTION_TYPE.value],
+                    name=row[ColumnNameValues.NAME.value],
+                    no_traded=row[ColumnNameValues.NO_TRADED.value],
+                    currency=row[ColumnNameValues.CURRENCY.value],
+                    price=row[ColumnNameValues.PRICE.value],
+                    # It makes more sense to use the absolute value of the commission in
+                    # this context
+                    commission=commission,
+                    cash_flow=row[ColumnNameValues.AMOUNT.value],
+                    fx=row[ColumnNameValues.FX.value],
+                )
             )
-            for index, row in transaction_list.iterrows()
-        ]
+
+        return output_list
 
     @strawberry.field
     async def result_statement(self: Query) -> list[ResultStatementRow]:
