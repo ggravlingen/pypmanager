@@ -13,6 +13,24 @@ class PandasAlgorithm:
     """Pandas algorithm for transaction data."""
 
     @staticmethod
+    def cleanup_number(value: str | None) -> float | None:
+        """Make sure values are converted to floats."""
+        if value is None:
+            return None
+
+        if (value := f"{value}") == "-":
+            return 0
+
+        value = value.replace(",", ".")
+        value = value.replace(" ", "")
+
+        try:
+            return float(value)
+        except ValueError as err:
+            msg = f"Unable to parse {value}"
+            raise ValueError(msg) from err
+
+    @staticmethod
     def normalize_amount(row: pd.DataFrame) -> float:
         """Calculate amount if nan."""
         if row[ColumnNameValues.TRANSACTION_TYPE.value] in [

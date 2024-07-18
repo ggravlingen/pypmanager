@@ -105,24 +105,6 @@ def _calculate_cash_flow_nominal(row: pd.DataFrame) -> float:
     return amount + commission
 
 
-def _cleanup_number(value: str | None) -> float | None:
-    """Make sure values are converted to floats."""
-    if value is None:
-        return None
-
-    if (value := f"{value}") == "-":
-        return 0
-
-    value = value.replace(",", ".")
-    value = value.replace(" ", "")
-
-    try:
-        return float(value)
-    except ValueError as err:
-        msg = f"Unable to parse {value}"
-        raise ValueError(msg) from err
-
-
 class TransactionRegistry:
     """
     Create a normalised registry for all transactions.
@@ -226,7 +208,7 @@ class TransactionRegistry:
         for col in NUMBER_COLS:
             if col in df_raw.columns:
                 df_raw[col] = df_raw.apply(
-                    lambda x, _col=col: _cleanup_number(x[_col]),
+                    lambda x, _col=col: PandasAlgorithm.cleanup_number(x[_col]),
                     axis=1,
                 )
 
