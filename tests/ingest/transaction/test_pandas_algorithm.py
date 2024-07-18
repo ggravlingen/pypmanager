@@ -101,12 +101,13 @@ def test_normalize_amount(row: pd.Series, expected: int) -> None:
 @pytest.mark.parametrize(
     ("number", "expected_result"),
     [
+        (None, None),
         ("-", 0),
         ("500 000 000.0", 500000000.0),
         ("500,0", 500.0),
     ],
 )
-def test_cleanup_number(number: str, expected_result: int) -> None:
+def test_cleanup_number(number: str | None, expected_result: float | None) -> None:
     """Test function _cleanup_number."""
     result = PandasAlgorithm.cleanup_number(number)
     assert result == expected_result
