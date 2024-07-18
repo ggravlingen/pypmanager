@@ -42,3 +42,47 @@ def test__normalize_fx(input_data: pd.DataFrame, expected: float) -> None:
     """Test function _normalize_fx."""
     result = PandasAlgorithm.normalize_fx(input_data.iloc[0])
     assert result == expected
+
+
+@pytest.mark.parametrize(
+    ("row", "expected"),
+    [
+        # Test a buy transaction without a specified amount
+        (
+            pd.Series(
+                {
+                    "no_traded": 10,
+                    "price": 10,
+                    "transaction_type": TransactionTypeValues.BUY,
+                },
+            ),
+            -100,
+        ),
+        # Test a sell transaction without a specified amount
+        (
+            pd.Series(
+                {
+                    "no_traded": 10,
+                    "price": 10,
+                    "transaction_type": TransactionTypeValues.SELL,
+                },
+            ),
+            100,
+        ),
+        # Test a buy transaction without a specified amount and a negative number of
+        # traded units
+        (
+            pd.Series(
+                {
+                    "no_traded": -10,
+                    "price": 10,
+                    "transaction_type": TransactionTypeValues.BUY,
+                },
+            ),
+            -100,
+        ),
+    ],
+)
+def test_normalize_amount(row: pd.Series, expected: int) -> None:
+    """Test function _normalize_amount."""
+    assert PandasAlgorithm.normalize_amount(row) == expected

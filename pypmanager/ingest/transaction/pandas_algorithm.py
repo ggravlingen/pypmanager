@@ -13,6 +13,29 @@ class PandasAlgorithm:
     """Pandas algorithm for transaction data."""
 
     @staticmethod
+    def normalize_amount(row: pd.DataFrame) -> float:
+        """Calculate amount if nan."""
+        if row[ColumnNameValues.TRANSACTION_TYPE] in [
+            TransactionTypeValues.CASHBACK,
+            TransactionTypeValues.FEE,
+        ]:
+            amount = row[ColumnNameValues.AMOUNT]
+        else:
+            amount = row[ColumnNameValues.NO_TRADED] * row[ColumnNameValues.PRICE]
+
+        # Buy and tax is a negative cash flow for us
+        if row[ColumnNameValues.TRANSACTION_TYPE] in [
+            TransactionTypeValues.BUY,
+            TransactionTypeValues.TAX,
+            TransactionTypeValues.FEE,
+        ]:
+            amount = abs(amount) * -1
+        else:
+            amount = abs(amount)
+
+        return cast(float, amount)
+
+    @staticmethod
     def normalize_no_traded(row: pd.DataFrame) -> float:
         """Calculate number of units traded."""
         no_traded = cast(float, row[ColumnNameValues.NO_TRADED.value])

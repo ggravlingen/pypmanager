@@ -92,29 +92,6 @@ REPLACE_CONFIG = [
 ]
 
 
-def _normalize_amount(row: pd.DataFrame) -> float:
-    """Calculate amount if nan."""
-    if row[ColumnNameValues.TRANSACTION_TYPE] in [
-        TransactionTypeValues.CASHBACK,
-        TransactionTypeValues.FEE,
-    ]:
-        amount = row[ColumnNameValues.AMOUNT]
-    else:
-        amount = row[ColumnNameValues.NO_TRADED] * row[ColumnNameValues.PRICE]
-
-    # Buy and tax is a negative cash flow for us
-    if row[ColumnNameValues.TRANSACTION_TYPE] in [
-        TransactionTypeValues.BUY,
-        TransactionTypeValues.TAX,
-        TransactionTypeValues.FEE,
-    ]:
-        amount = abs(amount) * -1
-    else:
-        amount = abs(amount)
-
-    return cast(float, amount)
-
-
 def _calculate_cash_flow_nominal(row: pd.DataFrame) -> float:
     """Calculate cash flow."""
     if (amount := cast(float | None, row[ColumnNameValues.AMOUNT.value])) is None:
@@ -271,7 +248,9 @@ class TransactionRegistry:
         df_raw[ColumnNameValues.NO_TRADED.value] = df_raw.apply(
             PandasAlgorithm.normalize_no_traded, axis=1
         )
-        df_raw[ColumnNameValues.AMOUNT.value] = df_raw.apply(_normalize_amount, axis=1)
+        df_raw[ColumnNameValues.AMOUNT.value] = df_raw.apply(
+            PandasAlgorithm.normalize_amount, axis=1
+        )
         df_raw[ColumnNameValues.FX.value] = df_raw.apply(
             PandasAlgorithm.normalize_fx, axis=1
         )
