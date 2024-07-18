@@ -12,7 +12,6 @@ from pypmanager.ingest.transaction.base_loader import (
 from pypmanager.ingest.transaction.transaction_registry import (
     _cleanup_number,
     _normalize_amount,
-    _normalize_no_traded,
 )
 
 
@@ -64,23 +63,6 @@ def test_normalize_amount(row: pd.Series, expected: int) -> None:
 def data_normalize_no_traded() -> pd.DataFrame:
     """Return test data for normalize_no_traded function."""
     return pd.DataFrame({"transaction_type": ["BUY", "SELL"], "no_traded": [10, -5]})
-
-
-@pytest.mark.parametrize(
-    ("trans_type", "no_traded", "expected"),
-    [
-        (TransactionTypeValues.BUY, 10, 10),
-        (TransactionTypeValues.SELL, -5, -5),
-    ],
-)
-def test__normalize_no_traded(trans_type: str, no_traded: int, expected: int) -> None:
-    """Test function _normalize_no_traded."""
-    test_data = pd.DataFrame(
-        {"transaction_type": [trans_type], "no_traded": [no_traded]},
-    )
-    result = _normalize_no_traded(test_data.iloc[0])
-
-    assert result == expected
 
 
 @pytest.mark.parametrize(
