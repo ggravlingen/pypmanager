@@ -117,3 +117,47 @@ def test_cleanup_number__raise_value_error() -> None:
     """Test function _cleanup_number for invalid number."""
     with pytest.raises(ValueError, match="Unable to parse abc"):
         PandasAlgorithm.cleanup_number("abc")
+
+
+@pytest.mark.parametrize(
+    ("row", "expected"),
+    [
+        # Amount is None, which leads to an early return
+        (
+            pd.DataFrame(
+                {
+                    ColumnNameValues.AMOUNT.value: [None],
+                    ColumnNameValues.COMMISSION.value: [None],
+                }
+            ),
+            0.0,
+        ),
+        # Amount is 1.00 but commission is None
+        (
+            pd.DataFrame(
+                {
+                    ColumnNameValues.AMOUNT.value: [1.0],
+                    ColumnNameValues.COMMISSION.value: [None],
+                }
+            ),
+            1.0,
+        ),
+        # Both amount and commission are True
+        (
+            pd.DataFrame(
+                {
+                    ColumnNameValues.AMOUNT.value: [1.0],
+                    ColumnNameValues.COMMISSION.value: [2.0],
+                }
+            ),
+            3.0,
+        ),
+    ],
+)
+def test_calculate_cash_flow_nominal(
+    row: pd.DataFrame,
+    expected: float,
+) -> None:
+    """Test function calculate_cash_flow_nominal."""
+    result = PandasAlgorithm.calculate_cash_flow_nominal(row.iloc[0])
+    assert result == expected
