@@ -5,7 +5,7 @@ from __future__ import annotations
 import pandas as pd
 import pytest
 
-from pypmanager.ingest.transaction.const import TransactionTypeValues
+from pypmanager.ingest.transaction.const import ColumnNameValues, TransactionTypeValues
 from pypmanager.ingest.transaction.pandas_algorithm import PandasAlgorithm
 
 
@@ -24,4 +24,21 @@ def test__normalize_no_traded(trans_type: str, no_traded: int, expected: int) ->
     )
     result = PandasAlgorithm.normalize_no_traded(test_data.iloc[0])
 
+    assert result == expected
+
+
+@pytest.mark.parametrize(
+    ("input_data", "expected"),
+    [
+        # Case when FX column is missing
+        (pd.DataFrame({ColumnNameValues.AMOUNT.value: [1.00]}), 1.00),
+        # Case when FX value is NaN
+        (pd.DataFrame({ColumnNameValues.FX.value: [pd.NA]}), 1.00),
+        # Case when FX value is present and valid
+        (pd.DataFrame({ColumnNameValues.FX.value: [1.23]}), 1.23),
+    ],
+)
+def test__normalize_fx(input_data: pd.DataFrame, expected: float) -> None:
+    """Test function _normalize_fx."""
+    result = PandasAlgorithm.normalize_fx(input_data.iloc[0])
     assert result == expected

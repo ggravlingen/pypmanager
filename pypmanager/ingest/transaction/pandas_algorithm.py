@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, cast
+from typing import cast
+
+import pandas as pd
 
 from .const import ColumnNameValues, TransactionTypeValues
-
-if TYPE_CHECKING:
-    import pandas as pd
 
 
 class PandasAlgorithm:
@@ -25,3 +24,14 @@ class PandasAlgorithm:
             return no_traded
 
         return abs(no_traded) * -1
+
+    @staticmethod
+    def normalize_fx(row: pd.DataFrame) -> float:
+        """Set FX rate to a value."""
+        if ColumnNameValues.FX.value not in row:
+            return 1.00
+
+        if pd.isna(row[ColumnNameValues.FX.value]):
+            return 1.00
+
+        return cast(float, row[ColumnNameValues.FX.value])
