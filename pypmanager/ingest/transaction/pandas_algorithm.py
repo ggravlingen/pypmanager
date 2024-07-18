@@ -15,19 +15,22 @@ class PandasAlgorithm:
     @staticmethod
     def normalize_amount(row: pd.DataFrame) -> float:
         """Calculate amount if nan."""
-        if row[ColumnNameValues.TRANSACTION_TYPE] in [
-            TransactionTypeValues.CASHBACK,
-            TransactionTypeValues.FEE,
+        if row[ColumnNameValues.TRANSACTION_TYPE.value] in [
+            TransactionTypeValues.CASHBACK.value,
+            TransactionTypeValues.FEE.value,
         ]:
-            amount = row[ColumnNameValues.AMOUNT]
+            amount = row[ColumnNameValues.AMOUNT.value]
         else:
-            amount = row[ColumnNameValues.NO_TRADED] * row[ColumnNameValues.PRICE]
+            amount = (
+                row[ColumnNameValues.NO_TRADED.value]
+                * row[ColumnNameValues.PRICE.value]
+            )
 
         # Buy and tax is a negative cash flow for us
-        if row[ColumnNameValues.TRANSACTION_TYPE] in [
-            TransactionTypeValues.BUY,
-            TransactionTypeValues.TAX,
-            TransactionTypeValues.FEE,
+        if row[ColumnNameValues.TRANSACTION_TYPE.value] in [
+            TransactionTypeValues.BUY.value,
+            TransactionTypeValues.TAX.value,
+            TransactionTypeValues.FEE.value,
         ]:
             amount = abs(amount) * -1
         else:
