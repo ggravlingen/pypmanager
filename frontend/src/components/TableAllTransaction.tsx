@@ -55,6 +55,19 @@ const columnSettings = [
     noDecimal: 0,
   },
   {
+    headerName: "Currency",
+    fieldPath: "currency",
+    align: CellAlign.RIGHT,
+    dataType: CellDataType.STRING,
+  },
+  {
+    headerName: "Nominal cash flow",
+    fieldPath: "cashFlow",
+    align: CellAlign.RIGHT,
+    dataType: CellDataType.NUMBER,
+    noDecimal: 0,
+  },
+  {
     headerName: "FX rate",
     fieldPath: "fx",
     align: CellAlign.RIGHT,
