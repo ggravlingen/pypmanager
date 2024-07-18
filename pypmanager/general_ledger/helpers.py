@@ -41,8 +41,6 @@ async def async_aggregate_ledger_by_year() -> pd.DataFrame:
     """Aggregate the general ledger by year."""
     df_general_ledger = await async_get_general_ledger()
 
-    new_date_column = f"{ColumnNameValues.TRANSACTION_DATE.value}_2"
-
     # Filter all income statement records
     filtered_df = df_general_ledger[
         df_general_ledger[ColumnNameValues.ACCOUNT.value].str.startswith("is_")
@@ -50,18 +48,14 @@ async def async_aggregate_ledger_by_year() -> pd.DataFrame:
 
     filtered_df_copy = filtered_df.copy()
 
-    filtered_df_copy[new_date_column] = pd.to_datetime(filtered_df_copy.index)
-
-    filtered_df_copy["year"] = filtered_df_copy[new_date_column].dt.year
-
     filtered_df_copy["result_value"] = filtered_df_copy.apply(
         PandasAlgorithmGeneralLedger.calculate_result, axis=1
     )
 
     df_grouped_data = (
-        filtered_df_copy.groupby(["year", ColumnNameValues.ACCOUNT.value])[
-            "result_value"
-        ]
+        filtered_df_copy.groupby(
+            [ColumnNameValues.TRANSACTION_YEAR.value, ColumnNameValues.ACCOUNT.value]
+        )["result_value"]
         .sum()
         .reset_index()
     )
@@ -69,6 +63,6 @@ async def async_aggregate_ledger_by_year() -> pd.DataFrame:
     return df_grouped_data.pivot_table(
         values="result_value",
         index=ColumnNameValues.ACCOUNT.value,
-        columns="year",
+        columns=ColumnNameValues.TRANSACTION_YEAR.value,
         fill_value=None,
     ).reset_index()

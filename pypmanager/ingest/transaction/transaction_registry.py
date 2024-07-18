@@ -121,13 +121,14 @@ class TransactionRegistry:
         self._normalise_transaction_date()
         self._set_index()
         self._filter_by_date()
+        self._sort_transactions()
         self._normalize_transaction_type()
         # Cleanup must be done before converting data types
         self._cleanup_df()
         self._convert_data_types()
         self._filter_transactions()
         self._normalize_data()
-        self._sort_transactions()
+        self._append_columns()
 
     def _load_transaction_files(self: TransactionRegistry) -> pd.DataFrame:
         """Load transaction files and return a sorted DataFrame."""
@@ -240,9 +241,20 @@ class TransactionRegistry:
         df_raw[ColumnNameValues.FX.value] = df_raw.apply(
             PandasAlgorithm.normalize_fx, axis=1
         )
-        df_raw[ColumnNameValues.CASH_CLOW_NOMAL.value] = df_raw.apply(
+
+        self.df_all_transactions = df_raw
+
+    def _append_columns(self: TransactionRegistry) -> None:
+        """Append calculated columns."""
+        df_raw = self.df_all_transactions.copy()
+
+        # Calculate the transaction's total cash flow
+        df_raw[ColumnNameValues.CASH_FLOW_NOMINAL.value] = df_raw.apply(
             PandasAlgorithm.calculate_cash_flow_nominal, axis=1
         )
+
+        # Add transaction year
+        df_raw[ColumnNameValues.TRANSACTION_YEAR.value] = df_raw.index.year
 
         self.df_all_transactions = df_raw
 
