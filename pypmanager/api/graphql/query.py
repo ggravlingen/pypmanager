@@ -115,7 +115,9 @@ class Query:
                 no_traded=row[ColumnNameValues.NO_TRADED.value],
                 currency=row[ColumnNameValues.CURRENCY.value],
                 price=row[ColumnNameValues.PRICE.value],
-                commission=row[ColumnNameValues.COMMISSION.value],
+                # It makes more sense to use the absolute value of the commission in
+                # this context
+                commission=abs(row[ColumnNameValues.COMMISSION.value]),
                 cash_flow=row[ColumnNameValues.AMOUNT.value],
                 fx=row[ColumnNameValues.FX.value],
             )
