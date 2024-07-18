@@ -26,6 +26,8 @@ class TransactionRow(BaseTransactionRow):
     """Represent a transaction row."""
 
     price: float | None
+    currency: str | None
+    cash_flow: float | None
 
 
 @strawberry.type

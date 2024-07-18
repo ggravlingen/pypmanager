@@ -113,8 +113,10 @@ class Query:
                 action=row[ColumnNameValues.TRANSACTION_TYPE.value],
                 name=row[ColumnNameValues.NAME.value],
                 no_traded=row[ColumnNameValues.NO_TRADED.value],
+                currency=row[ColumnNameValues.CURRENCY.value],
                 price=row[ColumnNameValues.PRICE.value],
                 commission=row[ColumnNameValues.COMMISSION.value],
+                cash_flow=row[ColumnNameValues.AMOUNT.value],
                 fx=row[ColumnNameValues.FX.value],
             )
             for index, row in transaction_list.iterrows()

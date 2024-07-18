@@ -11,9 +11,11 @@ const QUERY = gql`
       action
       name
       noTraded
+      currency
       price
       commission
       fx
+      cashFlow
     }
   }
 `;
