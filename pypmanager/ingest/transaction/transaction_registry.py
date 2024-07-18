@@ -106,6 +106,13 @@ class TransactionRegistry:
         sort_by_date_descending: bool = False,
     ) -> None:
         """Init class."""
+        if report_date is not None and (
+            report_date.tzinfo is None
+            or report_date.tzinfo.utcoffset(report_date) is None
+        ):
+            msg = "report_date argument must be time zone aware"
+            raise ValueError(msg)
+
         self.report_date = report_date
         self.sort_by_date_descending = sort_by_date_descending
 
@@ -113,6 +120,7 @@ class TransactionRegistry:
 
         self._normalise_transaction_date()
         self._set_index()
+        self._filter_by_date()
         self._normalize_transaction_type()
         # Cleanup must be done before converting data types
         self._cleanup_df()
@@ -123,9 +131,9 @@ class TransactionRegistry:
 
     def _load_transaction_files(self: TransactionRegistry) -> pd.DataFrame:
         """Load transaction files and return a sorted DataFrame."""
-        df_generic = GenericLoader(self.report_date).df_final
-        df_avanza = AvanzaLoader(self.report_date).df_final
-        df_lysa = LysaLoader(self.report_date).df_final
+        df_generic = GenericLoader().df_final
+        df_avanza = AvanzaLoader().df_final
+        df_lysa = LysaLoader().df_final
 
         return pd.concat([df_generic, df_avanza, df_lysa])
 
@@ -160,6 +168,15 @@ class TransactionRegistry:
         df_raw = self.df_all_transactions.copy()
 
         df_raw = df_raw.set_index(ColumnNameValues.TRANSACTION_DATE.value)
+
+        self.df_all_transactions = df_raw
+
+    def _filter_by_date(self: TransactionRegistry) -> None:
+        """Filter transactions by date."""
+        df_raw = self.df_all_transactions.copy()
+
+        if self.report_date is not None:
+            df_raw = df_raw.query(f"index <= '{self.report_date}'")
 
         self.df_all_transactions = df_raw
 

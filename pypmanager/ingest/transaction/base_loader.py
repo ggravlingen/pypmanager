@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import TYPE_CHECKING
 
 import pandas as pd
 
@@ -14,9 +13,6 @@ from .const import (
     ColumnNameValues,
     CSVSeparator,
 )
-
-if TYPE_CHECKING:
-    from datetime import datetime
 
 
 def _get_filename(file_path: Path) -> str:
@@ -57,10 +53,8 @@ class TransactionLoader(ABC):
     file_pattern: str
     date_format_pattern: str
 
-    def __init__(self: TransactionLoader, report_date: datetime | None = None) -> None:
+    def __init__(self: TransactionLoader) -> None:
         """Init class."""
-        self.report_date = report_date
-
         # The order is important here
         self.load_data_files()
         self.rename_and_filter()
@@ -98,9 +92,6 @@ class TransactionLoader(ABC):
 
         if self.col_map is not None:
             df_raw = df_raw.rename(columns=self.col_map)
-
-        if self.report_date is not None:
-            df_raw = df_raw.query(f"index <= '{self.report_date}'")
 
         self.df_final = df_raw
 
