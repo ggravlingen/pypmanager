@@ -2,11 +2,20 @@
 
 from __future__ import annotations
 
+from datetime import datetime
+from typing import TYPE_CHECKING
+
+import numpy as np
+from numpy.testing import assert_array_equal
 import pandas as pd
 import pytest
 
 from pypmanager.ingest.transaction.const import ColumnNameValues, TransactionTypeValues
 from pypmanager.ingest.transaction.pandas_algorithm import PandasAlgorithm
+from pypmanager.settings import Settings
+
+if TYPE_CHECKING:
+    from tests.conftest import DataFactory
 
 
 @pytest.mark.parametrize(
@@ -161,3 +170,81 @@ def test_calculate_cash_flow_nominal(
     """Test function calculate_cash_flow_nominal."""
     result = PandasAlgorithm.calculate_cash_flow_nominal(row.iloc[0])
     assert result == expected
+
+
+def test_calculate_adjusted_price_per_unit(
+    data_factory: type[DataFactory],
+) -> None:
+    """Test function calculate_adjusted_price_per_unit."""
+    factory = data_factory()
+    df_mocked_transactions = (
+        factory.buy(
+            transaction_date=datetime(2021, 1, 1, tzinfo=Settings.system_time_zone),
+            no_traded=10.0,
+            price=10.0,
+        )
+        .buy(
+            transaction_date=datetime(2021, 1, 2, tzinfo=Settings.system_time_zone),
+            no_traded=10.0,
+            price=20.0,
+        )
+        .sell(
+            transaction_date=datetime(2021, 1, 3, tzinfo=Settings.system_time_zone),
+            no_traded=3.0,
+        )
+        .sell(
+            transaction_date=datetime(2021, 1, 4, tzinfo=Settings.system_time_zone),
+            no_traded=17.0,
+        )
+        .buy(
+            transaction_date=datetime(2021, 1, 5, tzinfo=Settings.system_time_zone),
+            no_traded=100.0,
+            price=1.0,
+        )
+        .buy(
+            transaction_date=datetime(2021, 1, 6, tzinfo=Settings.system_time_zone),
+            no_traded=100.0,
+            price=3.0,
+        )
+        .df_transaction_list
+    )
+    df_mocked_transactions = df_mocked_transactions.sort_values(
+        [
+            ColumnNameValues.NAME.value,
+            ColumnNameValues.TRANSACTION_DATE.value,
+            ColumnNameValues.TRANSACTION_TYPE.value,
+        ],
+        ascending=[True, True, True],
+    )
+    # Calculate turnover
+    df_mocked_transactions[ColumnNameValues.AMOUNT.value] = (
+        df_mocked_transactions[ColumnNameValues.NO_TRADED.value]
+        * df_mocked_transactions[ColumnNameValues.PRICE.value]
+    )
+    df_mocked_transactions["Adjusted Quantity"] = df_mocked_transactions.apply(
+        lambda x: (
+            (
+                x[ColumnNameValues.TRANSACTION_TYPE.value]
+                == TransactionTypeValues.BUY.value
+            )
+            - (
+                x[ColumnNameValues.TRANSACTION_TYPE.value]
+                == TransactionTypeValues.SELL.value
+            )
+        )
+        * x[ColumnNameValues.NO_TRADED.value],
+        axis=1,
+    )
+    df_mocked_transactions["Adjusted Quantity"] = df_mocked_transactions.groupby(
+        ColumnNameValues.NAME.value
+    )["Adjusted Quantity"].cumsum()
+
+    df_mocked_transactions = df_mocked_transactions.groupby(
+        ColumnNameValues.NAME.value
+    ).apply(PandasAlgorithm.calculate_adjusted_price_per_unit, include_groups=False)
+
+    assert len(df_mocked_transactions) == 6
+    expected_values = [10.0, 15.0, 15.0, np.nan, 1.0, 2.0]
+    actual_values = df_mocked_transactions["Adjusted Price Per Unit"].to_numpy()
+
+    assert_array_equal(actual_values, expected_values)
