@@ -48,6 +48,11 @@ class ColumnNameValues(StrEnum):
     AVG_PRICE = "average_price"
     AVG_FX = "average_fx_rate"
     AMOUNT = "amount"
+    """
+    The cash flow amount of the transaction.
+
+    Use turnover if the value represend a buy or a sell.
+    """
     BROKER = "broker"
     COMMISSION = "commission"
     CASH_FLOW_LOCAL = "cash_flow_base_ccy"
@@ -58,6 +63,7 @@ class ColumnNameValues(StrEnum):
     FX = "fx_rate"
     ISIN_CODE = "isin_code"
     NAME = "name"
+    """The full name of the security."""
     NO_TRADED = "no_traded"
     NO_HELD = "cumulative_buy_volume"
     PRICE = "price"
@@ -68,6 +74,12 @@ class ColumnNameValues(StrEnum):
     REALIZED_PNL_INTEREST = "realized_pnl_interest"
     REALIZED_PNL_DIVIDEND = "realized_pnl_dividend"
     SOURCE = "source"
+    TURNOVER = "calc_turnover"
+    """
+    The turnover of the transaction.
+
+    Turnover = no_traded * price
+    """
     TRANSACTION_DATE = "transaction_date"
     TRANSACTION_YEAR = "transaction_year"
     TRANSACTION_TYPE = "transaction_type"

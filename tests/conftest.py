@@ -51,18 +51,23 @@ class DataFactory:
         """Initialize the class."""
         self.transaction_list = []
 
-    def buy(self) -> DataFactory:
+    def buy(
+        self,
+        transaction_date: datetime = datetime(
+            2021, 1, 1, tzinfo=Settings.system_time_zone
+        ),
+        no_traded: float = 10.0,
+        price: float = 10.0,
+    ) -> DataFactory:
         """Add a buy transaction."""
         self.transaction_list.append(
             {
-                "transaction_date": datetime(
-                    2021, 1, 1, tzinfo=Settings.system_time_zone
-                ),
+                "transaction_date": transaction_date,
                 "transaction_type": TransactionTypeValues.BUY.value,
                 "name": "Company A",
                 "isin_code": "US1234567890",
-                "no_traded": 10.0,
-                "price": 10.0,
+                "no_traded": no_traded,
+                "price": price,
                 "commission": 0.0,
                 "currency": "SEK",
                 "broker": "Broker A",
@@ -72,17 +77,21 @@ class DataFactory:
         )
         return self
 
-    def sell(self) -> DataFactory:
+    def sell(
+        self,
+        transaction_date: datetime = datetime(
+            2021, 2, 1, tzinfo=Settings.system_time_zone
+        ),
+        no_traded: float = 10.0,
+    ) -> DataFactory:
         """Add a sell transaction."""
         self.transaction_list.append(
             {
-                "transaction_date": datetime(
-                    2021, 2, 1, tzinfo=Settings.system_time_zone
-                ),
+                "transaction_date": transaction_date,
                 "transaction_type": TransactionTypeValues.SELL.value,
                 "name": "Company A",
                 "isin_code": "US1234567890",
-                "no_traded": 10.0,
+                "no_traded": no_traded,
                 "price": 15.0,
                 "commission": 0.0,
                 "currency": "SEK",

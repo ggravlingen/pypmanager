@@ -91,3 +91,53 @@ class PandasAlgorithm:
             return 1.00
 
         return cast(float, row[ColumnNameValues.FX.value])
+
+    @staticmethod
+    def calculate_adjusted_price_per_unit(group: pd.DataFrame) -> pd.DataFrame:
+        """Calculate adjusted price per unit."""
+        group["Adjusted Turnover"] = group.apply(
+            lambda x: (
+                (
+                    x[ColumnNameValues.TRANSACTION_TYPE.value]
+                    == TransactionTypeValues.BUY.value
+                )
+                - (
+                    x[ColumnNameValues.TRANSACTION_TYPE.value]
+                    == TransactionTypeValues.SELL.value
+                )
+            )
+            * x[ColumnNameValues.AMOUNT.value],
+            axis=1,
+        )
+
+        group["Adjusted Price Per Unit"] = 0.0
+        last_entry_price = 0.0
+
+        current_turnover = 0.0
+        for index, row in group.iterrows():
+            current_turnover += row["Adjusted Turnover"]
+
+            if (
+                row[ColumnNameValues.TRANSACTION_TYPE.value]
+                == TransactionTypeValues.BUY.value
+            ):
+                group.at[index, "Adjusted Price Per Unit"] = (  # noqa: PD008
+                    current_turnover / row["Adjusted Quantity"]
+                )
+
+            if (
+                row[ColumnNameValues.TRANSACTION_TYPE.value]
+                == TransactionTypeValues.SELL.value
+            ):
+                group.at[index, "Adjusted Price Per Unit"] = (  # noqa: PD008
+                    last_entry_price
+                )
+
+            if row["Adjusted Quantity"] == 0.0:
+                current_turnover = 0.0
+                group.at[index, "Adjusted Price Per Unit"] = None  # noqa: PD008
+                group.at[index, "Adjusted Turnover"] = None  # noqa: PD008
+
+            last_entry_price = group.at[index, "Adjusted Price Per Unit"]  # noqa: PD008
+
+        return group
