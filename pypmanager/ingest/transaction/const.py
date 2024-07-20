@@ -88,6 +88,12 @@ class ColumnNameValues(StrEnum):
     COST_BASIS_DELTA = "cost_basis_delta"
     SUM_COST_BASIS_DELTA = "sum_cost_basis_delta"
     TRANSACTION_CASH_FLOW = "transaction_cash_flow"
+    PRICE_PER_UNIT = "calc_price_per_unit"
+    """
+    Average purchase price per unit.
+
+    Resets when the cumulative volume held is zero.
+    """
 
 
 class CSVSeparator(StrEnum):
