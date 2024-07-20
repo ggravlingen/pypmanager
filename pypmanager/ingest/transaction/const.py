@@ -92,7 +92,7 @@ class ColumnNameValues(StrEnum):
     """
     Average purchase price per unit.
 
-    Resets when the cumulative volume helt is zero.
+    Resets when the cumulative volume held is zero.
     """
 
 
