@@ -245,6 +245,8 @@ def test_calculate_adjusted_price_per_unit(
 
     assert len(df_mocked_transactions) == 6
     expected_values = [10.0, 15.0, 15.0, np.nan, 1.0, 2.0]
-    actual_values = df_mocked_transactions["Adjusted Price Per Unit"].to_numpy()
+    actual_values = df_mocked_transactions[
+        ColumnNameValues.PRICE_PER_UNIT.value
+    ].to_numpy()
 
     assert_array_equal(actual_values, expected_values)

@@ -110,7 +110,7 @@ class PandasAlgorithm:
             axis=1,
         )
 
-        group["Adjusted Price Per Unit"] = 0.0
+        group[ColumnNameValues.PRICE_PER_UNIT.value] = 0.0
         last_entry_price = 0.0
 
         current_turnover = 0.0
@@ -121,7 +121,7 @@ class PandasAlgorithm:
                 row[ColumnNameValues.TRANSACTION_TYPE.value]
                 == TransactionTypeValues.BUY.value
             ):
-                group.at[index, "Adjusted Price Per Unit"] = (  # noqa: PD008
+                group.at[index, ColumnNameValues.PRICE_PER_UNIT.value] = (  # noqa: PD008
                     current_turnover / row["Adjusted Quantity"]
                 )
 
@@ -129,15 +129,15 @@ class PandasAlgorithm:
                 row[ColumnNameValues.TRANSACTION_TYPE.value]
                 == TransactionTypeValues.SELL.value
             ):
-                group.at[index, "Adjusted Price Per Unit"] = (  # noqa: PD008
+                group.at[index, ColumnNameValues.PRICE_PER_UNIT.value] = (  # noqa: PD008
                     last_entry_price
                 )
 
             if row["Adjusted Quantity"] == 0.0:
                 current_turnover = 0.0
-                group.at[index, "Adjusted Price Per Unit"] = None  # noqa: PD008
+                group.at[index, ColumnNameValues.PRICE_PER_UNIT.value] = None  # noqa: PD008
                 group.at[index, "Adjusted Turnover"] = None  # noqa: PD008
 
-            last_entry_price = group.at[index, "Adjusted Price Per Unit"]  # noqa: PD008
+            last_entry_price = group.at[index, ColumnNameValues.PRICE_PER_UNIT.value]  # noqa: PD008
 
         return group
