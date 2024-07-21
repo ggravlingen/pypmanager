@@ -116,19 +116,32 @@ class TransactionRegistry:
         self.report_date = report_date
         self.sort_by_date_descending = sort_by_date_descending
 
+        # Load all transaction files into a dataframe
         self.df_all_transactions = self._load_transaction_files()
 
-        self._normalise_transaction_date()
-        self._set_index()
-        self._filter_by_date()
-        self._sort_transactions()
-        self._normalize_transaction_type()
-        # Cleanup must be done before converting data types
-        self._cleanup_df()
-        self._convert_data_types()
+        # Only include those transaction we are interested in analysing
         self._filter_transactions()
-        self._normalize_data()
-        self._append_columns()
+
+        # Cleanup must be done before converting data types
+        self._100_cleanup_df()
+
+        # Run the first sequence of normalisation
+        self._200_normalise_transaction_date()
+        self._201_normalize_transaction_type()
+        self._202_normalize_data()
+        self._203_convert_data_types()
+
+        self._300_calculate_average_price()
+
+        # Set index
+        self._400_set_index()
+
+        # Append columns containing derived meta data
+        self._500_append_columns()
+
+        # Set index and, sort by transaction date and filter by date, if applicable
+        self._sort_transactions()
+        self._filter_by_date()
 
     def _load_transaction_files(self: TransactionRegistry) -> pd.DataFrame:
         """Load transaction files and return a sorted DataFrame."""
@@ -138,74 +151,7 @@ class TransactionRegistry:
 
         return pd.concat([df_generic, df_avanza, df_lysa])
 
-    def _normalise_transaction_date(self: TransactionRegistry) -> None:
-        """Make transaction date aware using system time zone."""
-        df_raw = self.df_all_transactions.copy()
-
-        # Convert all datetime objects to UTC
-        df_raw[ColumnNameValues.TRANSACTION_DATE.value] = (
-            df_raw[ColumnNameValues.TRANSACTION_DATE.value]
-            .dt.tz_localize(None)
-            .dt.tz_localize(Settings.system_time_zone)
-        )
-
-        self.df_all_transactions = df_raw
-
-    def _convert_data_types(self: TransactionRegistry) -> None:
-        """Convert columns to correct data types."""
-        df_raw = self.df_all_transactions.copy()
-        for key, val in DTYPES_MAP.items():
-            if key in df_raw.columns:
-                try:
-                    df_raw[key] = df_raw[key].astype(val)
-                except ValueError as err:
-                    msg = f"Unable to parse {key}"
-                    raise ValueError(msg) from err
-
-        self.df_all_transactions = df_raw
-
-    def _set_index(self: TransactionRegistry) -> None:
-        """Set index."""
-        df_raw = self.df_all_transactions.copy()
-
-        df_raw = df_raw.set_index(ColumnNameValues.TRANSACTION_DATE.value)
-
-        self.df_all_transactions = df_raw
-
-    def _filter_by_date(self: TransactionRegistry) -> None:
-        """Filter transactions by date."""
-        df_raw = self.df_all_transactions.copy()
-
-        if self.report_date is not None:
-            df_raw = df_raw.query(f"index <= '{self.report_date}'")
-
-        self.df_all_transactions = df_raw
-
-    def _normalize_transaction_type(self: TransactionRegistry) -> None:
-        """
-        Normalize transaction types.
-
-        In the source data, transactions will be named differently. To enable
-        calculations, we replace the names in the source data with our internal names.
-        """
-        df_raw = self.df_all_transactions.copy()
-
-        for config in REPLACE_CONFIG:
-            for event in config.search:
-                df_raw[ColumnNameValues.TRANSACTION_TYPE] = df_raw[
-                    ColumnNameValues.TRANSACTION_TYPE
-                ].replace(event, config.target)
-        self.df_all_transactions = df_raw
-
-    def _filter_transactions(self: TransactionRegistry) -> None:
-        """Remove transactions we are not able to process."""
-        df_raw = self.df_all_transactions.copy()
-        df_raw = df_raw.query(
-            f"{ColumnNameValues.TRANSACTION_TYPE} in {FILTER_STATEMENT}",
-        )
-        self.df_all_transactions = df_raw
-
-    def _cleanup_df(self: TransactionRegistry) -> None:
+    def _100_cleanup_df(self: TransactionRegistry) -> None:
         """Cleanup dataframe."""
         df_raw = self.df_all_transactions.copy()
 
@@ -228,7 +174,36 @@ class TransactionRegistry:
 
         self.df_all_transactions = df_raw
 
-    def _normalize_data(self: TransactionRegistry) -> None:
+    def _200_normalise_transaction_date(self: TransactionRegistry) -> None:
+        """Make transaction date aware using system time zone."""
+        df_raw = self.df_all_transactions.copy()
+
+        # Convert all datetime objects to UTC
+        df_raw[ColumnNameValues.TRANSACTION_DATE.value] = (
+            df_raw[ColumnNameValues.TRANSACTION_DATE.value]
+            .dt.tz_localize(None)
+            .dt.tz_localize(Settings.system_time_zone)
+        )
+
+        self.df_all_transactions = df_raw
+
+    def _201_normalize_transaction_type(self: TransactionRegistry) -> None:
+        """
+        Normalize transaction types.
+
+        In the source data, transactions will be named differently. To enable
+        calculations, we replace the names in the source data with our internal names.
+        """
+        df_raw = self.df_all_transactions.copy()
+
+        for config in REPLACE_CONFIG:
+            for event in config.search:
+                df_raw[ColumnNameValues.TRANSACTION_TYPE] = df_raw[
+                    ColumnNameValues.TRANSACTION_TYPE
+                ].replace(event, config.target)
+        self.df_all_transactions = df_raw
+
+    def _202_normalize_data(self: TransactionRegistry) -> None:
         """Make sure data is calculated in the same way."""
         df_raw = self.df_all_transactions.copy()
 
@@ -244,7 +219,91 @@ class TransactionRegistry:
 
         self.df_all_transactions = df_raw
 
-    def _append_columns(self: TransactionRegistry) -> None:
+    def _203_convert_data_types(self: TransactionRegistry) -> None:
+        """Convert columns to correct data types."""
+        df_raw = self.df_all_transactions.copy()
+        for key, val in DTYPES_MAP.items():
+            if key in df_raw.columns:
+                try:
+                    df_raw[key] = df_raw[key].astype(val)
+                except ValueError as err:
+                    msg = f"Unable to parse {key}"
+                    raise ValueError(msg) from err
+
+        self.df_all_transactions = df_raw
+
+    def _filter_by_date(self: TransactionRegistry) -> None:
+        """Filter transactions by date."""
+        df_raw = self.df_all_transactions.copy()
+
+        if self.report_date is not None:
+            df_raw = df_raw.query(f"index <= '{self.report_date}'")
+
+        self.df_all_transactions = df_raw
+
+    def _filter_transactions(self: TransactionRegistry) -> None:
+        """Remove transactions we are not able to process."""
+        df_raw = self.df_all_transactions.copy()
+        df_raw = df_raw.query(
+            f"{ColumnNameValues.TRANSACTION_TYPE} in {FILTER_STATEMENT}",
+        )
+        self.df_all_transactions = df_raw
+
+    def _300_calculate_average_price(self: TransactionRegistry) -> None:
+        """Calculate average price."""
+        df_raw = self.df_all_transactions.copy()
+
+        df_sorted = df_raw.sort_values(
+            by=[
+                ColumnNameValues.NAME.value,
+                ColumnNameValues.TRANSACTION_DATE.value,
+                ColumnNameValues.TRANSACTION_TYPE.value,
+            ],
+            ascending=[True, True, True],
+        )
+
+        df_sorted[ColumnNameValues.AMOUNT.value] = (
+            df_sorted[ColumnNameValues.NO_TRADED.value]
+            * df_sorted[ColumnNameValues.PRICE.value]
+        )
+        df_sorted["Adjusted Quantity"] = df_sorted.apply(
+            lambda x: (
+                (
+                    x[ColumnNameValues.TRANSACTION_TYPE.value]
+                    == TransactionTypeValues.BUY.value
+                )
+                - (
+                    x[ColumnNameValues.TRANSACTION_TYPE.value]
+                    == TransactionTypeValues.SELL.value
+                )
+            )
+            * x[ColumnNameValues.NO_TRADED.value],
+            axis=1,
+        )
+        df_sorted["Adjusted Quantity"] = df_sorted.groupby(ColumnNameValues.NAME.value)[
+            "Adjusted Quantity"
+        ].cumsum()
+
+        df_sorted = (
+            df_sorted.groupby(ColumnNameValues.NAME.value)
+            .apply(
+                PandasAlgorithm.calculate_adjusted_price_per_unit, include_groups=False
+            )
+            # Add bane back as a column
+            .reset_index(drop=False)
+        )
+
+        self.df_all_transactions = df_sorted
+
+    def _400_set_index(self: TransactionRegistry) -> None:
+        """Set index."""
+        df_raw = self.df_all_transactions.copy()
+
+        df_raw = df_raw.set_index(ColumnNameValues.TRANSACTION_DATE.value)
+
+        self.df_all_transactions = df_raw
+
+    def _500_append_columns(self: TransactionRegistry) -> None:
         """Append calculated columns."""
         df_raw = self.df_all_transactions.copy()
 
