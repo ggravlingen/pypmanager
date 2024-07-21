@@ -167,8 +167,8 @@ def test_calculate_cash_flow_nominal(
     row: pd.DataFrame,
     expected: float,
 ) -> None:
-    """Test function calculate_cash_flow_nominal."""
-    result = PandasAlgorithm.calculate_cash_flow_nominal(row.iloc[0])
+    """Test function calculate_CASH_FLOW_NET_FEE_NOMINAL."""
+    result = PandasAlgorithm.calculate_cash_flow_net_fee_nominal(row.iloc[0])
     assert result == expected
 
 
@@ -221,23 +221,27 @@ def test_calculate_adjusted_price_per_unit(
         df_mocked_transactions[ColumnNameValues.NO_TRADED.value]
         * df_mocked_transactions[ColumnNameValues.PRICE.value]
     )
-    df_mocked_transactions["Adjusted Quantity"] = df_mocked_transactions.apply(
-        lambda x: (
-            (
-                x[ColumnNameValues.TRANSACTION_TYPE.value]
-                == TransactionTypeValues.BUY.value
+    df_mocked_transactions[ColumnNameValues.ADJUSTED_QUANTITY_HELD.value] = (
+        df_mocked_transactions.apply(
+            lambda x: (
+                (
+                    x[ColumnNameValues.TRANSACTION_TYPE.value]
+                    == TransactionTypeValues.BUY.value
+                )
+                - (
+                    x[ColumnNameValues.TRANSACTION_TYPE.value]
+                    == TransactionTypeValues.SELL.value
+                )
             )
-            - (
-                x[ColumnNameValues.TRANSACTION_TYPE.value]
-                == TransactionTypeValues.SELL.value
-            )
+            * x[ColumnNameValues.NO_TRADED.value],
+            axis=1,
         )
-        * x[ColumnNameValues.NO_TRADED.value],
-        axis=1,
     )
-    df_mocked_transactions["Adjusted Quantity"] = df_mocked_transactions.groupby(
-        ColumnNameValues.NAME.value
-    )["Adjusted Quantity"].cumsum()
+    df_mocked_transactions[ColumnNameValues.ADJUSTED_QUANTITY_HELD.value] = (
+        df_mocked_transactions.groupby(
+            ColumnNameValues.NAME.value
+        )[ColumnNameValues.ADJUSTED_QUANTITY_HELD.value].cumsum()
+    )
 
     df_mocked_transactions = df_mocked_transactions.groupby(
         ColumnNameValues.NAME.value

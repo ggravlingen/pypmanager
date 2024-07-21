@@ -13,7 +13,7 @@ class PandasAlgorithm:
     """Pandas algorithm for transaction data."""
 
     @staticmethod
-    def calculate_cash_flow_nominal(row: pd.DataFrame) -> float:
+    def calculate_cash_flow_net_fee_nominal(row: pd.DataFrame) -> float:
         """Calculate nominal total cash flow for a transaction."""
         if (amount := cast(float | None, row[ColumnNameValues.AMOUNT.value])) is None:
             return 0.0
@@ -122,7 +122,8 @@ class PandasAlgorithm:
                 == TransactionTypeValues.BUY.value
             ):
                 group.at[index, ColumnNameValues.PRICE_PER_UNIT.value] = (  # noqa: PD008
-                    current_turnover / row["Adjusted Quantity"]
+                    current_turnover
+                    / row[ColumnNameValues.ADJUSTED_QUANTITY_HELD.value]
                 )
 
             if (
@@ -135,9 +136,10 @@ class PandasAlgorithm:
 
             # There might be fractional rounding errors when closing a position so we
             # guard against that here
-            if round(row["Adjusted Quantity"], 0) == 0:
+            if round(row[ColumnNameValues.ADJUSTED_QUANTITY_HELD.value], 0) == 0:
                 current_turnover = 0.0
                 group.at[index, ColumnNameValues.PRICE_PER_UNIT.value] = None  # noqa: PD008
+                group.at[index, ColumnNameValues.ADJUSTED_QUANTITY_HELD.value] = None  # noqa: PD008
                 group.at[index, "Adjusted Turnover"] = None  # noqa: PD008
 
             last_entry_price = group.at[index, ColumnNameValues.PRICE_PER_UNIT.value]  # noqa: PD008
