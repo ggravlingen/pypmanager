@@ -7,7 +7,8 @@ export default merge(commonConfig, {
   entry: path.resolve(__dirname, "../src/index.tsx"),
   mode: "development",
   output: {
-    clean: true,
+    // Don't cleanup folder
+    clean: false,
     path: path.resolve(__dirname, "../", "static"),
     filename: "main.js",
   },

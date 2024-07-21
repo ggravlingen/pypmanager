@@ -15,6 +15,7 @@ const TransactionList = {
       commission: 0,
       fx: 1.22,
       price: 120,
+      currency: "USD",
     },
     {
       transactionDate: new Date("2024-05-01"),
@@ -26,6 +27,7 @@ const TransactionList = {
       commission: 0,
       fx: 1.22,
       price: 120,
+      currency: "USD",
     },
   ],
 };

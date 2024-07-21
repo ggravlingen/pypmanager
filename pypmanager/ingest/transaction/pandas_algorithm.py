@@ -133,7 +133,9 @@ class PandasAlgorithm:
                     last_entry_price
                 )
 
-            if row["Adjusted Quantity"] == 0.0:
+            # There might be fractional rounding errors when closing a position so we
+            # guard against that here
+            if round(row["Adjusted Quantity"], 0) == 0:
                 current_turnover = 0.0
                 group.at[index, ColumnNameValues.PRICE_PER_UNIT.value] = None  # noqa: PD008
                 group.at[index, "Adjusted Turnover"] = None  # noqa: PD008

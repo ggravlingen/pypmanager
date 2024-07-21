@@ -16,6 +16,7 @@ const QUERY = gql`
       commission
       fx
       cashFlow
+      costBaseAverage
     }
   }
 `;
