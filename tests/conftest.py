@@ -10,7 +10,7 @@ from unittest.mock import PropertyMock, patch
 import pandas as pd
 import pytest
 
-from pypmanager.ingest.transaction.const import TransactionTypeValues
+from pypmanager.ingest.transaction.const import ColumnNameValues, TransactionTypeValues
 from pypmanager.settings import Settings, TypedSettings
 
 if TYPE_CHECKING:
@@ -71,7 +71,7 @@ class DataFactory:
                 "commission": 0.0,
                 "currency": "SEK",
                 "broker": "Broker A",
-                "fx": 1.0,
+                ColumnNameValues.FX.value: 1.0,
                 "source": "Test data",
             }
         )
@@ -96,7 +96,7 @@ class DataFactory:
                 "commission": 0.0,
                 "currency": "SEK",
                 "broker": "Broker A",
-                "fx": 1.0,
+                ColumnNameValues.FX.value: 1.0,
                 "source": "Test data",
             }
         )

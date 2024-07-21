@@ -288,6 +288,9 @@ class TransactionRegistry:
             .reset_index(drop=False)
         )
 
+        # Drop the column that is appended in the group by above
+        df_sorted = df_sorted.drop(columns=["level_1"])
+
         self.df_all_transactions = df_sorted
 
     def _400_set_index(self: TransactionRegistry) -> None:
