@@ -67,3 +67,38 @@ async def test_transaction_registry__date_filter__raises(
         await TransactionRegistry(
             report_date=datetime(2021, 1, 15)  # noqa: DTZ001
         ).async_get_registry()
+
+
+@pytest.mark.asyncio()
+async def test_transaction_registry__columns(
+    data_factory: type[DataFactory],
+) -> None:
+    """Test the column names of the transaction registry."""
+    factory = data_factory()
+    mocked_transactions = factory.buy().sell().df_transaction_list
+    with (
+        patch(
+            "pypmanager.ingest.transaction.transaction_registry.TransactionRegistry."
+            "_load_transaction_files",
+            return_value=mocked_transactions,
+        ),
+    ):
+        registry = await TransactionRegistry().async_get_registry()
+        assert registry.columns.to_list() == [
+            "name",
+            "transaction_type",
+            "isin_code",
+            "no_traded",
+            "price",
+            "commission",
+            "currency",
+            "broker",
+            "fx_rate",
+            "source",
+            "amount",
+            "Adjusted Quantity",
+            "Adjusted Turnover",
+            "calc_price_per_unit",
+            "cash_flow_nominal_ccy",
+            "transaction_year",
+        ]
