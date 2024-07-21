@@ -163,12 +163,44 @@ def test_cleanup_number__raise_value_error() -> None:
         ),
     ],
 )
-def test_calculate_cash_flow_nominal(
+def test_calculate_cash_flow_net_fee_nominal(
     row: pd.DataFrame,
     expected: float,
 ) -> None:
-    """Test function calculate_CASH_FLOW_NET_FEE_NOMINAL."""
+    """Test function calculate_cash_flow_net_fee_nominal."""
     result = PandasAlgorithm.calculate_cash_flow_net_fee_nominal(row.iloc[0])
+    assert result == expected
+
+
+@pytest.mark.parametrize(
+    ("row", "expected"),
+    [
+        # Amount is None, which leads to an early return
+        (
+            pd.DataFrame(
+                {
+                    ColumnNameValues.AMOUNT.value: [None],
+                }
+            ),
+            0.0,
+        ),
+        # Amount is 1.00
+        (
+            pd.DataFrame(
+                {
+                    ColumnNameValues.AMOUNT.value: [1.0],
+                }
+            ),
+            1.0,
+        ),
+    ],
+)
+def test_calculate_cash_flow_gross_fee_nominal(
+    row: pd.DataFrame,
+    expected: float,
+) -> None:
+    """Test function calculate_cash_flow_gross_fee_nominal."""
+    result = PandasAlgorithm.calculate_cash_flow_gross_fee_nominal(row.iloc[0])
     assert result == expected
 
 

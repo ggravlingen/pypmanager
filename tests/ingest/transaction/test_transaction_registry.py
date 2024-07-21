@@ -107,5 +107,6 @@ async def test_transaction_registry__columns(
             "Adjusted Turnover",
             "calc_price_per_unit",
             "calc_cf_net_fee_nominal_ccy",
+            "calc_cf_gross_fee_nominal_ccy",
             "transaction_year",
         ]
