@@ -139,3 +139,5 @@ data/*.yaml
 *debug.csv
 
 prof
+
+coverage.json

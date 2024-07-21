@@ -183,7 +183,13 @@ jobs:
       - name: Run tests
         run: |
           source .venv/bin/activate
-          pytest tests --timeout=30 --cov pypmanager --cov-report term-missing
+          pytest tests --timeout=30 --cov pypmanager --cov-report
+      - name: Run coverage test
+        run: |
+          source .venv/bin/activate
+
+          coverage json
+          coverage-threshold
 
       - name: Coverage comment
         id: coverage_comment
