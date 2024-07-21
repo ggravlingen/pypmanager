@@ -127,6 +127,7 @@ class Query:
                     commission=commission,
                     cash_flow=row[ColumnNameValues.CASH_FLOW_NOMINAL.value],
                     fx=row[ColumnNameValues.FX.value],
+                    cost_base_average=row[ColumnNameValues.PRICE_PER_UNIT.value],
                 )
             )
 

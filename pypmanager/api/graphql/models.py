@@ -28,6 +28,7 @@ class TransactionRow(BaseTransactionRow):
     price: float | None
     currency: str | None
     cash_flow: float | None
+    cost_base_average: float | None
 
 
 @strawberry.type
