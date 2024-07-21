@@ -119,15 +119,12 @@ class TransactionRegistry:
         # Load all transaction files into a dataframe
         self.df_all_transactions = self._load_transaction_files()
 
-        # Only include those transaction we are interested in analysing
-        self._filter_transactions()
-
         # Cleanup must be done before converting data types
         self._100_cleanup_df()
 
         # Run the first sequence of normalisation
-        self._200_normalise_transaction_date()
-        self._201_normalize_transaction_type()
+        self._200_normalize_and_filter_transaction_type()
+        self._201_normalise_transaction_date()
         self._202_normalize_data()
         self._203_convert_data_types()
 
@@ -174,20 +171,7 @@ class TransactionRegistry:
 
         self.df_all_transactions = df_raw
 
-    def _200_normalise_transaction_date(self: TransactionRegistry) -> None:
-        """Make transaction date aware using system time zone."""
-        df_raw = self.df_all_transactions.copy()
-
-        # Convert all datetime objects to UTC
-        df_raw[ColumnNameValues.TRANSACTION_DATE.value] = (
-            df_raw[ColumnNameValues.TRANSACTION_DATE.value]
-            .dt.tz_localize(None)
-            .dt.tz_localize(Settings.system_time_zone)
-        )
-
-        self.df_all_transactions = df_raw
-
-    def _201_normalize_transaction_type(self: TransactionRegistry) -> None:
+    def _200_normalize_and_filter_transaction_type(self: TransactionRegistry) -> None:
         """
         Normalize transaction types.
 
@@ -201,6 +185,24 @@ class TransactionRegistry:
                 df_raw[ColumnNameValues.TRANSACTION_TYPE] = df_raw[
                     ColumnNameValues.TRANSACTION_TYPE
                 ].replace(event, config.target)
+
+        df_raw = df_raw.query(
+            f"{ColumnNameValues.TRANSACTION_TYPE} in {FILTER_STATEMENT}",
+        )
+
+        self.df_all_transactions = df_raw
+
+    def _201_normalise_transaction_date(self: TransactionRegistry) -> None:
+        """Make transaction date aware using system time zone."""
+        df_raw = self.df_all_transactions.copy()
+
+        # Convert all datetime objects to UTC
+        df_raw[ColumnNameValues.TRANSACTION_DATE.value] = (
+            df_raw[ColumnNameValues.TRANSACTION_DATE.value]
+            .dt.tz_localize(None)
+            .dt.tz_localize(Settings.system_time_zone)
+        )
+
         self.df_all_transactions = df_raw
 
     def _202_normalize_data(self: TransactionRegistry) -> None:
@@ -241,14 +243,6 @@ class TransactionRegistry:
 
         self.df_all_transactions = df_raw
 
-    def _filter_transactions(self: TransactionRegistry) -> None:
-        """Remove transactions we are not able to process."""
-        df_raw = self.df_all_transactions.copy()
-        df_raw = df_raw.query(
-            f"{ColumnNameValues.TRANSACTION_TYPE} in {FILTER_STATEMENT}",
-        )
-        self.df_all_transactions = df_raw
-
     def _300_calculate_average_price(self: TransactionRegistry) -> None:
         """Calculate average price."""
         df_raw = self.df_all_transactions.copy()
@@ -277,7 +271,8 @@ class TransactionRegistry:
                     == TransactionTypeValues.SELL.value
                 )
             )
-            * x[ColumnNameValues.NO_TRADED.value],
+            # Make sure traded volume is always a positive integer
+            * abs(x[ColumnNameValues.NO_TRADED.value]),
             axis=1,
         )
         df_sorted["Adjusted Quantity"] = df_sorted.groupby(ColumnNameValues.NAME.value)[

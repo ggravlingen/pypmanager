@@ -42,6 +42,13 @@ const columnSettings = [
     noDecimal: 2,
   },
   {
+    headerName: "Cost base average",
+    fieldPath: "costBaseAverage",
+    align: CellAlign.RIGHT,
+    dataType: CellDataType.NUMBER,
+    noDecimal: 2,
+  },
+  {
     headerName: "Commission",
     fieldPath: "commission",
     align: CellAlign.RIGHT,
