@@ -17,7 +17,14 @@ async def test_transaction_registry(
 ) -> None:
     """Test function async_aggregate_ledger_by_year."""
     factory = data_factory()
-    mocked_transactions = factory.buy().sell().df_transaction_list
+    mocked_transactions = (
+        factory.buy(
+            transaction_date=datetime(2021, 1, 1, tzinfo=Settings.system_time_zone)
+        )
+        .buy(transaction_date=datetime(2021, 1, 15, tzinfo=Settings.system_time_zone))
+        .sell()
+        .df_transaction_list
+    )
     with (
         patch(
             "pypmanager.ingest.transaction.transaction_registry.TransactionRegistry."
@@ -26,7 +33,7 @@ async def test_transaction_registry(
         ),
     ):
         registry = await TransactionRegistry().async_get_registry()
-        assert len(registry) == 2
+        assert len(registry) == 3
 
 
 @pytest.mark.asyncio()
@@ -96,9 +103,9 @@ async def test_transaction_registry__columns(
             "fx_rate",
             "source",
             "amount",
-            "Adjusted Quantity",
+            "calc_adjusted_quantity_held",
             "Adjusted Turnover",
             "calc_price_per_unit",
-            "cash_flow_nominal_ccy",
+            "calc_cf_net_fee_nominal_ccy",
             "transaction_year",
         ]

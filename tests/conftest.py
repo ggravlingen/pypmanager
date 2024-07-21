@@ -58,6 +58,7 @@ class DataFactory:
         ),
         no_traded: float = 10.0,
         price: float = 10.0,
+        commission: float = 1.0,
     ) -> DataFactory:
         """Add a buy transaction."""
         self.transaction_list.append(
@@ -68,7 +69,7 @@ class DataFactory:
                 "isin_code": "US1234567890",
                 "no_traded": no_traded,
                 "price": price,
-                "commission": 0.0,
+                "commission": commission,
                 "currency": "SEK",
                 "broker": "Broker A",
                 ColumnNameValues.FX.value: 1.0,
@@ -83,6 +84,7 @@ class DataFactory:
             2021, 2, 1, tzinfo=Settings.system_time_zone
         ),
         no_traded: float = 10.0,
+        commission: float = 1.0,
     ) -> DataFactory:
         """Add a sell transaction."""
         self.transaction_list.append(
@@ -93,7 +95,7 @@ class DataFactory:
                 "isin_code": "US1234567890",
                 "no_traded": no_traded,
                 "price": 15.0,
-                "commission": 0.0,
+                "commission": commission,
                 "currency": "SEK",
                 "broker": "Broker A",
                 ColumnNameValues.FX.value: 1.0,

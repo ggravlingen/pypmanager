@@ -53,10 +53,13 @@ class ColumnNameValues(StrEnum):
 
     Use turnover if the value represend a buy or a sell.
     """
+    ADJUSTED_QUANTITY_HELD = "calc_adjusted_quantity_held"
     BROKER = "broker"
     COMMISSION = "commission"
     CASH_FLOW_LOCAL = "cash_flow_base_ccy"
-    CASH_FLOW_NOMINAL = "cash_flow_nominal_ccy"
+    CASH_FLOW_NET_FEE_NOMINAL = "calc_cf_net_fee_nominal_ccy"
+    CASH_FLOW_GROSS_FEE_NOMINAL = "calc_cf_gross_fee_nominal_ccy"
+    """The nominal cash flow, net of any fees (eg commissions) in the base currency."""
     CURRENCY = "currency"
     CREDIT = "credit"
     DEBIT = "debit"

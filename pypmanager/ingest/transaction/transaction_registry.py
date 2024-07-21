@@ -260,7 +260,7 @@ class TransactionRegistry:
             df_sorted[ColumnNameValues.NO_TRADED.value]
             * df_sorted[ColumnNameValues.PRICE.value]
         )
-        df_sorted["Adjusted Quantity"] = df_sorted.apply(
+        df_sorted[ColumnNameValues.ADJUSTED_QUANTITY_HELD.value] = df_sorted.apply(
             lambda x: (
                 (
                     x[ColumnNameValues.TRANSACTION_TYPE.value]
@@ -275,9 +275,9 @@ class TransactionRegistry:
             * abs(x[ColumnNameValues.NO_TRADED.value]),
             axis=1,
         )
-        df_sorted["Adjusted Quantity"] = df_sorted.groupby(ColumnNameValues.NAME.value)[
-            "Adjusted Quantity"
-        ].cumsum()
+        df_sorted[ColumnNameValues.ADJUSTED_QUANTITY_HELD.value] = df_sorted.groupby(
+            ColumnNameValues.NAME.value
+        )[ColumnNameValues.ADJUSTED_QUANTITY_HELD.value].cumsum()
 
         df_sorted = (
             df_sorted.groupby(ColumnNameValues.NAME.value)
@@ -306,8 +306,8 @@ class TransactionRegistry:
         df_raw = self.df_all_transactions.copy()
 
         # Calculate the transaction's total cash flow
-        df_raw[ColumnNameValues.CASH_FLOW_NOMINAL.value] = df_raw.apply(
-            PandasAlgorithm.calculate_cash_flow_nominal, axis=1
+        df_raw[ColumnNameValues.CASH_FLOW_NET_FEE_NOMINAL.value] = df_raw.apply(
+            PandasAlgorithm.calculate_cash_flow_net_fee_nominal, axis=1
         )
 
         # Add transaction year
