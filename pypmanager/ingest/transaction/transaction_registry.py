@@ -101,6 +101,7 @@ class ColumnAppendConfig:
     callable: Callable[[pd.DataFrame], pd.DataFrame]
 
 
+# These columns are appended to the transaction registry
 COLUMN_APPEND: tuple[ColumnAppendConfig, ...] = (
     ColumnAppendConfig(
         column=ColumnNameValues.CASH_FLOW_NET_FEE_NOMINAL.value,
