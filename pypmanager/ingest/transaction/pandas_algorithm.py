@@ -14,8 +14,8 @@ class PandasAlgorithm:
 
     @staticmethod
     def calculate_cash_flow_net_fee_nominal(row: pd.DataFrame) -> float:
-        """Calculate nominal total cash flow for a transaction."""
-        if (amount := cast(float | None, row[ColumnNameValues.AMOUNT.value])) is None:
+        """Calculate nominal total cash flow, including fees, for a transaction."""
+        if (turnover := cast(float | None, row[ColumnNameValues.AMOUNT.value])) is None:
             return 0.0
 
         if row[ColumnNameValues.COMMISSION.value] is None:
@@ -23,7 +23,15 @@ class PandasAlgorithm:
         else:
             commission = cast(float, row[ColumnNameValues.COMMISSION.value])
 
-        return amount + commission
+        return turnover + commission
+
+    @staticmethod
+    def calculate_cash_flow_gross_fee_nominal(row: pd.DataFrame) -> float:
+        """Calculate nominal total cash flow, excluding fees, for a transaction."""
+        if (turnover := cast(float | None, row[ColumnNameValues.AMOUNT.value])) is None:
+            return 0.0
+
+        return turnover
 
     @staticmethod
     def cleanup_number(value: str | None) -> float | None:

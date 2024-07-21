@@ -21,6 +21,7 @@ from .lysa import LysaLoader
 from .pandas_algorithm import PandasAlgorithm
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
     from datetime import datetime
 
 
@@ -90,6 +91,26 @@ REPLACE_CONFIG = [
         target=TransactionTypeValues.DEPOSIT.value,
     ),
 ]
+
+
+@dataclass
+class ColumnAppendConfig:
+    """Configuration to append columns."""
+
+    column: str
+    callable: Callable[[pd.DataFrame], pd.DataFrame]
+
+
+COLUMN_APPEND: tuple[ColumnAppendConfig, ...] = (
+    ColumnAppendConfig(
+        column=ColumnNameValues.CASH_FLOW_NET_FEE_NOMINAL.value,
+        callable=PandasAlgorithm.calculate_cash_flow_net_fee_nominal,
+    ),
+    ColumnAppendConfig(
+        column=ColumnNameValues.CASH_FLOW_GROSS_FEE_NOMINAL.value,
+        callable=PandasAlgorithm.calculate_cash_flow_gross_fee_nominal,
+    ),
+)
 
 
 class TransactionRegistry:
@@ -304,6 +325,9 @@ class TransactionRegistry:
     def _500_append_columns(self: TransactionRegistry) -> None:
         """Append calculated columns."""
         df_raw = self.df_all_transactions.copy()
+
+        for config in COLUMN_APPEND:
+            df_raw[config.column] = df_raw.apply(config.callable, axis=1)
 
         # Calculate the transaction's total cash flow
         df_raw[ColumnNameValues.CASH_FLOW_NET_FEE_NOMINAL.value] = df_raw.apply(
