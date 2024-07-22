@@ -16,6 +16,8 @@ const TransactionList = {
       fx: 1.22,
       price: 120,
       currency: "USD",
+      cashFlow: 1200,
+      costBaseAverage: 120,
     },
     {
       transactionDate: new Date("2024-05-01"),
@@ -28,6 +30,8 @@ const TransactionList = {
       fx: 1.22,
       price: 120,
       currency: "USD",
+      cashFlow: 1200,
+      costBaseAverage: 120,
     },
   ],
 };

@@ -1,4 +1,6 @@
+import { HelpOutline } from "@mui/icons-material";
 import {
+  Box,
   Paper,
   Table,
   TableBody,
@@ -7,6 +9,7 @@ import {
   TableFooter,
   TableHead,
   TableRow,
+  Tooltip,
 } from "@mui/material";
 import { extractDataFromRecord, formatDate, formatNumber } from "@Utils";
 import React from "react";
@@ -31,8 +34,9 @@ interface ColumnSetting {
   fieldPath: string;
   align: CellAlign;
   dataType: CellDataType;
-  noDecimals?: number;
+  noDecimal?: number;
   showSubtotal?: boolean;
+  description?: string;
 }
 
 interface BasicTableProps {
@@ -71,12 +75,47 @@ function getCellValue(
   if (columnSetting.dataType === CellDataType.DATE) {
     return formatDate(extractedValue);
   } else if (columnSetting.dataType === CellDataType.NUMBER) {
-    return formatNumber(extractedValue, columnSetting.noDecimals ?? 1, false);
+    return formatNumber(extractedValue, columnSetting.noDecimal ?? 1, false);
   } else if (columnSetting.dataType === CellDataType.PER_CENT) {
-    return formatNumber(extractedValue, columnSetting.noDecimals ?? 1, true);
+    return formatNumber(extractedValue, columnSetting.noDecimal ?? 1, true);
   }
 
   return extractedValue;
+}
+
+interface TableHeaderCellProps {
+  columnSetting: ColumnSetting;
+}
+
+/**
+ * Renders a table header cell based on the provided column setting.
+ * @param props The properties for the table header cell, including the column setting.
+ * @param props.columnSetting The settings for the column, including the header name and alignment.
+ * @returns The table header cell.
+ */
+function TableHeaderCell({ columnSetting }: TableHeaderCellProps): JSX.Element {
+  return (
+    <TableCell key={columnSetting.fieldPath}>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent={
+          columnSetting.align === "right"
+            ? "flex-end"
+            : columnSetting.align === "center"
+              ? "center"
+              : "flex-start"
+        }
+      >
+        {columnSetting.description && (
+          <Tooltip title={columnSetting.description}>
+            <HelpOutline sx={{ fontSize: "18px", marginRight: "3px" }} />
+          </Tooltip>
+        )}
+        {columnSetting.headerName}
+      </Box>
+    </TableCell>
+  );
 }
 
 /**
@@ -121,12 +160,10 @@ export default function BasicTable({
         <TableHead>
           <TableRow>
             {columnSettings.map((columnSetting) => (
-              <TableCell
+              <TableHeaderCell
                 key={columnSetting.fieldPath}
-                align={columnSetting.align || "left"}
-              >
-                {columnSetting.headerName}
-              </TableCell>
+                columnSetting={columnSetting}
+              />
             ))}
           </TableRow>
         </TableHead>
