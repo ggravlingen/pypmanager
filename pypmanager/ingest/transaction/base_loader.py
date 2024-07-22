@@ -63,7 +63,7 @@ class TransactionLoader(ABC):
 
     def load_data_files(self: TransactionLoader) -> None:
         """Parse CSV-files and load them into a data frame."""
-        folder_path = Path(Settings.dir_data)
+        folder_path = Path(Settings.dir_transaction_data)
         files = list(Path.glob(folder_path, self.file_pattern))
 
         dfs: list[pd.DataFrame] = []
