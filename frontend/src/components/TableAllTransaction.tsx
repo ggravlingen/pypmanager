@@ -27,7 +27,7 @@ const columnSettings = [
   {
     headerName: "Action",
     fieldPath: "action",
-    align: CellAlign.LEFT,
+    align: CellAlign.RIGHT,
     dataType: CellDataType.STRING,
     description: "The type of transaction",
   },
