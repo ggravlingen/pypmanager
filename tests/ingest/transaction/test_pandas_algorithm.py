@@ -210,29 +210,36 @@ def test_calculate_adjusted_price_per_unit(
     """Test function calculate_adjusted_price_per_unit."""
     factory = data_factory()
     df_mocked_transactions = (
+        # We hold 100 after this transaction
         factory.buy(
             transaction_date=datetime(2021, 1, 1, tzinfo=Settings.system_time_zone),
-            no_traded=10.0,
+            no_traded=100.0,
             price=10.0,
         )
-        .buy(
-            transaction_date=datetime(2021, 1, 2, tzinfo=Settings.system_time_zone),
-            no_traded=10.0,
-            price=20.0,
-        )
+        # We hold 50 after this transaction
         .sell(
             transaction_date=datetime(2021, 1, 3, tzinfo=Settings.system_time_zone),
-            no_traded=3.0,
+            no_traded=50.0,
+            price=10.0,
         )
+        # We hold 100 after this transaction
+        .buy(
+            transaction_date=datetime(2021, 1, 4, tzinfo=Settings.system_time_zone),
+            no_traded=50.0,
+            price=10.0,
+        )
+        # We hold 0 after this transaction
         .sell(
             transaction_date=datetime(2021, 1, 4, tzinfo=Settings.system_time_zone),
-            no_traded=17.0,
+            no_traded=100.0,
         )
+        # We hold 100 after this transaction
         .buy(
             transaction_date=datetime(2021, 1, 5, tzinfo=Settings.system_time_zone),
             no_traded=100.0,
             price=1.0,
         )
+        # We hold 200 after this transaction
         .buy(
             transaction_date=datetime(2021, 1, 6, tzinfo=Settings.system_time_zone),
             no_traded=100.0,
@@ -280,7 +287,7 @@ def test_calculate_adjusted_price_per_unit(
     ).apply(PandasAlgorithm.calculate_adjusted_price_per_unit, include_groups=False)
 
     assert len(df_mocked_transactions) == 6
-    expected_values = [10.0, 15.0, 15.0, np.nan, 1.0, 2.0]
+    expected_values = [10.0, 10.0, 10.0, np.nan, 1.0, 2.0]
     actual_values = df_mocked_transactions[
         ColumnNameValues.PRICE_PER_UNIT.value
     ].to_numpy()
