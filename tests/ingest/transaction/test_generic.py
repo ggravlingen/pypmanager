@@ -6,7 +6,7 @@ from pypmanager.ingest.transaction.generic import GenericLoader
 from pypmanager.settings import TypedSettings
 
 
-@patch.object(TypedSettings, "dir_data", "tests/fixtures/")
+@patch.object(TypedSettings, "dir_transaction_data", "tests/fixtures/transactions")
 def test_misc_loader() -> None:
     """Test GenericLoader."""
     df_misc = GenericLoader().df_final

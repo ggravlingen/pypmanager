@@ -38,9 +38,15 @@ class TypedSettings(BaseSettings):
 
     @property
     def dir_market_data(self: TypedSettings) -> Path:
-        """Return market data file."""
+        """Return folder path for market data."""
         folder_path = Path(self.dir_data)
         return (folder_path / "market_data").resolve()
+
+    @property
+    def dir_transaction_data(self: TypedSettings) -> Path:
+        """Return folder path for transaction data."""
+        folder_path = Path(self.dir_data)
+        return (folder_path / "transactions").resolve()
 
     @property
     def file_market_data_config(self: TypedSettings) -> Path:

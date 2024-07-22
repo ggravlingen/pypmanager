@@ -10,7 +10,7 @@ from pypmanager.ingest.transaction.lysa import LysaLoader, _replace_fee_name
 from pypmanager.settings import TypedSettings
 
 
-@patch.object(TypedSettings, "dir_data", "tests/fixtures/")
+@patch.object(TypedSettings, "dir_transaction_data", "tests/fixtures/transactions")
 def test_lysa_loader() -> None:
     """Test LysaLoader."""
     df_lysa = LysaLoader().df_final
