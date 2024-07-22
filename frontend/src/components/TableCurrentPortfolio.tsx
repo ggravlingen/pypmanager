@@ -20,7 +20,7 @@ const columnSettings = [
     headerName: "Invested amount",
     align: CellAlign.RIGHT,
     dataType: CellDataType.NUMBER,
-    noDecimals: 0,
+    noDecimal: 0,
     showSubtotal: true,
   },
   {
@@ -28,7 +28,7 @@ const columnSettings = [
     headerName: "Market value",
     align: CellAlign.RIGHT,
     dataType: CellDataType.NUMBER,
-    noDecimals: 0,
+    noDecimal: 0,
     showSubtotal: true,
   },
   {
@@ -36,14 +36,14 @@ const columnSettings = [
     headerName: "Current holdings",
     align: CellAlign.RIGHT,
     dataType: CellDataType.NUMBER,
-    noDecimals: 0,
+    noDecimal: 0,
   },
   {
     fieldPath: "currentPrice",
     headerName: "Current price",
     align: CellAlign.RIGHT,
     dataType: CellDataType.NUMBER,
-    noDecimals: 2,
+    noDecimal: 2,
   },
   {
     fieldPath: "averagePrice",
@@ -56,14 +56,14 @@ const columnSettings = [
     headerName: "Return %",
     align: CellAlign.RIGHT,
     dataType: CellDataType.PER_CENT,
-    noDecimals: 0,
+    noDecimal: 0,
   },
   {
     fieldPath: "totalPnl",
     headerName: "Total P&L",
     align: CellAlign.RIGHT,
     dataType: CellDataType.NUMBER,
-    noDecimals: 0,
+    noDecimal: 0,
     showSubtotal: true,
   },
   {
@@ -71,7 +71,7 @@ const columnSettings = [
     headerName: "Realized P&L",
     align: CellAlign.RIGHT,
     dataType: CellDataType.NUMBER,
-    noDecimals: 0,
+    noDecimal: 0,
     showSubtotal: true,
   },
   {
@@ -79,7 +79,7 @@ const columnSettings = [
     headerName: "Unrealized P&L",
     align: CellAlign.RIGHT,
     dataType: CellDataType.NUMBER,
-    noDecimals: 0,
+    noDecimal: 0,
     showSubtotal: true,
   },
 ];

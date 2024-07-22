@@ -8,24 +8,28 @@ const columnSettings = [
     fieldPath: "transactionDate",
     align: CellAlign.RIGHT,
     dataType: CellDataType.DATE,
+    description: "The date of the transaction",
   },
   {
     headerName: "Source",
     fieldPath: "source",
     align: CellAlign.LEFT,
     dataType: CellDataType.STRING,
+    description: "The data source of the transaction",
   },
   {
     headerName: "Security",
     fieldPath: "name",
     align: CellAlign.LEFT,
     dataType: CellDataType.STRING,
+    description: "The name of the security",
   },
   {
     headerName: "Action",
     fieldPath: "action",
     align: CellAlign.LEFT,
     dataType: CellDataType.STRING,
+    description: "The type of transaction",
   },
   {
     headerName: "Volume",
@@ -33,6 +37,7 @@ const columnSettings = [
     align: CellAlign.RIGHT,
     dataType: CellDataType.NUMBER,
     noDecimal: 2,
+    description: "The number of securities traded",
   },
   {
     headerName: "Price",
@@ -40,6 +45,7 @@ const columnSettings = [
     align: CellAlign.RIGHT,
     dataType: CellDataType.NUMBER,
     noDecimal: 2,
+    description: "The price paid or received for the security",
   },
   {
     headerName: "Cost base average",
@@ -47,6 +53,7 @@ const columnSettings = [
     align: CellAlign.RIGHT,
     dataType: CellDataType.NUMBER,
     noDecimal: 2,
+    description: "The volume weighted average price paid for the security",
   },
   {
     headerName: "Commission",
@@ -54,12 +61,14 @@ const columnSettings = [
     align: CellAlign.RIGHT,
     dataType: CellDataType.NUMBER,
     noDecimal: 0,
+    description: "The commission paid, if any",
   },
   {
     headerName: "Currency",
     fieldPath: "currency",
     align: CellAlign.RIGHT,
     dataType: CellDataType.STRING,
+    description: "The nominal currency of the transaction",
   },
   {
     headerName: "Nominal cash flow",
@@ -67,6 +76,7 @@ const columnSettings = [
     align: CellAlign.RIGHT,
     dataType: CellDataType.NUMBER,
     noDecimal: 0,
+    description: "The nominal cash flow, net of any fees, for the transaction",
   },
 ];
 
