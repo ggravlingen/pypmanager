@@ -19,6 +19,8 @@ const handlers: RequestHandler[] = [
 
 let isFileCleared = false;
 
+const filterStrings = ["Download the React DevTools"];
+
 const testFactory = (config?: Config) =>
   base.extend<{
     worker: MockServiceWorker;
@@ -31,15 +33,24 @@ const testFactory = (config?: Config) =>
       page.on("console", async (msg) => {
         const filePath = `./${LOG_FOLDER_NAME}/${fileName}.log`;
 
-        // If a folder was created, the path to the first created folder will be returned.
-        fs.mkdirSync("./" + LOG_FOLDER_NAME, { recursive: true });
-
         // Clear the file
         if (!isFileCleared) {
           fs.writeFile(filePath, "", () => {
             isFileCleared = true;
           });
         }
+
+        // Filter out specific log messages
+        if (
+          filterStrings.some((filterString) =>
+            msg.text().includes(filterString),
+          )
+        ) {
+          return; // Skip this log message
+        }
+
+        // If a folder was created, the path to the first created folder will be returned.
+        fs.mkdirSync("./" + LOG_FOLDER_NAME, { recursive: true });
 
         // Write log to file
         fs.appendFile(
