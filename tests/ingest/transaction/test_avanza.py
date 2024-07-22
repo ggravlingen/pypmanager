@@ -6,7 +6,7 @@ from pypmanager.ingest.transaction.avanza import AvanzaLoader
 from pypmanager.settings import TypedSettings
 
 
-@patch.object(TypedSettings, "dir_data", "tests/fixtures/")
+@patch.object(TypedSettings, "dir_transaction_data", "tests/fixtures/transactions")
 def test_avanza_loader() -> None:
     """Test AvanzaLoader."""
     loader = AvanzaLoader()
