@@ -45,7 +45,9 @@ def test_interest_transaction() -> None:
                     2023, 4, 1
                 ),
                 TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
-                ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.INTEREST,
+                TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+                    TransactionTypeValues.INTEREST
+                ),
             },
         ],
     )
@@ -64,7 +66,9 @@ def test_interest_transaction() -> None:
             ColumnNameValues.SOURCE: "Source",
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(2023, 4, 1),
             TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
-            ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.INTEREST,
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+                TransactionTypeValues.INTEREST
+            ),
         },
     ]
     df_test = pd.DataFrame(data)
@@ -108,7 +112,9 @@ def test_dividend_transaction() -> None:
                     2023, 4, 1
                 ),
                 TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
-                ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.DIVIDEND,
+                TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+                    TransactionTypeValues.DIVIDEND
+                ),
             },
         ],
     )
@@ -127,7 +133,9 @@ def test_dividend_transaction() -> None:
             ColumnNameValues.SOURCE: "Source",
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(2023, 4, 1),
             TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
-            ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.DIVIDEND,
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+                TransactionTypeValues.DIVIDEND
+            ),
         },
     ]
     df_test = pd.DataFrame(data)
@@ -171,7 +179,9 @@ def test_buy_transaction() -> None:
                     2023, 4, 1
                 ),
                 TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
-                ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.BUY,
+                TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+                    TransactionTypeValues.BUY
+                ),
             },
         ],
     )
@@ -192,7 +202,9 @@ def test_buy_transaction() -> None:
             ColumnNameValues.SOURCE: "Source",
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(2023, 4, 1),
             TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
-            ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.BUY,
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+                TransactionTypeValues.BUY
+            ),
         },
     ]
     df_test = pd.DataFrame(data)
@@ -236,7 +248,9 @@ def test_sell_transaction() -> None:
                     2023, 4, 1
                 ),
                 TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
-                ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.BUY,
+                TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+                    TransactionTypeValues.BUY
+                ),
             },
             {
                 ColumnNameValues.AMOUNT: 200.0,
@@ -265,7 +279,9 @@ def test_sell_transaction() -> None:
                     2023, 5, 1
                 ),
                 TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
-                ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.SELL,
+                TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+                    TransactionTypeValues.SELL
+                ),
             },
         ],
     )
@@ -286,7 +302,9 @@ def test_sell_transaction() -> None:
             ColumnNameValues.SOURCE: "Source",
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(2023, 4, 1),
             TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
-            ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.BUY,
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+                TransactionTypeValues.BUY
+            ),
         },
         {
             ColumnNameValues.AMOUNT: 200.0,
@@ -300,7 +318,9 @@ def test_sell_transaction() -> None:
             ColumnNameValues.SOURCE: "Source",
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(2023, 5, 1),
             TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
-            ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.SELL,
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+                TransactionTypeValues.SELL
+            ),
         },
     ]
     df_test = pd.DataFrame(data)
@@ -348,7 +368,9 @@ def test_buy_sell_sequence() -> None:
                     2023, 4, 1
                 ),
                 TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
-                ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.BUY,
+                TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+                    TransactionTypeValues.BUY
+                ),
             },
             {
                 ColumnNameValues.AMOUNT: -1224.0,
@@ -377,7 +399,9 @@ def test_buy_sell_sequence() -> None:
                     2023, 4, 2
                 ),
                 TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
-                ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.BUY,
+                TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+                    TransactionTypeValues.BUY
+                ),
             },
             {
                 ColumnNameValues.AMOUNT: 1000.0,
@@ -398,7 +422,9 @@ def test_buy_sell_sequence() -> None:
                 ColumnNameValues.SOURCE: "Source",
                 ColumnNameValues.SUM_COST_BASIS_DELTA: -2041.67,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: 901.0,
-                ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.SELL,
+                TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+                    TransactionTypeValues.SELL
+                ),
                 TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(
                     2023, 4, 3
                 ),
@@ -423,7 +449,9 @@ def test_buy_sell_sequence() -> None:
                 ColumnNameValues.SOURCE: "Source",
                 ColumnNameValues.SUM_COST_BASIS_DELTA: -2666.67,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: -724.0,
-                ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.BUY,
+                TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+                    TransactionTypeValues.BUY
+                ),
                 TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(
                     2023, 4, 4
                 ),
@@ -448,7 +476,9 @@ def test_buy_sell_sequence() -> None:
                 ColumnNameValues.SOURCE: "Source",
                 ColumnNameValues.SUM_COST_BASIS_DELTA: None,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: 4901.0,
-                ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.SELL,
+                TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+                    TransactionTypeValues.SELL
+                ),
                 TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(
                     2023, 4, 5
                 ),
@@ -473,7 +503,9 @@ def test_buy_sell_sequence() -> None:
             ColumnNameValues.SOURCE: "Source",
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(2023, 4, 1),
             TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
-            ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.BUY,
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+                TransactionTypeValues.BUY
+            ),
         },
         {
             ColumnNameValues.AMOUNT: -1224.0,
@@ -487,7 +519,9 @@ def test_buy_sell_sequence() -> None:
             ColumnNameValues.SOURCE: "Source",
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(2023, 4, 2),
             TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
-            ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.BUY,
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+                TransactionTypeValues.BUY
+            ),
         },
         {
             ColumnNameValues.AMOUNT: 1000.0,
@@ -501,7 +535,9 @@ def test_buy_sell_sequence() -> None:
             ColumnNameValues.SOURCE: "Source",
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(2023, 4, 3),
             TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
-            ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.SELL,
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+                TransactionTypeValues.SELL
+            ),
         },
         {
             ColumnNameValues.AMOUNT: -625.0,
@@ -515,7 +551,9 @@ def test_buy_sell_sequence() -> None:
             ColumnNameValues.SOURCE: "Source",
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(2023, 4, 4),
             TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
-            ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.BUY,
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+                TransactionTypeValues.BUY
+            ),
         },
         {
             ColumnNameValues.AMOUNT: 5000.0,
@@ -529,7 +567,9 @@ def test_buy_sell_sequence() -> None:
             ColumnNameValues.SOURCE: "Source",
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(2023, 4, 5),
             TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
-            ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.SELL,
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+                TransactionTypeValues.SELL
+            ),
         },
     ]
     df_test = pd.DataFrame(data)

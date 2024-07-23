@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 from pypmanager.ingest.transaction import (
     AccountNameValues,
     ColumnNameValues,
+    TransactionRegistryColNameValues,
     TransactionTypeValues,
 )
 
@@ -37,7 +38,9 @@ class TransactionMacro:
 
         self.amount = row[ColumnNameValues.AMOUNT]
         self.amount_local = row[ColumnNameValues.CASH_FLOW_LOCAL]
-        self.transaction_type = row[ColumnNameValues.TRANSACTION_TYPE]
+        self.transaction_type = row[
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE
+        ]
         self.profit_loss = row[ColumnNameValues.REALIZED_PNL]
         self.profit_loss_eq = row[ColumnNameValues.REALIZED_PNL_EQ]
         self.profit_loss_fx = None
@@ -72,7 +75,7 @@ class TransactionMacro:
         debit_row[ColumnNameValues.REALIZED_PNL_EQ] = None
         debit_row[ColumnNameValues.REALIZED_PNL_FX] = None
         debit_row[ColumnNameValues.PRICE] = None
-        debit_row[ColumnNameValues.TRANSACTION_TYPE] = None
+        debit_row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE] = None
 
         self.credit_rows.append(credit_row)
         self.debit_rows.append(debit_row)
@@ -93,7 +96,7 @@ class TransactionMacro:
         debit_row[ColumnNameValues.DEBIT] = self.amount
         debit_row[ColumnNameValues.NO_TRADED] = None
         debit_row[ColumnNameValues.REALIZED_PNL] = None
-        debit_row[ColumnNameValues.TRANSACTION_TYPE] = None
+        debit_row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE] = None
 
         self.credit_rows.append(credit_row)
         self.debit_rows.append(debit_row)
@@ -116,7 +119,7 @@ class TransactionMacro:
         debit_row[ColumnNameValues.DEBIT] = self.amount
         debit_row[ColumnNameValues.NO_TRADED] = None
         debit_row[ColumnNameValues.REALIZED_PNL] = self.amount
-        debit_row[ColumnNameValues.TRANSACTION_TYPE] = None
+        debit_row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE] = None
 
         self.credit_rows.append(credit_row)
         self.debit_rows.append(debit_row)
@@ -137,7 +140,7 @@ class TransactionMacro:
         debit_row[ColumnNameValues.DEBIT] = -self.amount
         debit_row[ColumnNameValues.NO_TRADED] = None
         debit_row[ColumnNameValues.REALIZED_PNL] = None
-        debit_row[ColumnNameValues.TRANSACTION_TYPE] = None
+        debit_row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE] = None
 
         self.credit_rows.append(credit_row)
         self.debit_rows.append(debit_row)
@@ -158,7 +161,7 @@ class TransactionMacro:
         debit_row[ColumnNameValues.DEBIT] = self.amount
         debit_row[ColumnNameValues.NO_TRADED] = None
         debit_row[ColumnNameValues.REALIZED_PNL] = None
-        debit_row[ColumnNameValues.TRANSACTION_TYPE] = None
+        debit_row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE] = None
 
         self.credit_rows.append(credit_row)
         self.debit_rows.append(debit_row)
@@ -189,7 +192,7 @@ class TransactionMacro:
             credit_row[ColumnNameValues.REALIZED_PNL_FX] = None
             credit_row[ColumnNameValues.NO_TRADED] = None
             credit_row[ColumnNameValues.NO_HELD] = None
-            credit_row[ColumnNameValues.TRANSACTION_TYPE] = None
+            credit_row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE] = None
             self.credit_rows.append(credit_row)
 
             if self.transaction_type == TransactionTypeValues.SELL:
@@ -204,7 +207,9 @@ class TransactionMacro:
                 credit_row_2[ColumnNameValues.REALIZED_PNL_FX] = None
                 credit_row_2[ColumnNameValues.NO_TRADED] = None
                 credit_row_2[ColumnNameValues.NO_HELD] = None
-                credit_row_2[ColumnNameValues.TRANSACTION_TYPE] = None
+                credit_row_2[
+                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE
+                ] = None
                 self.credit_rows.append(credit_row_2)
 
         else:
@@ -218,7 +223,7 @@ class TransactionMacro:
             debit_row[ColumnNameValues.REALIZED_PNL] = None
             debit_row[ColumnNameValues.REALIZED_PNL_EQ] = None
             debit_row[ColumnNameValues.REALIZED_PNL_FX] = None
-            debit_row[ColumnNameValues.TRANSACTION_TYPE] = None
+            debit_row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE] = None
             self.debit_rows.append(debit_row)
 
             if self.transaction_type == TransactionTypeValues.SELL:
@@ -232,7 +237,9 @@ class TransactionMacro:
                 debit_row_2[ColumnNameValues.REALIZED_PNL_EQ] = None
                 debit_row_2[ColumnNameValues.REALIZED_PNL_FX] = None
                 debit_row_2[ColumnNameValues.NO_TRADED] = None
-                debit_row_2[ColumnNameValues.TRANSACTION_TYPE] = None
+                debit_row_2[
+                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE
+                ] = None
                 self.debit_rows.append(debit_row_2)
 
         return self
@@ -260,7 +267,7 @@ class TransactionMacro:
         debit_row[ColumnNameValues.REALIZED_PNL] = self.profit_loss
         debit_row[ColumnNameValues.REALIZED_PNL_EQ] = self.profit_loss_eq
         debit_row[ColumnNameValues.REALIZED_PNL_FX] = None
-        debit_row[ColumnNameValues.TRANSACTION_TYPE] = None
+        debit_row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE] = None
 
         self.credit_rows.append(credit_row)
         self.debit_rows.append(debit_row)
@@ -271,12 +278,12 @@ class TransactionMacro:
 def _amend_row(row: RowType) -> ListType:
     """Amend row."""
     row[ColumnNameValues.TRANSACTION_TYPE_INTERNAL] = row[
-        ColumnNameValues.TRANSACTION_TYPE
+        TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE
     ]  # A library internal field that can be used for debug filtering
 
     ledger_list: ListType = []
 
-    transaction_type = row[ColumnNameValues.TRANSACTION_TYPE]
+    transaction_type = row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE]
     if transaction_type == TransactionTypeValues.BUY:
         transaction = TransactionMacro(row=row)
         transaction.buy()

@@ -33,7 +33,7 @@ EMPTY_DF = pd.DataFrame(
     columns=[
         TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE,
         ColumnNameValues.ACCOUNT,
-        ColumnNameValues.TRANSACTION_TYPE,
+        TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE,
         ColumnNameValues.NAME,
         ColumnNameValues.NO_TRADED,
         ColumnNameValues.PRICE,

@@ -70,7 +70,9 @@ class DataFactory:
                 TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value: (
                     transaction_date
                 ),
-                "transaction_type": TransactionTypeValues.BUY.value,
+                TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
+                    TransactionTypeValues.BUY.value
+                ),
                 "name": "Company A",
                 "isin_code": "US1234567890",
                 "no_traded": no_traded,
@@ -99,7 +101,9 @@ class DataFactory:
                 TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value: (
                     transaction_date
                 ),
-                "transaction_type": TransactionTypeValues.SELL.value,
+                TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
+                    TransactionTypeValues.SELL.value
+                ),
                 "name": "Company A",
                 "isin_code": "US1234567890",
                 "no_traded": no_traded,

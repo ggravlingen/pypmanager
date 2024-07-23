@@ -238,7 +238,9 @@ class CalculateAggregates:
         self.isin = row[ColumnNameValues.ISIN_CODE]
         self.name = row[ColumnNameValues.NAME]
         self.source = row[ColumnNameValues.SOURCE]
-        self.transaction_type = row[ColumnNameValues.TRANSACTION_TYPE]
+        self.transaction_type = row[
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE
+        ]
         self.transaction_date = row[
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE
         ]
@@ -290,6 +292,8 @@ class CalculateAggregates:
                 TransactionRegistryColNameValues.META_TRANSACTION_YEAR: (
                     self.transaction_year
                 ),
-                ColumnNameValues.TRANSACTION_TYPE: self.transaction_type,
+                TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+                    self.transaction_type
+                ),
             },
         )

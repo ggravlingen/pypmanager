@@ -19,7 +19,10 @@ if TYPE_CHECKING:
 
 def _replace_fee_name(row: pd.DataFrame) -> str:
     """Replace interest flows with cash and equivalemts."""
-    if row[ColumnNameValues.TRANSACTION_TYPE] == TransactionTypeValues.FEE.value:
+    if (
+        row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE]
+        == TransactionTypeValues.FEE.value
+    ):
         return "Lysa management fee"
 
     return cast(str, row[ColumnNameValues.NAME])
@@ -30,7 +33,7 @@ class LysaLoader(TransactionLoader):
 
     col_map = {  # noqa: RUF012
         "Date": TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE,
-        "Type": ColumnNameValues.TRANSACTION_TYPE,
+        "Type": TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE,
         "Amount": ColumnNameValues.AMOUNT,
         "Counterpart/Fund": ColumnNameValues.NAME,
         "Volume": ColumnNameValues.NO_TRADED,
