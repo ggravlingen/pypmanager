@@ -13,7 +13,7 @@ const columnSettings = [
   {
     headerName: "Source",
     fieldPath: "source",
-    align: CellAlign.LEFT,
+    align: CellAlign.CENTER,
     dataType: CellDataType.STRING,
     description: "The data source of the transaction",
   },
