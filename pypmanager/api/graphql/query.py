@@ -39,7 +39,9 @@ class Query:
 
         return [
             LedgerRow(
-                transaction_date=row[ColumnNameValues.TRANSACTION_DATE],
+                transaction_date=row[
+                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE
+                ],
                 broker=row[ColumnNameValues.BROKER],
                 source=row[ColumnNameValues.SOURCE],
                 action=row[ColumnNameValues.TRANSACTION_TYPE_INTERNAL],

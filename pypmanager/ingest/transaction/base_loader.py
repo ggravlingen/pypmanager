@@ -12,6 +12,7 @@ from pypmanager.settings import Settings
 from .const import (
     ColumnNameValues,
     CSVSeparator,
+    TransactionRegistryColNameValues,
 )
 
 
@@ -30,7 +31,7 @@ def _get_filename(file_path: Path) -> str:
 
 EMPTY_DF = pd.DataFrame(
     columns=[
-        ColumnNameValues.TRANSACTION_DATE,
+        TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE,
         ColumnNameValues.ACCOUNT,
         ColumnNameValues.TRANSACTION_TYPE,
         ColumnNameValues.NAME,
@@ -99,9 +100,11 @@ class TransactionLoader(ABC):
         """Make sure transaction date is in the correct format."""
         df_raw = self.df_final
 
-        df_raw[ColumnNameValues.TRANSACTION_DATE] = pd.to_datetime(
-            df_raw[ColumnNameValues.TRANSACTION_DATE],
-            format=self.date_format_pattern,
+        df_raw[TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE] = (
+            pd.to_datetime(
+                df_raw[TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE],
+                format=self.date_format_pattern,
+            )
         )
 
         self.df_final = df_raw

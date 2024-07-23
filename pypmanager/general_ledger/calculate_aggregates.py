@@ -87,7 +87,7 @@ class CalculateAggregates:
         data_copy.index = pd.to_datetime(data_copy.index)
         data_copy.index = data_copy.index.map(lambda x: x.date())
 
-        data_copy[ColumnNameValues.TRANSACTION_DATE] = (
+        data_copy[TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE] = (
             data_copy.index
         )  # Convert index to a column
 
@@ -96,7 +96,9 @@ class CalculateAggregates:
         self.parse_transactions()
 
         final_df = pd.DataFrame(self.calculated_transaction_list)
-        final_df = final_df.set_index(ColumnNameValues.TRANSACTION_DATE)
+        final_df = final_df.set_index(
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE
+        )
         self.output_data = final_df
 
     def parse_transactions(self: CalculateAggregates) -> None:
@@ -237,7 +239,9 @@ class CalculateAggregates:
         self.name = row[ColumnNameValues.NAME]
         self.source = row[ColumnNameValues.SOURCE]
         self.transaction_type = row[ColumnNameValues.TRANSACTION_TYPE]
-        self.transaction_date = row[ColumnNameValues.TRANSACTION_DATE]
+        self.transaction_date = row[
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE
+        ]
         self.transaction_year = row[
             TransactionRegistryColNameValues.META_TRANSACTION_YEAR
         ]
@@ -280,7 +284,9 @@ class CalculateAggregates:
                 ColumnNameValues.SOURCE: self.source,
                 ColumnNameValues.SUM_COST_BASIS_DELTA: self.sum_cost_basis_delta,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: self.transaction_cash_flow,
-                ColumnNameValues.TRANSACTION_DATE: self.transaction_date,
+                TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: (
+                    self.transaction_date
+                ),
                 TransactionRegistryColNameValues.META_TRANSACTION_YEAR: (
                     self.transaction_year
                 ),
