@@ -53,7 +53,7 @@ class ColumnNameValues(StrEnum):
 
     Use turnover if the value represend a buy or a sell.
     """
-    ADJUSTED_QUANTITY_HELD = "calc_adjusted_quantity_held"
+    ADJUSTED_QUANTITY_HELD = "calc_agg_sum_quantity_held"
     BROKER = "broker"
     COMMISSION = "commission"
     CASH_FLOW_LOCAL = "cash_flow_base_ccy"
@@ -88,7 +88,7 @@ class ColumnNameValues(StrEnum):
     """
     TRANSACTION_DATE = "transaction_date"
     """The date of the transaction (time zone aware)."""
-    TRANSACTION_YEAR = "transaction_year"
+    META_TRANSACTION_YEAR = "meta_transaction_year"
     """The year of the transaction (based on transaction date)."""
     TRANSACTION_TYPE = "transaction_type"
     """The type of transaction, eg buy, sell, dividend, etc."""
@@ -97,7 +97,7 @@ class ColumnNameValues(StrEnum):
     COST_BASIS_DELTA = "cost_basis_delta"
     SUM_COST_BASIS_DELTA = "sum_cost_basis_delta"
     TRANSACTION_CASH_FLOW = "transaction_cash_flow"
-    PRICE_PER_UNIT = "calc_price_per_unit"
+    PRICE_PER_UNIT = "calc_avg_price_per_unit"
     """
     Average purchase price per unit.
 
