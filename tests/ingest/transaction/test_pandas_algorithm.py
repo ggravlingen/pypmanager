@@ -33,7 +33,7 @@ if TYPE_CHECKING:
 def test__normalize_no_traded(trans_type: str, no_traded: int, expected: int) -> None:
     """Test function _normalize_no_traded."""
     test_data = pd.DataFrame(
-        {"transaction_type": [trans_type], "no_traded": [no_traded]},
+        {"source_transaction_type": [trans_type], "no_traded": [no_traded]},
     )
     result = PandasAlgorithm.normalize_no_traded(test_data.iloc[0])
 
@@ -66,7 +66,7 @@ def test__normalize_fx(input_data: pd.DataFrame, expected: float) -> None:
                 {
                     "no_traded": 10,
                     "price": 10,
-                    "transaction_type": TransactionTypeValues.BUY.value,
+                    "source_transaction_type": TransactionTypeValues.BUY.value,
                 },
             ),
             -100,
@@ -77,7 +77,7 @@ def test__normalize_fx(input_data: pd.DataFrame, expected: float) -> None:
                 {
                     "no_traded": 10,
                     "price": 10,
-                    "transaction_type": TransactionTypeValues.SELL.value,
+                    "source_transaction_type": TransactionTypeValues.SELL.value,
                 },
             ),
             100,
@@ -89,7 +89,7 @@ def test__normalize_fx(input_data: pd.DataFrame, expected: float) -> None:
                 {
                     "no_traded": -10,
                     "price": 10,
-                    "transaction_type": TransactionTypeValues.BUY.value,
+                    "source_transaction_type": TransactionTypeValues.BUY.value,
                 },
             ),
             -100,
@@ -99,7 +99,7 @@ def test__normalize_fx(input_data: pd.DataFrame, expected: float) -> None:
             pd.Series(
                 {
                     "amount": 100,
-                    "transaction_type": TransactionTypeValues.CASHBACK.value,
+                    "source_transaction_type": TransactionTypeValues.CASHBACK.value,
                 },
             ),
             100,
