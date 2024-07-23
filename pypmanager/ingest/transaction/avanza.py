@@ -40,7 +40,7 @@ class AvanzaLoader(TransactionLoader):
         "Konto": ColumnNameValues.ACCOUNT,
         "Typ av transaktion": TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE,
         "Värdepapper/beskrivning": ColumnNameValues.NAME,
-        "Antal": ColumnNameValues.NO_TRADED,
+        "Antal": TransactionRegistryColNameValues.SOURCE_VOLUME,
         "Kurs": ColumnNameValues.PRICE,
         "Belopp": ColumnNameValues.AMOUNT,
         "Courtage": ColumnNameValues.COMMISSION,

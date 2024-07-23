@@ -45,9 +45,13 @@ class TransactionMacro:
         self.profit_loss_eq = row[ColumnNameValues.REALIZED_PNL_EQ]
         self.profit_loss_fx = None
 
-        if row[ColumnNameValues.AVG_PRICE] and row[ColumnNameValues.NO_TRADED]:
+        if (
+            row[ColumnNameValues.AVG_PRICE]
+            and row[TransactionRegistryColNameValues.SOURCE_VOLUME]
+        ):
             self.invested_amount = (
-                row[ColumnNameValues.AVG_PRICE] * row[ColumnNameValues.NO_TRADED]
+                row[ColumnNameValues.AVG_PRICE]
+                * row[TransactionRegistryColNameValues.SOURCE_VOLUME]
             )
 
         self.credit_rows: ListType = []
@@ -69,7 +73,7 @@ class TransactionMacro:
         debit_row[ColumnNameValues.COMMISSION] = None
         # Amount is negative in the row data due to being a cash outflow
         debit_row[ColumnNameValues.DEBIT] = -self.amount
-        debit_row[ColumnNameValues.NO_TRADED] = None
+        debit_row[TransactionRegistryColNameValues.SOURCE_VOLUME] = None
         debit_row[ColumnNameValues.NO_HELD] = None
         debit_row[ColumnNameValues.REALIZED_PNL] = None
         debit_row[ColumnNameValues.REALIZED_PNL_EQ] = None
@@ -94,7 +98,7 @@ class TransactionMacro:
         debit_row[ColumnNameValues.AMOUNT] = None
         debit_row[ColumnNameValues.COMMISSION] = None
         debit_row[ColumnNameValues.DEBIT] = self.amount
-        debit_row[ColumnNameValues.NO_TRADED] = None
+        debit_row[TransactionRegistryColNameValues.SOURCE_VOLUME] = None
         debit_row[ColumnNameValues.REALIZED_PNL] = None
         debit_row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE] = None
 
@@ -109,7 +113,7 @@ class TransactionMacro:
 
         credit_row[ColumnNameValues.ACCOUNT] = AccountNameValues.EQUITY
         credit_row[ColumnNameValues.CREDIT] = self.amount
-        credit_row[ColumnNameValues.NO_TRADED] = None
+        credit_row[TransactionRegistryColNameValues.SOURCE_VOLUME] = None
         credit_row[ColumnNameValues.REALIZED_PNL] = None
 
         debit_row = self.row.copy()
@@ -117,7 +121,7 @@ class TransactionMacro:
         debit_row[ColumnNameValues.AMOUNT] = None
         debit_row[ColumnNameValues.COMMISSION] = None
         debit_row[ColumnNameValues.DEBIT] = self.amount
-        debit_row[ColumnNameValues.NO_TRADED] = None
+        debit_row[TransactionRegistryColNameValues.SOURCE_VOLUME] = None
         debit_row[ColumnNameValues.REALIZED_PNL] = self.amount
         debit_row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE] = None
 
@@ -138,7 +142,7 @@ class TransactionMacro:
         debit_row[ColumnNameValues.AMOUNT] = None
         debit_row[ColumnNameValues.COMMISSION] = None
         debit_row[ColumnNameValues.DEBIT] = -self.amount
-        debit_row[ColumnNameValues.NO_TRADED] = None
+        debit_row[TransactionRegistryColNameValues.SOURCE_VOLUME] = None
         debit_row[ColumnNameValues.REALIZED_PNL] = None
         debit_row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE] = None
 
@@ -159,7 +163,7 @@ class TransactionMacro:
         debit_row[ColumnNameValues.AMOUNT] = None
         debit_row[ColumnNameValues.COMMISSION] = None
         debit_row[ColumnNameValues.DEBIT] = self.amount
-        debit_row[ColumnNameValues.NO_TRADED] = None
+        debit_row[TransactionRegistryColNameValues.SOURCE_VOLUME] = None
         debit_row[ColumnNameValues.REALIZED_PNL] = None
         debit_row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE] = None
 
@@ -190,7 +194,7 @@ class TransactionMacro:
             credit_row[ColumnNameValues.REALIZED_PNL] = None
             credit_row[ColumnNameValues.REALIZED_PNL_EQ] = None
             credit_row[ColumnNameValues.REALIZED_PNL_FX] = None
-            credit_row[ColumnNameValues.NO_TRADED] = None
+            credit_row[TransactionRegistryColNameValues.SOURCE_VOLUME] = None
             credit_row[ColumnNameValues.NO_HELD] = None
             credit_row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE] = None
             self.credit_rows.append(credit_row)
@@ -205,7 +209,7 @@ class TransactionMacro:
                 credit_row_2[ColumnNameValues.REALIZED_PNL] = None
                 credit_row_2[ColumnNameValues.REALIZED_PNL_EQ] = None
                 credit_row_2[ColumnNameValues.REALIZED_PNL_FX] = None
-                credit_row_2[ColumnNameValues.NO_TRADED] = None
+                credit_row_2[TransactionRegistryColNameValues.SOURCE_VOLUME] = None
                 credit_row_2[ColumnNameValues.NO_HELD] = None
                 credit_row_2[
                     TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE
@@ -218,7 +222,7 @@ class TransactionMacro:
             debit_row[ColumnNameValues.AVG_PRICE] = None
             debit_row[ColumnNameValues.COMMISSION] = None
             debit_row[ColumnNameValues.DEBIT] = -self.profit_loss
-            debit_row[ColumnNameValues.NO_TRADED] = None
+            debit_row[TransactionRegistryColNameValues.SOURCE_VOLUME] = None
             debit_row[ColumnNameValues.PRICE] = None
             debit_row[ColumnNameValues.REALIZED_PNL] = None
             debit_row[ColumnNameValues.REALIZED_PNL_EQ] = None
@@ -236,7 +240,7 @@ class TransactionMacro:
                 debit_row_2[ColumnNameValues.REALIZED_PNL] = None
                 debit_row_2[ColumnNameValues.REALIZED_PNL_EQ] = None
                 debit_row_2[ColumnNameValues.REALIZED_PNL_FX] = None
-                debit_row_2[ColumnNameValues.NO_TRADED] = None
+                debit_row_2[TransactionRegistryColNameValues.SOURCE_VOLUME] = None
                 debit_row_2[
                     TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE
                 ] = None
@@ -253,7 +257,7 @@ class TransactionMacro:
         # as we haven't marked the AccountNameValues.SECURITIES to market
         credit_row[ColumnNameValues.ACCOUNT] = AccountNameValues.SECURITIES
         credit_row[ColumnNameValues.CREDIT] = self.amount
-        credit_row[ColumnNameValues.NO_TRADED] = None
+        credit_row[TransactionRegistryColNameValues.SOURCE_VOLUME] = None
         credit_row[ColumnNameValues.REALIZED_PNL] = None
         credit_row[ColumnNameValues.REALIZED_PNL_EQ] = None
         credit_row[ColumnNameValues.PRICE] = None

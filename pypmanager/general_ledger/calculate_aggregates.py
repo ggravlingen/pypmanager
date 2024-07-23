@@ -255,8 +255,8 @@ class CalculateAggregates:
         else:
             self.nominal_price = None
 
-        if row.get(ColumnNameValues.NO_TRADED):
-            self.no_traded = row[ColumnNameValues.NO_TRADED]
+        if row.get(TransactionRegistryColNameValues.SOURCE_VOLUME):
+            self.no_traded = row[TransactionRegistryColNameValues.SOURCE_VOLUME]
         else:
             self.no_traded = None
 
@@ -276,7 +276,7 @@ class CalculateAggregates:
                 ColumnNameValues.ISIN_CODE: self.isin,
                 ColumnNameValues.NAME: self.name,
                 ColumnNameValues.NO_HELD: self.sum_held,
-                ColumnNameValues.NO_TRADED: self.no_traded,
+                TransactionRegistryColNameValues.SOURCE_VOLUME: self.no_traded,
                 ColumnNameValues.PRICE: self.nominal_price,
                 ColumnNameValues.REALIZED_PNL: self.pnl_total,
                 ColumnNameValues.REALIZED_PNL_COMMISSION: self.pnl_commission,

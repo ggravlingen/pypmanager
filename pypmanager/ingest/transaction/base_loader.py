@@ -35,7 +35,7 @@ EMPTY_DF = pd.DataFrame(
         ColumnNameValues.ACCOUNT,
         TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE,
         ColumnNameValues.NAME,
-        ColumnNameValues.NO_TRADED,
+        TransactionRegistryColNameValues.SOURCE_VOLUME,
         ColumnNameValues.PRICE,
         ColumnNameValues.AMOUNT,
         ColumnNameValues.COMMISSION,

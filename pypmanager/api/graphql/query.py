@@ -46,7 +46,7 @@ class Query:
                 source=row[ColumnNameValues.SOURCE],
                 action=row[ColumnNameValues.TRANSACTION_TYPE_INTERNAL],
                 name=row[ColumnNameValues.NAME],
-                no_traded=row[ColumnNameValues.NO_TRADED],
+                no_traded=row[TransactionRegistryColNameValues.SOURCE_VOLUME.value],
                 agg_buy_volume=row[ColumnNameValues.NO_HELD],
                 average_price=row[ColumnNameValues.AVG_PRICE],
                 amount=row[ColumnNameValues.AMOUNT],
@@ -127,7 +127,7 @@ class Query:
                         ],
                     ).capitalize(),
                     name=row[ColumnNameValues.NAME.value],
-                    no_traded=row[ColumnNameValues.NO_TRADED.value],
+                    no_traded=row[TransactionRegistryColNameValues.SOURCE_VOLUME.value],
                     currency=row[ColumnNameValues.CURRENCY.value],
                     price=row[ColumnNameValues.PRICE.value],
                     # It makes more sense to use the absolute value of the commission in

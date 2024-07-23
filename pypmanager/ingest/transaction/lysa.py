@@ -36,7 +36,7 @@ class LysaLoader(TransactionLoader):
         "Type": TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE,
         "Amount": ColumnNameValues.AMOUNT,
         "Counterpart/Fund": ColumnNameValues.NAME,
-        "Volume": ColumnNameValues.NO_TRADED,
+        "Volume": TransactionRegistryColNameValues.SOURCE_VOLUME,
         "Price": ColumnNameValues.PRICE,
     }
 

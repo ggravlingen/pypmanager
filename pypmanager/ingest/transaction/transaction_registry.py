@@ -32,7 +32,7 @@ DTYPES_MAP: dict[str, type[str | float] | str] = {
     ColumnNameValues.ACCOUNT.value: str,
     TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: str,
     ColumnNameValues.NAME.value: str,
-    ColumnNameValues.NO_TRADED.value: float,
+    TransactionRegistryColNameValues.SOURCE_VOLUME.value: float,
     ColumnNameValues.PRICE.value: float,
     ColumnNameValues.AMOUNT.value: float,
     ColumnNameValues.COMMISSION.value: float,
@@ -236,7 +236,7 @@ class TransactionRegistry:
         """Make sure data is calculated in the same way."""
         df_raw = self.df_all_transactions.copy()
 
-        df_raw[ColumnNameValues.NO_TRADED.value] = df_raw.apply(
+        df_raw[TransactionRegistryColNameValues.SOURCE_VOLUME.value] = df_raw.apply(
             PandasAlgorithm.normalize_no_traded, axis=1
         )
         df_raw[ColumnNameValues.AMOUNT.value] = df_raw.apply(
@@ -284,7 +284,7 @@ class TransactionRegistry:
         )
 
         df_sorted[ColumnNameValues.AMOUNT.value] = (
-            df_sorted[ColumnNameValues.NO_TRADED.value]
+            df_sorted[TransactionRegistryColNameValues.SOURCE_VOLUME.value]
             * df_sorted[ColumnNameValues.PRICE.value]
         )
         df_sorted[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value] = (
@@ -304,7 +304,7 @@ class TransactionRegistry:
                     )
                 )
                 # Make sure traded volume is always a positive integer
-                * abs(x[ColumnNameValues.NO_TRADED.value]),
+                * abs(x[TransactionRegistryColNameValues.SOURCE_VOLUME.value]),
                 axis=1,
             )
         )

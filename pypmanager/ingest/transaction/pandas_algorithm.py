@@ -65,7 +65,7 @@ class PandasAlgorithm:
             amount = row[ColumnNameValues.AMOUNT.value]
         else:
             amount = (
-                row[ColumnNameValues.NO_TRADED.value]
+                row[TransactionRegistryColNameValues.SOURCE_VOLUME.value]
                 * row[ColumnNameValues.PRICE.value]
             )
 
@@ -84,7 +84,9 @@ class PandasAlgorithm:
     @staticmethod
     def normalize_no_traded(row: pd.DataFrame) -> float:
         """Calculate number of units traded."""
-        no_traded = cast(float, row[ColumnNameValues.NO_TRADED.value])
+        no_traded = cast(
+            float, row[TransactionRegistryColNameValues.SOURCE_VOLUME.value]
+        )
 
         if row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value] in [
             TransactionTypeValues.BUY.value,
