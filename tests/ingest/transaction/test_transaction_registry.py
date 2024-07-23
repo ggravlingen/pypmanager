@@ -95,7 +95,7 @@ async def test_transaction_registry__columns(
             "name",
             "source_transaction_type",
             "isin_code",
-            "no_traded",
+            "source_volume",
             "price",
             "commission",
             "currency",

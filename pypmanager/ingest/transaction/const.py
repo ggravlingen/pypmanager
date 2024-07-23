@@ -64,8 +64,6 @@ class ColumnNameValues(StrEnum):
     ISIN_CODE = "isin_code"
     NAME = "name"
     """The full name of the security."""
-    NO_TRADED = "no_traded"
-    """The number of units traded."""
     NO_HELD = "cumulative_buy_volume"
     PRICE = "price"
     """Price paid per unit."""
@@ -114,6 +112,12 @@ class TransactionRegistryColNameValues(StrEnum):
 
     Resets when the cumulative volume held is zero.
     """
+    SOURCE_VOLUME = "source_volume"
+    """
+    The number of units traded.
+
+    Ingested from the transaction source files.
+    """
     SOURCE_TRANSACTION_DATE = "source_transaction_date"
     """
     The date of the transaction (time zone aware).
@@ -139,7 +143,7 @@ NUMBER_COLS = [
     ColumnNameValues.AMOUNT,
     ColumnNameValues.COMMISSION,
     ColumnNameValues.FX,
-    ColumnNameValues.NO_TRADED,
+    TransactionRegistryColNameValues.SOURCE_VOLUME,
     ColumnNameValues.PRICE,
     ColumnNameValues.REALIZED_PNL,
 ]

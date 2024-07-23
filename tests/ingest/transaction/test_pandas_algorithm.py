@@ -33,7 +33,7 @@ if TYPE_CHECKING:
 def test__normalize_no_traded(trans_type: str, no_traded: int, expected: int) -> None:
     """Test function _normalize_no_traded."""
     test_data = pd.DataFrame(
-        {"source_transaction_type": [trans_type], "no_traded": [no_traded]},
+        {"source_transaction_type": [trans_type], "source_volume": [no_traded]},
     )
     result = PandasAlgorithm.normalize_no_traded(test_data.iloc[0])
 
@@ -64,7 +64,7 @@ def test__normalize_fx(input_data: pd.DataFrame, expected: float) -> None:
         (
             pd.Series(
                 {
-                    "no_traded": 10,
+                    "source_volume": 10,
                     "price": 10,
                     "source_transaction_type": TransactionTypeValues.BUY.value,
                 },
@@ -75,7 +75,7 @@ def test__normalize_fx(input_data: pd.DataFrame, expected: float) -> None:
         (
             pd.Series(
                 {
-                    "no_traded": 10,
+                    "source_volume": 10,
                     "price": 10,
                     "source_transaction_type": TransactionTypeValues.SELL.value,
                 },
@@ -87,7 +87,7 @@ def test__normalize_fx(input_data: pd.DataFrame, expected: float) -> None:
         (
             pd.Series(
                 {
-                    "no_traded": -10,
+                    "source_volume": -10,
                     "price": 10,
                     "source_transaction_type": TransactionTypeValues.BUY.value,
                 },
@@ -261,7 +261,7 @@ def test_calculate_adjusted_price_per_unit(
     )
     # Calculate turnover
     df_mocked_transactions[ColumnNameValues.AMOUNT.value] = (
-        df_mocked_transactions[ColumnNameValues.NO_TRADED.value]
+        df_mocked_transactions[TransactionRegistryColNameValues.SOURCE_VOLUME.value]
         * df_mocked_transactions[ColumnNameValues.PRICE.value]
     )
     df_mocked_transactions[
@@ -277,7 +277,7 @@ def test_calculate_adjusted_price_per_unit(
                 == TransactionTypeValues.SELL.value
             )
         )
-        * x[ColumnNameValues.NO_TRADED.value],
+        * x[TransactionRegistryColNameValues.SOURCE_VOLUME.value],
         axis=1,
     )
     df_mocked_transactions[

@@ -12,7 +12,11 @@ from typing import cast
 import numpy as np
 import pandas as pd
 
-from pypmanager.ingest.transaction import AccountNameValues, ColumnNameValues
+from pypmanager.ingest.transaction import (
+    AccountNameValues,
+    ColumnNameValues,
+    TransactionRegistryColNameValues,
+)
 from pypmanager.settings import Settings
 
 from .security import MutualFund
@@ -82,7 +86,9 @@ class Holding:
         if self.calculated_data is None:
             return None
 
-        total_held = self.calculated_data[ColumnNameValues.NO_TRADED].sum()
+        total_held = self.calculated_data[
+            TransactionRegistryColNameValues.SOURCE_VOLUME
+        ].sum()
 
         if (
             self.calculated_data is None
