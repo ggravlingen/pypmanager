@@ -117,7 +117,9 @@ class Query:
                     transaction_date=index,
                     broker=row[ColumnNameValues.BROKER.value],
                     source=row[ColumnNameValues.SOURCE.value],
-                    action=row[ColumnNameValues.TRANSACTION_TYPE.value],
+                    action=cast(
+                        str, row[ColumnNameValues.TRANSACTION_TYPE.value]
+                    ).capitalize(),
                     name=row[ColumnNameValues.NAME.value],
                     no_traded=row[ColumnNameValues.NO_TRADED.value],
                     currency=row[ColumnNameValues.CURRENCY.value],
