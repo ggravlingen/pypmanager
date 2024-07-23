@@ -11,6 +11,7 @@ import pandas as pd
 from pypmanager.ingest.transaction.const import (
     NUMBER_COLS,
     ColumnNameValues,
+    TransactionRegistryColumnNameValues,
     TransactionTypeValues,
 )
 from pypmanager.settings import Settings
@@ -311,7 +312,12 @@ class TransactionRegistry:
         )
 
         # Drop the column that is appended in the group by above
-        df_sorted = df_sorted.drop(columns=["level_1"])
+        df_sorted = df_sorted.drop(
+            columns=[
+                "level_1",
+                TransactionRegistryColumnNameValues.INTERNAL_TURNOVER.value,
+            ]
+        )
 
         self.df_all_transactions = df_sorted
 

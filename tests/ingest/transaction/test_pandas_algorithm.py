@@ -10,7 +10,11 @@ from numpy.testing import assert_array_equal
 import pandas as pd
 import pytest
 
-from pypmanager.ingest.transaction.const import ColumnNameValues, TransactionTypeValues
+from pypmanager.ingest.transaction import (
+    ColumnNameValues,
+    TransactionRegistryColumnNameValues,
+    TransactionTypeValues,
+)
 from pypmanager.ingest.transaction.pandas_algorithm import PandasAlgorithm
 from pypmanager.settings import Settings
 
@@ -289,7 +293,7 @@ def test_calculate_adjusted_price_per_unit(
     assert len(df_mocked_transactions) == 6
     expected_values = [10.0, 10.0, 10.0, np.nan, 1.0, 2.0]
     actual_values = df_mocked_transactions[
-        ColumnNameValues.PRICE_PER_UNIT.value
+        TransactionRegistryColumnNameValues.PRICE_PER_UNIT.value
     ].to_numpy()
 
     assert_array_equal(actual_values, expected_values)

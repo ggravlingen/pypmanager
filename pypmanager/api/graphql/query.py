@@ -16,6 +16,7 @@ from pypmanager.ingest.transaction import (
     AccountNameValues,
     ColumnNameValues,
     TransactionRegistry,
+    TransactionRegistryColumnNameValues,
 )
 
 from .models import (
@@ -129,7 +130,9 @@ class Query:
                     commission=commission,
                     cash_flow=row[ColumnNameValues.CASH_FLOW_NET_FEE_NOMINAL.value],
                     fx=row[ColumnNameValues.FX.value],
-                    cost_base_average=row[ColumnNameValues.PRICE_PER_UNIT.value],
+                    cost_base_average=row[
+                        TransactionRegistryColumnNameValues.PRICE_PER_UNIT.value
+                    ],
                 )
             )
 
