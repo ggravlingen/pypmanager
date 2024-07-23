@@ -20,7 +20,7 @@ def _replace_fee_name(row: pd.DataFrame) -> str:
     ):
         return "SAVR management fee"
 
-    return cast(str, row[ColumnNameValues.NAME])
+    return cast(str, row[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY])
 
 
 class GenericLoader(TransactionLoader):
@@ -33,6 +33,8 @@ class GenericLoader(TransactionLoader):
         """Load CSV."""
         df_raw = self.df_final
 
-        df_raw[ColumnNameValues.NAME] = df_raw.apply(_replace_fee_name, axis=1)
+        df_raw[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY] = df_raw.apply(
+            _replace_fee_name, axis=1
+        )
 
         self.df_final = df_raw

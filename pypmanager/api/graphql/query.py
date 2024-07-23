@@ -45,7 +45,7 @@ class Query:
                 broker=row[ColumnNameValues.BROKER],
                 source=row[ColumnNameValues.SOURCE],
                 action=row[ColumnNameValues.TRANSACTION_TYPE_INTERNAL],
-                name=row[ColumnNameValues.NAME],
+                name=row[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY],
                 no_traded=row[TransactionRegistryColNameValues.SOURCE_VOLUME.value],
                 agg_buy_volume=row[ColumnNameValues.NO_HELD],
                 average_price=row[ColumnNameValues.AVG_PRICE],
@@ -126,7 +126,9 @@ class Query:
                             TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value
                         ],
                     ).capitalize(),
-                    name=row[ColumnNameValues.NAME.value],
+                    name=row[
+                        TransactionRegistryColNameValues.SOURCE_NAME_SECURITY.value
+                    ],
                     no_traded=row[TransactionRegistryColNameValues.SOURCE_VOLUME.value],
                     currency=row[ColumnNameValues.CURRENCY.value],
                     price=row[TransactionRegistryColNameValues.SOURCE_PRICE.value],

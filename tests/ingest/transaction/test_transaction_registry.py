@@ -92,9 +92,9 @@ async def test_transaction_registry__columns(
     ):
         registry = await TransactionRegistry().async_get_registry()
         assert registry.columns.to_list() == [
-            "name",
+            "source_name",
             "source_transaction_type",
-            "isin_code",
+            "source_isin_code",
             "source_volume",
             "source_price",
             "source_fee",

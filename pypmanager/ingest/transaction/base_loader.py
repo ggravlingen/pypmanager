@@ -34,13 +34,13 @@ EMPTY_DF = pd.DataFrame(
         TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE,
         ColumnNameValues.ACCOUNT,
         TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE,
-        ColumnNameValues.NAME,
+        TransactionRegistryColNameValues.SOURCE_NAME_SECURITY,
         TransactionRegistryColNameValues.SOURCE_VOLUME,
         TransactionRegistryColNameValues.SOURCE_PRICE,
         ColumnNameValues.AMOUNT,
         TransactionRegistryColNameValues.SOURCE_FEE,
         ColumnNameValues.CURRENCY,
-        ColumnNameValues.ISIN_CODE,
+        TransactionRegistryColNameValues.SOURCE_ISIN,
     ],
 )
 

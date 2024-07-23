@@ -253,7 +253,7 @@ def test_calculate_adjusted_price_per_unit(
     )
     df_mocked_transactions = df_mocked_transactions.sort_values(
         [
-            ColumnNameValues.NAME.value,
+            TransactionRegistryColNameValues.SOURCE_NAME_SECURITY.value,
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value,
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value,
         ],
@@ -282,12 +282,12 @@ def test_calculate_adjusted_price_per_unit(
     )
     df_mocked_transactions[
         TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value
-    ] = df_mocked_transactions.groupby(ColumnNameValues.NAME.value)[
-        TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value
-    ].cumsum()
+    ] = df_mocked_transactions.groupby(
+        TransactionRegistryColNameValues.SOURCE_NAME_SECURITY.value
+    )[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value].cumsum()
 
     df_mocked_transactions = df_mocked_transactions.groupby(
-        ColumnNameValues.NAME.value
+        TransactionRegistryColNameValues.SOURCE_NAME_SECURITY.value
     ).apply(PandasAlgorithm.calculate_adjusted_price_per_unit, include_groups=False)
 
     assert len(df_mocked_transactions) == 6

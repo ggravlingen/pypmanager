@@ -20,15 +20,20 @@ from .transaction_macro import _amend_row
 
 def calculate_results(data: pd.DataFrame) -> pd.DataFrame:
     """Calculate the general ledger."""
-    all_securities_name = data.name.unique()
+    all_securities_name = data[
+        TransactionRegistryColNameValues.SOURCE_NAME_SECURITY.value
+    ].unique()
 
     dfs: list[pd.DataFrame] = []
 
-    for name in all_securities_name:
-        if Settings.debug_name and Settings.debug_name not in name:
+    for security_name in all_securities_name:
+        if Settings.debug_name and Settings.debug_name not in security_name:
             continue
 
-        df_data = data.query(f"name == '{name}'")
+        df_data = data.query(
+            f"{TransactionRegistryColNameValues.SOURCE_NAME_SECURITY.value} == "
+            f"'{security_name}'"
+        )
         df_result = CalculateAggregates(df_data).output_data
 
         dfs.append(df_result)

@@ -25,7 +25,7 @@ def _replace_fee_name(row: pd.DataFrame) -> str:
     ):
         return "Lysa management fee"
 
-    return cast(str, row[ColumnNameValues.NAME])
+    return cast(str, row[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY])
 
 
 class LysaLoader(TransactionLoader):
@@ -35,7 +35,7 @@ class LysaLoader(TransactionLoader):
         "Date": TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE,
         "Type": TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE,
         "Amount": ColumnNameValues.AMOUNT,
-        "Counterpart/Fund": ColumnNameValues.NAME,
+        "Counterpart/Fund": TransactionRegistryColNameValues.SOURCE_NAME_SECURITY,
         "Volume": TransactionRegistryColNameValues.SOURCE_VOLUME,
         "Price": TransactionRegistryColNameValues.SOURCE_PRICE,
     }
@@ -49,7 +49,9 @@ class LysaLoader(TransactionLoader):
         df_raw = self.df_final
 
         df_raw[ColumnNameValues.BROKER] = "Lysa"
-        df_raw[ColumnNameValues.NAME] = df_raw.apply(_replace_fee_name, axis=1)
+        df_raw[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY] = df_raw.apply(
+            _replace_fee_name, axis=1
+        )
 
         df_raw[TransactionRegistryColNameValues.SOURCE_FEE] = None
         df_raw[ColumnNameValues.CURRENCY] = CurrencyValues.SEK
