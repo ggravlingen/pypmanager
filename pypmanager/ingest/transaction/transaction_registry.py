@@ -11,7 +11,7 @@ import pandas as pd
 from pypmanager.ingest.transaction.const import (
     NUMBER_COLS,
     ColumnNameValues,
-    TransactionRegistryColumnNameValues,
+    TransactionRegistryColNameValues,
     TransactionTypeValues,
 )
 from pypmanager.settings import Settings
@@ -105,11 +105,11 @@ class ColumnAppendConfig:
 # These columns are appended to the transaction registry
 COLUMN_APPEND: tuple[ColumnAppendConfig, ...] = (
     ColumnAppendConfig(
-        column=ColumnNameValues.CASH_FLOW_NET_FEE_NOMINAL.value,
+        column=TransactionRegistryColNameValues.CASH_FLOW_NET_FEE_NOMINAL.value,
         callable=PandasAlgorithm.calculate_cash_flow_net_fee_nominal,
     ),
     ColumnAppendConfig(
-        column=ColumnNameValues.CASH_FLOW_GROSS_FEE_NOMINAL.value,
+        column=TransactionRegistryColNameValues.CASH_FLOW_GROSS_FEE_NOMINAL.value,
         callable=PandasAlgorithm.calculate_cash_flow_gross_fee_nominal,
     ),
 )
@@ -283,24 +283,28 @@ class TransactionRegistry:
             df_sorted[ColumnNameValues.NO_TRADED.value]
             * df_sorted[ColumnNameValues.PRICE.value]
         )
-        df_sorted[ColumnNameValues.ADJUSTED_QUANTITY_HELD.value] = df_sorted.apply(
-            lambda x: (
-                (
-                    x[ColumnNameValues.TRANSACTION_TYPE.value]
-                    == TransactionTypeValues.BUY.value
+        df_sorted[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value] = (
+            df_sorted.apply(
+                lambda x: (
+                    (
+                        x[ColumnNameValues.TRANSACTION_TYPE.value]
+                        == TransactionTypeValues.BUY.value
+                    )
+                    - (
+                        x[ColumnNameValues.TRANSACTION_TYPE.value]
+                        == TransactionTypeValues.SELL.value
+                    )
                 )
-                - (
-                    x[ColumnNameValues.TRANSACTION_TYPE.value]
-                    == TransactionTypeValues.SELL.value
-                )
+                # Make sure traded volume is always a positive integer
+                * abs(x[ColumnNameValues.NO_TRADED.value]),
+                axis=1,
             )
-            # Make sure traded volume is always a positive integer
-            * abs(x[ColumnNameValues.NO_TRADED.value]),
-            axis=1,
         )
-        df_sorted[ColumnNameValues.ADJUSTED_QUANTITY_HELD.value] = df_sorted.groupby(
-            ColumnNameValues.NAME.value
-        )[ColumnNameValues.ADJUSTED_QUANTITY_HELD.value].cumsum()
+        df_sorted[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value] = (
+            df_sorted.groupby(
+                ColumnNameValues.NAME.value
+            )[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value].cumsum()
+        )
 
         df_sorted = (
             df_sorted.groupby(ColumnNameValues.NAME.value)
@@ -315,7 +319,7 @@ class TransactionRegistry:
         df_sorted = df_sorted.drop(
             columns=[
                 "level_1",
-                TransactionRegistryColumnNameValues.INTERNAL_TURNOVER.value,
+                TransactionRegistryColNameValues.INTERNAL_TURNOVER.value,
             ]
         )
 
@@ -336,13 +340,10 @@ class TransactionRegistry:
         for config in COLUMN_APPEND:
             df_raw[config.column] = df_raw.apply(config.callable, axis=1)
 
-        # Calculate the transaction's total cash flow
-        df_raw[ColumnNameValues.CASH_FLOW_NET_FEE_NOMINAL.value] = df_raw.apply(
-            PandasAlgorithm.calculate_cash_flow_net_fee_nominal, axis=1
-        )
-
         # Add transaction year
-        df_raw[ColumnNameValues.META_TRANSACTION_YEAR.value] = df_raw.index.year
+        df_raw[TransactionRegistryColNameValues.META_TRANSACTION_YEAR.value] = (
+            df_raw.index.year
+        )
 
         self.df_all_transactions = df_raw
 

@@ -4,7 +4,7 @@ from .avanza import AvanzaLoader
 from .const import (
     AccountNameValues,
     ColumnNameValues,
-    TransactionRegistryColumnNameValues,
+    TransactionRegistryColNameValues,
     TransactionTypeValues,
 )
 from .generic import GenericLoader
@@ -21,5 +21,5 @@ __all__ = [
     "ColumnNameValues",
     "TransactionTypeValues",
     "TransactionRegistry",
-    "TransactionRegistryColumnNameValues",
+    "TransactionRegistryColNameValues",
 ]
