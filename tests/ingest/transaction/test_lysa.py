@@ -6,6 +6,7 @@ import pandas as pd
 import pytest
 
 from pypmanager.ingest.transaction import ColumnNameValues, TransactionTypeValues
+from pypmanager.ingest.transaction.const import TransactionRegistryColNameValues
 from pypmanager.ingest.transaction.lysa import LysaLoader, _replace_fee_name
 from pypmanager.settings import TypedSettings
 
@@ -32,7 +33,7 @@ def test_replace_fee_name(
 ) -> None:
     """Test function _replace_fee_name."""
     data = {
-        ColumnNameValues.TRANSACTION_TYPE: [transaction_type],
+        TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: [transaction_type],
         ColumnNameValues.NAME: [name],
     }
     df_test_data = pd.DataFrame(data)

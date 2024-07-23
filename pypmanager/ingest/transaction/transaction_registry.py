@@ -30,7 +30,7 @@ DTYPES_MAP: dict[str, type[str | float] | str] = {
     # TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value is
     # handled in the class
     ColumnNameValues.ACCOUNT.value: str,
-    ColumnNameValues.TRANSACTION_TYPE.value: str,
+    TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: str,
     ColumnNameValues.NAME.value: str,
     ColumnNameValues.NO_TRADED.value: float,
     ColumnNameValues.PRICE.value: float,
@@ -206,12 +206,15 @@ class TransactionRegistry:
 
         for config in REPLACE_CONFIG:
             for event in config.search:
-                df_raw[ColumnNameValues.TRANSACTION_TYPE] = df_raw[
-                    ColumnNameValues.TRANSACTION_TYPE
-                ].replace(event, config.target)
+                df_raw[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE] = (
+                    df_raw[
+                        TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE
+                    ].replace(event, config.target)
+                )
 
         df_raw = df_raw.query(
-            f"{ColumnNameValues.TRANSACTION_TYPE} in {FILTER_STATEMENT}",
+            f"{TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE} in "
+            f"{FILTER_STATEMENT}",
         )
 
         self.df_all_transactions = df_raw
@@ -275,7 +278,7 @@ class TransactionRegistry:
             by=[
                 ColumnNameValues.NAME.value,
                 TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value,
-                ColumnNameValues.TRANSACTION_TYPE.value,
+                TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value,
             ],
             ascending=[True, True, True],
         )
@@ -288,11 +291,15 @@ class TransactionRegistry:
             df_sorted.apply(
                 lambda x: (
                     (
-                        x[ColumnNameValues.TRANSACTION_TYPE.value]
+                        x[
+                            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value
+                        ]
                         == TransactionTypeValues.BUY.value
                     )
                     - (
-                        x[ColumnNameValues.TRANSACTION_TYPE.value]
+                        x[
+                            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value
+                        ]
                         == TransactionTypeValues.SELL.value
                     )
                 )

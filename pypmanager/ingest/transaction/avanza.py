@@ -18,18 +18,18 @@ if TYPE_CHECKING:
 def _transaction_type(row: pd.DataFrame) -> pd.Series:
     """Handle special cases."""
     if (
-        row[ColumnNameValues.TRANSACTION_TYPE] == "Övrigt"
+        row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE] == "Övrigt"
         and row[ColumnNameValues.NAME] == "Avkastningsskatt"
     ):
         return TransactionTypeValues.FEE
 
     if (
-        row[ColumnNameValues.TRANSACTION_TYPE] == "Övrigt"
+        row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE] == "Övrigt"
         and "Flyttavg" in row[ColumnNameValues.NAME]
     ):
         return TransactionTypeValues.FEE_CREDIT
 
-    return row[ColumnNameValues.TRANSACTION_TYPE]
+    return row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE]
 
 
 class AvanzaLoader(TransactionLoader):
@@ -38,7 +38,7 @@ class AvanzaLoader(TransactionLoader):
     col_map = {  # noqa: RUF012
         "Datum": TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE,
         "Konto": ColumnNameValues.ACCOUNT,
-        "Typ av transaktion": ColumnNameValues.TRANSACTION_TYPE,
+        "Typ av transaktion": TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE,
         "Värdepapper/beskrivning": ColumnNameValues.NAME,
         "Antal": ColumnNameValues.NO_TRADED,
         "Kurs": ColumnNameValues.PRICE,
@@ -62,7 +62,7 @@ class AvanzaLoader(TransactionLoader):
         if "Resultat" in df_raw.columns:
             df_raw = df_raw.drop(columns=["Resultat"])
 
-        df_raw[ColumnNameValues.TRANSACTION_TYPE] = df_raw.apply(
+        df_raw[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE] = df_raw.apply(
             _transaction_type,
             axis=1,
         )

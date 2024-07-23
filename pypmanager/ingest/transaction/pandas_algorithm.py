@@ -58,7 +58,7 @@ class PandasAlgorithm:
     @staticmethod
     def normalize_amount(row: pd.DataFrame) -> float:
         """Calculate amount if nan."""
-        if row[ColumnNameValues.TRANSACTION_TYPE.value] in [
+        if row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value] in [
             TransactionTypeValues.CASHBACK.value,
             TransactionTypeValues.FEE.value,
         ]:
@@ -70,7 +70,7 @@ class PandasAlgorithm:
             )
 
         # Buy and tax is a negative cash flow for us
-        if row[ColumnNameValues.TRANSACTION_TYPE.value] in [
+        if row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value] in [
             TransactionTypeValues.BUY.value,
             TransactionTypeValues.TAX.value,
             TransactionTypeValues.FEE.value,
@@ -86,7 +86,7 @@ class PandasAlgorithm:
         """Calculate number of units traded."""
         no_traded = cast(float, row[ColumnNameValues.NO_TRADED.value])
 
-        if row[ColumnNameValues.TRANSACTION_TYPE.value] in [
+        if row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value] in [
             TransactionTypeValues.BUY.value,
             TransactionTypeValues.DIVIDEND.value,
         ]:
@@ -110,11 +110,11 @@ class PandasAlgorithm:
         group[TransactionRegistryColNameValues.INTERNAL_TURNOVER.value] = group.apply(
             lambda x: (
                 (
-                    x[ColumnNameValues.TRANSACTION_TYPE.value]
+                    x[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value]
                     == TransactionTypeValues.BUY.value
                 )
                 - (
-                    x[ColumnNameValues.TRANSACTION_TYPE.value]
+                    x[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value]
                     == TransactionTypeValues.SELL.value
                 )
             )
@@ -132,7 +132,7 @@ class PandasAlgorithm:
             ]
 
             if (
-                row[ColumnNameValues.TRANSACTION_TYPE.value]
+                row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value]
                 == TransactionTypeValues.BUY.value
             ):
                 group.at[  # noqa: PD008
@@ -143,7 +143,7 @@ class PandasAlgorithm:
                 )
 
             if (
-                row[ColumnNameValues.TRANSACTION_TYPE.value]
+                row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value]
                 == TransactionTypeValues.SELL.value
             ):
                 group.at[  # noqa: PD008

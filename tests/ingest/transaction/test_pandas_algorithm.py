@@ -255,7 +255,7 @@ def test_calculate_adjusted_price_per_unit(
         [
             ColumnNameValues.NAME.value,
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value,
-            ColumnNameValues.TRANSACTION_TYPE.value,
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value,
         ],
         ascending=[True, True, True],
     )
@@ -269,11 +269,11 @@ def test_calculate_adjusted_price_per_unit(
     ] = df_mocked_transactions.apply(
         lambda x: (
             (
-                x[ColumnNameValues.TRANSACTION_TYPE.value]
+                x[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value]
                 == TransactionTypeValues.BUY.value
             )
             - (
-                x[ColumnNameValues.TRANSACTION_TYPE.value]
+                x[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value]
                 == TransactionTypeValues.SELL.value
             )
         )

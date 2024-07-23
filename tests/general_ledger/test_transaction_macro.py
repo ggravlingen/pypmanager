@@ -6,6 +6,7 @@ from pypmanager.ingest.transaction import (
     ColumnNameValues,
     TransactionTypeValues,
 )
+from pypmanager.ingest.transaction.const import TransactionRegistryColNameValues
 
 
 def test_amend_row__buy() -> None:
@@ -18,7 +19,9 @@ def test_amend_row__buy() -> None:
         ColumnNameValues.REALIZED_PNL: None,
         ColumnNameValues.REALIZED_PNL_EQ: None,
         ColumnNameValues.REALIZED_PNL_FX: None,
-        ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.BUY,
+        TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+            TransactionTypeValues.BUY
+        ),
     }
     expected_result = [
         # Credit row
@@ -32,7 +35,9 @@ def test_amend_row__buy() -> None:
             ColumnNameValues.REALIZED_PNL: None,
             ColumnNameValues.REALIZED_PNL_EQ: None,
             ColumnNameValues.REALIZED_PNL_FX: None,
-            ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.BUY,
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+                TransactionTypeValues.BUY
+            ),
             ColumnNameValues.TRANSACTION_TYPE_INTERNAL: TransactionTypeValues.BUY,
         },
         # Debit row
@@ -49,7 +54,7 @@ def test_amend_row__buy() -> None:
             ColumnNameValues.REALIZED_PNL: None,
             ColumnNameValues.REALIZED_PNL_EQ: None,
             ColumnNameValues.REALIZED_PNL_FX: None,
-            ColumnNameValues.TRANSACTION_TYPE: None,
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: None,
             ColumnNameValues.TRANSACTION_TYPE_INTERNAL: TransactionTypeValues.BUY,
         },
     ]
@@ -69,7 +74,9 @@ def test_amend_row__fee() -> None:
         ColumnNameValues.REALIZED_PNL: -100,
         ColumnNameValues.REALIZED_PNL_EQ: None,
         ColumnNameValues.REALIZED_PNL_FX: None,
-        ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.FEE,
+        TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+            TransactionTypeValues.FEE
+        ),
     }
     expected_result = [
         {
@@ -82,7 +89,9 @@ def test_amend_row__fee() -> None:
             ColumnNameValues.REALIZED_PNL: -100,
             ColumnNameValues.REALIZED_PNL_EQ: None,
             ColumnNameValues.REALIZED_PNL_FX: None,
-            ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.FEE,
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+                TransactionTypeValues.FEE
+            ),
             ColumnNameValues.TRANSACTION_TYPE_INTERNAL: TransactionTypeValues.FEE,
         },
         {
@@ -96,7 +105,7 @@ def test_amend_row__fee() -> None:
             ColumnNameValues.REALIZED_PNL: None,
             ColumnNameValues.REALIZED_PNL_EQ: None,
             ColumnNameValues.REALIZED_PNL_FX: None,
-            ColumnNameValues.TRANSACTION_TYPE: None,
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: None,
             ColumnNameValues.TRANSACTION_TYPE_INTERNAL: TransactionTypeValues.FEE,
         },
         {
@@ -111,7 +120,7 @@ def test_amend_row__fee() -> None:
             ColumnNameValues.REALIZED_PNL: None,
             ColumnNameValues.REALIZED_PNL_EQ: None,
             ColumnNameValues.REALIZED_PNL_FX: None,
-            ColumnNameValues.TRANSACTION_TYPE: None,
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: None,
             ColumnNameValues.TRANSACTION_TYPE_INTERNAL: TransactionTypeValues.FEE,
         },
     ]
@@ -130,7 +139,9 @@ def test_amend_row__sell() -> None:
         ColumnNameValues.REALIZED_PNL: 50,
         ColumnNameValues.REALIZED_PNL_EQ: 50,
         ColumnNameValues.REALIZED_PNL_FX: 0,
-        ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.SELL,
+        TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+            TransactionTypeValues.SELL
+        ),
     }
     expected_result = [
         {
@@ -144,7 +155,9 @@ def test_amend_row__sell() -> None:
             ColumnNameValues.REALIZED_PNL: None,
             ColumnNameValues.REALIZED_PNL_EQ: None,
             ColumnNameValues.REALIZED_PNL_FX: 0,
-            ColumnNameValues.TRANSACTION_TYPE: TransactionTypeValues.SELL,
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
+                TransactionTypeValues.SELL
+            ),
             ColumnNameValues.TRANSACTION_TYPE_INTERNAL: TransactionTypeValues.SELL,
         },
         {
@@ -160,7 +173,7 @@ def test_amend_row__sell() -> None:
             ColumnNameValues.REALIZED_PNL: None,
             ColumnNameValues.REALIZED_PNL_EQ: None,
             ColumnNameValues.REALIZED_PNL_FX: None,
-            ColumnNameValues.TRANSACTION_TYPE: None,
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: None,
             ColumnNameValues.TRANSACTION_TYPE_INTERNAL: TransactionTypeValues.SELL,
         },
         {
@@ -176,7 +189,7 @@ def test_amend_row__sell() -> None:
             ColumnNameValues.REALIZED_PNL: None,
             ColumnNameValues.REALIZED_PNL_EQ: None,
             ColumnNameValues.REALIZED_PNL_FX: None,
-            ColumnNameValues.TRANSACTION_TYPE: None,
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: None,
             ColumnNameValues.TRANSACTION_TYPE_INTERNAL: TransactionTypeValues.SELL,
         },
         {
@@ -191,7 +204,7 @@ def test_amend_row__sell() -> None:
             ColumnNameValues.REALIZED_PNL: 50,
             ColumnNameValues.REALIZED_PNL_EQ: 50,
             ColumnNameValues.REALIZED_PNL_FX: None,
-            ColumnNameValues.TRANSACTION_TYPE: None,
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: None,
             ColumnNameValues.TRANSACTION_TYPE_INTERNAL: TransactionTypeValues.SELL,
         },
     ]
