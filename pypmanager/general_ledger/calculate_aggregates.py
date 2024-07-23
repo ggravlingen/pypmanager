@@ -235,8 +235,8 @@ class CalculateAggregates:
         """Set base data from the transaction."""
         self.amount = row[ColumnNameValues.AMOUNT]
         self.broker = row[ColumnNameValues.BROKER]
-        self.isin = row[ColumnNameValues.ISIN_CODE]
-        self.name = row[ColumnNameValues.NAME]
+        self.isin = row[TransactionRegistryColNameValues.SOURCE_ISIN]
+        self.name = row[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY]
         self.source = row[ColumnNameValues.SOURCE]
         self.transaction_type = row[
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE
@@ -273,8 +273,8 @@ class CalculateAggregates:
                 TransactionRegistryColNameValues.SOURCE_FEE: self.nominal_commission,
                 ColumnNameValues.COST_BASIS_DELTA: self.cost_basis_delta,
                 ColumnNameValues.FX: self.fx_rate,
-                ColumnNameValues.ISIN_CODE: self.isin,
-                ColumnNameValues.NAME: self.name,
+                TransactionRegistryColNameValues.SOURCE_ISIN: self.isin,
+                TransactionRegistryColNameValues.SOURCE_NAME_SECURITY: self.name,
                 ColumnNameValues.NO_HELD: self.sum_held,
                 TransactionRegistryColNameValues.SOURCE_VOLUME: self.no_traded,
                 TransactionRegistryColNameValues.SOURCE_PRICE: self.nominal_price,

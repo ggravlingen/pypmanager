@@ -31,13 +31,13 @@ DTYPES_MAP: dict[str, type[str | float] | str] = {
     # handled in the class
     ColumnNameValues.ACCOUNT.value: str,
     TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: str,
-    ColumnNameValues.NAME.value: str,
+    TransactionRegistryColNameValues.SOURCE_NAME_SECURITY.value: str,
     TransactionRegistryColNameValues.SOURCE_VOLUME.value: float,
     TransactionRegistryColNameValues.SOURCE_PRICE.value: float,
     ColumnNameValues.AMOUNT.value: float,
     TransactionRegistryColNameValues.SOURCE_FEE.value: float,
     ColumnNameValues.CURRENCY.value: str,
-    ColumnNameValues.ISIN_CODE.value: str,
+    TransactionRegistryColNameValues.SOURCE_ISIN.value: str,
     ColumnNameValues.FX.value: float,
 }
 
@@ -187,7 +187,7 @@ class TransactionRegistry:
         # Replace dashes with 0
         for col in (
             TransactionRegistryColNameValues.SOURCE_FEE,
-            ColumnNameValues.ISIN_CODE,
+            TransactionRegistryColNameValues.SOURCE_ISIN,
         ):
             if col in df_raw.columns:
                 with contextlib.suppress(AttributeError):
@@ -276,7 +276,7 @@ class TransactionRegistry:
 
         df_sorted = df_raw.sort_values(
             by=[
-                ColumnNameValues.NAME.value,
+                TransactionRegistryColNameValues.SOURCE_NAME_SECURITY.value,
                 TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value,
                 TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value,
             ],
@@ -310,12 +310,14 @@ class TransactionRegistry:
         )
         df_sorted[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value] = (
             df_sorted.groupby(
-                ColumnNameValues.NAME.value
+                TransactionRegistryColNameValues.SOURCE_NAME_SECURITY.value
             )[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value].cumsum()
         )
 
         df_sorted = (
-            df_sorted.groupby(ColumnNameValues.NAME.value)
+            df_sorted.groupby(
+                TransactionRegistryColNameValues.SOURCE_NAME_SECURITY.value
+            )
             .apply(
                 PandasAlgorithm.calculate_adjusted_price_per_unit, include_groups=False
             )

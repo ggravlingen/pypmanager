@@ -60,9 +60,6 @@ class ColumnNameValues(StrEnum):
     DEBIT = "debit"
     FX = "fx_rate"
     """The FX rate between the nominal currency and your base currency."""
-    ISIN_CODE = "isin_code"
-    NAME = "name"
-    """The full name of the security."""
     NO_HELD = "cumulative_buy_volume"
     REALIZED_PNL = "realized_pnl"
     REALIZED_PNL_EQ = "realized_pnl_equity"
@@ -109,11 +106,23 @@ class TransactionRegistryColNameValues(StrEnum):
 
     Resets when the cumulative volume held is zero.
     """
+    SOURCE_ISIN = "source_isin_code"
+    """
+    The ISIN code of the security.
+
+    Ingested from the transaction source files
+    """
     SOURCE_FEE = "source_fee"
     """
     Any fees associated with the transaction.
 
     Ingested from the transaction source files.
+    """
+    SOURCE_NAME_SECURITY = "source_name"
+    """
+    The full name of the security.
+
+    Ingested from the transaction source files
     """
     SOURCE_PRICE = "source_price"
     """

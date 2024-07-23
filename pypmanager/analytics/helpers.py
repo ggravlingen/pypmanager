@@ -8,7 +8,7 @@ import logging
 from typing import cast
 
 from pypmanager.general_ledger import async_get_general_ledger
-from pypmanager.ingest.transaction import ColumnNameValues
+from pypmanager.ingest.transaction.const import TransactionRegistryColNameValues
 from pypmanager.settings import Settings
 from pypmanager.utils.dt import async_get_last_n_quarters
 
@@ -21,7 +21,12 @@ LOGGER = logging.getLogger(__package__)
 async def async_get_holdings(report_date: datetime | None = None) -> list[Holding]:
     """Return a list of current holdings."""
     df_general_ledger = await async_get_general_ledger(report_date=report_date)
-    all_securities = cast(list[str], df_general_ledger[ColumnNameValues.NAME].unique())
+    all_securities = cast(
+        list[str],
+        df_general_ledger[
+            TransactionRegistryColNameValues.SOURCE_NAME_SECURITY
+        ].unique(),
+    )
 
     holdings: list[Holding] = []
     for security_name in all_securities:

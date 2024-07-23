@@ -48,7 +48,8 @@ class Holding:
         We filter by ledger account = cash since the relevant data is in that row.
         """
         df_all_data = self.df_general_ledger.query(
-            f"name == '{self.name}' and ledger_account == '{AccountNameValues.CASH}'",
+            f"{TransactionRegistryColNameValues.SOURCE_NAME_SECURITY.value} == "
+            f"'{self.name}' and ledger_account == '{AccountNameValues.CASH}'",
         )
 
         if self.report_date is not None:
@@ -135,7 +136,9 @@ class Holding:
             return None
 
         try:
-            val = self.calculated_data[ColumnNameValues.ISIN_CODE].unique()[0]
+            val = self.calculated_data[
+                TransactionRegistryColNameValues.SOURCE_ISIN
+            ].unique()[0]
         except (IndexError, AttributeError, TypeError):
             return None
 

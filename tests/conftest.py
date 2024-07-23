@@ -58,8 +58,8 @@ class DataFactory:
                 TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
                     TransactionTypeValues.BUY.value
                 ),
-                "name": "Company A",
-                "isin_code": "US1234567890",
+                TransactionRegistryColNameValues.SOURCE_NAME_SECURITY: "Company A",
+                TransactionRegistryColNameValues.SOURCE_ISIN: "US1234567890",
                 TransactionRegistryColNameValues.SOURCE_VOLUME.value: no_traded,
                 "source_price": price,
                 "source_fee": commission,
@@ -89,8 +89,8 @@ class DataFactory:
                 TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
                     TransactionTypeValues.SELL.value
                 ),
-                "name": "Company A",
-                "isin_code": "US1234567890",
+                TransactionRegistryColNameValues.SOURCE_NAME_SECURITY: "Company A",
+                TransactionRegistryColNameValues.SOURCE_ISIN: "US1234567890",
                 TransactionRegistryColNameValues.SOURCE_VOLUME.value: no_traded,
                 "source_price": price,
                 "source_fee": commission,

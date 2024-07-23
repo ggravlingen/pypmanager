@@ -29,7 +29,7 @@ async def async_get_general_ledger_as_dict(
     df_general_ledger = df_general_ledger.sort_values(
         [
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE,
-            ColumnNameValues.NAME,
+            TransactionRegistryColNameValues.SOURCE_NAME_SECURITY,
         ],
         ascending=False,
     )

@@ -19,13 +19,14 @@ def _transaction_type(row: pd.DataFrame) -> pd.Series:
     """Handle special cases."""
     if (
         row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE] == "Övrigt"
-        and row[ColumnNameValues.NAME] == "Avkastningsskatt"
+        and row[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY]
+        == "Avkastningsskatt"
     ):
         return TransactionTypeValues.FEE
 
     if (
         row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE] == "Övrigt"
-        and "Flyttavg" in row[ColumnNameValues.NAME]
+        and "Flyttavg" in row[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY]
     ):
         return TransactionTypeValues.FEE_CREDIT
 
@@ -39,13 +40,15 @@ class AvanzaLoader(TransactionLoader):
         "Datum": TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE,
         "Konto": ColumnNameValues.ACCOUNT,
         "Typ av transaktion": TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE,
-        "Värdepapper/beskrivning": ColumnNameValues.NAME,
+        "Värdepapper/beskrivning": (
+            TransactionRegistryColNameValues.SOURCE_NAME_SECURITY
+        ),
         "Antal": TransactionRegistryColNameValues.SOURCE_VOLUME,
         "Kurs": TransactionRegistryColNameValues.SOURCE_PRICE,
         "Belopp": ColumnNameValues.AMOUNT,
         "Courtage": TransactionRegistryColNameValues.SOURCE_FEE,
         "Valuta": ColumnNameValues.CURRENCY,
-        "ISIN": ColumnNameValues.ISIN_CODE,
+        "ISIN": TransactionRegistryColNameValues.SOURCE_ISIN,
         "FX": ColumnNameValues.FX,
     }
 
