@@ -6,7 +6,11 @@ from typing import cast
 
 import pandas as pd
 
-from .const import ColumnNameValues, TransactionTypeValues
+from .const import (
+    ColumnNameValues,
+    TransactionRegistryColumnNameValues,
+    TransactionTypeValues,
+)
 
 
 class PandasAlgorithm:
@@ -103,33 +107,39 @@ class PandasAlgorithm:
     @staticmethod
     def calculate_adjusted_price_per_unit(group: pd.DataFrame) -> pd.DataFrame:
         """Calculate adjusted price per unit."""
-        group["Adjusted Turnover"] = group.apply(
-            lambda x: (
-                (
-                    x[ColumnNameValues.TRANSACTION_TYPE.value]
-                    == TransactionTypeValues.BUY.value
+        group[TransactionRegistryColumnNameValues.INTERNAL_TURNOVER.value] = (
+            group.apply(
+                lambda x: (
+                    (
+                        x[ColumnNameValues.TRANSACTION_TYPE.value]
+                        == TransactionTypeValues.BUY.value
+                    )
+                    - (
+                        x[ColumnNameValues.TRANSACTION_TYPE.value]
+                        == TransactionTypeValues.SELL.value
+                    )
                 )
-                - (
-                    x[ColumnNameValues.TRANSACTION_TYPE.value]
-                    == TransactionTypeValues.SELL.value
-                )
+                * x[ColumnNameValues.AMOUNT.value],
+                axis=1,
             )
-            * x[ColumnNameValues.AMOUNT.value],
-            axis=1,
         )
 
-        group[ColumnNameValues.PRICE_PER_UNIT.value] = 0.0
+        group[TransactionRegistryColumnNameValues.PRICE_PER_UNIT.value] = 0.0
         last_entry_price = 0.0
 
         current_turnover = 0.0
         for index, row in group.iterrows():
-            current_turnover += row["Adjusted Turnover"]
+            current_turnover += row[
+                TransactionRegistryColumnNameValues.INTERNAL_TURNOVER.value
+            ]
 
             if (
                 row[ColumnNameValues.TRANSACTION_TYPE.value]
                 == TransactionTypeValues.BUY.value
             ):
-                group.at[index, ColumnNameValues.PRICE_PER_UNIT.value] = (  # noqa: PD008
+                group.at[  # noqa: PD008
+                    index, TransactionRegistryColumnNameValues.PRICE_PER_UNIT.value
+                ] = (
                     current_turnover
                     / row[ColumnNameValues.ADJUSTED_QUANTITY_HELD.value]
                 )
@@ -138,18 +148,24 @@ class PandasAlgorithm:
                 row[ColumnNameValues.TRANSACTION_TYPE.value]
                 == TransactionTypeValues.SELL.value
             ):
-                group.at[index, ColumnNameValues.PRICE_PER_UNIT.value] = (  # noqa: PD008
-                    last_entry_price
-                )
+                group.at[  # noqa: PD008
+                    index, TransactionRegistryColumnNameValues.PRICE_PER_UNIT.value
+                ] = last_entry_price
 
             # There might be fractional rounding errors when closing a position so we
             # guard against that here
             if round(row[ColumnNameValues.ADJUSTED_QUANTITY_HELD.value], 0) == 0:
                 current_turnover = 0.0
-                group.at[index, ColumnNameValues.PRICE_PER_UNIT.value] = None  # noqa: PD008
+                group.at[  # noqa: PD008
+                    index, TransactionRegistryColumnNameValues.PRICE_PER_UNIT.value
+                ] = None
                 group.at[index, ColumnNameValues.ADJUSTED_QUANTITY_HELD.value] = None  # noqa: PD008
-                group.at[index, "Adjusted Turnover"] = None  # noqa: PD008
+                group.at[  # noqa: PD008
+                    index, TransactionRegistryColumnNameValues.INTERNAL_TURNOVER.value
+                ] = None
 
-            last_entry_price = group.at[index, ColumnNameValues.PRICE_PER_UNIT.value]  # noqa: PD008
+            last_entry_price = group.at[  # noqa: PD008
+                index, TransactionRegistryColumnNameValues.PRICE_PER_UNIT.value
+            ]
 
         return group

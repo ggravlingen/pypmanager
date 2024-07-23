@@ -97,6 +97,19 @@ class ColumnNameValues(StrEnum):
     COST_BASIS_DELTA = "cost_basis_delta"
     SUM_COST_BASIS_DELTA = "sum_cost_basis_delta"
     TRANSACTION_CASH_FLOW = "transaction_cash_flow"
+
+
+class TransactionRegistryColumnNameValues(StrEnum):
+    """Represent names of columns in the ledger."""
+
+    INTERNAL_TURNOVER = "internal_turnover"
+    """
+    An internal turnover column for the ledger.
+
+    Do not expose this to the user.
+
+    This is the absolute value of a transaction's cash flow.
+    """
     PRICE_PER_UNIT = "calc_avg_price_per_unit"
     """
     Average purchase price per unit.

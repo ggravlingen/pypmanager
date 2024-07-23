@@ -1,10 +1,17 @@
 """Transaction data ingestion code."""
 
 from .avanza import AvanzaLoader
-from .const import AccountNameValues, ColumnNameValues, TransactionTypeValues
+from .const import (
+    AccountNameValues,
+    ColumnNameValues,
+    TransactionRegistryColumnNameValues,
+    TransactionTypeValues,
+)
 from .generic import GenericLoader
 from .lysa import LysaLoader
-from .transaction_registry import TransactionRegistry
+from .transaction_registry import (
+    TransactionRegistry,
+)
 
 __all__ = [
     "AccountNameValues",
@@ -14,4 +21,5 @@ __all__ = [
     "ColumnNameValues",
     "TransactionTypeValues",
     "TransactionRegistry",
+    "TransactionRegistryColumnNameValues",
 ]
