@@ -336,7 +336,7 @@ class TransactionRegistry:
         )
 
         # Add transaction year
-        df_raw[ColumnNameValues.TRANSACTION_YEAR.value] = df_raw.index.year
+        df_raw[ColumnNameValues.META_TRANSACTION_YEAR.value] = df_raw.index.year
 
         self.df_all_transactions = df_raw
 

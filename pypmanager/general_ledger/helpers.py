@@ -54,7 +54,10 @@ async def async_aggregate_ledger_by_year() -> pd.DataFrame:
 
     df_grouped_data = (
         filtered_df_copy.groupby(
-            [ColumnNameValues.TRANSACTION_YEAR.value, ColumnNameValues.ACCOUNT.value]
+            [
+                ColumnNameValues.META_TRANSACTION_YEAR.value,
+                ColumnNameValues.ACCOUNT.value,
+            ]
         )["result_value"]
         .sum()
         .reset_index()
@@ -63,6 +66,6 @@ async def async_aggregate_ledger_by_year() -> pd.DataFrame:
     return df_grouped_data.pivot_table(
         values="result_value",
         index=ColumnNameValues.ACCOUNT.value,
-        columns=ColumnNameValues.TRANSACTION_YEAR.value,
+        columns=ColumnNameValues.META_TRANSACTION_YEAR.value,
         fill_value=None,
     ).reset_index()
