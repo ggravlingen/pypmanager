@@ -54,7 +54,6 @@ class ColumnNameValues(StrEnum):
     Use turnover if the value represend a buy or a sell.
     """
     BROKER = "broker"
-    COMMISSION = "commission"
     CASH_FLOW_LOCAL = "cash_flow_base_ccy"
     CURRENCY = "currency"
     CREDIT = "credit"
@@ -65,8 +64,6 @@ class ColumnNameValues(StrEnum):
     NAME = "name"
     """The full name of the security."""
     NO_HELD = "cumulative_buy_volume"
-    PRICE = "price"
-    """Price paid per unit."""
     REALIZED_PNL = "realized_pnl"
     REALIZED_PNL_EQ = "realized_pnl_equity"
     REALIZED_PNL_COMMISSION = "realized_pnl_commission"
@@ -112,9 +109,15 @@ class TransactionRegistryColNameValues(StrEnum):
 
     Resets when the cumulative volume held is zero.
     """
-    SOURCE_VOLUME = "source_volume"
+    SOURCE_FEE = "source_fee"
     """
-    The number of units traded.
+    Any fees associated with the transaction.
+
+    Ingested from the transaction source files.
+    """
+    SOURCE_PRICE = "source_price"
+    """
+    Price paid per unit.
 
     Ingested from the transaction source files.
     """
@@ -130,6 +133,12 @@ class TransactionRegistryColNameValues(StrEnum):
 
     Ingested from the transaction source files.
     """
+    SOURCE_VOLUME = "source_volume"
+    """
+    The number of units traded.
+
+    Ingested from the transaction source files.
+    """
 
 
 class CSVSeparator(StrEnum):
@@ -141,10 +150,10 @@ class CSVSeparator(StrEnum):
 
 NUMBER_COLS = [
     ColumnNameValues.AMOUNT,
-    ColumnNameValues.COMMISSION,
+    TransactionRegistryColNameValues.SOURCE_FEE,
     ColumnNameValues.FX,
     TransactionRegistryColNameValues.SOURCE_VOLUME,
-    ColumnNameValues.PRICE,
+    TransactionRegistryColNameValues.SOURCE_PRICE,
     ColumnNameValues.REALIZED_PNL,
 ]
 

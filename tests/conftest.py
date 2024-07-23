@@ -32,22 +32,7 @@ def _mock_dir_market_data() -> Generator[Any, Any, Any]:
 
 
 class DataFactory:
-    """
-    Create test data.
-
-    A transaction is represented by these columns:
-    - transaction_date
-    - transaction_type
-    - name
-    - isin_code
-    - no_traded
-    - price
-    - amount
-    - commission
-    - currency
-    - fx
-    - broker
-    """
+    """Create test data."""
 
     transaction_list: list[dict[str, Any]]
 
@@ -76,8 +61,8 @@ class DataFactory:
                 "name": "Company A",
                 "isin_code": "US1234567890",
                 TransactionRegistryColNameValues.SOURCE_VOLUME.value: no_traded,
-                "price": price,
-                "commission": commission,
+                "source_price": price,
+                "source_fee": commission,
                 "currency": "SEK",
                 "broker": "Broker A",
                 ColumnNameValues.FX.value: 1.0,
@@ -107,8 +92,8 @@ class DataFactory:
                 "name": "Company A",
                 "isin_code": "US1234567890",
                 TransactionRegistryColNameValues.SOURCE_VOLUME.value: no_traded,
-                "price": price,
-                "commission": commission,
+                "source_price": price,
+                "source_fee": commission,
                 "currency": "SEK",
                 "broker": "Broker A",
                 ColumnNameValues.FX.value: 1.0,

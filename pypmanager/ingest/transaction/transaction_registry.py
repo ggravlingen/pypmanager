@@ -33,9 +33,9 @@ DTYPES_MAP: dict[str, type[str | float] | str] = {
     TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: str,
     ColumnNameValues.NAME.value: str,
     TransactionRegistryColNameValues.SOURCE_VOLUME.value: float,
-    ColumnNameValues.PRICE.value: float,
+    TransactionRegistryColNameValues.SOURCE_PRICE.value: float,
     ColumnNameValues.AMOUNT.value: float,
-    ColumnNameValues.COMMISSION.value: float,
+    TransactionRegistryColNameValues.SOURCE_FEE.value: float,
     ColumnNameValues.CURRENCY.value: str,
     ColumnNameValues.ISIN_CODE.value: str,
     ColumnNameValues.FX.value: float,
@@ -186,7 +186,7 @@ class TransactionRegistry:
 
         # Replace dashes with 0
         for col in (
-            ColumnNameValues.COMMISSION,
+            TransactionRegistryColNameValues.SOURCE_FEE,
             ColumnNameValues.ISIN_CODE,
         ):
             if col in df_raw.columns:
@@ -285,7 +285,7 @@ class TransactionRegistry:
 
         df_sorted[ColumnNameValues.AMOUNT.value] = (
             df_sorted[TransactionRegistryColNameValues.SOURCE_VOLUME.value]
-            * df_sorted[ColumnNameValues.PRICE.value]
+            * df_sorted[TransactionRegistryColNameValues.SOURCE_PRICE.value]
         )
         df_sorted[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value] = (
             df_sorted.apply(

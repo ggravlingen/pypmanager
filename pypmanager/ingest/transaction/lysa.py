@@ -37,7 +37,7 @@ class LysaLoader(TransactionLoader):
         "Amount": ColumnNameValues.AMOUNT,
         "Counterpart/Fund": ColumnNameValues.NAME,
         "Volume": TransactionRegistryColNameValues.SOURCE_VOLUME,
-        "Price": ColumnNameValues.PRICE,
+        "Price": TransactionRegistryColNameValues.SOURCE_PRICE,
     }
 
     csv_separator = CSVSeparator.COMMA
@@ -51,7 +51,7 @@ class LysaLoader(TransactionLoader):
         df_raw[ColumnNameValues.BROKER] = "Lysa"
         df_raw[ColumnNameValues.NAME] = df_raw.apply(_replace_fee_name, axis=1)
 
-        df_raw[ColumnNameValues.COMMISSION] = None
+        df_raw[TransactionRegistryColNameValues.SOURCE_FEE] = None
         df_raw[ColumnNameValues.CURRENCY] = CurrencyValues.SEK
 
         self.df_final = df_raw

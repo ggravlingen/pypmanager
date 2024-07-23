@@ -247,11 +247,11 @@ class CalculateAggregates:
         self.transaction_year = row[
             TransactionRegistryColNameValues.META_TRANSACTION_YEAR
         ]
-        self.nominal_commission = row[ColumnNameValues.COMMISSION]
+        self.nominal_commission = row[TransactionRegistryColNameValues.SOURCE_FEE]
         self.fx_rate = row[ColumnNameValues.FX]
 
-        if row.get(ColumnNameValues.PRICE):
-            self.nominal_price = row[ColumnNameValues.PRICE]
+        if row.get(TransactionRegistryColNameValues.SOURCE_PRICE):
+            self.nominal_price = row[TransactionRegistryColNameValues.SOURCE_PRICE]
         else:
             self.nominal_price = None
 
@@ -270,14 +270,14 @@ class CalculateAggregates:
                 ColumnNameValues.BROKER: self.broker,
                 ColumnNameValues.CASH_FLOW_LOCAL: self.transaction_cash_flow_local,
                 ColumnNameValues.CF_EX_COMMISSION: self.cf_ex_commission,
-                ColumnNameValues.COMMISSION: self.nominal_commission,
+                TransactionRegistryColNameValues.SOURCE_FEE: self.nominal_commission,
                 ColumnNameValues.COST_BASIS_DELTA: self.cost_basis_delta,
                 ColumnNameValues.FX: self.fx_rate,
                 ColumnNameValues.ISIN_CODE: self.isin,
                 ColumnNameValues.NAME: self.name,
                 ColumnNameValues.NO_HELD: self.sum_held,
                 TransactionRegistryColNameValues.SOURCE_VOLUME: self.no_traded,
-                ColumnNameValues.PRICE: self.nominal_price,
+                TransactionRegistryColNameValues.SOURCE_PRICE: self.nominal_price,
                 ColumnNameValues.REALIZED_PNL: self.pnl_total,
                 ColumnNameValues.REALIZED_PNL_COMMISSION: self.pnl_commission,
                 ColumnNameValues.REALIZED_PNL_EQ: self.pnl_price,
