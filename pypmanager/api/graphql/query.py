@@ -50,7 +50,7 @@ class Query:
                 agg_buy_volume=row[ColumnNameValues.NO_HELD],
                 average_price=row[ColumnNameValues.AVG_PRICE],
                 amount=row[ColumnNameValues.AMOUNT],
-                commission=row[ColumnNameValues.COMMISSION],
+                commission=row[TransactionRegistryColNameValues.SOURCE_FEE],
                 cash_flow=row[ColumnNameValues.CASH_FLOW_LOCAL],
                 fx=row[ColumnNameValues.FX],
                 average_fx_rate=row[ColumnNameValues.AVG_FX],
@@ -110,8 +110,8 @@ class Query:
 
         output_list: list[TransactionRow] = []
         for index, row in transaction_list.iterrows():
-            if row[ColumnNameValues.COMMISSION.value] is not None:
-                commission = abs(row[ColumnNameValues.COMMISSION.value])
+            if row[TransactionRegistryColNameValues.SOURCE_FEE.value] is not None:
+                commission = abs(row[TransactionRegistryColNameValues.SOURCE_FEE.value])
             else:
                 commission = None
 
@@ -129,7 +129,7 @@ class Query:
                     name=row[ColumnNameValues.NAME.value],
                     no_traded=row[TransactionRegistryColNameValues.SOURCE_VOLUME.value],
                     currency=row[ColumnNameValues.CURRENCY.value],
-                    price=row[ColumnNameValues.PRICE.value],
+                    price=row[TransactionRegistryColNameValues.SOURCE_PRICE.value],
                     # It makes more sense to use the absolute value of the commission in
                     # this context
                     commission=commission,

@@ -22,10 +22,12 @@ class PandasAlgorithm:
         if (turnover := cast(float | None, row[ColumnNameValues.AMOUNT.value])) is None:
             return 0.0
 
-        if row[ColumnNameValues.COMMISSION.value] is None:
+        if row[TransactionRegistryColNameValues.SOURCE_FEE.value] is None:
             commission = 0.0
         else:
-            commission = cast(float, row[ColumnNameValues.COMMISSION.value])
+            commission = cast(
+                float, row[TransactionRegistryColNameValues.SOURCE_FEE.value]
+            )
 
         return turnover + commission
 
@@ -66,7 +68,7 @@ class PandasAlgorithm:
         else:
             amount = (
                 row[TransactionRegistryColNameValues.SOURCE_VOLUME.value]
-                * row[ColumnNameValues.PRICE.value]
+                * row[TransactionRegistryColNameValues.SOURCE_PRICE.value]
             )
 
         # Buy and tax is a negative cash flow for us

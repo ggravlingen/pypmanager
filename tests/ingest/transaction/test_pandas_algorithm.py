@@ -65,7 +65,7 @@ def test__normalize_fx(input_data: pd.DataFrame, expected: float) -> None:
             pd.Series(
                 {
                     "source_volume": 10,
-                    "price": 10,
+                    "source_price": 10,
                     "source_transaction_type": TransactionTypeValues.BUY.value,
                 },
             ),
@@ -76,7 +76,7 @@ def test__normalize_fx(input_data: pd.DataFrame, expected: float) -> None:
             pd.Series(
                 {
                     "source_volume": 10,
-                    "price": 10,
+                    "source_price": 10,
                     "source_transaction_type": TransactionTypeValues.SELL.value,
                 },
             ),
@@ -88,7 +88,7 @@ def test__normalize_fx(input_data: pd.DataFrame, expected: float) -> None:
             pd.Series(
                 {
                     "source_volume": -10,
-                    "price": 10,
+                    "source_price": 10,
                     "source_transaction_type": TransactionTypeValues.BUY.value,
                 },
             ),
@@ -140,7 +140,7 @@ def test_cleanup_number__raise_value_error() -> None:
             pd.DataFrame(
                 {
                     ColumnNameValues.AMOUNT.value: [None],
-                    ColumnNameValues.COMMISSION.value: [None],
+                    TransactionRegistryColNameValues.SOURCE_FEE.value: [None],
                 }
             ),
             0.0,
@@ -150,7 +150,7 @@ def test_cleanup_number__raise_value_error() -> None:
             pd.DataFrame(
                 {
                     ColumnNameValues.AMOUNT.value: [1.0],
-                    ColumnNameValues.COMMISSION.value: [None],
+                    TransactionRegistryColNameValues.SOURCE_FEE.value: [None],
                 }
             ),
             1.0,
@@ -160,7 +160,7 @@ def test_cleanup_number__raise_value_error() -> None:
             pd.DataFrame(
                 {
                     ColumnNameValues.AMOUNT.value: [1.0],
-                    ColumnNameValues.COMMISSION.value: [2.0],
+                    TransactionRegistryColNameValues.SOURCE_FEE.value: [2.0],
                 }
             ),
             3.0,
@@ -262,7 +262,7 @@ def test_calculate_adjusted_price_per_unit(
     # Calculate turnover
     df_mocked_transactions[ColumnNameValues.AMOUNT.value] = (
         df_mocked_transactions[TransactionRegistryColNameValues.SOURCE_VOLUME.value]
-        * df_mocked_transactions[ColumnNameValues.PRICE.value]
+        * df_mocked_transactions[TransactionRegistryColNameValues.SOURCE_PRICE.value]
     )
     df_mocked_transactions[
         TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value
