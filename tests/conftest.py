@@ -10,7 +10,11 @@ from unittest.mock import PropertyMock, patch
 import pandas as pd
 import pytest
 
-from pypmanager.ingest.transaction.const import ColumnNameValues, TransactionTypeValues
+from pypmanager.ingest.transaction.const import (
+    ColumnNameValues,
+    TransactionRegistryColNameValues,
+    TransactionTypeValues,
+)
 from pypmanager.settings import Settings, TypedSettings
 
 if TYPE_CHECKING:
@@ -63,7 +67,9 @@ class DataFactory:
         """Add a buy transaction."""
         self.transaction_list.append(
             {
-                "transaction_date": transaction_date,
+                TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value: (
+                    transaction_date
+                ),
                 "transaction_type": TransactionTypeValues.BUY.value,
                 "name": "Company A",
                 "isin_code": "US1234567890",
@@ -90,7 +96,9 @@ class DataFactory:
         """Add a sell transaction."""
         self.transaction_list.append(
             {
-                "transaction_date": transaction_date,
+                TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value: (
+                    transaction_date
+                ),
                 "transaction_type": TransactionTypeValues.SELL.value,
                 "name": "Company A",
                 "isin_code": "US1234567890",

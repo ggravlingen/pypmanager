@@ -27,7 +27,8 @@ if TYPE_CHECKING:
 
 
 DTYPES_MAP: dict[str, type[str | float] | str] = {
-    # ColumnNameValues.TRANSACTION_DATE.value is handled in the class
+    # TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value is
+    # handled in the class
     ColumnNameValues.ACCOUNT.value: str,
     ColumnNameValues.TRANSACTION_TYPE.value: str,
     ColumnNameValues.NAME.value: str,
@@ -220,8 +221,8 @@ class TransactionRegistry:
         df_raw = self.df_all_transactions.copy()
 
         # Convert all datetime objects to UTC
-        df_raw[ColumnNameValues.TRANSACTION_DATE.value] = (
-            df_raw[ColumnNameValues.TRANSACTION_DATE.value]
+        df_raw[TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value] = (
+            df_raw[TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value]
             .dt.tz_localize(None)
             .dt.tz_localize(Settings.system_time_zone)
         )
@@ -273,7 +274,7 @@ class TransactionRegistry:
         df_sorted = df_raw.sort_values(
             by=[
                 ColumnNameValues.NAME.value,
-                ColumnNameValues.TRANSACTION_DATE.value,
+                TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value,
                 ColumnNameValues.TRANSACTION_TYPE.value,
             ],
             ascending=[True, True, True],
@@ -329,7 +330,9 @@ class TransactionRegistry:
         """Set index."""
         df_raw = self.df_all_transactions.copy()
 
-        df_raw = df_raw.set_index(ColumnNameValues.TRANSACTION_DATE.value)
+        df_raw = df_raw.set_index(
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value
+        )
 
         self.df_all_transactions = df_raw
 

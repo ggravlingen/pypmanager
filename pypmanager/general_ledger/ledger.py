@@ -8,7 +8,10 @@ import warnings
 import numpy as np
 import pandas as pd
 
-from pypmanager.ingest.transaction import ColumnNameValues
+from pypmanager.ingest.transaction import (
+    ColumnNameValues,
+    TransactionRegistryColNameValues,
+)
 from pypmanager.settings import Settings
 
 from .calculate_aggregates import CalculateAggregates
@@ -67,20 +70,28 @@ class GeneralLedger:
         """Set index to date."""
         df_tmp = self.output_df.copy()
         # Convert index to a date of format YYYY-MM-DD
-        df_tmp[ColumnNameValues.TRANSACTION_DATE] = (
-            df_tmp[ColumnNameValues.TRANSACTION_DATE].astype(str).str[:10]
+        df_tmp[TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE] = (
+            df_tmp[TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE]
+            .astype(str)
+            .str[:10]
         )
-        df_tmp[ColumnNameValues.TRANSACTION_DATE] = pd.to_datetime(
-            df_tmp[ColumnNameValues.TRANSACTION_DATE],
-            format="%Y-%m-%d",
+        df_tmp[TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE] = (
+            pd.to_datetime(
+                df_tmp[TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE],
+                format="%Y-%m-%d",
+            )
         )
-        df_tmp = df_tmp.set_index(ColumnNameValues.TRANSACTION_DATE)
+        df_tmp = df_tmp.set_index(
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE
+        )
         df_tmp.index = df_tmp.index
 
         # Sort by transaction date
-        df_tmp = df_tmp.rename_axis(ColumnNameValues.TRANSACTION_DATE).sort_values(
+        df_tmp = df_tmp.rename_axis(
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE
+        ).sort_values(
             by=[
-                ColumnNameValues.TRANSACTION_DATE,
+                TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE,
                 ColumnNameValues.TRANSACTION_TYPE_INTERNAL,
             ],
             ascending=[True, True],

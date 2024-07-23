@@ -9,6 +9,7 @@ from .const import (
     ColumnNameValues,
     CSVSeparator,
     CurrencyValues,
+    TransactionRegistryColNameValues,
     TransactionTypeValues,
 )
 
@@ -28,7 +29,7 @@ class LysaLoader(TransactionLoader):
     """Data loader for Lysa."""
 
     col_map = {  # noqa: RUF012
-        "Date": ColumnNameValues.TRANSACTION_DATE,
+        "Date": TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE,
         "Type": ColumnNameValues.TRANSACTION_TYPE,
         "Amount": ColumnNameValues.AMOUNT,
         "Counterpart/Fund": ColumnNameValues.NAME,

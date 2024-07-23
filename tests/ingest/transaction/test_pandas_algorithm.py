@@ -254,7 +254,7 @@ def test_calculate_adjusted_price_per_unit(
     df_mocked_transactions = df_mocked_transactions.sort_values(
         [
             ColumnNameValues.NAME.value,
-            ColumnNameValues.TRANSACTION_DATE.value,
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value,
             ColumnNameValues.TRANSACTION_TYPE.value,
         ],
         ascending=[True, True, True],

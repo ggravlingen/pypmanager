@@ -5,7 +5,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from .base_loader import TransactionLoader
-from .const import ColumnNameValues, TransactionTypeValues
+from .const import (
+    ColumnNameValues,
+    TransactionRegistryColNameValues,
+    TransactionTypeValues,
+)
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -32,7 +36,7 @@ class AvanzaLoader(TransactionLoader):
     """Data loader for Avanza."""
 
     col_map = {  # noqa: RUF012
-        "Datum": ColumnNameValues.TRANSACTION_DATE,
+        "Datum": TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE,
         "Konto": ColumnNameValues.ACCOUNT,
         "Typ av transaktion": ColumnNameValues.TRANSACTION_TYPE,
         "Värdepapper/beskrivning": ColumnNameValues.NAME,

@@ -82,8 +82,6 @@ class ColumnNameValues(StrEnum):
 
     Turnover = no_traded * price
     """
-    TRANSACTION_DATE = "transaction_date"
-    """The date of the transaction (time zone aware)."""
     TRANSACTION_TYPE = "transaction_type"
     """The type of transaction, eg buy, sell, dividend, etc."""
     TRANSACTION_TYPE_INTERNAL = "transaction_type_internal"
@@ -118,6 +116,8 @@ class TransactionRegistryColNameValues(StrEnum):
 
     Resets when the cumulative volume held is zero.
     """
+    SOURCE_TRANSACTION_DATE = "source_transaction_date"
+    """The date of the transaction (time zone aware)."""
 
 
 class CSVSeparator(StrEnum):

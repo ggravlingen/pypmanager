@@ -28,7 +28,7 @@ async def async_get_general_ledger_as_dict(
     df_general_ledger = await async_get_general_ledger(report_date=report_date)
     df_general_ledger = df_general_ledger.sort_values(
         [
-            ColumnNameValues.TRANSACTION_DATE,
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE,
             ColumnNameValues.NAME,
         ],
         ascending=False,
