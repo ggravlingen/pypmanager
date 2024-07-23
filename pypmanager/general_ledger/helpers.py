@@ -9,6 +9,7 @@ from pypmanager.ingest.transaction import (
     ColumnNameValues,
     TransactionRegistry,
 )
+from pypmanager.ingest.transaction.const import TransactionRegistryColNameValues
 
 from .ledger import GeneralLedger
 from .pandas_algorithm import PandasAlgorithmGeneralLedger
@@ -55,7 +56,7 @@ async def async_aggregate_ledger_by_year() -> pd.DataFrame:
     df_grouped_data = (
         filtered_df_copy.groupby(
             [
-                ColumnNameValues.META_TRANSACTION_YEAR.value,
+                TransactionRegistryColNameValues.META_TRANSACTION_YEAR.value,
                 ColumnNameValues.ACCOUNT.value,
             ]
         )["result_value"]
@@ -66,6 +67,6 @@ async def async_aggregate_ledger_by_year() -> pd.DataFrame:
     return df_grouped_data.pivot_table(
         values="result_value",
         index=ColumnNameValues.ACCOUNT.value,
-        columns=ColumnNameValues.META_TRANSACTION_YEAR.value,
+        columns=TransactionRegistryColNameValues.META_TRANSACTION_YEAR.value,
         fill_value=None,
     ).reset_index()

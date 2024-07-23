@@ -53,13 +53,9 @@ class ColumnNameValues(StrEnum):
 
     Use turnover if the value represend a buy or a sell.
     """
-    ADJUSTED_QUANTITY_HELD = "calc_agg_sum_quantity_held"
     BROKER = "broker"
     COMMISSION = "commission"
     CASH_FLOW_LOCAL = "cash_flow_base_ccy"
-    CASH_FLOW_NET_FEE_NOMINAL = "calc_cf_net_fee_nominal_ccy"
-    CASH_FLOW_GROSS_FEE_NOMINAL = "calc_cf_gross_fee_nominal_ccy"
-    """The nominal cash flow, net of any fees (eg commissions) in the base currency."""
     CURRENCY = "currency"
     CREDIT = "credit"
     DEBIT = "debit"
@@ -88,8 +84,6 @@ class ColumnNameValues(StrEnum):
     """
     TRANSACTION_DATE = "transaction_date"
     """The date of the transaction (time zone aware)."""
-    META_TRANSACTION_YEAR = "meta_transaction_year"
-    """The year of the transaction (based on transaction date)."""
     TRANSACTION_TYPE = "transaction_type"
     """The type of transaction, eg buy, sell, dividend, etc."""
     TRANSACTION_TYPE_INTERNAL = "transaction_type_internal"
@@ -99,9 +93,15 @@ class ColumnNameValues(StrEnum):
     TRANSACTION_CASH_FLOW = "transaction_cash_flow"
 
 
-class TransactionRegistryColumnNameValues(StrEnum):
+class TransactionRegistryColNameValues(StrEnum):
     """Represent names of columns in the ledger."""
 
+    ADJUSTED_QUANTITY_HELD = "calc_agg_sum_quantity_held"
+    """The aggregate number of units held at the end of the transaction."""
+    CASH_FLOW_NET_FEE_NOMINAL = "calc_cf_net_fee_nominal_ccy"
+    """The nominal cash flow, net of any fees (eg commissions) in the base currency."""
+    CASH_FLOW_GROSS_FEE_NOMINAL = "calc_cf_gross_fee_nominal_ccy"
+    """The nominal cash flow, less any fees (eg commissions) in the base currency."""
     INTERNAL_TURNOVER = "internal_turnover"
     """
     An internal turnover column for the ledger.
@@ -110,6 +110,8 @@ class TransactionRegistryColumnNameValues(StrEnum):
 
     This is the absolute value of a transaction's cash flow.
     """
+    META_TRANSACTION_YEAR = "meta_transaction_year"
+    """The year of the transaction (based on transaction date)."""
     PRICE_PER_UNIT = "calc_avg_price_per_unit"
     """
     Average purchase price per unit.

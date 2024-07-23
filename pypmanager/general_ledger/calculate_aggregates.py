@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING, Any
 import pandas as pd
 
 from pypmanager.ingest.transaction import ColumnNameValues, TransactionTypeValues
+from pypmanager.ingest.transaction.const import TransactionRegistryColNameValues
 
 if TYPE_CHECKING:
     from datetime import date
@@ -237,7 +238,9 @@ class CalculateAggregates:
         self.source = row[ColumnNameValues.SOURCE]
         self.transaction_type = row[ColumnNameValues.TRANSACTION_TYPE]
         self.transaction_date = row[ColumnNameValues.TRANSACTION_DATE]
-        self.transaction_year = row[ColumnNameValues.META_TRANSACTION_YEAR]
+        self.transaction_year = row[
+            TransactionRegistryColNameValues.META_TRANSACTION_YEAR
+        ]
         self.nominal_commission = row[ColumnNameValues.COMMISSION]
         self.fx_rate = row[ColumnNameValues.FX]
 
@@ -278,7 +281,9 @@ class CalculateAggregates:
                 ColumnNameValues.SUM_COST_BASIS_DELTA: self.sum_cost_basis_delta,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: self.transaction_cash_flow,
                 ColumnNameValues.TRANSACTION_DATE: self.transaction_date,
-                ColumnNameValues.META_TRANSACTION_YEAR: self.transaction_year,
+                TransactionRegistryColNameValues.META_TRANSACTION_YEAR: (
+                    self.transaction_year
+                ),
                 ColumnNameValues.TRANSACTION_TYPE: self.transaction_type,
             },
         )

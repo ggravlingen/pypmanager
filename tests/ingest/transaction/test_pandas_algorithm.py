@@ -12,7 +12,7 @@ import pytest
 
 from pypmanager.ingest.transaction import (
     ColumnNameValues,
-    TransactionRegistryColumnNameValues,
+    TransactionRegistryColNameValues,
     TransactionTypeValues,
 )
 from pypmanager.ingest.transaction.pandas_algorithm import PandasAlgorithm
@@ -264,27 +264,27 @@ def test_calculate_adjusted_price_per_unit(
         df_mocked_transactions[ColumnNameValues.NO_TRADED.value]
         * df_mocked_transactions[ColumnNameValues.PRICE.value]
     )
-    df_mocked_transactions[ColumnNameValues.ADJUSTED_QUANTITY_HELD.value] = (
-        df_mocked_transactions.apply(
-            lambda x: (
-                (
-                    x[ColumnNameValues.TRANSACTION_TYPE.value]
-                    == TransactionTypeValues.BUY.value
-                )
-                - (
-                    x[ColumnNameValues.TRANSACTION_TYPE.value]
-                    == TransactionTypeValues.SELL.value
-                )
+    df_mocked_transactions[
+        TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value
+    ] = df_mocked_transactions.apply(
+        lambda x: (
+            (
+                x[ColumnNameValues.TRANSACTION_TYPE.value]
+                == TransactionTypeValues.BUY.value
             )
-            * x[ColumnNameValues.NO_TRADED.value],
-            axis=1,
+            - (
+                x[ColumnNameValues.TRANSACTION_TYPE.value]
+                == TransactionTypeValues.SELL.value
+            )
         )
+        * x[ColumnNameValues.NO_TRADED.value],
+        axis=1,
     )
-    df_mocked_transactions[ColumnNameValues.ADJUSTED_QUANTITY_HELD.value] = (
-        df_mocked_transactions.groupby(
-            ColumnNameValues.NAME.value
-        )[ColumnNameValues.ADJUSTED_QUANTITY_HELD.value].cumsum()
-    )
+    df_mocked_transactions[
+        TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value
+    ] = df_mocked_transactions.groupby(ColumnNameValues.NAME.value)[
+        TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value
+    ].cumsum()
 
     df_mocked_transactions = df_mocked_transactions.groupby(
         ColumnNameValues.NAME.value
@@ -293,7 +293,7 @@ def test_calculate_adjusted_price_per_unit(
     assert len(df_mocked_transactions) == 6
     expected_values = [10.0, 10.0, 10.0, np.nan, 1.0, 2.0]
     actual_values = df_mocked_transactions[
-        TransactionRegistryColumnNameValues.PRICE_PER_UNIT.value
+        TransactionRegistryColNameValues.PRICE_PER_UNIT.value
     ].to_numpy()
 
     assert_array_equal(actual_values, expected_values)
