@@ -124,6 +124,15 @@ class TransactionRegistryColNameValues(StrEnum):
 
     Ingested from the transaction source files
     """
+    SOURCE_OTHER_CASH_FLOW = "source_other_cash_flow"
+    """
+    Other cash flows associated with a transaction.
+
+    Example of this are dividends, deposits or withdrawals that are not calculated on
+    a per unit basis.
+
+    Ingested from the transaction source files.
+    """
     SOURCE_PRICE = "source_price"
     """
     Price paid per unit.
