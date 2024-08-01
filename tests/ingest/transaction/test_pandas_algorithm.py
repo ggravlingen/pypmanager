@@ -348,6 +348,18 @@ def test_calculate_adjusted_price_per_unit(
             ),
             99.0,
         ),
+        # Test a sell transaction with only a commission
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
+                        TransactionTypeValues.SELL.value
+                    ),
+                    TransactionRegistryColNameValues.SOURCE_FEE.value: -1.0,
+                },
+            ),
+            -1.0,
+        ),
     ],
 )
 def test_calculate_pnl_trade(row_data: pd.DataFrame, expected: float | None) -> None:
