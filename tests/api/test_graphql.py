@@ -131,9 +131,13 @@ async def test_graphql_query__all_transaction() -> None:
             action
             name
             noTraded
+            currency
             price
             commission
             fx
+            cashFlow
+            costBaseAverage
+            pnlTotal
         }
     }
     """
