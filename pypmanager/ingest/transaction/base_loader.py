@@ -71,7 +71,7 @@ class TransactionLoader(ABC):
         for file in files:
             df_load = pd.read_csv(file, sep=self.csv_separator)
             filename = _get_filename(file)
-            df_load[ColumnNameValues.SOURCE] = filename
+            df_load[TransactionRegistryColNameValues.SOURCE_FILE.value] = filename
 
             dfs.append(df_load)
 

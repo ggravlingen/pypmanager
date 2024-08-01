@@ -43,7 +43,7 @@ class Query:
                     TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE
                 ],
                 broker=row[TransactionRegistryColNameValues.SOURCE_BROKER.value],
-                source=row[ColumnNameValues.SOURCE],
+                source=row[TransactionRegistryColNameValues.SOURCE_FILE.value],
                 action=row[ColumnNameValues.TRANSACTION_TYPE_INTERNAL],
                 name=row[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY],
                 no_traded=row[TransactionRegistryColNameValues.SOURCE_VOLUME.value],
@@ -119,7 +119,7 @@ class Query:
                 TransactionRow(
                     transaction_date=index,
                     broker=row[TransactionRegistryColNameValues.SOURCE_BROKER.value],
-                    source=row[ColumnNameValues.SOURCE.value],
+                    source=row[TransactionRegistryColNameValues.SOURCE_FILE.value],
                     action=cast(
                         str,
                         row[

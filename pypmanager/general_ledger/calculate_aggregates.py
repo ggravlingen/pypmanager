@@ -237,7 +237,7 @@ class CalculateAggregates:
         self.broker = row[TransactionRegistryColNameValues.SOURCE_BROKER.value]
         self.isin = row[TransactionRegistryColNameValues.SOURCE_ISIN]
         self.name = row[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY]
-        self.source = row[ColumnNameValues.SOURCE]
+        self.source = row[TransactionRegistryColNameValues.SOURCE_FILE.value]
         self.transaction_type = row[
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE
         ]
@@ -283,7 +283,7 @@ class CalculateAggregates:
                 ColumnNameValues.REALIZED_PNL_EQ: self.pnl_price,
                 ColumnNameValues.REALIZED_PNL_DIVIDEND: self.pnl_dividend,
                 ColumnNameValues.REALIZED_PNL_INTEREST: self.pnl_interest,
-                ColumnNameValues.SOURCE: self.source,
+                TransactionRegistryColNameValues.SOURCE_FILE.value: self.source,
                 ColumnNameValues.SUM_COST_BASIS_DELTA: self.sum_cost_basis_delta,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: self.transaction_cash_flow,
                 TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: (

@@ -65,7 +65,7 @@ class DataFactory:
                 TransactionRegistryColNameValues.SOURCE_CURRENCY.value: "SEK",
                 TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker A",
                 TransactionRegistryColNameValues.SOURCE_FX.value: 1.0,
-                "source": "Test data",
+                TransactionRegistryColNameValues.SOURCE_FILE.value: "test-file",
             }
         )
         return self
@@ -96,7 +96,7 @@ class DataFactory:
                 TransactionRegistryColNameValues.SOURCE_CURRENCY.value: "SEK",
                 TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker A",
                 TransactionRegistryColNameValues.SOURCE_FX.value: 1.0,
-                "source": "Test data",
+                TransactionRegistryColNameValues.SOURCE_FILE.value: "test-file",
             }
         )
         return self

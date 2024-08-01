@@ -38,7 +38,7 @@ def test_interest_transaction() -> None:
                 ColumnNameValues.REALIZED_PNL_EQ: None,
                 ColumnNameValues.REALIZED_PNL_DIVIDEND: None,
                 ColumnNameValues.REALIZED_PNL_INTEREST: 100.0,
-                ColumnNameValues.SOURCE: "Source",
+                TransactionRegistryColNameValues.SOURCE_FILE.value: "Source",
                 ColumnNameValues.SUM_COST_BASIS_DELTA: None,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: 100.0,
                 TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(
@@ -63,7 +63,7 @@ def test_interest_transaction() -> None:
             TransactionRegistryColNameValues.SOURCE_FX.value: 1.0,
             TransactionRegistryColNameValues.SOURCE_ISIN: "isin",
             TransactionRegistryColNameValues.SOURCE_NAME_SECURITY: "Name A",
-            ColumnNameValues.SOURCE: "Source",
+            TransactionRegistryColNameValues.SOURCE_FILE.value: "Source",
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(2023, 4, 1),
             TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
@@ -105,7 +105,7 @@ def test_dividend_transaction() -> None:
                 ColumnNameValues.REALIZED_PNL_EQ: None,
                 ColumnNameValues.REALIZED_PNL_DIVIDEND: 100.0,
                 ColumnNameValues.REALIZED_PNL_INTEREST: None,
-                ColumnNameValues.SOURCE: "Source",
+                TransactionRegistryColNameValues.SOURCE_FILE.value: "Source",
                 ColumnNameValues.SUM_COST_BASIS_DELTA: None,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: 100.0,
                 TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(
@@ -130,7 +130,7 @@ def test_dividend_transaction() -> None:
             TransactionRegistryColNameValues.SOURCE_FX.value: 1.0,
             TransactionRegistryColNameValues.SOURCE_ISIN: "isin",
             TransactionRegistryColNameValues.SOURCE_NAME_SECURITY: "Name A",
-            ColumnNameValues.SOURCE: "Source",
+            TransactionRegistryColNameValues.SOURCE_FILE.value: "Source",
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(2023, 4, 1),
             TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
@@ -172,7 +172,7 @@ def test_buy_transaction() -> None:
                 ColumnNameValues.REALIZED_PNL_EQ: None,
                 ColumnNameValues.REALIZED_PNL_DIVIDEND: None,
                 ColumnNameValues.REALIZED_PNL_INTEREST: None,
-                ColumnNameValues.SOURCE: "Source",
+                TransactionRegistryColNameValues.SOURCE_FILE.value: "Source",
                 ColumnNameValues.SUM_COST_BASIS_DELTA: -100.0,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: -105.0,
                 TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(
@@ -199,7 +199,7 @@ def test_buy_transaction() -> None:
             TransactionRegistryColNameValues.SOURCE_NAME_SECURITY: "Name A",
             TransactionRegistryColNameValues.SOURCE_VOLUME: 10.0,
             TransactionRegistryColNameValues.SOURCE_PRICE: 10.0,
-            ColumnNameValues.SOURCE: "Source",
+            TransactionRegistryColNameValues.SOURCE_FILE.value: "Source",
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(2023, 4, 1),
             TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
@@ -241,7 +241,7 @@ def test_sell_transaction() -> None:
                 ColumnNameValues.REALIZED_PNL_EQ: None,
                 ColumnNameValues.REALIZED_PNL_DIVIDEND: None,
                 ColumnNameValues.REALIZED_PNL_INTEREST: None,
-                ColumnNameValues.SOURCE: "Source",
+                TransactionRegistryColNameValues.SOURCE_FILE.value: "Source",
                 ColumnNameValues.SUM_COST_BASIS_DELTA: -100.0,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: -105.0,
                 TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(
@@ -272,7 +272,7 @@ def test_sell_transaction() -> None:
                 ColumnNameValues.REALIZED_PNL_EQ: 100.0,
                 ColumnNameValues.REALIZED_PNL_DIVIDEND: None,
                 ColumnNameValues.REALIZED_PNL_INTEREST: None,
-                ColumnNameValues.SOURCE: "Source",
+                TransactionRegistryColNameValues.SOURCE_FILE.value: "Source",
                 ColumnNameValues.SUM_COST_BASIS_DELTA: None,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: 190.0,
                 TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(
@@ -299,7 +299,7 @@ def test_sell_transaction() -> None:
             TransactionRegistryColNameValues.SOURCE_NAME_SECURITY: "Name A",
             TransactionRegistryColNameValues.SOURCE_VOLUME: 10.0,
             TransactionRegistryColNameValues.SOURCE_PRICE: 10.0,
-            ColumnNameValues.SOURCE: "Source",
+            TransactionRegistryColNameValues.SOURCE_FILE.value: "Source",
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(2023, 4, 1),
             TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
@@ -315,7 +315,7 @@ def test_sell_transaction() -> None:
             TransactionRegistryColNameValues.SOURCE_NAME_SECURITY: "Name A",
             TransactionRegistryColNameValues.SOURCE_VOLUME: -10.0,
             TransactionRegistryColNameValues.SOURCE_PRICE: 20.0,
-            ColumnNameValues.SOURCE: "Source",
+            TransactionRegistryColNameValues.SOURCE_FILE.value: "Source",
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(2023, 5, 1),
             TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
@@ -361,7 +361,7 @@ def test_buy_sell_sequence() -> None:
                 ColumnNameValues.REALIZED_PNL_EQ: None,
                 ColumnNameValues.REALIZED_PNL_DIVIDEND: None,
                 ColumnNameValues.REALIZED_PNL_INTEREST: None,
-                ColumnNameValues.SOURCE: "Source",
+                TransactionRegistryColNameValues.SOURCE_FILE.value: "Source",
                 ColumnNameValues.SUM_COST_BASIS_DELTA: -1500.0,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: -1599.0,
                 TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(
@@ -392,7 +392,7 @@ def test_buy_sell_sequence() -> None:
                 ColumnNameValues.REALIZED_PNL_EQ: None,
                 ColumnNameValues.REALIZED_PNL_DIVIDEND: None,
                 ColumnNameValues.REALIZED_PNL_INTEREST: None,
-                ColumnNameValues.SOURCE: "Source",
+                TransactionRegistryColNameValues.SOURCE_FILE.value: "Source",
                 ColumnNameValues.SUM_COST_BASIS_DELTA: -2625.0,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: -1224.0,
                 TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(
@@ -419,7 +419,7 @@ def test_buy_sell_sequence() -> None:
                 TransactionRegistryColNameValues.SOURCE_PRICE: 20.0,
                 ColumnNameValues.REALIZED_PNL: 416.67,
                 ColumnNameValues.REALIZED_PNL_EQ: 416.67,
-                ColumnNameValues.SOURCE: "Source",
+                TransactionRegistryColNameValues.SOURCE_FILE.value: "Source",
                 ColumnNameValues.SUM_COST_BASIS_DELTA: -2041.67,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: 901.0,
                 TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
@@ -446,7 +446,7 @@ def test_buy_sell_sequence() -> None:
                 TransactionRegistryColNameValues.SOURCE_PRICE: 25.0,
                 ColumnNameValues.REALIZED_PNL: None,
                 ColumnNameValues.REALIZED_PNL_EQ: None,
-                ColumnNameValues.SOURCE: "Source",
+                TransactionRegistryColNameValues.SOURCE_FILE.value: "Source",
                 ColumnNameValues.SUM_COST_BASIS_DELTA: -2666.67,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: -724.0,
                 TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
@@ -473,7 +473,7 @@ def test_buy_sell_sequence() -> None:
                 TransactionRegistryColNameValues.SOURCE_PRICE: 25.0,
                 ColumnNameValues.REALIZED_PNL: 2333.33,
                 ColumnNameValues.REALIZED_PNL_EQ: 2333.33,
-                ColumnNameValues.SOURCE: "Source",
+                TransactionRegistryColNameValues.SOURCE_FILE.value: "Source",
                 ColumnNameValues.SUM_COST_BASIS_DELTA: None,
                 ColumnNameValues.TRANSACTION_CASH_FLOW: 4901.0,
                 TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
@@ -500,7 +500,7 @@ def test_buy_sell_sequence() -> None:
             TransactionRegistryColNameValues.SOURCE_NAME_SECURITY: "Name A",
             TransactionRegistryColNameValues.SOURCE_VOLUME: 150.0,
             TransactionRegistryColNameValues.SOURCE_PRICE: 10.0,
-            ColumnNameValues.SOURCE: "Source",
+            TransactionRegistryColNameValues.SOURCE_FILE.value: "Source",
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(2023, 4, 1),
             TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
@@ -516,7 +516,7 @@ def test_buy_sell_sequence() -> None:
             TransactionRegistryColNameValues.SOURCE_NAME_SECURITY: "Name A",
             TransactionRegistryColNameValues.SOURCE_VOLUME: 75.0,
             TransactionRegistryColNameValues.SOURCE_PRICE: 15.0,
-            ColumnNameValues.SOURCE: "Source",
+            TransactionRegistryColNameValues.SOURCE_FILE.value: "Source",
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(2023, 4, 2),
             TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
@@ -532,7 +532,7 @@ def test_buy_sell_sequence() -> None:
             TransactionRegistryColNameValues.SOURCE_NAME_SECURITY: "Name A",
             TransactionRegistryColNameValues.SOURCE_VOLUME: -50.0,
             TransactionRegistryColNameValues.SOURCE_PRICE: 20.0,
-            ColumnNameValues.SOURCE: "Source",
+            TransactionRegistryColNameValues.SOURCE_FILE.value: "Source",
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(2023, 4, 3),
             TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
@@ -548,7 +548,7 @@ def test_buy_sell_sequence() -> None:
             TransactionRegistryColNameValues.SOURCE_NAME_SECURITY: "Name A",
             TransactionRegistryColNameValues.SOURCE_VOLUME: 25.0,
             TransactionRegistryColNameValues.SOURCE_PRICE: 25.0,
-            ColumnNameValues.SOURCE: "Source",
+            TransactionRegistryColNameValues.SOURCE_FILE.value: "Source",
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(2023, 4, 4),
             TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
@@ -564,7 +564,7 @@ def test_buy_sell_sequence() -> None:
             TransactionRegistryColNameValues.SOURCE_NAME_SECURITY: "Name A",
             TransactionRegistryColNameValues.SOURCE_VOLUME: -200.0,
             TransactionRegistryColNameValues.SOURCE_PRICE: 25.0,
-            ColumnNameValues.SOURCE: "Source",
+            TransactionRegistryColNameValues.SOURCE_FILE.value: "Source",
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE: date(2023, 4, 5),
             TransactionRegistryColNameValues.META_TRANSACTION_YEAR: 2023,
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE: (
