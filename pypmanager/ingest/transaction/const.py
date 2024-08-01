@@ -63,12 +63,6 @@ class ColumnNameValues(StrEnum):
     REALIZED_PNL_FX = "realized_pnl_fx"
     REALIZED_PNL_INTEREST = "realized_pnl_interest"
     REALIZED_PNL_DIVIDEND = "realized_pnl_dividend"
-    TURNOVER = "calc_turnover"
-    """
-    The turnover of the transaction.
-
-    Turnover = no_traded * price
-    """
     TRANSACTION_TYPE_INTERNAL = "transaction_type_internal"
     CF_EX_COMMISSION = "cf_ex_commission"
     COST_BASIS_DELTA = "cost_basis_delta"
