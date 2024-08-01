@@ -98,7 +98,7 @@ async def test_transaction_registry__columns(
             "source_volume",
             "source_price",
             "source_fee",
-            "currency",
+            "source_currency",
             "broker",
             "fx_rate",
             "source",

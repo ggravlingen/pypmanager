@@ -36,7 +36,7 @@ DTYPES_MAP: dict[str, type[str | float] | str] = {
     TransactionRegistryColNameValues.SOURCE_PRICE.value: float,
     ColumnNameValues.AMOUNT.value: float,
     TransactionRegistryColNameValues.SOURCE_FEE.value: float,
-    ColumnNameValues.CURRENCY.value: str,
+    TransactionRegistryColNameValues.SOURCE_CURRENCY.value: str,
     TransactionRegistryColNameValues.SOURCE_ISIN.value: str,
     ColumnNameValues.FX.value: float,
 }

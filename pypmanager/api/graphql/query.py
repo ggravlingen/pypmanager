@@ -130,7 +130,9 @@ class Query:
                         TransactionRegistryColNameValues.SOURCE_NAME_SECURITY.value
                     ],
                     no_traded=row[TransactionRegistryColNameValues.SOURCE_VOLUME.value],
-                    currency=row[ColumnNameValues.CURRENCY.value],
+                    currency=row[
+                        TransactionRegistryColNameValues.SOURCE_CURRENCY.value
+                    ],
                     price=row[TransactionRegistryColNameValues.SOURCE_PRICE.value],
                     # It makes more sense to use the absolute value of the commission in
                     # this context
