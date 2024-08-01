@@ -11,7 +11,6 @@ import pandas as pd
 import pytest
 
 from pypmanager.ingest.transaction.const import (
-    ColumnNameValues,
     TransactionRegistryColNameValues,
     TransactionTypeValues,
 )
@@ -65,7 +64,7 @@ class DataFactory:
                 "source_fee": commission,
                 TransactionRegistryColNameValues.SOURCE_CURRENCY.value: "SEK",
                 TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker A",
-                ColumnNameValues.FX.value: 1.0,
+                TransactionRegistryColNameValues.SOURCE_FX.value: 1.0,
                 "source": "Test data",
             }
         )
@@ -96,7 +95,7 @@ class DataFactory:
                 "source_fee": commission,
                 TransactionRegistryColNameValues.SOURCE_CURRENCY.value: "SEK",
                 TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker A",
-                ColumnNameValues.FX.value: 1.0,
+                TransactionRegistryColNameValues.SOURCE_FX.value: 1.0,
                 "source": "Test data",
             }
         )

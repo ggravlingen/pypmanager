@@ -56,8 +56,6 @@ class ColumnNameValues(StrEnum):
     CASH_FLOW_LOCAL = "cash_flow_base_ccy"
     CREDIT = "credit"
     DEBIT = "debit"
-    FX = "fx_rate"
-    """The FX rate between the nominal currency and your base currency."""
     NO_HELD = "cumulative_buy_volume"
     REALIZED_PNL = "realized_pnl"
     REALIZED_PNL_EQ = "realized_pnl_equity"
@@ -128,6 +126,12 @@ class TransactionRegistryColNameValues(StrEnum):
 
     Ingested from the transaction source files.
     """
+    SOURCE_FX = "source_fx_rate"
+    """
+    The FX rate between the nominal currency and your base currency.
+
+    Ingested from the transaction source files.
+    """
     SOURCE_NAME_SECURITY = "source_name"
     """
     The full name of the security.
@@ -179,7 +183,7 @@ class CSVSeparator(StrEnum):
 NUMBER_COLS = [
     ColumnNameValues.AMOUNT,
     TransactionRegistryColNameValues.SOURCE_FEE,
-    ColumnNameValues.FX,
+    TransactionRegistryColNameValues.SOURCE_FX,
     TransactionRegistryColNameValues.SOURCE_VOLUME,
     TransactionRegistryColNameValues.SOURCE_PRICE,
     ColumnNameValues.REALIZED_PNL,

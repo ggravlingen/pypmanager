@@ -49,7 +49,7 @@ class AvanzaLoader(TransactionLoader):
         "Courtage": TransactionRegistryColNameValues.SOURCE_FEE,
         "Valuta": TransactionRegistryColNameValues.SOURCE_CURRENCY.value,
         "ISIN": TransactionRegistryColNameValues.SOURCE_ISIN,
-        "FX": ColumnNameValues.FX,
+        "FX": TransactionRegistryColNameValues.SOURCE_FX.value,
     }
 
     file_pattern = "avanza*.csv"
