@@ -47,7 +47,7 @@ class AvanzaLoader(TransactionLoader):
         "Kurs": TransactionRegistryColNameValues.SOURCE_PRICE,
         "Belopp": ColumnNameValues.AMOUNT,
         "Courtage": TransactionRegistryColNameValues.SOURCE_FEE,
-        "Valuta": ColumnNameValues.CURRENCY,
+        "Valuta": TransactionRegistryColNameValues.SOURCE_CURRENCY.value,
         "ISIN": TransactionRegistryColNameValues.SOURCE_ISIN,
         "FX": ColumnNameValues.FX,
     }

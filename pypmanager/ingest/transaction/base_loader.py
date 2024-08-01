@@ -39,7 +39,7 @@ EMPTY_DF = pd.DataFrame(
         TransactionRegistryColNameValues.SOURCE_PRICE,
         ColumnNameValues.AMOUNT,
         TransactionRegistryColNameValues.SOURCE_FEE,
-        ColumnNameValues.CURRENCY,
+        TransactionRegistryColNameValues.SOURCE_CURRENCY.value,
         TransactionRegistryColNameValues.SOURCE_ISIN,
     ],
 )

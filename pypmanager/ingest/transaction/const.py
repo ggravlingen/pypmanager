@@ -55,7 +55,6 @@ class ColumnNameValues(StrEnum):
     """
     BROKER = "broker"
     CASH_FLOW_LOCAL = "cash_flow_base_ccy"
-    CURRENCY = "currency"
     CREDIT = "credit"
     DEBIT = "debit"
     FX = "fx_rate"
@@ -105,6 +104,12 @@ class TransactionRegistryColNameValues(StrEnum):
     Average purchase price per unit.
 
     Resets when the cumulative volume held is zero.
+    """
+    SOURCE_CURRENCY = "source_currency"
+    """
+    The currency of the transaction.
+
+    Ingested from the transaction source files.
     """
     SOURCE_ISIN = "source_isin_code"
     """

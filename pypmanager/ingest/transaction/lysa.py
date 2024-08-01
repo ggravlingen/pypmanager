@@ -54,6 +54,8 @@ class LysaLoader(TransactionLoader):
         )
 
         df_raw[TransactionRegistryColNameValues.SOURCE_FEE] = None
-        df_raw[ColumnNameValues.CURRENCY] = CurrencyValues.SEK
+        df_raw[TransactionRegistryColNameValues.SOURCE_CURRENCY.value] = (
+            CurrencyValues.SEK
+        )
 
         self.df_final = df_raw
