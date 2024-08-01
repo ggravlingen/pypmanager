@@ -63,7 +63,6 @@ class ColumnNameValues(StrEnum):
     REALIZED_PNL_FX = "realized_pnl_fx"
     REALIZED_PNL_INTEREST = "realized_pnl_interest"
     REALIZED_PNL_DIVIDEND = "realized_pnl_dividend"
-    SOURCE = "source"
     TURNOVER = "calc_turnover"
     """
     The turnover of the transaction.
@@ -111,6 +110,12 @@ class TransactionRegistryColNameValues(StrEnum):
     SOURCE_CURRENCY = "source_currency"
     """
     The currency of the transaction.
+
+    Ingested from the transaction source files.
+    """
+    SOURCE_FILE = "source_file_name"
+    """
+    The name of the file the transaction was ingested from.
 
     Ingested from the transaction source files.
     """
