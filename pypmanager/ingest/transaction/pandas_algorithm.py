@@ -162,10 +162,9 @@ class PandasAlgorithm:
                 )
                 == 0
             ):
+                # We keep current value of PRICE_PER_UNIT here as it might be used
+                # in calculating PnL
                 current_turnover = 0.0
-                group.at[  # noqa: PD008
-                    index, TransactionRegistryColNameValues.PRICE_PER_UNIT.value
-                ] = None
                 group.at[  # noqa: PD008
                     index,
                     TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value,

@@ -5,7 +5,6 @@ from __future__ import annotations
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-import numpy as np
 from numpy.testing import assert_array_equal
 import pandas as pd
 import pytest
@@ -297,7 +296,7 @@ def test_calculate_adjusted_price_per_unit(
     ).apply(PandasAlgorithm.calculate_adjusted_price_per_unit, include_groups=False)
 
     assert len(df_mocked_transactions) == 6
-    expected_values = [10.0, 10.0, 10.0, np.nan, 1.0, 2.0]
+    expected_values = [10.0, 10.0, 10.0, 10.0, 1.0, 2.0]
     actual_values = df_mocked_transactions[
         TransactionRegistryColNameValues.PRICE_PER_UNIT.value
     ].to_numpy()
