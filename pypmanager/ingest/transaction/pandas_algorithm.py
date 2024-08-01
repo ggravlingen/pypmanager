@@ -85,18 +85,17 @@ class PandasAlgorithm:
 
     @staticmethod
     def normalize_no_traded(row: pd.DataFrame) -> float:
-        """Calculate number of units traded."""
+        """
+        Calculate number of units traded.
+
+        We expect this number to be positive and use the type (buy/sell) to indicate
+        the direction of the flow.
+        """
         no_traded = cast(
             float, row[TransactionRegistryColNameValues.SOURCE_VOLUME.value]
         )
 
-        if row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value] in [
-            TransactionTypeValues.BUY.value,
-            TransactionTypeValues.DIVIDEND.value,
-        ]:
-            return no_traded
-
-        return abs(no_traded) * -1
+        return abs(no_traded)
 
     @staticmethod
     def normalize_fx(row: pd.DataFrame) -> float:
@@ -203,9 +202,7 @@ class PandasAlgorithm:
                     row[TransactionRegistryColNameValues.SOURCE_PRICE.value]
                     - row[TransactionRegistryColNameValues.PRICE_PER_UNIT.value]
                 )
-                # TO-DO: we should use a normalizer here instead as we always
-                # expect volume to be a positive integer
-                * abs(row[TransactionRegistryColNameValues.SOURCE_VOLUME.value])
+                * row[TransactionRegistryColNameValues.SOURCE_VOLUME.value]
             )
 
         return cast(
