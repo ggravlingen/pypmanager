@@ -48,7 +48,6 @@ class Query:
                 name=row[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY],
                 no_traded=row[TransactionRegistryColNameValues.SOURCE_VOLUME.value],
                 agg_buy_volume=row[ColumnNameValues.NO_HELD],
-                average_price=row[ColumnNameValues.AVG_PRICE],
                 amount=row[ColumnNameValues.AMOUNT],
                 commission=row[TransactionRegistryColNameValues.SOURCE_FEE],
                 cash_flow=row[ColumnNameValues.CASH_FLOW_LOCAL],

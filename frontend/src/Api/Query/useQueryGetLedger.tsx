@@ -12,7 +12,6 @@ const QUERY = gql`
       name
       noTraded
       aggBuyVolume
-      averagePrice
       amount
       commission
       cashFlow

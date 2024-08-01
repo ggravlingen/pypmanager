@@ -46,12 +46,6 @@ const columnSettings = [
     dataType: CellDataType.NUMBER,
   },
   {
-    headerName: "Average price",
-    fieldPath: "averagePrice",
-    align: CellAlign.RIGHT,
-    dataType: CellDataType.NUMBER,
-  },
-  {
     headerName: "Amount",
     fieldPath: "amount",
     align: CellAlign.RIGHT,

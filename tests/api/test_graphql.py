@@ -52,7 +52,6 @@ async def test_graphql_query__all_general_ledger() -> None:
             name
             noTraded
             aggBuyVolume
-            averagePrice
             amount
             commission
             cashFlow
