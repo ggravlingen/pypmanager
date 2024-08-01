@@ -22,7 +22,6 @@ export interface TransactionRow extends BaseTransactionRow {
 
 export interface LedgerRow extends BaseTransactionRow {
   aggBuyVolume?: number;
-  averagePrice?: number;
   amount?: number;
   cashFlow?: number;
   averageFx?: number;

@@ -36,7 +36,6 @@ class LedgerRow(BaseTransactionRow):
     """Represent a row in the general ledger."""
 
     agg_buy_volume: float | None
-    average_price: float | None
     amount: float | None
     cash_flow: float | None
     average_fx_rate: float | None
