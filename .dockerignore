@@ -1,0 +1,13 @@
+# General files
+.git
+.github
+
+# Development
+.devcontainer
+.vscode
+
+# Test related files
+tests
+
+# Temporary files
+**/__pycache__
