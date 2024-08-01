@@ -46,9 +46,15 @@ def test__normalize_no_traded(trans_type: str, no_traded: int, expected: int) ->
         # Case when FX column is missing
         (pd.DataFrame({ColumnNameValues.AMOUNT.value: [1.00]}), 1.00),
         # Case when FX value is NaN
-        (pd.DataFrame({ColumnNameValues.FX.value: [pd.NA]}), 1.00),
+        (
+            pd.DataFrame({TransactionRegistryColNameValues.SOURCE_FX.value: [pd.NA]}),
+            1.00,
+        ),
         # Case when FX value is present and valid
-        (pd.DataFrame({ColumnNameValues.FX.value: [1.23]}), 1.23),
+        (
+            pd.DataFrame({TransactionRegistryColNameValues.SOURCE_FX.value: [1.23]}),
+            1.23,
+        ),
     ],
 )
 def test__normalize_fx(input_data: pd.DataFrame, expected: float) -> None:

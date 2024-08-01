@@ -38,7 +38,7 @@ DTYPES_MAP: dict[str, type[str | float] | str] = {
     TransactionRegistryColNameValues.SOURCE_FEE.value: float,
     TransactionRegistryColNameValues.SOURCE_CURRENCY.value: str,
     TransactionRegistryColNameValues.SOURCE_ISIN.value: str,
-    ColumnNameValues.FX.value: float,
+    TransactionRegistryColNameValues.SOURCE_FX.value: float,
 }
 
 FILTER_STATEMENT = (
@@ -242,7 +242,7 @@ class TransactionRegistry:
         df_raw[ColumnNameValues.AMOUNT.value] = df_raw.apply(
             PandasAlgorithm.normalize_amount, axis=1
         )
-        df_raw[ColumnNameValues.FX.value] = df_raw.apply(
+        df_raw[TransactionRegistryColNameValues.SOURCE_FX.value] = df_raw.apply(
             PandasAlgorithm.normalize_fx, axis=1
         )
 

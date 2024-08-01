@@ -248,7 +248,7 @@ class CalculateAggregates:
             TransactionRegistryColNameValues.META_TRANSACTION_YEAR
         ]
         self.nominal_commission = row[TransactionRegistryColNameValues.SOURCE_FEE]
-        self.fx_rate = row[ColumnNameValues.FX]
+        self.fx_rate = row[TransactionRegistryColNameValues.SOURCE_FX.value]
 
         if row.get(TransactionRegistryColNameValues.SOURCE_PRICE):
             self.nominal_price = row[TransactionRegistryColNameValues.SOURCE_PRICE]
@@ -272,7 +272,7 @@ class CalculateAggregates:
                 ColumnNameValues.CF_EX_COMMISSION: self.cf_ex_commission,
                 TransactionRegistryColNameValues.SOURCE_FEE: self.nominal_commission,
                 ColumnNameValues.COST_BASIS_DELTA: self.cost_basis_delta,
-                ColumnNameValues.FX: self.fx_rate,
+                TransactionRegistryColNameValues.SOURCE_FX.value: self.fx_rate,
                 TransactionRegistryColNameValues.SOURCE_ISIN: self.isin,
                 TransactionRegistryColNameValues.SOURCE_NAME_SECURITY: self.name,
                 ColumnNameValues.NO_HELD: self.sum_held,

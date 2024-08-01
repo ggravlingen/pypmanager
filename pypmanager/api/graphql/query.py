@@ -52,7 +52,7 @@ class Query:
                 amount=row[ColumnNameValues.AMOUNT],
                 commission=row[TransactionRegistryColNameValues.SOURCE_FEE],
                 cash_flow=row[ColumnNameValues.CASH_FLOW_LOCAL],
-                fx=row[ColumnNameValues.FX],
+                fx=row[TransactionRegistryColNameValues.SOURCE_FX.value],
                 average_fx_rate=row[ColumnNameValues.AVG_FX],
                 credit=row[ColumnNameValues.CREDIT],
                 debit=row[ColumnNameValues.DEBIT],
@@ -140,7 +140,7 @@ class Query:
                     cash_flow=row[
                         TransactionRegistryColNameValues.CASH_FLOW_NET_FEE_NOMINAL.value
                     ],
-                    fx=row[ColumnNameValues.FX.value],
+                    fx=row[TransactionRegistryColNameValues.SOURCE_FX.value],
                     cost_base_average=row[
                         TransactionRegistryColNameValues.PRICE_PER_UNIT.value
                     ],

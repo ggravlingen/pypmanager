@@ -101,12 +101,12 @@ class PandasAlgorithm:
     @staticmethod
     def normalize_fx(row: pd.DataFrame) -> float:
         """Return FX rate or default to 1.00."""
-        if ColumnNameValues.FX.value not in row or pd.isna(
-            row[ColumnNameValues.FX.value]
+        if TransactionRegistryColNameValues.SOURCE_FX.value not in row or pd.isna(
+            row[TransactionRegistryColNameValues.SOURCE_FX.value]
         ):
             return 1.00
 
-        return cast(float, row[ColumnNameValues.FX.value])
+        return cast(float, row[TransactionRegistryColNameValues.SOURCE_FX.value])
 
     @staticmethod
     def calculate_adjusted_price_per_unit(group: pd.DataFrame) -> pd.DataFrame:
