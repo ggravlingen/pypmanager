@@ -110,7 +110,7 @@ class Query:
         output_list: list[TransactionRow] = []
         for index, row in transaction_list.iterrows():
             if row[TransactionRegistryColNameValues.SOURCE_FEE.value] is not None:
-                commission = abs(row[TransactionRegistryColNameValues.SOURCE_FEE.value])
+                commission = row[TransactionRegistryColNameValues.SOURCE_FEE.value]
             else:
                 commission = None
 
@@ -142,6 +142,9 @@ class Query:
                     fx=row[TransactionRegistryColNameValues.SOURCE_FX.value],
                     cost_base_average=row[
                         TransactionRegistryColNameValues.PRICE_PER_UNIT.value
+                    ],
+                    pnl_total=row[
+                        TransactionRegistryColNameValues.CALC_PNL_TOTAL.value
                     ],
                 )
             )
