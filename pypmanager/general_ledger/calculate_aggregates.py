@@ -234,7 +234,7 @@ class CalculateAggregates:
     def set_base_data(self: CalculateAggregates, row: dict[str, Any]) -> None:
         """Set base data from the transaction."""
         self.amount = row[ColumnNameValues.AMOUNT]
-        self.broker = row[ColumnNameValues.BROKER]
+        self.broker = row[TransactionRegistryColNameValues.SOURCE_BROKER.value]
         self.isin = row[TransactionRegistryColNameValues.SOURCE_ISIN]
         self.name = row[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY]
         self.source = row[ColumnNameValues.SOURCE]
@@ -267,7 +267,7 @@ class CalculateAggregates:
                 ColumnNameValues.AMOUNT: self.amount,
                 ColumnNameValues.AVG_PRICE: self.avg_cost_basis,
                 ColumnNameValues.AVG_FX: None,
-                ColumnNameValues.BROKER: self.broker,
+                TransactionRegistryColNameValues.SOURCE_BROKER.value: self.broker,
                 ColumnNameValues.CASH_FLOW_LOCAL: self.transaction_cash_flow_local,
                 ColumnNameValues.CF_EX_COMMISSION: self.cf_ex_commission,
                 TransactionRegistryColNameValues.SOURCE_FEE: self.nominal_commission,

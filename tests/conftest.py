@@ -64,7 +64,7 @@ class DataFactory:
                 "source_price": price,
                 "source_fee": commission,
                 TransactionRegistryColNameValues.SOURCE_CURRENCY.value: "SEK",
-                "broker": "Broker A",
+                TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker A",
                 ColumnNameValues.FX.value: 1.0,
                 "source": "Test data",
             }
@@ -95,7 +95,7 @@ class DataFactory:
                 "source_price": price,
                 "source_fee": commission,
                 TransactionRegistryColNameValues.SOURCE_CURRENCY.value: "SEK",
-                "broker": "Broker A",
+                TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker A",
                 ColumnNameValues.FX.value: 1.0,
                 "source": "Test data",
             }

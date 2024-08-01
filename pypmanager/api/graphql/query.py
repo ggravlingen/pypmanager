@@ -42,7 +42,7 @@ class Query:
                 transaction_date=row[
                     TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE
                 ],
-                broker=row[ColumnNameValues.BROKER],
+                broker=row[TransactionRegistryColNameValues.SOURCE_BROKER.value],
                 source=row[ColumnNameValues.SOURCE],
                 action=row[ColumnNameValues.TRANSACTION_TYPE_INTERNAL],
                 name=row[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY],
@@ -118,7 +118,7 @@ class Query:
             output_list.append(
                 TransactionRow(
                     transaction_date=index,
-                    broker=row[ColumnNameValues.BROKER.value],
+                    broker=row[TransactionRegistryColNameValues.SOURCE_BROKER.value],
                     source=row[ColumnNameValues.SOURCE.value],
                     action=cast(
                         str,

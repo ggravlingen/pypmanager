@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, cast
 
 from .base_loader import TransactionLoader
-from .const import ColumnNameValues, TransactionRegistryColNameValues
+from .const import TransactionRegistryColNameValues
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -16,7 +16,7 @@ def _replace_fee_name(row: pd.DataFrame) -> str:
     if (
         row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE]
         == "Plattformsavgift"
-        and row[ColumnNameValues.BROKER] == "SAVR"
+        and row[TransactionRegistryColNameValues.SOURCE_BROKER.value] == "SAVR"
     ):
         return "SAVR management fee"
 

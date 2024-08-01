@@ -22,7 +22,7 @@ def test_interest_transaction() -> None:
                 ColumnNameValues.AMOUNT: 100.0,
                 ColumnNameValues.AVG_PRICE: None,
                 ColumnNameValues.AVG_FX: None,
-                ColumnNameValues.BROKER: "Broker",
+                TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker",
                 ColumnNameValues.CASH_FLOW_LOCAL: 100.0,
                 ColumnNameValues.CF_EX_COMMISSION: None,
                 TransactionRegistryColNameValues.SOURCE_FEE: None,
@@ -58,7 +58,7 @@ def test_interest_transaction() -> None:
     data = [
         {
             ColumnNameValues.AMOUNT: 100.0,
-            ColumnNameValues.BROKER: "Broker",
+            TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker",
             TransactionRegistryColNameValues.SOURCE_FEE: None,
             ColumnNameValues.FX: 1.0,
             TransactionRegistryColNameValues.SOURCE_ISIN: "isin",
@@ -89,7 +89,7 @@ def test_dividend_transaction() -> None:
                 ColumnNameValues.AMOUNT: 100.0,
                 ColumnNameValues.AVG_PRICE: None,
                 ColumnNameValues.AVG_FX: None,
-                ColumnNameValues.BROKER: "Broker",
+                TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker",
                 ColumnNameValues.CASH_FLOW_LOCAL: 100.0,
                 ColumnNameValues.CF_EX_COMMISSION: None,
                 TransactionRegistryColNameValues.SOURCE_FEE: None,
@@ -125,7 +125,7 @@ def test_dividend_transaction() -> None:
     data = [
         {
             ColumnNameValues.AMOUNT: 100.0,
-            ColumnNameValues.BROKER: "Broker",
+            TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker",
             TransactionRegistryColNameValues.SOURCE_FEE: None,
             ColumnNameValues.FX: 1.0,
             TransactionRegistryColNameValues.SOURCE_ISIN: "isin",
@@ -156,7 +156,7 @@ def test_buy_transaction() -> None:
                 ColumnNameValues.AMOUNT: -100.0,
                 ColumnNameValues.AVG_PRICE: 10.0,
                 ColumnNameValues.AVG_FX: None,
-                ColumnNameValues.BROKER: "Broker",
+                TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker",
                 ColumnNameValues.CASH_FLOW_LOCAL: -105.0,
                 ColumnNameValues.CF_EX_COMMISSION: -100.0,
                 TransactionRegistryColNameValues.SOURCE_FEE: -5.0,
@@ -192,7 +192,7 @@ def test_buy_transaction() -> None:
     data = [
         {
             ColumnNameValues.AMOUNT: -100.0,
-            ColumnNameValues.BROKER: "Broker",
+            TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker",
             TransactionRegistryColNameValues.SOURCE_FEE: -5.0,
             ColumnNameValues.FX: 1.0,
             TransactionRegistryColNameValues.SOURCE_ISIN: "isin",
@@ -225,7 +225,7 @@ def test_sell_transaction() -> None:
                 ColumnNameValues.AMOUNT: -100.0,
                 ColumnNameValues.AVG_PRICE: 10.0,
                 ColumnNameValues.AVG_FX: None,
-                ColumnNameValues.BROKER: "Broker",
+                TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker",
                 ColumnNameValues.CASH_FLOW_LOCAL: -105.0,
                 ColumnNameValues.CF_EX_COMMISSION: -100.0,
                 TransactionRegistryColNameValues.SOURCE_FEE: -5.0,
@@ -256,7 +256,7 @@ def test_sell_transaction() -> None:
                 ColumnNameValues.AMOUNT: 200.0,
                 ColumnNameValues.AVG_PRICE: None,
                 ColumnNameValues.AVG_FX: None,
-                ColumnNameValues.BROKER: "Broker",
+                TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker",
                 ColumnNameValues.CF_EX_COMMISSION: 200.0,
                 ColumnNameValues.CASH_FLOW_LOCAL: 190.0,
                 TransactionRegistryColNameValues.SOURCE_FEE: -10.0,
@@ -292,7 +292,7 @@ def test_sell_transaction() -> None:
     data = [
         {
             ColumnNameValues.AMOUNT: -100.0,
-            ColumnNameValues.BROKER: "Broker",
+            TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker",
             TransactionRegistryColNameValues.SOURCE_FEE: -5.0,
             ColumnNameValues.FX: 1.0,
             TransactionRegistryColNameValues.SOURCE_ISIN: "isin",
@@ -308,7 +308,7 @@ def test_sell_transaction() -> None:
         },
         {
             ColumnNameValues.AMOUNT: 200.0,
-            ColumnNameValues.BROKER: "Broker",
+            TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker",
             TransactionRegistryColNameValues.SOURCE_FEE: -10.0,
             ColumnNameValues.FX: 1.0,
             TransactionRegistryColNameValues.SOURCE_ISIN: "isin",
@@ -345,7 +345,7 @@ def test_buy_sell_sequence() -> None:
                 ColumnNameValues.AMOUNT: -1500.0,
                 ColumnNameValues.AVG_PRICE: 10.0,
                 ColumnNameValues.AVG_FX: None,
-                ColumnNameValues.BROKER: "Broker",
+                TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker",
                 ColumnNameValues.CASH_FLOW_LOCAL: -1599.0,
                 ColumnNameValues.CF_EX_COMMISSION: -1500.0,
                 TransactionRegistryColNameValues.SOURCE_FEE: -99.0,
@@ -376,7 +376,7 @@ def test_buy_sell_sequence() -> None:
                 ColumnNameValues.AMOUNT: -1224.0,
                 ColumnNameValues.AVG_PRICE: 11.6667,
                 ColumnNameValues.AVG_FX: None,
-                ColumnNameValues.BROKER: "Broker",
+                TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker",
                 ColumnNameValues.CASH_FLOW_LOCAL: -1224.0,
                 ColumnNameValues.CF_EX_COMMISSION: -1125.0,
                 TransactionRegistryColNameValues.SOURCE_FEE: -99.0,
@@ -406,7 +406,7 @@ def test_buy_sell_sequence() -> None:
             {
                 ColumnNameValues.AMOUNT: 1000.0,
                 ColumnNameValues.AVG_PRICE: 11.6667,
-                ColumnNameValues.BROKER: "Broker",
+                TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker",
                 ColumnNameValues.CASH_FLOW_LOCAL: 901.0,
                 ColumnNameValues.CF_EX_COMMISSION: 1000.0,
                 TransactionRegistryColNameValues.SOURCE_FEE: -99.0,
@@ -433,7 +433,7 @@ def test_buy_sell_sequence() -> None:
             {
                 ColumnNameValues.AMOUNT: -625.0,
                 ColumnNameValues.AVG_PRICE: 13.3333,
-                ColumnNameValues.BROKER: "Broker",
+                TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker",
                 ColumnNameValues.CASH_FLOW_LOCAL: -724.0,
                 ColumnNameValues.CF_EX_COMMISSION: -625.0,
                 TransactionRegistryColNameValues.SOURCE_FEE: -99.0,
@@ -460,7 +460,7 @@ def test_buy_sell_sequence() -> None:
             {
                 ColumnNameValues.AMOUNT: 5000.0,
                 ColumnNameValues.AVG_PRICE: None,
-                ColumnNameValues.BROKER: "Broker",
+                TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker",
                 ColumnNameValues.CASH_FLOW_LOCAL: 4901.0,
                 ColumnNameValues.CF_EX_COMMISSION: 5000.0,
                 TransactionRegistryColNameValues.SOURCE_FEE: -99.0,
@@ -493,7 +493,7 @@ def test_buy_sell_sequence() -> None:
     data = [
         {
             ColumnNameValues.AMOUNT: -1500.0,
-            ColumnNameValues.BROKER: "Broker",
+            TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker",
             TransactionRegistryColNameValues.SOURCE_FEE: -99.0,
             ColumnNameValues.FX: 1.0,
             TransactionRegistryColNameValues.SOURCE_ISIN: "isin",
@@ -509,7 +509,7 @@ def test_buy_sell_sequence() -> None:
         },
         {
             ColumnNameValues.AMOUNT: -1224.0,
-            ColumnNameValues.BROKER: "Broker",
+            TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker",
             TransactionRegistryColNameValues.SOURCE_FEE: -99.0,
             ColumnNameValues.FX: 1.0,
             TransactionRegistryColNameValues.SOURCE_ISIN: "isin",
@@ -525,7 +525,7 @@ def test_buy_sell_sequence() -> None:
         },
         {
             ColumnNameValues.AMOUNT: 1000.0,
-            ColumnNameValues.BROKER: "Broker",
+            TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker",
             TransactionRegistryColNameValues.SOURCE_FEE: -99.0,
             ColumnNameValues.FX: 1.0,
             TransactionRegistryColNameValues.SOURCE_ISIN: "isin",
@@ -541,7 +541,7 @@ def test_buy_sell_sequence() -> None:
         },
         {
             ColumnNameValues.AMOUNT: -625.0,
-            ColumnNameValues.BROKER: "Broker",
+            TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker",
             TransactionRegistryColNameValues.SOURCE_FEE: -99.0,
             ColumnNameValues.FX: 1.0,
             TransactionRegistryColNameValues.SOURCE_ISIN: "isin",
@@ -557,7 +557,7 @@ def test_buy_sell_sequence() -> None:
         },
         {
             ColumnNameValues.AMOUNT: 5000.0,
-            ColumnNameValues.BROKER: "Broker",
+            TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker",
             TransactionRegistryColNameValues.SOURCE_FEE: -99.0,
             ColumnNameValues.FX: 1.0,
             TransactionRegistryColNameValues.SOURCE_ISIN: "isin",

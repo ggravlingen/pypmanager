@@ -53,7 +53,6 @@ class ColumnNameValues(StrEnum):
 
     Use turnover if the value represend a buy or a sell.
     """
-    BROKER = "broker"
     CASH_FLOW_LOCAL = "cash_flow_base_ccy"
     CREDIT = "credit"
     DEBIT = "debit"
@@ -104,6 +103,12 @@ class TransactionRegistryColNameValues(StrEnum):
     Average purchase price per unit.
 
     Resets when the cumulative volume held is zero.
+    """
+    SOURCE_BROKER = "source_broker"
+    """
+    The name of the broker transactions are ingested from.
+
+    Ingested from the transaction source files.
     """
     SOURCE_CURRENCY = "source_currency"
     """

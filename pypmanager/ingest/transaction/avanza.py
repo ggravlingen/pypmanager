@@ -59,7 +59,7 @@ class AvanzaLoader(TransactionLoader):
         """Broker specific manipulation of the data frame."""
         df_raw = self.df_final
 
-        df_raw[ColumnNameValues.BROKER] = "Avanza"
+        df_raw[TransactionRegistryColNameValues.SOURCE_BROKER.value] = "Avanza"
 
         # We don't need this column as we calculate it in this library
         if "Resultat" in df_raw.columns:
