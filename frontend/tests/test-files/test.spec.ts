@@ -18,12 +18,13 @@ const TransactionList = {
       currency: "USD",
       cashFlow: 1200,
       costBaseAverage: 120,
+      pnlTotal: null,
     },
     {
       transactionDate: new Date("2024-05-01"),
       broker: "IBKR",
       source: "IBKR",
-      action: "BUY",
+      action: "SELL",
       name: "EFGH",
       noTraded: 10,
       commission: 0,
@@ -32,6 +33,7 @@ const TransactionList = {
       currency: "USD",
       cashFlow: 1200,
       costBaseAverage: 120,
+      pnlTotal: 1.0,
     },
   ],
 };

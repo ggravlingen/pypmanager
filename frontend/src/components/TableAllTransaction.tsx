@@ -71,6 +71,14 @@ const columnSettings = [
     description: "The commission paid, if any",
   },
   {
+    headerName: "PnL",
+    fieldPath: "pnlTotal",
+    align: CellAlign.RIGHT,
+    dataType: CellDataType.NUMBER,
+    noDecimal: 0,
+    description: "The total profit or loss for the transaction, including any commission.",
+  },
+  {
     headerName: "Currency",
     fieldPath: "currency",
     align: CellAlign.RIGHT,

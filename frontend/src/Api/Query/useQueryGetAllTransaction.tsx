@@ -17,6 +17,7 @@ const QUERY = gql`
       fx
       cashFlow
       costBaseAverage
+      pnlTotal
     }
   }
 `;
