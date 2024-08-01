@@ -192,22 +192,19 @@ class PandasAlgorithm:
         if row.get(TransactionRegistryColNameValues.SOURCE_FEE.value):
             commission = row[TransactionRegistryColNameValues.SOURCE_FEE.value]
         else:
-            commission = 0.0
+            commission = pd.Series([0.0])
+
+        transaction_result = (
+            (
+                row[TransactionRegistryColNameValues.SOURCE_PRICE.value]
+                - row[TransactionRegistryColNameValues.PRICE_PER_UNIT.value]
+            )
+            # TO-DO: we should use a normalizer here instead as we always
+            # expect volume to be a positive integer
+            * abs(row[TransactionRegistryColNameValues.SOURCE_VOLUME.value])
+        )
 
         return cast(
             float,
-            (
-                # Calculate PnL based on the price difference
-                (
-                    (
-                        row[TransactionRegistryColNameValues.SOURCE_PRICE.value]
-                        - row[TransactionRegistryColNameValues.PRICE_PER_UNIT.value]
-                    )
-                    # TO-DO: we should use a normalizer here instead as we always
-                    # expect volume to be a positive integer
-                    * abs(row[TransactionRegistryColNameValues.SOURCE_VOLUME.value])
-                )
-                # Subtract commission from PnL
-                + commission
-            ),
+            (transaction_result + commission),
         )
