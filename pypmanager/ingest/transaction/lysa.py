@@ -48,7 +48,7 @@ class LysaLoader(TransactionLoader):
         """Load CSV."""
         df_raw = self.df_final
 
-        df_raw[ColumnNameValues.BROKER] = "Lysa"
+        df_raw[TransactionRegistryColNameValues.SOURCE_BROKER.value] = "Lysa"
         df_raw[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY] = df_raw.apply(
             _replace_fee_name, axis=1
         )
