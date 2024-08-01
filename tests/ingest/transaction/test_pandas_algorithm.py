@@ -303,3 +303,54 @@ def test_calculate_adjusted_price_per_unit(
     ].to_numpy()
 
     assert_array_equal(actual_values, expected_values)
+
+
+@pytest.mark.parametrize(
+    ("row_data", "expected"),
+    [
+        # Test a buy transaction
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
+                        TransactionTypeValues.BUY.value
+                    ),
+                },
+            ),
+            None,
+        ),
+        # Test a sell transaction without a commission
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
+                        TransactionTypeValues.SELL.value
+                    ),
+                    TransactionRegistryColNameValues.SOURCE_PRICE.value: 10.0,
+                    TransactionRegistryColNameValues.PRICE_PER_UNIT.value: 9.0,
+                    TransactionRegistryColNameValues.SOURCE_VOLUME.value: 100.0,
+                },
+            ),
+            100.0,
+        ),
+        # Test a sell transaction with a commission
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
+                        TransactionTypeValues.SELL.value
+                    ),
+                    TransactionRegistryColNameValues.SOURCE_PRICE.value: 10.0,
+                    TransactionRegistryColNameValues.PRICE_PER_UNIT.value: 9.0,
+                    TransactionRegistryColNameValues.SOURCE_VOLUME.value: 100.0,
+                    TransactionRegistryColNameValues.SOURCE_FEE.value: -1.0,
+                },
+            ),
+            99.0,
+        ),
+    ],
+)
+def test_calculate_pnl_trade(row_data: pd.DataFrame, expected: float | None) -> None:
+    """Test function calculate_pnl_trade."""
+    result = PandasAlgorithm.calculate_pnl_trade(row_data)
+    assert result == expected

@@ -113,6 +113,10 @@ COLUMN_APPEND: tuple[ColumnAppendConfig, ...] = (
         column=TransactionRegistryColNameValues.CASH_FLOW_GROSS_FEE_NOMINAL.value,
         callable=PandasAlgorithm.calculate_cash_flow_gross_fee_nominal,
     ),
+    ColumnAppendConfig(
+        column=TransactionRegistryColNameValues.CALC_PNL_TOTAL.value,
+        callable=PandasAlgorithm.calculate_pnl_trade,
+    ),
 )
 
 
