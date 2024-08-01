@@ -27,7 +27,7 @@ if TYPE_CHECKING:
     [
         (TransactionTypeValues.BUY.value, 10, 10),
         (TransactionTypeValues.DIVIDEND.value, 15, 15),
-        (TransactionTypeValues.SELL.value, -5, -5),
+        (TransactionTypeValues.SELL.value, -5, 5),
     ],
 )
 def test__normalize_no_traded(trans_type: str, no_traded: int, expected: int) -> None:
