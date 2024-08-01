@@ -11,11 +11,18 @@ const columnSettings = [
     description: "The date of the transaction",
   },
   {
+    headerName: "Broker",
+    fieldPath: "broker",
+    align: CellAlign.CENTER,
+    dataType: CellDataType.STRING,
+    description: "The broker used for the transaction",
+  },
+  {
     headerName: "Source",
     fieldPath: "source",
     align: CellAlign.CENTER,
     dataType: CellDataType.STRING,
-    description: "The data source of the transaction",
+    description: "The data source file of the transaction",
   },
   {
     headerName: "Security",
