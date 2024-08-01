@@ -180,3 +180,32 @@ class PandasAlgorithm:
             ]
 
         return group
+
+    @staticmethod
+    def calculate_pnl_trade(row: pd.DataFrame) -> float | None:
+        """Calculate profit and loss from a trade."""
+        if row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value] not in [
+            TransactionTypeValues.SELL.value,
+        ]:
+            return None
+
+        if row.get(TransactionRegistryColNameValues.SOURCE_FEE.value):
+            commission = row[TransactionRegistryColNameValues.SOURCE_FEE.value]
+        else:
+            commission = 0.0
+
+        return cast(
+            float,
+            (
+                # Calculate PnL based on the price difference
+                (
+                    (
+                        row[TransactionRegistryColNameValues.SOURCE_PRICE.value]
+                        - row[TransactionRegistryColNameValues.PRICE_PER_UNIT.value]
+                    )
+                    * row[TransactionRegistryColNameValues.SOURCE_VOLUME.value]
+                )
+                # Subtract commission from PnL
+                + commission
+            ),
+        )
