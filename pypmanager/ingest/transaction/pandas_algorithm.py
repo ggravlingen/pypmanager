@@ -203,7 +203,9 @@ class PandasAlgorithm:
                         row[TransactionRegistryColNameValues.SOURCE_PRICE.value]
                         - row[TransactionRegistryColNameValues.PRICE_PER_UNIT.value]
                     )
-                    * row[TransactionRegistryColNameValues.SOURCE_VOLUME.value]
+                    # TO-DO: we should use a normalizer here instead as we always
+                    # expect volume to be a positive integer
+                    * abs(row[TransactionRegistryColNameValues.SOURCE_VOLUME.value])
                 )
                 # Subtract commission from PnL
                 + commission

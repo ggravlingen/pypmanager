@@ -46,7 +46,7 @@ class DataFactory:
         ),
         no_traded: float = 10.0,
         price: float = 10.0,
-        commission: float = 1.0,
+        commission: float = -1.0,
     ) -> DataFactory:
         """Add a buy transaction."""
         self.transaction_list.append(
@@ -77,7 +77,7 @@ class DataFactory:
         ),
         no_traded: float = 10.0,
         price: float = 15.0,
-        commission: float = 1.0,
+        commission: float = -1.0,
     ) -> DataFactory:
         """Add a sell transaction."""
         self.transaction_list.append(

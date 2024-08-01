@@ -89,7 +89,7 @@ class TransactionRegistryColNameValues(StrEnum):
     """
     META_TRANSACTION_YEAR = "meta_transaction_year"
     """The year of the transaction (based on transaction date)."""
-    CALC_PNL_TOTAL = "calc_pnl_total"
+    CALC_PNL_TOTAL = "calc_pnl_transaction_total"
     """The total profit and loss of the transaction."""
     PRICE_PER_UNIT = "calc_avg_price_per_unit"
     """
