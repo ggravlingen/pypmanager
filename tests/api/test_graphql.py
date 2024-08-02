@@ -138,6 +138,7 @@ async def test_graphql_query__all_transaction() -> None:
             cashFlow
             costBaseAverage
             pnlTotal
+            quantityHeld
         }
     }
     """
