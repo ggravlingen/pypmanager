@@ -47,6 +47,14 @@ const columnSettings = [
     description: "The number of securities traded",
   },
   {
+    headerName: "Held",
+    fieldPath: "quantityHeld",
+    align: CellAlign.RIGHT,
+    dataType: CellDataType.NUMBER,
+    noDecimal: 0,
+    description: "The number of units held efter the transaction",
+  },
+  {
     headerName: "Price",
     fieldPath: "price",
     align: CellAlign.RIGHT,

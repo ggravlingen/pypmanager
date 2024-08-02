@@ -19,6 +19,7 @@ const TransactionList = {
       cashFlow: 1200,
       costBaseAverage: 120,
       pnlTotal: null,
+      quantityHeld: 10,
     },
     {
       transactionDate: new Date("2024-05-01"),
@@ -34,6 +35,7 @@ const TransactionList = {
       cashFlow: 1200,
       costBaseAverage: 120,
       pnlTotal: 1.0,
+      quantityHeld: null,
     },
   ],
 };
