@@ -118,7 +118,7 @@ COLUMN_APPEND: tuple[ColumnAppendConfig, ...] = (
         callable=PandasAlgorithm.calculate_pnl_dividend,
     ),
     ColumnAppendConfig(
-        column=TransactionRegistryColNameValues.CALC_PNL_TOTAL.value,
+        column=TransactionRegistryColNameValues.CALC_PNL_TRADE.value,
         callable=PandasAlgorithm.calculate_pnl_trade,
     ),
 )
