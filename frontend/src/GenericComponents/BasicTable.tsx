@@ -66,6 +66,12 @@ function getCellValue(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   rowData: any,
 ): string | JSX.Element | null {
+  if (columnSetting.dataType === CellDataType.CUSTOM) {
+    return columnSetting?.customComponent
+      ? columnSetting.customComponent({ rowData: rowData })
+      : null;
+  }
+
   const extractedValue = extractDataFromRecord(
     rowData,
     columnSetting.fieldPath,
@@ -82,10 +88,6 @@ function getCellValue(
     return formatNumber(extractedValue, columnSetting.noDecimal ?? 1, false);
   } else if (columnSetting.dataType === CellDataType.PER_CENT) {
     return formatNumber(extractedValue, columnSetting.noDecimal ?? 1, true);
-  } else if (columnSetting.dataType === CellDataType.CUSTOM) {
-    return columnSetting.customComponent
-      ? columnSetting.customComponent(rowData)
-      : null;
   }
 
   return extractedValue;
