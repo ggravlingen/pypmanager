@@ -123,6 +123,17 @@ COLUMN_APPEND: tuple[ColumnAppendConfig, ...] = (
     ),
 )
 
+COLUMN_CLEANUP: tuple[ColumnAppendConfig, ...] = (
+    ColumnAppendConfig(
+        column=TransactionRegistryColNameValues.PRICE_PER_UNIT.value,
+        callable=PandasAlgorithm.cleanup_price_per_unit,
+    ),
+    ColumnAppendConfig(
+        column=TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value,
+        callable=PandasAlgorithm.cleanup_quantity_held,
+    ),
+)
+
 
 class TransactionRegistry:
     """
@@ -378,9 +389,8 @@ class TransactionRegistry:
         """
         df_raw = self.df_all_transactions.copy()
 
-        df_raw[TransactionRegistryColNameValues.PRICE_PER_UNIT.value] = df_raw.apply(
-            PandasAlgorithm.cleanup_price_per_unit, axis=1
-        )
+        for config in COLUMN_CLEANUP:
+            df_raw[config.column] = df_raw.apply(config.callable, axis=1)
 
         self.df_all_transactions = df_raw
 
