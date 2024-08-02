@@ -19,6 +19,14 @@ const MAP_STATEMENT: MapStatementType = {
   calc_pnl_transaction_interest: "Interest income",
   calc_pnl_transaction_dividend: "Dividend income",
   calc_pnl_transaction_trade: "Trading income",
+  calc_pnl_transaction_total: "Total profit or loss",
+};
+
+const SX_SUBTOTAL = {
+  backgroundColor: "background.paper",
+  color: "text.primary",
+  borderTop: "1px solid",
+  borderColor: "primary.main",
 };
 
 /**
@@ -46,23 +54,31 @@ export default function TableIncomeStatement(): JSX.Element {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data?.resultStatement.map(({ itemName, yearList, amountList }) => (
-              <TableRow key={itemName}>
-                <TableCell>{MAP_STATEMENT[itemName]}</TableCell>
-                {yearList
-                  .slice()
-                  .reverse()
-                  .map((year, index) => (
-                    <TableCell key={year} align="right">
-                      {formatNumber(
-                        amountList[yearList.length - 1 - index],
-                        0,
-                        false,
-                      )}
-                    </TableCell>
-                  ))}
-              </TableRow>
-            ))}
+            {data?.resultStatement.map(
+              ({ itemName, yearList, amountList, isTotal }) => (
+                <TableRow key={itemName}>
+                  <TableCell sx={isTotal ? SX_SUBTOTAL : {}}>
+                    {MAP_STATEMENT[itemName]}
+                  </TableCell>
+                  {yearList
+                    .slice()
+                    .reverse()
+                    .map((year, index) => (
+                      <TableCell
+                        key={year}
+                        align="right"
+                        sx={isTotal ? SX_SUBTOTAL : {}}
+                      >
+                        {formatNumber(
+                          amountList[yearList.length - 1 - index],
+                          0,
+                          false,
+                        )}
+                      </TableCell>
+                    ))}
+                </TableRow>
+              ),
+            )}
           </TableBody>
         </Table>
       </TableContainer>

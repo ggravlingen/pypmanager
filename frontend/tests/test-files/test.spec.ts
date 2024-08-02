@@ -24,6 +24,7 @@ const ResultStatementData = {
         100,
         200,
       ],
+      isTotal: false,
     },
     {
       itemName: "calc_pnl_transaction_trade",
@@ -44,6 +45,28 @@ const ResultStatementData = {
         3000,
         4000,
       ],
+      isTotal: false,
+    },
+    {
+      itemName: "calc_pnl_transaction_total",
+      yearList: [
+        2006, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024,
+      ],
+      amountList: [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        3100,
+        4200,
+      ],
+      isTotal: true,
     },
   ],
 };

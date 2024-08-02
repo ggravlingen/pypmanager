@@ -167,9 +167,10 @@ class Query:
 
         year_list = [column for column in ledger_by_year.columns if column != "index"]
 
-        for row_index_name in (
-            TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value,
-            TransactionRegistryColNameValues.CALC_PNL_TRADE.value,
+        for row_index_name, is_total in (
+            (TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value, False),
+            (TransactionRegistryColNameValues.CALC_PNL_TRADE.value, False),
+            (TransactionRegistryColNameValues.CALC_PNL_TOTAL.value, True),
         ):
             filtered_ledger = ledger_by_year[
                 ledger_by_year["index"] == row_index_name
@@ -187,6 +188,7 @@ class Query:
                     item_name=row_index_name,
                     year_list=year_list,
                     amount_list=values_list,
+                    is_total=is_total,
                 )
             )
 
