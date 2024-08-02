@@ -210,6 +210,25 @@ class PandasAlgorithm:
         )
 
     @staticmethod
+    def calculate_pnl_dividend(row: pd.DataFrame) -> float | None:
+        """Calculate profit and loss from a dividend."""
+        if row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value] not in [
+            TransactionTypeValues.DIVIDEND.value,
+        ]:
+            return None
+
+        if (
+            TransactionRegistryColNameValues.SOURCE_PRICE.value not in row
+            or TransactionRegistryColNameValues.SOURCE_VOLUME.value not in row
+        ):
+            return None
+
+        return float(
+            row[TransactionRegistryColNameValues.SOURCE_PRICE.value]
+            * row[TransactionRegistryColNameValues.SOURCE_VOLUME.value]
+        )
+
+    @staticmethod
     def cleanup_adjusted_quantity(row: pd.DataFrame) -> float | None:
         """Set adjusted quantity to None if we have sold everything."""
         if row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value] in [
