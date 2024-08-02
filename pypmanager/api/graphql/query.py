@@ -9,14 +9,13 @@ import strawberry
 
 from pypmanager.analytics import async_get_historical_portfolio, async_get_holdings
 from pypmanager.general_ledger import (
-    async_aggregate_ledger_by_year,
     async_get_general_ledger_as_dict,
 )
 from pypmanager.ingest.transaction import (
-    AccountNameValues,
     ColumnNameValues,
     TransactionRegistry,
     TransactionRegistryColNameValues,
+    async_aggregate_income_statement_by_year,
 )
 
 from .models import (
@@ -163,20 +162,17 @@ class Query:
     @strawberry.field
     async def result_statement(self: Query) -> list[ResultStatementRow]:
         """Return the result statement."""
-        ledger_by_year = await async_aggregate_ledger_by_year()
+        ledger_by_year = await async_aggregate_income_statement_by_year()
         output_list: list[ResultStatementRow] = []
 
-        year_list = [
-            column for column in ledger_by_year.columns if column != "ledger_account"
-        ]
+        year_list = [column for column in ledger_by_year.columns if column != "index"]
 
-        for item_name in (
-            AccountNameValues.IS_INTEREST.value,
-            AccountNameValues.IS_DIVIDEND.value,
-            AccountNameValues.IS_PNL.value,
+        for row_index_name in (
+            TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value,
+            TransactionRegistryColNameValues.CALC_PNL_TRADE.value,
         ):
             filtered_ledger = ledger_by_year[
-                ledger_by_year["ledger_account"] == item_name
+                ledger_by_year["index"] == row_index_name
             ].reset_index()
 
             if filtered_ledger.empty:
@@ -188,7 +184,7 @@ class Query:
 
             output_list.append(
                 ResultStatementRow(
-                    item_name=item_name,
+                    item_name=row_index_name,
                     year_list=year_list,
                     amount_list=values_list,
                 )

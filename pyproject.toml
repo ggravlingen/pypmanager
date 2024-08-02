@@ -215,9 +215,6 @@ file_line_coverage_min = 70
 [coverage-threshold.modules."pypmanager/ingest/transaction/pandas_algorithm.py"]
 file_line_coverage_min = 100
 
-[coverage-threshold.modules."pypmanager/general_ledger/pandas_algorithm.py"]
-file_line_coverage_min = 100
-
 [coverage-threshold.modules."pypmanager/analytics/security.py"]
 line_coverage_min = 70
 file_line_coverage_min = 29
