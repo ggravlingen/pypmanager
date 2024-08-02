@@ -5,6 +5,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import TYPE_CHECKING
 
+import numpy as np
 from numpy.testing import assert_array_equal
 import pandas as pd
 import pytest
@@ -364,4 +365,61 @@ def test_calculate_adjusted_price_per_unit(
 def test_calculate_pnl_trade(row_data: pd.DataFrame, expected: float | None) -> None:
     """Test function calculate_pnl_trade."""
     result = PandasAlgorithm.calculate_pnl_trade(row_data)
+    assert result == expected
+
+
+@pytest.mark.parametrize(
+    ("row_data", "expected"),
+    [
+        # Test a transaction with almonst everything sold due to rounding
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value: (
+                        0.0003
+                    ),
+                },
+            ),
+            None,
+        ),
+        # Test a transaction when the value is nan
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value: (
+                        np.nan
+                    ),
+                },
+            ),
+            None,
+        ),
+        # Test a transaction when the value is None
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value: (
+                        None
+                    ),
+                },
+            ),
+            None,
+        ),
+        # Test a transaction where there is still something left
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value: (
+                        1.0
+                    ),
+                },
+            ),
+            1.0,
+        ),
+    ],
+)
+def test_cleanup_adjusted_quantity(
+    row_data: pd.DataFrame, expected: float | None
+) -> None:
+    """Test function cleanup_adjusted_quantity."""
+    result = PandasAlgorithm.cleanup_adjusted_quantity(row_data)
     assert result == expected
