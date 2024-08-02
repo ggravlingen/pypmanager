@@ -1,5 +1,13 @@
 import { QueryLoader, TransactionRow, useQueryGetAllTransaction } from "@Api";
 import { BasicTable, CellAlign, CellDataType } from "@Generic";
+import {
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Tooltip,
+} from "@mui/material";
 import { formatNumber } from "@Utils";
 import React from "react";
 
@@ -10,7 +18,33 @@ import React from "react";
  * @returns The JSX element representing the PnL column.
  */
 function ColumnPnL({ rowData }: { rowData: TransactionRow }): JSX.Element {
-  return <>{formatNumber(rowData.pnlTotal, 0, false)}</>;
+  return (
+    <Tooltip
+      title={
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell>Total PnL</TableCell>
+              <TableCell>{formatNumber(rowData.pnlTotal, 0, false)}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>... of which from trading</TableCell>
+              <TableCell>{formatNumber(rowData.pnlTrade, 0, false)}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>... of which from dividends</TableCell>
+              <TableCell>
+                {formatNumber(rowData.pnlDividend, 0, false)}
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      }
+      arrow
+    >
+      <Box>{formatNumber(rowData.pnlTotal, 0, false)}</Box>
+    </Tooltip>
+  );
 }
 
 const columnSettings = [
@@ -111,7 +145,7 @@ const columnSettings = [
     dataType: CellDataType.CUSTOM,
     customComponent: ColumnPnL,
     description:
-      "The total profit or loss for the transaction, including any commission.",
+      "The total profit or loss for the transaction. Hover cell for details.",
   },
 ];
 
