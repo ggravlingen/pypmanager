@@ -47,6 +47,38 @@ function ColumnPnL({ rowData }: { rowData: TransactionRow }): JSX.Element {
   );
 }
 
+/**
+ * Renders the price column for a transaction row.
+ * @param props - The component props.
+ * @param props.rowData - The data for the transaction row.
+ * @returns The rendered price column.
+ */
+function ColumnPrice({ rowData }: { rowData: TransactionRow }): JSX.Element {
+  return (
+    <Tooltip
+      title={
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell>Currency</TableCell>
+              <TableCell align="right">{rowData.currency}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>FX rate</TableCell>
+              <TableCell align="right">
+                {formatNumber(rowData.fx, 4, false)}
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      }
+      arrow
+    >
+      <Box>{formatNumber(rowData.price, 2, false)}</Box>
+    </Tooltip>
+  );
+}
+
 const columnSettings = [
   {
     headerName: "Transaction date",
@@ -103,9 +135,10 @@ const columnSettings = [
     headerName: "Price",
     fieldPath: "price",
     align: CellAlign.RIGHT,
-    dataType: CellDataType.NUMBER,
-    noDecimal: 2,
-    description: "The price paid or received for the security",
+    dataType: CellDataType.CUSTOM,
+    customComponent: ColumnPrice,
+    description:
+      "The price paid or received for the security. Hover cell for details.",
   },
   {
     headerName: "Cost base average",
@@ -122,13 +155,6 @@ const columnSettings = [
     dataType: CellDataType.NUMBER,
     noDecimal: 0,
     description: "The commission paid, if any",
-  },
-  {
-    headerName: "Currency",
-    fieldPath: "currency",
-    align: CellAlign.RIGHT,
-    dataType: CellDataType.STRING,
-    description: "The nominal currency of the transaction",
   },
   {
     headerName: "Nominal cash flow",
