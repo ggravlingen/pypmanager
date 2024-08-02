@@ -1,5 +1,4 @@
 import {
-  AccountBalance,
   DarkMode,
   LightMode,
   List as ListIcon,
@@ -180,13 +179,13 @@ export default function NavigationBar({
             )
           }
         />
-        <NavigationItem
+        {/* <NavigationItem
           isExpanded={isExpanded}
           label="Current portfolio"
           icon={<AccountBalance sx={IconSX} />}
           linkTo="/"
         />
-        {/* <NavigationItem
+        <NavigationItem
           isExpanded={isExpanded}
           label={"Income statement"}
           icon={<Leaderboard sx={IconSX} />}
