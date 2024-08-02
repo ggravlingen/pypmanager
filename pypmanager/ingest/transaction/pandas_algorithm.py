@@ -250,3 +250,18 @@ class PandasAlgorithm:
         return cast(
             float, row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
         )
+
+    @staticmethod
+    def cleanup_quantity_held(row: pd.DataFrame) -> float | None:
+        """Set adjusted quantity held to None when applicable."""
+        if row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value] in [
+            TransactionTypeValues.DIVIDEND.value,
+        ]:
+            return None
+
+        if row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value] is None:
+            return None
+
+        return cast(
+            float, row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
+        )
