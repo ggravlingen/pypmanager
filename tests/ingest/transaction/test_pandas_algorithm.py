@@ -395,6 +395,17 @@ def test_calculate_pnl_trade(row_data: pd.DataFrame, expected: float | None) -> 
             ),
             100.0,
         ),
+        # Test missing data
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
+                        TransactionTypeValues.DIVIDEND.value
+                    ),
+                }
+            ),
+            None,
+        ),
     ],
 )
 def test_calculate_pnl_dividend(row_data: pd.DataFrame, expected: float | None) -> None:

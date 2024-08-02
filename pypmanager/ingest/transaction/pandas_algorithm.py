@@ -221,14 +221,12 @@ class PandasAlgorithm:
             TransactionRegistryColNameValues.SOURCE_PRICE.value not in row
             or TransactionRegistryColNameValues.SOURCE_VOLUME.value not in row
         ):
-            dividend = 0.0
-        else:
-            dividend = float(
-                row[TransactionRegistryColNameValues.SOURCE_PRICE.value]
-                * row[TransactionRegistryColNameValues.SOURCE_VOLUME.value]
-            )
+            return None
 
-        return dividend
+        return float(
+            row[TransactionRegistryColNameValues.SOURCE_PRICE.value]
+            * row[TransactionRegistryColNameValues.SOURCE_VOLUME.value]
+        )
 
     @staticmethod
     def cleanup_adjusted_quantity(row: pd.DataFrame) -> float | None:
