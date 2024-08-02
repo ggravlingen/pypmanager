@@ -30,6 +30,7 @@ class TransactionRow(BaseTransactionRow):
     cash_flow: float | None
     cost_base_average: float | None
     pnl_total: float | None
+    quantity_held: float | None
 
 
 @strawberry.type

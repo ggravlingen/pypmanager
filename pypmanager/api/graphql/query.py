@@ -146,6 +146,9 @@ class Query:
                     pnl_total=row[
                         TransactionRegistryColNameValues.CALC_PNL_TOTAL.value
                     ],
+                    quantity_held=row[
+                        TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value
+                    ],
                 )
             )
 
