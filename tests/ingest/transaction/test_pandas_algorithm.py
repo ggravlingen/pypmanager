@@ -490,3 +490,53 @@ def test_cleanup_price_per_unit(row_data: pd.DataFrame, expected: float | None) 
     """Test function cleanup_price_per_unit."""
     result = PandasAlgorithm.cleanup_price_per_unit(row_data)
     assert result == expected
+
+
+@pytest.mark.parametrize(
+    ("row_data", "expected"),
+    [
+        # Test a dividend transaction
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
+                        TransactionTypeValues.DIVIDEND.value
+                    ),
+                },
+            ),
+            None,
+        ),
+        # Test a transaction when adjusted quantity is None
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
+                        TransactionTypeValues.SELL.value
+                    ),
+                    TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value: (
+                        None
+                    ),
+                },
+            ),
+            None,
+        ),
+        # Test a transaction when adjusted quantity is a value
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
+                        TransactionTypeValues.SELL.value
+                    ),
+                    TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value: (
+                        10.0
+                    ),
+                },
+            ),
+            10.0,
+        ),
+    ],
+)
+def test_cleanup_quantity_held(row_data: pd.DataFrame, expected: float | None) -> None:
+    """Test function cleanup_quantity_held."""
+    result = PandasAlgorithm.cleanup_quantity_held(row_data)
+    assert result == expected
