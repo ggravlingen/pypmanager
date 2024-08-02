@@ -16,9 +16,9 @@ type MapStatementType = {
 };
 
 const MAP_STATEMENT: MapStatementType = {
-  is_interest: "Interest income",
-  is_dividends: "Dividend income",
-  is_trading: "Trading income",
+  calc_pnl_transaction_interest: "Interest income",
+  calc_pnl_transaction_dividend: "Dividend income",
+  calc_pnl_transaction_trade: "Trading income",
 };
 
 /**

@@ -1,5 +1,6 @@
 import {
   DarkMode,
+  Leaderboard,
   LightMode,
   List as ListIcon,
   Menu,
@@ -187,12 +188,6 @@ export default function NavigationBar({
         />
         <NavigationItem
           isExpanded={isExpanded}
-          label={"Income statement"}
-          icon={<Leaderboard sx={IconSX} />}
-          linkTo="/income_statement"
-        />
-        <NavigationItem
-          isExpanded={isExpanded}
           label={"Historical portfolio"}
           icon={<ShowChart sx={IconSX} />}
           linkTo="/history"
@@ -203,6 +198,12 @@ export default function NavigationBar({
           icon={<Dataset sx={IconSX} />}
           linkTo="/ledger"
         /> */}
+        <NavigationItem
+          isExpanded={isExpanded}
+          label={"Income statement"}
+          icon={<Leaderboard sx={IconSX} />}
+          linkTo="/income_statement"
+        />
         <NavigationItem
           isExpanded={isExpanded}
           label={"Transaction list"}
