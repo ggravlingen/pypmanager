@@ -212,6 +212,11 @@ class PandasAlgorithm:
     @staticmethod
     def cleanup_adjusted_quantity(row: pd.DataFrame) -> float | None:
         """Set adjusted quantity to None if we have sold everything."""
+        if row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value] in [
+            TransactionTypeValues.DIVIDEND.value,
+        ]:
+            return None
+
         if row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value] is None:
             return None
 
