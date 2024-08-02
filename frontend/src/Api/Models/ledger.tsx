@@ -19,6 +19,7 @@ export interface TransactionRow extends BaseTransactionRow {
   cashFlow?: number;
   costBaseAverage?: number;
   pnlTotal?: number;
+  quantityHeld?: number;
 }
 
 export interface LedgerRow extends BaseTransactionRow {

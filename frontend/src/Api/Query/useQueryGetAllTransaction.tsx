@@ -18,6 +18,7 @@ const QUERY = gql`
       cashFlow
       costBaseAverage
       pnlTotal
+      quantityHeld
     }
   }
 `;
