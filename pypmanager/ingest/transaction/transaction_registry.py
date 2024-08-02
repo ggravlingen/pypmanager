@@ -374,8 +374,8 @@ class TransactionRegistry:
         """
         df_raw = self.df_all_transactions.copy()
 
-        df_raw[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value] = (
-            df_raw.apply(PandasAlgorithm.cleanup_adjusted_quantity, axis=1)
+        df_raw[TransactionRegistryColNameValues.PRICE_PER_UNIT.value] = df_raw.apply(
+            PandasAlgorithm.cleanup_adjusted_quantity, axis=1
         )
 
         self.df_all_transactions = df_raw

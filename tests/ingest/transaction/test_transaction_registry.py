@@ -3,9 +3,12 @@
 from datetime import datetime
 from unittest.mock import patch
 
+import numpy as np
+from numpy.testing import assert_array_equal
 import pytest
 
 from pypmanager.ingest.transaction import TransactionRegistry
+from pypmanager.ingest.transaction.const import TransactionRegistryColNameValues
 from pypmanager.settings import Settings
 
 from tests.conftest import DataFactory
@@ -34,6 +37,33 @@ async def test_transaction_registry(
     ):
         registry = await TransactionRegistry().async_get_registry()
         assert len(registry) == 3
+
+
+@pytest.mark.asyncio()
+async def test_transaction_registry__all_sold(
+    data_factory: type[DataFactory],
+) -> None:
+    """Test the registry when everything has been sold."""
+    factory = data_factory()
+    mocked_transactions = factory.buy().sell().df_transaction_list
+    with (
+        patch(
+            "pypmanager.ingest.transaction.transaction_registry.TransactionRegistry."
+            "_load_transaction_files",
+            return_value=mocked_transactions,
+        ),
+    ):
+        registry = await TransactionRegistry().async_get_registry()
+        assert len(registry) == 2
+
+        expected_values = [10.0, np.nan]
+        actual_values = registry[
+            TransactionRegistryColNameValues.PRICE_PER_UNIT.value
+        ].to_numpy()
+
+        assert_array_equal(actual_values, expected_values)
+
+        # calc_avg_price_per_unit
 
 
 @pytest.mark.asyncio()
