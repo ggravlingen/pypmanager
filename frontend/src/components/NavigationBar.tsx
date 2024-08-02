@@ -1,13 +1,10 @@
 import {
   AccountBalance,
   DarkMode,
-  Dataset,
-  Leaderboard,
   LightMode,
   List as ListIcon,
   Menu,
   MenuOpen,
-  ShowChart,
 } from "@mui/icons-material";
 import {
   Drawer,
@@ -185,11 +182,11 @@ export default function NavigationBar({
         />
         <NavigationItem
           isExpanded={isExpanded}
-          label={"Current portfolio"}
+          label="Current portfolio"
           icon={<AccountBalance sx={IconSX} />}
           linkTo="/"
         />
-        <NavigationItem
+        {/* <NavigationItem
           isExpanded={isExpanded}
           label={"Income statement"}
           icon={<Leaderboard sx={IconSX} />}
@@ -206,7 +203,7 @@ export default function NavigationBar({
           label={"General ledger"}
           icon={<Dataset sx={IconSX} />}
           linkTo="/ledger"
-        />
+        /> */}
         <NavigationItem
           isExpanded={isExpanded}
           label={"Transaction list"}
