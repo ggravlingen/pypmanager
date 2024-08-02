@@ -121,6 +121,10 @@ COLUMN_APPEND: tuple[ColumnAppendConfig, ...] = (
         column=TransactionRegistryColNameValues.CALC_PNL_TRADE.value,
         callable=PandasAlgorithmPnL.calculate_pnl_trade,
     ),
+    ColumnAppendConfig(
+        column=TransactionRegistryColNameValues.CALC_PNL_TOTAL.value,
+        callable=PandasAlgorithmPnL.calculate_pnl_total,
+    ),
 )
 
 COLUMN_CLEANUP: tuple[ColumnAppendConfig, ...] = (

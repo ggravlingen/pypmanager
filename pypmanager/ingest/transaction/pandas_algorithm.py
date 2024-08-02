@@ -198,9 +198,7 @@ class PandasAlgorithm:
         ):
             return None
 
-        return cast(
-            float, row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
-        )
+        return cast(float, row[TransactionRegistryColNameValues.PRICE_PER_UNIT.value])
 
     @staticmethod
     def cleanup_quantity_held(row: pd.DataFrame) -> float | None:
@@ -269,3 +267,28 @@ class PandasAlgorithmPnL:
             row[TransactionRegistryColNameValues.SOURCE_PRICE.value]
             * row[TransactionRegistryColNameValues.SOURCE_VOLUME.value]
         )
+
+    @staticmethod
+    def calculate_pnl_total(row: pd.DataFrame) -> float:
+        """Calculate total profit and loss."""
+        if (
+            pd.isna(row[TransactionRegistryColNameValues.CALC_PNL_TRADE.value])
+            or row[TransactionRegistryColNameValues.CALC_PNL_TRADE.value] is None
+        ):
+            pnl_trade = 0.0
+        else:
+            pnl_trade = cast(
+                float, row[TransactionRegistryColNameValues.CALC_PNL_TRADE.value]
+            )
+
+        if (
+            pd.isna(row[TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value])
+            or row[TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value] is None
+        ):
+            pnl_dividend = 0.0
+        else:
+            pnl_dividend = cast(
+                float, row[TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value]
+            )
+
+        return pnl_dividend + pnl_trade

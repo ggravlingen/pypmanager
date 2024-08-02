@@ -143,9 +143,9 @@ class Query:
                     cost_base_average=row[
                         TransactionRegistryColNameValues.PRICE_PER_UNIT.value
                     ],
-                    # TO-DO: fix this
-                    # TransactionRegistryColNameValues.CALC_PNL_TOTAL.value
-                    pnl_total=None,
+                    pnl_total=row[
+                        TransactionRegistryColNameValues.CALC_PNL_TOTAL.value
+                    ],
                     quantity_held=row[
                         TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value
                     ],

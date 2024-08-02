@@ -420,6 +420,57 @@ def test_calculate_pnl_dividend(row_data: pd.DataFrame, expected: float | None) 
 @pytest.mark.parametrize(
     ("row_data", "expected"),
     [
+        # Test a transaction without any values
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.CALC_PNL_TRADE.value: None,
+                    TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value: np.nan,
+                },
+            ),
+            0.0,
+        ),
+        # Test a transaction where there is a value and NaN
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.CALC_PNL_TRADE.value: 1.0,
+                    TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value: np.nan,
+                },
+            ),
+            1.0,
+        ),
+        # Test a transaction where there is a value and None
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.CALC_PNL_TRADE.value: 1.0,
+                    TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value: None,
+                },
+            ),
+            1.0,
+        ),
+        # Test a transaction where there are two values
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.CALC_PNL_TRADE.value: 1.0,
+                    TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value: 2.0,
+                },
+            ),
+            3.0,
+        ),
+    ],
+)
+def test_calculate_pnl_total(row_data: pd.DataFrame, expected: float | None) -> None:
+    """Test function calculate_pnl_dividend."""
+    result = PandasAlgorithmPnL.calculate_pnl_total(row_data)
+    assert result == expected
+
+
+@pytest.mark.parametrize(
+    ("row_data", "expected"),
+    [
         # Test a transaction with almonst everything sold due to rounding
         (
             pd.Series(
@@ -470,8 +521,9 @@ def test_calculate_pnl_dividend(row_data: pd.DataFrame, expected: float | None) 
                         TransactionTypeValues.SELL.value
                     ),
                     TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value: (
-                        1.0
+                        10.0
                     ),
+                    TransactionRegistryColNameValues.PRICE_PER_UNIT.value: 1.0,
                 },
             ),
             1.0,
