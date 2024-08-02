@@ -18,8 +18,10 @@ const TransactionList = {
       currency: "USD",
       cashFlow: 1200,
       costBaseAverage: 120,
-      pnlTotal: null,
       quantityHeld: 10,
+      pnlTotal: null,
+      pnlTrade: null,
+      pnlDividend: null,
     },
     {
       transactionDate: new Date("2024-05-01"),
@@ -34,8 +36,10 @@ const TransactionList = {
       currency: "USD",
       cashFlow: 1200,
       costBaseAverage: 120,
-      pnlTotal: 1.0,
       quantityHeld: null,
+      pnlTotal: 1.0,
+      pnlTrade: 0.5,
+      pnlDividend: 0.5,
     },
   ],
 };

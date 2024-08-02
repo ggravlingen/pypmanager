@@ -137,8 +137,10 @@ async def test_graphql_query__all_transaction() -> None:
             fx
             cashFlow
             costBaseAverage
-            pnlTotal
             quantityHeld
+            pnlTotal
+            pnlTrade
+            pnlDividend
         }
     }
     """

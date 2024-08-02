@@ -17,8 +17,10 @@ const QUERY = gql`
       fx
       cashFlow
       costBaseAverage
-      pnlTotal
       quantityHeld
+      pnlTotal
+      pnlTrade
+      pnlDividend
     }
   }
 `;

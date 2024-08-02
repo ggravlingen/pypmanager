@@ -30,6 +30,8 @@ class TransactionRow(BaseTransactionRow):
     cash_flow: float | None
     cost_base_average: float | None
     pnl_total: float | None
+    pnl_trade: float | None
+    pnl_dividend: float | None
     quantity_held: float | None
 
 
