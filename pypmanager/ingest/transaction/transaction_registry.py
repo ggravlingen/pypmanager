@@ -164,6 +164,9 @@ class TransactionRegistry:
         # Append columns containing derived meta data
         self._500_append_columns()
 
+        # Cleanup data that we don't need in the final result
+        self._600_final_cleanup()
+
         # Set index and, sort by transaction date and filter by date, if applicable
         self._sort_transactions()
         self._filter_by_date()
@@ -359,6 +362,20 @@ class TransactionRegistry:
         # Add transaction year
         df_raw[TransactionRegistryColNameValues.META_TRANSACTION_YEAR.value] = (
             df_raw.index.year
+        )
+
+        self.df_all_transactions = df_raw
+
+    def _600_final_cleanup(self: TransactionRegistry) -> None:
+        """
+        Cleanup data.
+
+        This removes data we don't need in the final result.
+        """
+        df_raw = self.df_all_transactions.copy()
+
+        df_raw[TransactionRegistryColNameValues.PRICE_PER_UNIT.value] = df_raw.apply(
+            PandasAlgorithm.cleanup_adjusted_quantity, axis=1
         )
 
         self.df_all_transactions = df_raw

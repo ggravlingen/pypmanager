@@ -208,3 +208,21 @@ class PandasAlgorithm:
             float,
             (transaction_result + commission),
         )
+
+    @staticmethod
+    def cleanup_adjusted_quantity(row: pd.DataFrame) -> float | None:
+        """Set adjusted quantity to None if we have sold everything."""
+        if row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value] is None:
+            return None
+
+        if round(
+            row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value],
+            0,
+        ) == 0 or pd.isna(
+            row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
+        ):
+            return None
+
+        return cast(
+            float, row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
+        )
