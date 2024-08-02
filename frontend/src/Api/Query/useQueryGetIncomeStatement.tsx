@@ -8,6 +8,7 @@ const QUERY = gql`
       itemName
       yearList
       amountList
+      isTotal
     }
   }
 `;

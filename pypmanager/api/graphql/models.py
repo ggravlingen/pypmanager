@@ -84,3 +84,4 @@ class ResultStatementRow:
     item_name: str
     year_list: list[int]
     amount_list: list[float | None]
+    is_total: bool
