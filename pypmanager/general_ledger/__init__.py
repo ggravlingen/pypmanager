@@ -1,7 +1,6 @@
 """Code for generating the general ledger."""
 
 from .helpers import (
-    async_aggregate_ledger_by_year,
     async_get_general_ledger,
     async_get_general_ledger_as_dict,
 )
@@ -11,5 +10,4 @@ __all__ = [
     "async_get_general_ledger",
     "async_get_general_ledger_as_dict",
     "GeneralLedger",
-    "async_aggregate_ledger_by_year",
 ]

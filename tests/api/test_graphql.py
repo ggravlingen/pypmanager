@@ -164,4 +164,4 @@ async def test_graphql_query__result_statement() -> None:
     """
     response = client.post("/graphql", json={"query": query})
     assert response.status_code == 200
-    assert len(response.json()["data"]["resultStatement"]) == 1
+    assert len(response.json()["data"]["resultStatement"]) == 2

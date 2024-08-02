@@ -101,6 +101,35 @@ class DataFactory:
         )
         return self
 
+    def dividend(
+        self,
+        transaction_date: datetime = datetime(
+            2021, 2, 1, tzinfo=Settings.system_time_zone
+        ),
+        no_traded: float = 10.0,
+        price: float = 15.0,
+    ) -> DataFactory:
+        """Add a sell transaction."""
+        self.transaction_list.append(
+            {
+                TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value: (
+                    transaction_date
+                ),
+                TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
+                    TransactionTypeValues.DIVIDEND.value
+                ),
+                TransactionRegistryColNameValues.SOURCE_NAME_SECURITY: "Company A",
+                TransactionRegistryColNameValues.SOURCE_ISIN: "US1234567890",
+                TransactionRegistryColNameValues.SOURCE_VOLUME.value: no_traded,
+                TransactionRegistryColNameValues.SOURCE_PRICE.value: price,
+                TransactionRegistryColNameValues.SOURCE_CURRENCY.value: "SEK",
+                TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker A",
+                TransactionRegistryColNameValues.SOURCE_FX.value: 1.0,
+                TransactionRegistryColNameValues.SOURCE_FILE.value: "test-file",
+            }
+        )
+        return self
+
     @property
     def df_transaction_list(self) -> pd.DataFrame:
         """Return the transaction list as a DataFrame."""
