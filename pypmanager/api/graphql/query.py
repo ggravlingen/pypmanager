@@ -146,6 +146,12 @@ class Query:
                     pnl_total=row[
                         TransactionRegistryColNameValues.CALC_PNL_TOTAL.value
                     ],
+                    pnl_trade=row[
+                        TransactionRegistryColNameValues.CALC_PNL_TRADE.value
+                    ],
+                    pnl_dividend=row[
+                        TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value
+                    ],
                     quantity_held=row[
                         TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value
                     ],
