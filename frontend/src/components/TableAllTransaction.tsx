@@ -1,6 +1,17 @@
-import { QueryLoader, useQueryGetAllTransaction } from "@Api";
+import { QueryLoader, TransactionRow, useQueryGetAllTransaction } from "@Api";
 import { BasicTable, CellAlign, CellDataType } from "@Generic";
+import { formatNumber } from "@Utils";
 import React from "react";
+
+/**
+ * Renders the PnL column for a transaction row.
+ * @param rowData - The data for the transaction row.
+ * @param rowData.rowData - The data for the transaction row.
+ * @returns The JSX element representing the PnL column.
+ */
+function ColumnPnL({ rowData }: { rowData: TransactionRow }): JSX.Element {
+  return <>{formatNumber(rowData.pnlTotal, 0, false)}</>;
+}
 
 const columnSettings = [
   {
@@ -95,10 +106,10 @@ const columnSettings = [
   },
   {
     headerName: "PnL",
-    fieldPath: "pnlTotal",
+    fieldPath: "",
     align: CellAlign.RIGHT,
-    dataType: CellDataType.NUMBER,
-    noDecimal: 0,
+    dataType: CellDataType.CUSTOM,
+    customComponent: ColumnPnL,
     description:
       "The total profit or loss for the transaction, including any commission.",
   },
