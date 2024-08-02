@@ -229,8 +229,8 @@ class PandasAlgorithm:
         )
 
     @staticmethod
-    def cleanup_adjusted_quantity(row: pd.DataFrame) -> float | None:
-        """Set adjusted quantity to None if we have sold everything."""
+    def cleanup_price_per_unit(row: pd.DataFrame) -> float | None:
+        """Set average price per unit to None when applicable."""
         if row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value] in [
             TransactionTypeValues.DIVIDEND.value,
         ]:

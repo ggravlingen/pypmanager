@@ -486,9 +486,7 @@ def test_calculate_pnl_dividend(row_data: pd.DataFrame, expected: float | None) 
         ),
     ],
 )
-def test_cleanup_adjusted_quantity(
-    row_data: pd.DataFrame, expected: float | None
-) -> None:
-    """Test function cleanup_adjusted_quantity."""
-    result = PandasAlgorithm.cleanup_adjusted_quantity(row_data)
+def test_cleanup_price_per_unit(row_data: pd.DataFrame, expected: float | None) -> None:
+    """Test function cleanup_price_per_unit."""
+    result = PandasAlgorithm.cleanup_price_per_unit(row_data)
     assert result == expected
