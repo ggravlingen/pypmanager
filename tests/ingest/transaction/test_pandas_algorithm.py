@@ -15,7 +15,10 @@ from pypmanager.ingest.transaction import (
     TransactionRegistryColNameValues,
     TransactionTypeValues,
 )
-from pypmanager.ingest.transaction.pandas_algorithm import PandasAlgorithm
+from pypmanager.ingest.transaction.pandas_algorithm import (
+    PandasAlgorithm,
+    PandasAlgorithmPnL,
+)
 from pypmanager.settings import Settings
 
 if TYPE_CHECKING:
@@ -364,7 +367,7 @@ def test_calculate_adjusted_price_per_unit(
 )
 def test_calculate_pnl_trade(row_data: pd.DataFrame, expected: float | None) -> None:
     """Test function calculate_pnl_trade."""
-    result = PandasAlgorithm.calculate_pnl_trade(row_data)
+    result = PandasAlgorithmPnL.calculate_pnl_trade(row_data)
     assert result == expected
 
 
@@ -410,7 +413,7 @@ def test_calculate_pnl_trade(row_data: pd.DataFrame, expected: float | None) -> 
 )
 def test_calculate_pnl_dividend(row_data: pd.DataFrame, expected: float | None) -> None:
     """Test function calculate_pnl_dividend."""
-    result = PandasAlgorithm.calculate_pnl_dividend(row_data)
+    result = PandasAlgorithmPnL.calculate_pnl_dividend(row_data)
     assert result == expected
 
 
