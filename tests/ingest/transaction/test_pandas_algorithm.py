@@ -375,6 +375,9 @@ def test_calculate_pnl_trade(row_data: pd.DataFrame, expected: float | None) -> 
         (
             pd.Series(
                 {
+                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
+                        TransactionTypeValues.SELL.value
+                    ),
                     TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value: (
                         0.0003
                     ),
@@ -386,6 +389,9 @@ def test_calculate_pnl_trade(row_data: pd.DataFrame, expected: float | None) -> 
         (
             pd.Series(
                 {
+                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
+                        TransactionTypeValues.SELL.value
+                    ),
                     TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value: (
                         np.nan
                     ),
@@ -397,6 +403,9 @@ def test_calculate_pnl_trade(row_data: pd.DataFrame, expected: float | None) -> 
         (
             pd.Series(
                 {
+                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
+                        TransactionTypeValues.SELL.value
+                    ),
                     TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value: (
                         None
                     ),
@@ -408,12 +417,26 @@ def test_calculate_pnl_trade(row_data: pd.DataFrame, expected: float | None) -> 
         (
             pd.Series(
                 {
+                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
+                        TransactionTypeValues.SELL.value
+                    ),
                     TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value: (
                         1.0
                     ),
                 },
             ),
             1.0,
+        ),
+        # Test a dividend transaction
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
+                        TransactionTypeValues.DIVIDEND.value
+                    ),
+                },
+            ),
+            None,
         ),
     ],
 )
