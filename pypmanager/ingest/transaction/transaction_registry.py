@@ -379,7 +379,7 @@ class TransactionRegistry:
         df_raw = self.df_all_transactions.copy()
 
         df_raw[TransactionRegistryColNameValues.PRICE_PER_UNIT.value] = df_raw.apply(
-            PandasAlgorithm.cleanup_adjusted_quantity, axis=1
+            PandasAlgorithm.cleanup_price_per_unit, axis=1
         )
 
         self.df_all_transactions = df_raw
