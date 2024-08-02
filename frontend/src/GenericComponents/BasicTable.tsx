@@ -27,6 +27,7 @@ export enum CellDataType {
   NUMBER = "number",
   PER_CENT = "per_cent",
   STRING = "string",
+  CUSTOM = "custom",
 }
 
 interface ColumnSetting {
@@ -37,6 +38,9 @@ interface ColumnSetting {
   noDecimal?: number;
   showSubtotal?: boolean;
   description?: string;
+  // We must allow any here as row data can by be anything
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  customComponent?: (rowData: any) => JSX.Element;
 }
 
 interface BasicTableProps {
@@ -61,7 +65,7 @@ function getCellValue(
   columnSetting: ColumnSetting,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   rowData: any,
-): string | null {
+): string | JSX.Element | null {
   const extractedValue = extractDataFromRecord(
     rowData,
     columnSetting.fieldPath,
@@ -78,6 +82,10 @@ function getCellValue(
     return formatNumber(extractedValue, columnSetting.noDecimal ?? 1, false);
   } else if (columnSetting.dataType === CellDataType.PER_CENT) {
     return formatNumber(extractedValue, columnSetting.noDecimal ?? 1, true);
+  } else if (columnSetting.dataType === CellDataType.CUSTOM) {
+    return columnSetting.customComponent
+      ? columnSetting.customComponent(rowData)
+      : null;
   }
 
   return extractedValue;
