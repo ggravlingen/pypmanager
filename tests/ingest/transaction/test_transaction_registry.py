@@ -137,6 +137,7 @@ async def test_transaction_registry__columns(
             "calc_avg_price_per_unit",
             "calc_cf_net_fee_nominal_ccy",
             "calc_cf_gross_fee_nominal_ccy",
+            "calc_pnl_transaction_dividend",
             "calc_pnl_transaction_total",
             "meta_transaction_year",
         ]

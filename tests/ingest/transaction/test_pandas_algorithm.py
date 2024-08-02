@@ -371,6 +371,41 @@ def test_calculate_pnl_trade(row_data: pd.DataFrame, expected: float | None) -> 
 @pytest.mark.parametrize(
     ("row_data", "expected"),
     [
+        # Test non-dividend transaction
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
+                        TransactionTypeValues.BUY.value
+                    ),
+                },
+            ),
+            None,
+        ),
+        # Test dividend-transaction
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
+                        TransactionTypeValues.DIVIDEND.value
+                    ),
+                    TransactionRegistryColNameValues.SOURCE_PRICE.value: (10.0),
+                    TransactionRegistryColNameValues.SOURCE_VOLUME.value: (10.0),
+                },
+            ),
+            100.0,
+        ),
+    ],
+)
+def test_calculate_pnl_dividend(row_data: pd.DataFrame, expected: float | None) -> None:
+    """Test function calculate_pnl_dividend."""
+    result = PandasAlgorithm.calculate_pnl_dividend(row_data)
+    assert result == expected
+
+
+@pytest.mark.parametrize(
+    ("row_data", "expected"),
+    [
         # Test a transaction with almonst everything sold due to rounding
         (
             pd.Series(

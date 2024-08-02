@@ -91,6 +91,8 @@ class TransactionRegistryColNameValues(StrEnum):
     """The year of the transaction (based on transaction date)."""
     CALC_PNL_TOTAL = "calc_pnl_transaction_total"
     """The total profit and loss of the transaction."""
+    CALC_PNL_DIVIDEND = "calc_pnl_transaction_dividend"
+    """The total profit from a dividend."""
     PRICE_PER_UNIT = "calc_avg_price_per_unit"
     """
     Average purchase price per unit.
