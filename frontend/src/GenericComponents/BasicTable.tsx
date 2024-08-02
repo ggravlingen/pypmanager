@@ -27,7 +27,7 @@ export enum CellDataType {
   NUMBER = "number",
   PER_CENT = "per_cent",
   STRING = "string",
-  CUSTOM = "CUSTOM",
+  CUSTOM = "custom",
 }
 
 interface ColumnSetting {
