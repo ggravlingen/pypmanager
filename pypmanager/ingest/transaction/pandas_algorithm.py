@@ -180,6 +180,48 @@ class PandasAlgorithm:
         return group
 
     @staticmethod
+    def cleanup_price_per_unit(row: pd.DataFrame) -> float | None:
+        """Set average price per unit to None when applicable."""
+        if row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value] in [
+            TransactionTypeValues.DIVIDEND.value,
+        ]:
+            return None
+
+        if row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value] is None:
+            return None
+
+        if round(
+            row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value],
+            0,
+        ) == 0 or pd.isna(
+            row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
+        ):
+            return None
+
+        return cast(
+            float, row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
+        )
+
+    @staticmethod
+    def cleanup_quantity_held(row: pd.DataFrame) -> float | None:
+        """Set adjusted quantity held to None when applicable."""
+        if row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value] in [
+            TransactionTypeValues.DIVIDEND.value,
+        ]:
+            return None
+
+        if row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value] is None:
+            return None
+
+        return cast(
+            float, row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
+        )
+
+
+class PandasAlgorithmPnL:
+    """Pandas algorithm for PnL transaction data."""
+
+    @staticmethod
     def calculate_pnl_trade(row: pd.DataFrame) -> float | None:
         """Calculate profit and loss from a trade."""
         if row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value] not in [
@@ -226,42 +268,4 @@ class PandasAlgorithm:
         return float(
             row[TransactionRegistryColNameValues.SOURCE_PRICE.value]
             * row[TransactionRegistryColNameValues.SOURCE_VOLUME.value]
-        )
-
-    @staticmethod
-    def cleanup_price_per_unit(row: pd.DataFrame) -> float | None:
-        """Set average price per unit to None when applicable."""
-        if row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value] in [
-            TransactionTypeValues.DIVIDEND.value,
-        ]:
-            return None
-
-        if row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value] is None:
-            return None
-
-        if round(
-            row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value],
-            0,
-        ) == 0 or pd.isna(
-            row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
-        ):
-            return None
-
-        return cast(
-            float, row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
-        )
-
-    @staticmethod
-    def cleanup_quantity_held(row: pd.DataFrame) -> float | None:
-        """Set adjusted quantity held to None when applicable."""
-        if row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value] in [
-            TransactionTypeValues.DIVIDEND.value,
-        ]:
-            return None
-
-        if row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value] is None:
-            return None
-
-        return cast(
-            float, row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
         )

@@ -19,7 +19,7 @@ from pypmanager.settings import Settings
 from .avanza import AvanzaLoader
 from .generic import GenericLoader
 from .lysa import LysaLoader
-from .pandas_algorithm import PandasAlgorithm
+from .pandas_algorithm import PandasAlgorithm, PandasAlgorithmPnL
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -115,11 +115,11 @@ COLUMN_APPEND: tuple[ColumnAppendConfig, ...] = (
     ),
     ColumnAppendConfig(
         column=TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value,
-        callable=PandasAlgorithm.calculate_pnl_dividend,
+        callable=PandasAlgorithmPnL.calculate_pnl_dividend,
     ),
     ColumnAppendConfig(
         column=TransactionRegistryColNameValues.CALC_PNL_TRADE.value,
-        callable=PandasAlgorithm.calculate_pnl_trade,
+        callable=PandasAlgorithmPnL.calculate_pnl_trade,
     ),
 )
 
