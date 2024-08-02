@@ -3,6 +3,51 @@ import { graphql, HttpResponse } from "msw";
 
 import { expect, test } from "../baseTest.ts";
 
+const ResultStatementData = {
+  resultStatement: [
+    {
+      itemName: "calc_pnl_transaction_dividend",
+      yearList: [
+        2006, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024,
+      ],
+      amountList: [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        100,
+        200,
+      ],
+    },
+    {
+      itemName: "calc_pnl_transaction_trade",
+      yearList: [
+        2006, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024,
+      ],
+      amountList: [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        3000,
+        4000,
+      ],
+    },
+  ],
+};
+
 const TransactionList = {
   allTransaction: [
     {
@@ -56,6 +101,22 @@ test.describe.parallel("Test views", () => {
     );
 
     await page.goto("/#/transaction");
+    await page.waitForTimeout(2000);
+
+    await expect(page).toHaveScreenshot("1.png");
+  });
+
+  test("Test loading the income statement table", async ({ page, worker }) => {
+    await worker.use(
+      graphql.query("QueryResultStatement", ({ query, variables }) => {
+        console.log("Intercepted QueryResultStatement");
+        return HttpResponse.json({
+          data: ResultStatementData,
+        });
+      }),
+    );
+
+    await page.goto("/#/income_statement");
     await page.waitForTimeout(2000);
 
     await expect(page).toHaveScreenshot("1.png");
