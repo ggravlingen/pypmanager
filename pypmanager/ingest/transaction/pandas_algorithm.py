@@ -23,10 +23,15 @@ class PandasAlgorithm:
 
         The returned value has correct sign.
         """
-        if row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value] in [
-            # This should be expanded
-            TransactionTypeValues.DIVIDEND.value,
-        ]:
+        if (
+            row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value]
+            in [
+                # This should be expanded
+                TransactionTypeValues.DIVIDEND.value,
+                TransactionTypeValues.DEPOSIT.value,
+            ]
+            and TransactionRegistryColNameValues.SOURCE_OTHER_CASH_FLOW.value in row
+        ):
             return cast(
                 float,
                 row[TransactionRegistryColNameValues.SOURCE_OTHER_CASH_FLOW.value],
@@ -66,7 +71,12 @@ class PandasAlgorithm:
     @staticmethod
     def calculate_cash_flow_net_fee_nominal(row: pd.DataFrame) -> float:
         """Calculate nominal total cash flow, including fees, for a transaction."""
-        if (turnover := cast(float | None, row[ColumnNameValues.AMOUNT.value])) is None:
+        if (
+            turnover_or_other_cf := cast(
+                float | None,
+                row[TransactionRegistryColNameValues.CALC_TURNOVER_OR_OTHER_CF.value],
+            )
+        ) is None:
             return 0.0
 
         if row[TransactionRegistryColNameValues.SOURCE_FEE.value] is None:
@@ -76,15 +86,20 @@ class PandasAlgorithm:
                 float, row[TransactionRegistryColNameValues.SOURCE_FEE.value]
             )
 
-        return turnover + commission
+        return turnover_or_other_cf + commission
 
     @staticmethod
     def calculate_cash_flow_gross_fee_nominal(row: pd.DataFrame) -> float:
         """Calculate nominal total cash flow, excluding fees, for a transaction."""
-        if (turnover := cast(float | None, row[ColumnNameValues.AMOUNT.value])) is None:
+        if (
+            turnover_or_other_cf := cast(
+                float | None,
+                row[TransactionRegistryColNameValues.CALC_TURNOVER_OR_OTHER_CF.value],
+            )
+        ) is None:
             return 0.0
 
-        return turnover
+        return turnover_or_other_cf
 
     @staticmethod
     def cleanup_number(value: str | None) -> float | None:
