@@ -148,7 +148,9 @@ def test_cleanup_number__raise_value_error() -> None:
         (
             pd.DataFrame(
                 {
-                    ColumnNameValues.AMOUNT.value: [None],
+                    TransactionRegistryColNameValues.CALC_TURNOVER_OR_OTHER_CF.value: [
+                        None
+                    ],
                     TransactionRegistryColNameValues.SOURCE_FEE.value: [None],
                 }
             ),
@@ -158,7 +160,9 @@ def test_cleanup_number__raise_value_error() -> None:
         (
             pd.DataFrame(
                 {
-                    ColumnNameValues.AMOUNT.value: [1.0],
+                    TransactionRegistryColNameValues.CALC_TURNOVER_OR_OTHER_CF.value: [
+                        1.0
+                    ],
                     TransactionRegistryColNameValues.SOURCE_FEE.value: [None],
                 }
             ),
@@ -168,7 +172,9 @@ def test_cleanup_number__raise_value_error() -> None:
         (
             pd.DataFrame(
                 {
-                    ColumnNameValues.AMOUNT.value: [1.0],
+                    TransactionRegistryColNameValues.CALC_TURNOVER_OR_OTHER_CF.value: [
+                        1.0
+                    ],
                     TransactionRegistryColNameValues.SOURCE_FEE.value: [2.0],
                 }
             ),
@@ -192,7 +198,9 @@ def test_calculate_cash_flow_net_fee_nominal(
         (
             pd.DataFrame(
                 {
-                    ColumnNameValues.AMOUNT.value: [None],
+                    TransactionRegistryColNameValues.CALC_TURNOVER_OR_OTHER_CF.value: [
+                        None
+                    ],
                 }
             ),
             0.0,
@@ -201,7 +209,9 @@ def test_calculate_cash_flow_net_fee_nominal(
         (
             pd.DataFrame(
                 {
-                    ColumnNameValues.AMOUNT.value: [1.0],
+                    TransactionRegistryColNameValues.CALC_TURNOVER_OR_OTHER_CF.value: [
+                        1.0
+                    ],
                 }
             ),
             1.0,
@@ -606,6 +616,18 @@ def test_cleanup_quantity_held(row_data: pd.DataFrame, expected: float | None) -
                 {
                     TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
                         TransactionTypeValues.DIVIDEND.value
+                    ),
+                    TransactionRegistryColNameValues.SOURCE_OTHER_CASH_FLOW.value: 1.0,
+                },
+            ),
+            1.0,
+        ),
+        # Test a deposit
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
+                        TransactionTypeValues.DEPOSIT.value
                     ),
                     TransactionRegistryColNameValues.SOURCE_OTHER_CASH_FLOW.value: 1.0,
                 },

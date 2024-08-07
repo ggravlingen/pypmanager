@@ -106,6 +106,10 @@ class ColumnAppendConfig:
 # These columns are appended to the transaction registry
 COLUMN_APPEND: tuple[ColumnAppendConfig, ...] = (
     ColumnAppendConfig(
+        column=TransactionRegistryColNameValues.CALC_TURNOVER_OR_OTHER_CF.value,
+        callable=PandasAlgorithm.turnover_or_other_cash_flow,
+    ),
+    ColumnAppendConfig(
         column=TransactionRegistryColNameValues.CASH_FLOW_NET_FEE_NOMINAL.value,
         callable=PandasAlgorithm.calculate_cash_flow_net_fee_nominal,
     ),
