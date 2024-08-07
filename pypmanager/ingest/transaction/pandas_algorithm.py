@@ -17,6 +17,53 @@ class PandasAlgorithm:
     """Pandas algorithm for transaction data."""
 
     @staticmethod
+    def turnover_or_other_cash_flow(row: pd.DataFrame) -> float | None:
+        """
+        Return turnover or other cash flow.
+
+        The returned value has correct sign.
+        """
+        if row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value] in [
+            # This should be expanded
+            TransactionTypeValues.DIVIDEND.value,
+        ]:
+            return cast(
+                float,
+                row[TransactionRegistryColNameValues.SOURCE_OTHER_CASH_FLOW.value],
+            )
+
+        if row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value] not in (
+            TransactionTypeValues.BUY.value,
+            TransactionTypeValues.SELL.value,
+        ):
+            return None
+
+        price = cast(float, row[TransactionRegistryColNameValues.SOURCE_PRICE.value])
+
+        # Return turnover for buy transactions (negative cash flow for us)
+        if (
+            row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value]
+            == TransactionTypeValues.BUY.value
+        ):
+            return (
+                cast(
+                    float,
+                    abs(row[TransactionRegistryColNameValues.SOURCE_VOLUME.value]),
+                )
+                * -1.0
+                * price
+            )
+
+        # Sell
+        return (
+            cast(
+                float,
+                abs(row[TransactionRegistryColNameValues.SOURCE_VOLUME.value]),
+            )
+            * price
+        )
+
+    @staticmethod
     def calculate_cash_flow_net_fee_nominal(row: pd.DataFrame) -> float:
         """Calculate nominal total cash flow, including fees, for a transaction."""
         if (turnover := cast(float | None, row[ColumnNameValues.AMOUNT.value])) is None:

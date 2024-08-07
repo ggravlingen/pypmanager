@@ -595,3 +595,65 @@ def test_cleanup_quantity_held(row_data: pd.DataFrame, expected: float | None) -
     """Test function cleanup_quantity_held."""
     result = PandasAlgorithm.cleanup_quantity_held(row_data)
     assert result == expected
+
+
+@pytest.mark.parametrize(
+    ("row_data", "expected"),
+    [
+        # Test a dividend
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
+                        TransactionTypeValues.DIVIDEND.value
+                    ),
+                    TransactionRegistryColNameValues.SOURCE_OTHER_CASH_FLOW.value: 1.0,
+                },
+            ),
+            1.0,
+        ),
+        # Test a buy
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
+                        TransactionTypeValues.BUY.value
+                    ),
+                    TransactionRegistryColNameValues.SOURCE_VOLUME.value: 100.0,
+                    TransactionRegistryColNameValues.SOURCE_PRICE.value: 1.0,
+                },
+            ),
+            -100.0,
+        ),
+        # Test a sell
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
+                        TransactionTypeValues.SELL.value
+                    ),
+                    TransactionRegistryColNameValues.SOURCE_VOLUME.value: 100.0,
+                    TransactionRegistryColNameValues.SOURCE_PRICE.value: 1.0,
+                },
+            ),
+            100.0,
+        ),
+        # Test other transaction
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
+                        TransactionTypeValues.FEE.value
+                    ),
+                },
+            ),
+            None,
+        ),
+    ],
+)
+def test_turnover_or_other_cash_flow(
+    row_data: pd.DataFrame, expected: float | None
+) -> None:
+    """Test function turnover_or_other_cash_flow."""
+    result = PandasAlgorithm.turnover_or_other_cash_flow(row_data)
+    assert result == expected

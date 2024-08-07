@@ -89,6 +89,13 @@ class TransactionRegistryColNameValues(StrEnum):
     """
     META_TRANSACTION_YEAR = "meta_transaction_year"
     """The year of the transaction (based on transaction date)."""
+    CALC_TURNOVER_OR_OTHER_CF = "calc_turnover_or_cash_flow"
+    """
+    Either return turnover or other cash flow.
+
+    Turnover = quantity * price
+    Other cash flow = any other flow, eg dividends, fees, etc.
+    """
     CALC_PNL_DIVIDEND = "calc_pnl_transaction_dividend"
     """Profit from dividends."""
     CALC_PNL_INTEREST = "calc_pnl_transaction_interest"
