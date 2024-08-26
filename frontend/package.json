@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@playwright/test": "1.46.1",
-    "@types/node": "22.4.1",
+    "@types/node": "22.5.0",
     "@typescript-eslint/eslint-plugin": "7.18.0",
     "@typescript-eslint/parser": "7.18.0",
     "concurrently": "8.2.2",
