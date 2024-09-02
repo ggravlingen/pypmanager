@@ -4,7 +4,7 @@
   "private": true,
   "main": "index.tsx",
   "dependencies": {
-    "@apollo/client": "3.11.4",
+    "@apollo/client": "3.11.5",
     "@babel/core": "7.25.2",
     "@babel/preset-env": "7.25.4",
     "@babel/preset-react": "7.24.7",
