@@ -18,6 +18,8 @@ LOGGER = logging.getLogger(__name__)
 if TYPE_CHECKING:
     from collections.abc import Callable, Coroutine
 
+DONE = asyncio.Event()
+
 
 def event_listener(event: JobExecutionEvent) -> None:
     """Handle events coming from the event loop."""
@@ -56,12 +58,13 @@ async def run_main() -> None:
     )
 
     scheduler.start()
+
     await asyncio.sleep(1)  # Sleep for a short while to allow scheduler to start
     scheduler.print_jobs()
 
     # Keep the script running indefinitely
     while True:
-        await asyncio.sleep(3600)  # Sleep for an hour before checking again
+        await DONE.wait()
 
 
 if __name__ == "__main__":
