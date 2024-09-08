@@ -63,8 +63,6 @@ async def test_transaction_registry__all_sold(
 
         assert_array_equal(actual_values, expected_values)
 
-        # calc_avg_price_per_unit
-
 
 @pytest.mark.asyncio()
 async def test_transaction_registry__date_filter(
@@ -135,6 +133,7 @@ async def test_transaction_registry__columns(
             "amount",
             "calc_agg_sum_quantity_held",
             "calc_avg_price_per_unit",
+            "source_other_cash_flow",
             "calc_turnover_or_cash_flow",
             "calc_cf_net_fee_nominal_ccy",
             "calc_cf_gross_fee_nominal_ccy",

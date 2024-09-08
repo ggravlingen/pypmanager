@@ -679,3 +679,49 @@ def test_turnover_or_other_cash_flow(
     """Test function turnover_or_other_cash_flow."""
     result = PandasAlgorithm.turnover_or_other_cash_flow(row_data)
     assert result == expected
+
+
+@pytest.mark.parametrize(
+    ("row_data", "expected"),
+    [
+        # Test a dividend
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
+                        TransactionTypeValues.DIVIDEND.value
+                    ),
+                    ColumnNameValues.AMOUNT.value: 1.0,
+                },
+            ),
+            1.0,
+        ),
+        # Test a deposit
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
+                        TransactionTypeValues.DEPOSIT.value
+                    ),
+                    ColumnNameValues.AMOUNT.value: 1.0,
+                },
+            ),
+            1.0,
+        ),
+        # Test a buy
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
+                        TransactionTypeValues.BUY.value
+                    ),
+                },
+            ),
+            None,
+        ),
+    ],
+)
+def test_other_cash_flow(row_data: pd.DataFrame, expected: float | None) -> None:
+    """Test function other_cash_flow."""
+    result = PandasAlgorithm.other_cash_flow(row_data)
+    assert result == expected

@@ -17,6 +17,24 @@ class PandasAlgorithm:
     """Pandas algorithm for transaction data."""
 
     @staticmethod
+    def other_cash_flow(row: pd.DataFrame) -> float | None:
+        """
+        Return other cash flow.
+
+        This is a cash flow that is not driven by a buy or sell transaction.
+        """
+        if row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value] not in [
+            TransactionTypeValues.DIVIDEND.value,
+            TransactionTypeValues.DEPOSIT.value,
+        ]:
+            return None
+
+        return cast(
+            float,
+            row[ColumnNameValues.AMOUNT.value],
+        )
+
+    @staticmethod
     def turnover_or_other_cash_flow(row: pd.DataFrame) -> float | None:
         """
         Return turnover or other cash flow.
@@ -79,7 +97,9 @@ class PandasAlgorithm:
         ) is None:
             return 0.0
 
-        if row[TransactionRegistryColNameValues.SOURCE_FEE.value] is None:
+        if row[TransactionRegistryColNameValues.SOURCE_FEE.value] is None or pd.isna(
+            row[TransactionRegistryColNameValues.SOURCE_FEE.value]
+        ):
             commission = 0.0
         else:
             commission = cast(
@@ -125,6 +145,7 @@ class PandasAlgorithm:
         if row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value] in [
             TransactionTypeValues.CASHBACK.value,
             TransactionTypeValues.FEE.value,
+            TransactionTypeValues.DEPOSIT.value,
         ]:
             amount = row[ColumnNameValues.AMOUNT.value]
         else:
@@ -183,6 +204,7 @@ class PandasAlgorithm:
                     == TransactionTypeValues.SELL.value
                 )
             )
+            # TO-DO: we should weigh with CALC_TURNOVER_OR_OTHER_CF instead
             * x[ColumnNameValues.AMOUNT.value],
             axis=1,
         )

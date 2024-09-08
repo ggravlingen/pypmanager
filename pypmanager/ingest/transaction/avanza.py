@@ -37,16 +37,18 @@ class AvanzaLoader(TransactionLoader):
     """Data loader for Avanza."""
 
     col_map = {  # noqa: RUF012
-        "Datum": TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE,
-        "Konto": ColumnNameValues.ACCOUNT,
-        "Typ av transaktion": TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE,
-        "Värdepapper/beskrivning": (
-            TransactionRegistryColNameValues.SOURCE_NAME_SECURITY
+        "Datum": TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value,
+        "Konto": ColumnNameValues.ACCOUNT.value,
+        "Typ av transaktion": (
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value
         ),
-        "Antal": TransactionRegistryColNameValues.SOURCE_VOLUME,
-        "Kurs": TransactionRegistryColNameValues.SOURCE_PRICE,
-        "Belopp": ColumnNameValues.AMOUNT,
-        "Courtage": TransactionRegistryColNameValues.SOURCE_FEE,
+        "Värdepapper/beskrivning": (
+            TransactionRegistryColNameValues.SOURCE_NAME_SECURITY.value
+        ),
+        "Antal": TransactionRegistryColNameValues.SOURCE_VOLUME.value,
+        "Kurs": TransactionRegistryColNameValues.SOURCE_PRICE.value,
+        "Belopp": ColumnNameValues.AMOUNT.value,
+        "Courtage": TransactionRegistryColNameValues.SOURCE_FEE.value,
         "Valuta": TransactionRegistryColNameValues.SOURCE_CURRENCY.value,
         "ISIN": TransactionRegistryColNameValues.SOURCE_ISIN,
         "FX": TransactionRegistryColNameValues.SOURCE_FX.value,
@@ -65,9 +67,11 @@ class AvanzaLoader(TransactionLoader):
         if "Resultat" in df_raw.columns:
             df_raw = df_raw.drop(columns=["Resultat"])
 
-        df_raw[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE] = df_raw.apply(
-            _transaction_type,
-            axis=1,
+        df_raw[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value] = (
+            df_raw.apply(
+                _transaction_type,
+                axis=1,
+            )
         )
 
         self.df_final = df_raw

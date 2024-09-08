@@ -105,6 +105,11 @@ class ColumnAppendConfig:
 
 # These columns are appended to the transaction registry
 COLUMN_APPEND: tuple[ColumnAppendConfig, ...] = (
+    # SOURCE_OTHER_CASH_FLOW must be appended first
+    ColumnAppendConfig(
+        column=TransactionRegistryColNameValues.SOURCE_OTHER_CASH_FLOW.value,
+        callable=PandasAlgorithm.other_cash_flow,
+    ),
     ColumnAppendConfig(
         column=TransactionRegistryColNameValues.CALC_TURNOVER_OR_OTHER_CF.value,
         callable=PandasAlgorithm.turnover_or_other_cash_flow,
@@ -117,6 +122,7 @@ COLUMN_APPEND: tuple[ColumnAppendConfig, ...] = (
         column=TransactionRegistryColNameValues.CASH_FLOW_GROSS_FEE_NOMINAL.value,
         callable=PandasAlgorithm.calculate_cash_flow_gross_fee_nominal,
     ),
+    # PnL calculations
     ColumnAppendConfig(
         column=TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value,
         callable=PandasAlgorithmPnL.calculate_pnl_dividend,
@@ -169,6 +175,11 @@ class TransactionRegistry:
 
         # Load all transaction files into a dataframe
         self.df_all_transactions = self._load_transaction_files()
+
+        self.df_all_transactions = self.df_all_transactions.query(
+            f"{TransactionRegistryColNameValues.SOURCE_NAME_SECURITY.value} == "
+            f"'Pareto cash account'"
+        )
 
         # Cleanup must be done before converting data types
         self._100_cleanup_df()
