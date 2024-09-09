@@ -1454,16 +1454,16 @@
   resolved "https://registry.yarnpkg.com/@mswjs/cookies/-/cookies-1.1.1.tgz#8b519e2bd8f1577c530beed44a25578eb9a6e72c"
   integrity sha512-W68qOHEjx1iD+4VjQudlx26CPIoxmIAtK4ZCexU0/UJBG6jYhcuyzKJx+Iw8uhBIGd9eba64XgWVgo20it1qwA==
 
-"@mswjs/interceptors@^0.29.0":
-  version "0.29.1"
-  resolved "https://registry.yarnpkg.com/@mswjs/interceptors/-/interceptors-0.29.1.tgz#e77fc58b5188569041d0440b25c9e9ebb1ccd60a"
-  integrity sha512-3rDakgJZ77+RiQUuSK69t1F0m8BQKA8Vh5DCS5V0DWvNY67zob2JhhQrhCO0AKLGINTRSFd1tBaHcJTkhefoSw==
+"@mswjs/interceptors@^0.35.0":
+  version "0.35.0"
+  resolved "https://registry.yarnpkg.com/@mswjs/interceptors/-/interceptors-0.35.0.tgz#ccdabb668833b97d3c5f26e761f5ea665629dd5f"
+  integrity sha512-f5cHyIvm4m4g1I5x9EH1etGx0puaU0OaX2szqGRVBVgUC6aMASlOI5hbpe7tJ9l4/VWjCUu5OMraCazLZGI24A==
   dependencies:
     "@open-draft/deferred-promise" "^2.2.0"
     "@open-draft/logger" "^0.3.0"
     "@open-draft/until" "^2.0.0"
     is-node-process "^1.2.0"
-    outvariant "^1.2.1"
+    outvariant "^1.4.3"
     strict-event-emitter "^0.5.1"
 
 "@mui/core-downloads-tracker@^5.16.7":
@@ -3475,7 +3475,7 @@ graphql-tag@2.12.6, graphql-tag@^2.12.6:
   dependencies:
     tslib "^2.1.0"
 
-graphql@16.9.0:
+graphql@16.9.0, graphql@^16.8.1:
   version "16.9.0"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.9.0.tgz#1c310e63f16a49ce1fbb230bd0a000e99f6f115f"
   integrity sha512-GGTKBX4SD7Wdb8mqeDLni2oaRGYQWjWHGKPQ24ZMnUtKfcsVoiv4uX8+LJr1K6U5VW2Lu1BwJnj7uiori0YtRw==
@@ -4133,20 +4133,21 @@ ms@2.1.3, ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.3.tgz#574c8138ce1d2b5861f0b44579dbadd60c6615b2"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
-msw@2.4.1:
-  version "2.4.1"
-  resolved "https://registry.yarnpkg.com/msw/-/msw-2.4.1.tgz#bb0ead0311de39d5847ff0836b9dd67e7bba02b8"
-  integrity sha512-HXcoQPzYTwEmVk+BGIcRa0vLabBT+J20SSSeYh/QfajaK5ceA6dlD4ZZjfz2dqGEq4vRNCPLP6eXsB94KllPFg==
+msw@2.4.4:
+  version "2.4.4"
+  resolved "https://registry.yarnpkg.com/msw/-/msw-2.4.4.tgz#d40c12b2d99750e3b2cbd94ef269a23b06a9aa67"
+  integrity sha512-iuM0qGs4YmgYCLH+xqb07w2e/e4fYmsx3+WHVlIOUA34TW1sw+wRpNmOlXnLDkw/T7233Jnm6t+aNf4v2E3e2Q==
   dependencies:
     "@bundled-es-modules/cookie" "^2.0.0"
     "@bundled-es-modules/statuses" "^1.0.1"
     "@bundled-es-modules/tough-cookie" "^0.1.6"
     "@inquirer/confirm" "^3.0.0"
-    "@mswjs/interceptors" "^0.29.0"
+    "@mswjs/interceptors" "^0.35.0"
     "@open-draft/until" "^2.1.0"
     "@types/cookie" "^0.6.0"
     "@types/statuses" "^2.0.4"
     chalk "^4.1.2"
+    graphql "^16.8.1"
     headers-polyfill "^4.0.2"
     is-node-process "^1.2.0"
     outvariant "^1.4.2"
@@ -4312,7 +4313,7 @@ ora@^5.4.1:
     strip-ansi "^6.0.0"
     wcwidth "^1.0.1"
 
-outvariant@^1.2.1, outvariant@^1.4.0, outvariant@^1.4.2:
+outvariant@^1.4.0, outvariant@^1.4.2, outvariant@^1.4.3:
   version "1.4.3"
   resolved "https://registry.yarnpkg.com/outvariant/-/outvariant-1.4.3.tgz#221c1bfc093e8fec7075497e7799fdbf43d14873"
   integrity sha512-+Sl2UErvtsoajRDKCE5/dBz4DIvHXQQnAxtQTF04OJxY0+DyZXSo5P5Bb7XYWOh81syohlYL24hbDwxedPUJCA==
