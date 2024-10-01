@@ -35,7 +35,7 @@ jobs:
       node_versions: ${{ steps.info.outputs.node_versions }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.0
 
       - name: Filter for core changes
         uses: dorny/paths-filter@v3.0.2
@@ -77,7 +77,7 @@ jobs:
         python-version: ${{ fromJSON(needs.info.outputs.python_versions) }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.0
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5.2.0
@@ -118,7 +118,7 @@ jobs:
     if: needs.info.outputs.run_pipeline == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.0
         with:
           fetch-depth: "2"
       - name: Set up Python ${{ matrix.python-version }}
@@ -165,7 +165,7 @@ jobs:
     if: needs.info.outputs.run_pipeline == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.0
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5.2.0
@@ -193,7 +193,7 @@ jobs:
 
       - name: Coverage comment
         id: coverage_comment
-        uses: py-cov-action/python-coverage-comment-action@v3.27
+        uses: py-cov-action/python-coverage-comment-action@v3.28
         with:
           GITHUB_TOKEN: ${{ github.token }}
           ANNOTATE_MISSING_LINES: true
@@ -221,10 +221,10 @@ jobs:
     if: needs.info.outputs.run_pipeline_frontend == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.0
 
       - name: Set up Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v4.0.3
+        uses: actions/setup-node@v4.0.4
         with:
           node-version: ${{ matrix.node-version }}
 
