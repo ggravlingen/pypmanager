@@ -128,10 +128,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Don't store user data on Github
-data/**/*.csv
-data/*.yaml
-
 *.xlsx
 
 *.DS_Store
