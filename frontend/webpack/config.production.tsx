@@ -9,5 +9,4 @@ export default merge(commonConfig, {
     path: path.join(__dirname, "..", "static"),
     filename: "main.js",
   },
-  devtool: "source-map",
 });
