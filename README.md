@@ -40,9 +40,14 @@ I have provided a few data sources built-in. Download this data using `python -m
 
 Configuration is done by appending `pypmanager/configuration/market_data.yaml` with the securities you want to download data for.
 
+Currently, there is support for loading data from the following sites:
+
+- Morningstar
+- The Financial Times
+- Svenska Handelsbanken
+
 ## Unimplemented ideas
 
 - Calculate IRR per security and on a total.
 - Split the overview by account or maybe tag.
 - Investments made in other currencies
-- Support other online brokers by extending the `DataLoader` class.

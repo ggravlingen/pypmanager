@@ -54,6 +54,16 @@ class TypedSettings(BaseSettings):
         folder_path = Path(self.dir_config)
         return (folder_path / "market_data.yaml").resolve()
 
+    @property
+    def file_market_data_config_local(self: TypedSettings) -> Path | None:
+        """Return local market data file."""
+        folder_path = Path(self.dir_data)
+        local_market_data = (folder_path / "configuration/market_data.yaml").resolve()
+        if local_market_data.exists():
+            return local_market_data
+
+        return None
+
     is_demo: bool = False
 
 
