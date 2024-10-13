@@ -2,6 +2,13 @@
 
 Summarize transactions in funds into a simple portfolio report.
 
+Available features:
+
+- A transaction list: merge data from multiple sources into one transaction list.
+- Profit- and loss statement: show the historical result from your transactions.
+
+## Screenshots from app
+
 Transaction list
 ![Screenshot of the transaction list.](/docs/assets/transaction_list.png)
 
@@ -10,7 +17,7 @@ Income statement:
 
 ## Why
 
-I have been looking for a library where I can download a set of transactions from my broker and pension fund manager and compile them into a report giving me an overview of all holdings.
+I have been looking for a library where I can download a set of transactions from my broker and pension fund manager use the merged data for analysis.
 
 ## Local-only data
 
