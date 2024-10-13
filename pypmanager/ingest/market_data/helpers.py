@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime
-from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import pandas as pd
@@ -22,14 +21,28 @@ if TYPE_CHECKING:
 
 def _load_sources() -> list[Source]:
     """Load settings."""
-    path = Path(Settings.file_market_data_config)
-    with path.open(encoding="UTF-8") as file:
+    output_data: list[Source] = []
+    with Settings.file_market_data_config.open(encoding="UTF-8") as file:
         # Load the YAML content from the file
         yaml_data = yaml.safe_load(file)
 
-        data = Sources(**yaml_data)
+        global_sources = Sources(**yaml_data).sources
+        LOGGER.info(f"Found {len(global_sources)} source(s) in global file")
+        output_data.extend(global_sources)
 
-        return data.sources
+    if (
+        Settings.file_market_data_config_local
+        and Settings.file_market_data_config_local.exists()
+    ):
+        with Settings.file_market_data_config_local.open(encoding="UTF-8") as file:
+            # Load the YAML content from the file
+            yaml_data = yaml.safe_load(file)
+
+            local_sources = Sources(**yaml_data).sources
+            LOGGER.info(f"Found {len(local_sources)} source(s) in local file")
+            output_data.extend(local_sources)
+
+    return output_data
 
 
 def _class_importer(name: str) -> Any:  # noqa: ANN401
