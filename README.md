@@ -6,7 +6,7 @@ Transaction list
 ![Screenshot of the transaction list.](/docs/assets/transaction_list.png)
 
 Income statement:
-![Screenshot of the general ledger.](/docs/assets/general_ledger.png)
+![Screenshot of the general ledger.](/docs/assets/income_statement.png)
 
 ## Why
 
