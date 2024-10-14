@@ -17,7 +17,7 @@ dependencies    = [
   "pydantic-settings==2.5.2",
   "requests==2.32.3",
   "strawberry_graphql[debug-server]==0.246.0",
-  "uvicorn[standard]==0.31.0",
+  "uvicorn[standard]==0.31.1",
 ]
 
 [project.optional-dependencies]
