@@ -32,7 +32,7 @@ There are other ways of getting this to work but this is how I use it:
 - Install `VSCode` from Microsoft and the `Dev Containers` extension.
 - Open the library in VSCode and choose the option to open the folder in a container.
 - Run the install script `./scipt/install.sh`.
-- Start the server `uvicorn --port 8001 pypmanager.api:app`.
+- Start the server `uvicorn --port 8001 pypmanager.api:app` or, in VSCode, use `Run and Debug` and `Pypmanager server`.
 - Browse to the transaction list on `http://localhost:8001/#/transaction`.
 
 ## Where to store your data

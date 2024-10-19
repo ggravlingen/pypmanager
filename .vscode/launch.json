@@ -2,7 +2,24 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "FastAPI",
+            "name": "Pypmanager server",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "--port",
+                "8001",
+                "pypmanager.api:app",
+            ],
+            "justMyCode": true,
+            "serverReadyAction": {
+                "pattern": "Uvicorn running on http://127.0.0.1:(\\d+)",
+                "uriFormat": "http://localhost:%s/#/transaction",
+                "action": "openExternally"
+            }
+        },
+        {
+            "name": "FastAPI debug",
             "type": "debugpy",
             "request": "launch",
             "module": "uvicorn",
@@ -12,7 +29,7 @@
                 "8001",
                 "pypmanager.api:app",
             ],
-            "justMyCode": true
+            "justMyCode": true,
         },
         {
             "name": "Scheduler",
