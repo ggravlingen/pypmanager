@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from tests.conftest import DataFactory
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_class_general_ledger(
     data_factory: type[DataFactory],
 ) -> None:
