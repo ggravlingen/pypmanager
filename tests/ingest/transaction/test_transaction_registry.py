@@ -14,7 +14,7 @@ from pypmanager.settings import Settings
 from tests.conftest import DataFactory
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_transaction_registry(
     data_factory: type[DataFactory],
 ) -> None:
@@ -39,7 +39,7 @@ async def test_transaction_registry(
         assert len(registry) == 3
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_transaction_registry__all_sold(
     data_factory: type[DataFactory],
 ) -> None:
@@ -66,7 +66,7 @@ async def test_transaction_registry__all_sold(
         # calc_avg_price_per_unit
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_transaction_registry__date_filter(
     data_factory: type[DataFactory],
 ) -> None:
@@ -86,7 +86,7 @@ async def test_transaction_registry__date_filter(
         assert len(registry) == 1
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_transaction_registry__date_filter__raises(
     data_factory: type[DataFactory],
 ) -> None:
@@ -106,7 +106,7 @@ async def test_transaction_registry__date_filter__raises(
         ).async_get_registry()
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_transaction_registry__columns(
     data_factory: type[DataFactory],
 ) -> None:
