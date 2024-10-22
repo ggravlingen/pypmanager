@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from tests.conftest import DataFactory
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_async_aggregate_ledger_by_year(
     data_factory: type[DataFactory],
 ) -> None:

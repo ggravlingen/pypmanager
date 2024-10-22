@@ -9,7 +9,7 @@ from pypmanager.settings import Settings
 from pypmanager.utils.dt import async_get_last_n_quarters, get_previous_quarter
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_async_get_last_n_quarters(
     freezer: FrozenDateTimeFactory,
 ) -> None:
