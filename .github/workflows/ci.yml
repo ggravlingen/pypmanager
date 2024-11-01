@@ -35,7 +35,7 @@ jobs:
       node_versions: ${{ steps.info.outputs.node_versions }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.0
+        uses: actions/checkout@v4.2.2
 
       - name: Filter for core changes
         uses: dorny/paths-filter@v3.0.2
@@ -77,16 +77,16 @@ jobs:
         python-version: ${{ fromJSON(needs.info.outputs.python_versions) }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.0
+        uses: actions/checkout@v4.2.2
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5.2.0
+        uses: actions/setup-python@v5.3.0
         with:
           python-version: ${{ matrix.python-version }}
 
       - name: Restore base Python virtual environment
         id: cache-venv
-        uses: actions/cache@v4.0.2
+        uses: actions/cache@v4.1.2
         with:
           path: .venv
           lookup-only: true
@@ -118,16 +118,16 @@ jobs:
     if: needs.info.outputs.run_pipeline == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.0
+        uses: actions/checkout@v4.2.2
         with:
           fetch-depth: "2"
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5.2.0
+        uses: actions/setup-python@v5.3.0
         with:
           python-version: ${{ matrix.python-version }}
       - name: Restore full Python ${{ steps.python.outputs.python-version }} virtual environment
         id: cache-venv
-        uses: actions/cache/restore@v4.0.2
+        uses: actions/cache/restore@v4.1.2
         with:
           path: .venv
           fail-on-cache-miss: true
@@ -165,15 +165,15 @@ jobs:
     if: needs.info.outputs.run_pipeline == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.0
+        uses: actions/checkout@v4.2.2
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5.2.0
+        uses: actions/setup-python@v5.3.0
         with:
           python-version: ${{ matrix.python-version }}
       - name: Restore full Python ${{ steps.python.outputs.python-version }} virtual environment
         id: cache-venv
-        uses: actions/cache/restore@v4.0.2
+        uses: actions/cache/restore@v4.1.2
         with:
           path: .venv
           fail-on-cache-miss: true
@@ -193,14 +193,14 @@ jobs:
 
       - name: Coverage comment
         id: coverage_comment
-        uses: py-cov-action/python-coverage-comment-action@v3.28
+        uses: py-cov-action/python-coverage-comment-action@v3.29
         with:
           GITHUB_TOKEN: ${{ github.token }}
           ANNOTATE_MISSING_LINES: true
           ANNOTATION_TYPE: warning
 
       - name: Store Pull Request comment to be posted
-        uses: actions/upload-artifact@v4.4.0
+        uses: actions/upload-artifact@v4.4.3
         if: steps.coverage_comment.outputs.COMMENT_FILE_WRITTEN == 'true'
         with:
           # If you use a different name, update COMMENT_ARTIFACT_NAME accordingly
@@ -221,10 +221,10 @@ jobs:
     if: needs.info.outputs.run_pipeline_frontend == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.0
+        uses: actions/checkout@v4.2.2
 
       - name: Set up Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v4.0.4
+        uses: actions/setup-node@v4.1.0
         with:
           node-version: ${{ matrix.node-version }}
 
