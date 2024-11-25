@@ -7,7 +7,7 @@ name = "pylocalpmanager"
 requires-python = ">=3.12"
 dynamic = ['version']
 dependencies    = [
-  "apscheduler==3.10.4",
+  "apscheduler==3.11.0",
   "colorlog==6.9.0",
   "fastapi==0.115.5",
   "lxml==5.3.0",
