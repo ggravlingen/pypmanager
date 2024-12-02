@@ -6,9 +6,9 @@ from .helpers import async_download_market_data
 from .morningstar import MorningstarLoader, MorningstarLoaderSHB
 
 __all__ = [
-    "async_download_market_data",
     "AvanzaLoader",
     "FTLoader",
     "MorningstarLoader",
     "MorningstarLoaderSHB",
+    "async_download_market_data",
 ]

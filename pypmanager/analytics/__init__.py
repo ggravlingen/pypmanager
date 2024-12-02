@@ -9,6 +9,6 @@ __all__ = [
     "Holding",
     "MutualFund",
     "Portfolio",
-    "async_get_holdings",
     "async_get_historical_portfolio",
+    "async_get_holdings",
 ]
