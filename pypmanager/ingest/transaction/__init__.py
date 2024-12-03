@@ -17,11 +17,11 @@ from .transaction_registry import (
 __all__ = [
     "AccountNameValues",
     "AvanzaLoader",
-    "LysaLoader",
-    "GenericLoader",
     "ColumnNameValues",
-    "TransactionTypeValues",
+    "GenericLoader",
+    "LysaLoader",
     "TransactionRegistry",
     "TransactionRegistryColNameValues",
+    "TransactionTypeValues",
     "async_aggregate_income_statement_by_year",
 ]
