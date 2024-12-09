@@ -33,7 +33,7 @@ test = [
   "pytest-freezer==0.4.8",
   "pytest-profiling==1.8.1",
   "pytest-timeout==2.3.1",
-  "ruff==0.8.1",
+  "ruff==0.8.2",
   "types_PyYAML==6.0.12.20240917",
   "types_requests==2.32.0.20241016",
 ]
