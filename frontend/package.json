@@ -7,7 +7,7 @@
     "@apollo/client": "3.12.2",
     "@babel/core": "7.26.0",
     "@babel/preset-env": "7.26.0",
-    "@babel/preset-react": "7.25.9",
+    "@babel/preset-react": "7.26.3",
     "@babel/preset-typescript": "7.26.0",
     "@babel/register": "7.25.9",
     "@emotion/react": "11.13.5",
