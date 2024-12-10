@@ -24,7 +24,7 @@ dependencies    = [
 test = [
   "coverage-threshold==0.5.0",
   "httpx==0.28.0",
-  "mypy_dev==1.14.0a5",
+  "mypy_dev==1.14.0a6",
   "pre-commit==4.0.1",
   "pylint==3.3.2",
   "pytest==8.3.4",
