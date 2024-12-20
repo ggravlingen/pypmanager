@@ -13,13 +13,15 @@ export default merge(commonConfig, {
   },
   optimization: {
     minimize: true,
-    minimizer: [new TerserPlugin({
-      terserOptions: {
-        compress: { drop_console: true },
-        format: { comments: false },
-      },
-      extractComments: false,
-    })],
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          compress: { drop_console: true },
+          format: { comments: false },
+        },
+        extractComments: false,
+      }),
+    ],
     splitChunks: {
       chunks: "all", // Split all chunks, including async and non-async ones
       minSize: 20000, // Minimum size (in bytes) for a chunk to be generated
@@ -38,10 +40,10 @@ export default merge(commonConfig, {
         },
       },
     },
-    },
+  },
   performance: {
     hints: false,
     maxEntrypointSize: 512000,
-    maxAssetSize: 512000
+    maxAssetSize: 512000,
   },
 });
