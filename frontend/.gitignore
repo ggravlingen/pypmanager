@@ -30,3 +30,4 @@ tests/logs
 
 static/*.js
 static/*.html
+templates/index.html

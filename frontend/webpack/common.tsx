@@ -1,4 +1,4 @@
-import Dotenv from "dotenv-webpack";
+import HtmlWebpackPlugin from "html-webpack-plugin";
 import path from "path";
 import webpack from "webpack"; // to access built-in plugins
 
@@ -29,12 +29,9 @@ const commonConfig: webpack.Configuration = {
   },
   plugins: [
     new webpack.ProgressPlugin(),
-    new Dotenv({
-      path: "./.env",
-      safe: true,
-      systemvars: true,
-      silent: false,
-      defaults: false,
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, "..", "templates", "index_template.html"),
+      filename: "./../templates/index.html",
     }),
   ],
 };

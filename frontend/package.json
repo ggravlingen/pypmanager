@@ -52,7 +52,7 @@
   "scripts": {
     "run-dev-ssr": "webpack --config webpack/config.dev.watch.tsx",
     "build-test": "webpack --config webpack/playwright.tsx",
-    "build-prod": "webpack --config webpack/config.production.tsx",
+    "build-prod": "rm -f ./static/*.js && webpack --config webpack/config.production.tsx",
     "test-ci": "jest --ci --reporters=default --reporters=jest-junit --coverage",
     "cicd-lint": "eslint 'src/**/*.tsx'",
     "cicd-typecheck": "tsc-strict --project tsconfig.json --noEmit",
