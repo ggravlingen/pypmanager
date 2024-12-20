@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "main": "index.tsx",
+  "sideEffects": false,
   "dependencies": {
     "@apollo/client": "3.12.3",
     "@babel/core": "7.26.0",
@@ -19,6 +20,7 @@
     "dotenv-webpack": "8.1.0",
     "graphql": "16.10.0",
     "graphql-tag": "2.12.6",
+    "html-webpack-plugin": "5.6.3",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-router-dom": "7.0.2",
@@ -50,7 +52,7 @@
   "scripts": {
     "run-dev-ssr": "webpack --config webpack/config.dev.watch.tsx",
     "build-test": "webpack --config webpack/playwright.tsx",
-    "build-prod": "webpack --config webpack/config.production.tsx",
+    "build-prod": "rm -f ./static/*.js && webpack --config webpack/config.production.tsx",
     "test-ci": "jest --ci --reporters=default --reporters=jest-junit --coverage",
     "cicd-lint": "eslint 'src/**/*.tsx'",
     "cicd-typecheck": "tsc-strict --project tsconfig.json --noEmit",

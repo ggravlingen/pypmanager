@@ -27,3 +27,7 @@ static/main.js*
 html-report
 test-results
 tests/logs
+
+static/*.js
+static/*.html
+templates/index.html
