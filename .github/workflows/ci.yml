@@ -247,3 +247,8 @@ jobs:
           cd frontend
           yarn cicd-typecheck
         name: Run type hint checks
+
+      - run:  |
+            ./script/playwright-setup.sh
+            ./script/playwright-run.sh
+        name: Run Playwright tests

@@ -5,7 +5,7 @@ cd "$(dirname "$0")/../frontend"
 
 rm -rf ./static/main.js
 
-yarn build-test
+yarn playwright-build
 
 # Check if the first argument is --update-snapshots
 if [ "$1" = "--update-snapshots" ]; then
