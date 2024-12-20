@@ -1,4 +1,3 @@
-import HtmlWebpackPlugin from "html-webpack-plugin";
 import * as path from "path";
 import TerserPlugin from "terser-webpack-plugin";
 import { merge } from "webpack-merge";
@@ -45,10 +44,4 @@ export default merge(commonConfig, {
     maxEntrypointSize: 512000,
     maxAssetSize: 512000
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: path.join(__dirname, "..", "templates", "index_template.html"),
-      filename: "./../templates/index.html",
-    }),
-  ],
 });
