@@ -187,7 +187,7 @@ jobs:
           # Required to make backend tests run
           # We don't need the content of the file to contain the javascript
           # import
-          cp frontend/templates/index_template.html index.html
+          cp frontend/templates/index_template.html frontend/templates/index.html
 
           pytest tests --timeout=30 --cov pypmanager --cov-report xml
       - name: Run coverage test
