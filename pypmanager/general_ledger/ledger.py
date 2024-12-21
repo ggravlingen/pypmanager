@@ -115,10 +115,6 @@ class GeneralLedger:
         """Str."""
         return f"GeneralLedger of ({len(self.output_df)}) records"
 
-    def __len__(self: GeneralLedger) -> int:
-        """Len."""
-        return len(self.output_df)
-
     async def async_get_volume_by_date(self: GeneralLedger) -> pd.DataFrame:
         """Get volume by date."""
         return (
