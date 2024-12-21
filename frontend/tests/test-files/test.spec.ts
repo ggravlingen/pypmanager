@@ -126,6 +126,8 @@ test.describe.parallel("Test views", () => {
     await page.goto("/#/transaction");
     await page.waitForTimeout(2000);
 
+    await page.mouse.move(100, 100);
+
     await expect(page).toHaveScreenshot("1.png");
   });
 
@@ -141,6 +143,8 @@ test.describe.parallel("Test views", () => {
 
     await page.goto("/#/income_statement");
     await page.waitForTimeout(2000);
+
+    await page.mouse.move(100, 100);
 
     await expect(page).toHaveScreenshot("1.png");
   });

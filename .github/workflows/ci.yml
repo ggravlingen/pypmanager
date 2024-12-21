@@ -67,7 +67,7 @@ jobs:
           echo "node_versions=${ALL_NODE_VERSIONS}" >> $GITHUB_OUTPUT
 
   create-virtualenv:
-    name: Setup environment
+    name: "Backend: setup environment"
     runs-on: ubuntu-latest
     needs: info
     timeout-minutes: 5
@@ -106,10 +106,10 @@ jobs:
           uv pip install -e .'[test]'
 
   linter:
-    name: Run code linters
+    name: "Backend: run code linters"
     needs:
-      - create-virtualenv
       - info
+      - create-virtualenv
     runs-on: ubuntu-latest
     timeout-minutes: 5
     strategy:
@@ -152,7 +152,7 @@ jobs:
           mypy pypmanager
 
   pytest:
-    name: Run test suite
+    name: "Backend: run test suite"
     continue-on-error: true
     needs:
       - info
@@ -183,6 +183,12 @@ jobs:
       - name: Run tests
         run: |
           source .venv/bin/activate
+
+          # Required to make backend tests run
+          # We don't need the content of the file to contain the javascript
+          # import
+          cp frontend/templates/index_template.html frontend/templates/index.html
+
           pytest tests --timeout=30 --cov pypmanager --cov-report xml
       - name: Run coverage test
         run: |
@@ -209,7 +215,7 @@ jobs:
           path: python-coverage-comment-action.txt
 
   qa-frontend:
-    name: Run test suite frontend
+    name: "Frontend: run code linters"
     continue-on-error: true
     needs:
       - info
@@ -247,3 +253,40 @@ jobs:
           cd frontend
           yarn cicd-typecheck
         name: Run type hint checks
+
+  qa-playwright:
+    name: "Frontend: run Playwright"
+    needs:
+      - info
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      matrix:
+        node-version: ${{ fromJSON(needs.info.outputs.node_versions) }}
+    if: needs.info.outputs.run_pipeline_frontend == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+
+      - name: Set up Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v4.1.0
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install requirements
+        run: |
+          cd frontend
+          yarn
+
+      - run:  |
+            ./script/playwright-setup.sh
+            ./script/playwright-run.sh
+        name: Run Playwright tests
+        id: playwrightTests
+
+      - uses: actions/upload-artifact@v4.5.0
+        if: always()
+        with:
+          path: frontend/test-results/
+          retention-days: 1
+          compression-level: 1

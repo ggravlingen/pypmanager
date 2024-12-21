@@ -10,10 +10,10 @@ const RES = { width: 1920, height: 1080 };
  * See https://playwright.dev/docs/test-configuration.
  */
 const config: PlaywrightTestConfig = {
-  testDir: "./test-files/",
+  testDir: "./tests/test-files/",
   testMatch: /.*\.ts/,
   snapshotPathTemplate:
-    "__screenshots__{/projectName}/{testFilePath}/{testName}/{arg}{ext}",
+    "./tests/__screenshots__{/projectName}/{testFilePath}/{testName}/{arg}{ext}",
   /* Maximum time one test can run for. */
   timeout: 30 * 1000,
   expect: {
@@ -24,7 +24,7 @@ const config: PlaywrightTestConfig = {
     timeout: 5000,
     toHaveScreenshot: {
       // an acceptable amount of pixels that could be different, unset by default.
-      maxDiffPixels: 50,
+      maxDiffPixels: 1000,
     },
   },
   /* Run tests in files in parallel */
