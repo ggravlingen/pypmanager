@@ -108,8 +108,8 @@ jobs:
   linter:
     name: "Backend: run code linters"
     needs:
-      - create-virtualenv
       - info
+      - create-virtualenv
     runs-on: ubuntu-latest
     timeout-minutes: 5
     strategy:
