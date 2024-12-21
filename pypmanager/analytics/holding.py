@@ -24,7 +24,7 @@ from .security import MutualFund
 LOGGER = logging.getLogger(__name__)
 
 
-def get_market_data() -> pd.DataFrame:
+def get_market_data(isin_code: str | None = None) -> pd.DataFrame:
     """
     Load all market data from CSV files and concatenate them into a single DataFrame.
 
@@ -38,7 +38,12 @@ def get_market_data() -> pd.DataFrame:
         df_market_data = pd.read_csv(file, sep=";", index_col="report_date")
         all_data_frames.append(df_market_data)
 
-    return pd.concat(all_data_frames, ignore_index=False)
+    merged_df = pd.concat(all_data_frames, ignore_index=False)
+
+    if isin_code:
+        return merged_df.query(f"isin_code == '{isin_code}'")
+
+    return merged_df
 
 
 @dataclass
