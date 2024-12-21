@@ -241,6 +241,7 @@ jobs:
 
       - name: Build frontend
         run: |
+          cd frontend
           yarn build-prod
 
       - name: Store build files
