@@ -55,15 +55,15 @@ class GeneralLedger:
         """Init."""
         self.transactions = calculate_results(transactions)
 
-        self.transactions_to_dict()
-        self.create_ledger()
-        self.set_date_index()
+        self._transactions_to_dict()
+        self._create_ledger()
+        self._set_date_index()
 
-    def transactions_to_dict(self: GeneralLedger) -> None:
+    def _transactions_to_dict(self: GeneralLedger) -> None:
         """Convert transactions to dict."""
         self.ledger_list = self.transactions.reset_index().to_dict(orient="records")
 
-    def create_ledger(self: GeneralLedger) -> None:
+    def _create_ledger(self: GeneralLedger) -> None:
         """Create ledger."""
         ledger_list: list[dict[str, Any]] = []
         for row in self.ledger_list:
@@ -71,7 +71,7 @@ class GeneralLedger:
 
         self.output_df = pd.DataFrame(ledger_list)
 
-    def set_date_index(self: GeneralLedger) -> None:
+    def _set_date_index(self: GeneralLedger) -> None:
         """Set index to date."""
         df_tmp = self.output_df.copy()
         # Convert index to a date of format YYYY-MM-DD
@@ -106,3 +106,25 @@ class GeneralLedger:
         df_tmp = df_tmp.replace({np.nan: None})
 
         self.output_df = df_tmp
+
+    def __repr__(self: GeneralLedger) -> str:
+        """Repr."""
+        return f"GeneralLedger of ({len(self.output_df)}) records"
+
+    def __str__(self: GeneralLedger) -> str:
+        """Str."""
+        return f"GeneralLedger of ({len(self.output_df)}) records"
+
+    def __len__(self: GeneralLedger) -> int:
+        """Len."""
+        return len(self.output_df)
+
+    async def async_get_volume_by_date(self: GeneralLedger) -> pd.DataFrame:
+        """Get volume by date."""
+        return (
+            self.output_df.groupby(
+                TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value
+            )[TransactionRegistryColNameValues.SOURCE_VOLUME.value]
+            .sum()
+            .reset_index()
+        )
