@@ -67,7 +67,7 @@ jobs:
           echo "node_versions=${ALL_NODE_VERSIONS}" >> $GITHUB_OUTPUT
 
   create-virtualenv:
-    name: Setup environment
+    name: "Backend: setup environment"
     runs-on: ubuntu-latest
     needs: info
     timeout-minutes: 5
