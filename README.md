@@ -8,7 +8,7 @@ Available features:
 - Profit- and loss statement: show the historical result from your transactions.
 
 ## Screenshots from app
-
+s
 Transaction list
 ![Screenshot of the transaction list.](/docs/assets/transaction_list.png)
 
