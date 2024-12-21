@@ -24,6 +24,28 @@ from .security import MutualFund
 LOGGER = logging.getLogger(__name__)
 
 
+def get_market_data(isin_code: str | None = None) -> pd.DataFrame:
+    """
+    Load all market data from CSV files and concatenate them into a single DataFrame.
+
+    Returns:
+        pd.DataFrame: A DataFrame containing all the market data concatenated together,
+        indexed by 'report_date'.
+    """
+    all_data_frames: list[pd.DataFrame] = []
+
+    for file in Settings.dir_market_data.glob("*.csv"):
+        df_market_data = pd.read_csv(file, sep=";", index_col="report_date")
+        all_data_frames.append(df_market_data)
+
+    merged_df = pd.concat(all_data_frames, ignore_index=False)
+
+    if isin_code:
+        return merged_df.query(f"isin_code == '{isin_code}'")
+
+    return merged_df
+
+
 @dataclass
 class Holding:
     """Represent a security."""
@@ -65,17 +87,7 @@ class Holding:
     @cached_property
     def df_market_data(self: Holding) -> pd.DataFrame:
         """Return market data."""
-        all_data_frames = []  # List to hold all the data frames
-
-        for file in Settings.dir_market_data.glob("*.csv"):
-            df_market_data = pd.read_csv(file, sep=";", index_col="report_date")
-            all_data_frames.append(df_market_data)
-
-        if not all_data_frames:
-            LOGGER.error("No market data found.")
-            return pd.DataFrame()
-
-        return pd.concat(all_data_frames, ignore_index=False)
+        return get_market_data()
 
     @cached_property
     def current_holdings(self: Holding) -> float | None:
