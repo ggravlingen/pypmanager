@@ -106,7 +106,7 @@ jobs:
           uv pip install -e .'[test]'
 
   linter:
-    name: Run code linters
+    name: "Backend: run code linters"
     needs:
       - create-virtualenv
       - info
@@ -152,7 +152,7 @@ jobs:
           mypy pypmanager
 
   pytest:
-    name: Run test suite
+    name: "Backend: run test suite"
     continue-on-error: true
     needs:
       - info
@@ -215,7 +215,7 @@ jobs:
           path: python-coverage-comment-action.txt
 
   qa-frontend:
-    name: Run test suite frontend
+    name: "Frontend: run code linters"
     continue-on-error: true
     needs:
       - info
@@ -255,8 +255,7 @@ jobs:
         name: Run type hint checks
 
   qa-playwright:
-    name: Run test suite frontend
-    continue-on-error: true
+    name: "Frontend: run Playwright"
     needs:
       - info
     runs-on: ubuntu-latest
@@ -284,10 +283,9 @@ jobs:
             ./script/playwright-run.sh
         name: Run Playwright tests
         id: playwrightTests
-        continue-on-error: true
 
       - uses: actions/upload-artifact@v4.5.0
-        if: failure() && steps.playwrightTests.outcome == 'failure'
+        if: always()
         with:
           path: frontend/test-results/
           retention-days: 1
