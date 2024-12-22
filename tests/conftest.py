@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import UTC, date, datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 from unittest.mock import PropertyMock, patch
@@ -140,3 +140,44 @@ class DataFactory:
 def data_factory() -> DataFactory:
     """Return a factory to mock transaction data."""
     return DataFactory
+
+
+class MarketDataFactory:
+    """Create test market data."""
+
+    market_data_list: list[dict[str, Any]]
+
+    def __init__(self: MarketDataFactory) -> None:
+        """Initialize the class."""
+        self.market_data_list = []
+
+    def add(
+        self: MarketDataFactory,
+        *,
+        isin_code: str,
+        report_date: date,
+        price: float = 10.0,
+    ) -> MarketDataFactory:
+        """Add a buy transaction."""
+        self.market_data_list.append(
+            {
+                "isin_code": isin_code,
+                "name": "Test",
+                "report_date": report_date,
+                "price": price,
+                "date_added_utc": datetime.now(tz=UTC),
+                "source": "test",
+            }
+        )
+        return self
+
+    @property
+    def df_market_data_list(self: MarketDataFactory) -> pd.DataFrame:
+        """Return the market data list as a DataFrame."""
+        return pd.DataFrame(self.market_data_list).set_index("report_date")
+
+
+@pytest.fixture(name="market_data_factory", scope="session")
+def market_data_factory() -> MarketDataFactory:
+    """Return a factory to mock transaction data."""
+    return MarketDataFactory
