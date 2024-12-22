@@ -26,18 +26,18 @@ class ChartData:
     x_val: date
     y_val: float
 
-    volume_buy: float
-    volume_sell: float
+    volume_buy: float | None
+    volume_sell: float | None
 
     @property
     def is_buy(self) -> bool:
         """Return if buy."""
-        return self.volume_buy > 0
+        return bool(self.volume_buy and self.volume_buy > 0)
 
     @property
     def is_sell(self) -> bool:
         """Return if sell."""
-        return self.volume_sell > 0
+        return bool(self.volume_sell and self.volume_sell > 0)
 
 
 async def async_get_market_data_and_transaction(
