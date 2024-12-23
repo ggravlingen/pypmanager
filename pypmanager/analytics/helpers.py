@@ -66,7 +66,11 @@ async def async_get_historical_portfolio() -> list[PortfolioSnapshot]:
             report_date.day,
             tzinfo=Settings.system_time_zone,
         )
-        holdings = await async_get_holdings(report_date=_report_date)
+        try:
+            holdings = await async_get_holdings(report_date=_report_date)
+        except ValueError:
+            continue
+
         portfolio = Portfolio(holdings=holdings)
         portfolio_data.append(
             PortfolioSnapshot(
