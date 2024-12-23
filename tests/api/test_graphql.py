@@ -31,7 +31,7 @@ def _mock_transaction_list_graphql(
         factory.buy(
             transaction_date=datetime(2022, 11, 1, tzinfo=Settings.system_time_zone)
         )
-        .sell(transaction_date=datetime(2022, 12, 1, tzinfo=Settings.system_time_zone))
+        .sell(transaction_date=datetime(2022, 11, 2, tzinfo=Settings.system_time_zone))
         .df_transaction_list
     )
     with (
