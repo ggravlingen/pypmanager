@@ -7,6 +7,7 @@ import {
   LinearScale,
   LineElement,
   PointElement,
+  TimeScale,
   Title,
   Tooltip,
   TooltipItem,
@@ -21,6 +22,7 @@ ChartJS.register(
   LinearScale,
   PointElement,
   LineElement,
+  TimeScale,
   Title,
   Tooltip,
   Legend,
@@ -103,7 +105,16 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
   return (
     <QueryLoader loading={loading} data={data} error={error}>
       {data && (
-        <Box sx={{ width: "1200px", height: "700px", margin: "20px" }}>
+        <Box
+          sx={{
+            width: "1200px",
+            height: "700px",
+            margin: "20px",
+            padding: "20px",
+            borderRadius: "16px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+          }}
+        >
           <Line
             data={{
               labels: data.chartHistory.map((item) => item.xVal),
@@ -121,7 +132,7 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
                   borderWidth: 1, // Make the line thinner
                   pointRadius: data.chartHistory.map((item) =>
                     (item.volumeBuy ?? 0) > 0 || (item.volumeSell ?? 0) > 0
-                      ? 7
+                      ? 9
                       : 0,
                   ), // Add marker if volumeBuy > 0 or volumeSell > 0
                   pointBackgroundColor: data.chartHistory.map(
@@ -141,6 +152,29 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
               interaction: {
                 mode: "nearest",
                 intersect: false,
+              },
+              scales: {
+                x: {
+                  ticks: {
+                    maxTicksLimit: 12, // Reduce the number of ticks
+                    color: theme.palette.text.primary, // Set tick labels to primary color
+                  },
+                  grid: {
+                    display: false, // Hide x-axis grid lines
+                  },
+                },
+                y: {
+                  ticks: {
+                    maxTicksLimit: 10, // Reduce the number of ticks
+                    callback: function (value) {
+                      return value.toLocaleString(); // Format the tick labels
+                    },
+                    color: theme.palette.text.primary, // Set tick labels to primary color
+                  },
+                  grid: {
+                    display: false, // Hide x-axis grid lines
+                  },
+                },
               },
               plugins: {
                 legend: {
