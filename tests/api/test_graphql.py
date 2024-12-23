@@ -31,7 +31,7 @@ def _mock_transaction_list_graphql(
         factory.buy(
             transaction_date=datetime(2022, 11, 1, tzinfo=Settings.system_time_zone)
         )
-        .sell(transaction_date=datetime(2022, 11, 2, tzinfo=Settings.system_time_zone))
+        .sell(transaction_date=datetime(2022, 12, 1, tzinfo=Settings.system_time_zone))
         .df_transaction_list
     )
     with (
@@ -124,8 +124,7 @@ async def test_graphql_query__current_portfolio() -> None:
 
 @pytest.mark.asyncio
 @pytest.mark.usefixtures("_mock_transaction_list_graphql")
-@pytest.mark.usefixtures("_mock_market_data_graphql")
-@freeze_time("2022-11-01")
+@freeze_time(date(2022, 12, 5))
 async def test_graphql_query__historical_portfolio() -> None:
     """Test query historicalPortfolio."""
     query = """
@@ -142,7 +141,7 @@ async def test_graphql_query__historical_portfolio() -> None:
     """
     response = client.post("/graphql", json={"query": query})
     assert response.status_code == 200
-    assert len(response.json()["data"]["historicalPortfolio"]) == 9
+    assert len(response.json()["data"]["historicalPortfolio"]) == 1
 
 
 @pytest.mark.asyncio
