@@ -75,6 +75,7 @@ const TransactionList = {
   allTransaction: [
     {
       transactionDate: new Date("2021-06-01"),
+      isinCode: "abc123",
       broker: "IBKR",
       source: "IBKR",
       action: "BUY",
@@ -93,6 +94,7 @@ const TransactionList = {
     },
     {
       transactionDate: new Date("2024-05-01"),
+      isinCode: "abc123",
       broker: "IBKR",
       source: "IBKR",
       action: "SELL",

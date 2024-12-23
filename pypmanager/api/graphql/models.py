@@ -15,7 +15,7 @@ class BaseTransactionRow:
     broker: str
     source: str
     action: str
-    name: str
+    name: str | None
     no_traded: float | None
     commission: float | None
     fx: float | None
@@ -25,6 +25,7 @@ class BaseTransactionRow:
 class TransactionRow(BaseTransactionRow):
     """Represent a transaction row."""
 
+    isin_code: str | None
     price: float | None
     currency: str | None
     cash_flow: float | None

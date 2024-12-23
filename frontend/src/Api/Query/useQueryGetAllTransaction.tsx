@@ -6,6 +6,7 @@ const QUERY = gql`
   query QueryAllTransaction {
     allTransaction {
       transactionDate
+      isinCode
       broker
       source
       action
