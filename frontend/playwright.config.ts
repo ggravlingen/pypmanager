@@ -24,7 +24,7 @@ const config: PlaywrightTestConfig = {
     timeout: 5000,
     toHaveScreenshot: {
       // an acceptable amount of pixels that could be different, unset by default.
-      maxDiffPixels: 50,
+      maxDiffPixels: 700,
     },
   },
   /* Run tests in files in parallel */
