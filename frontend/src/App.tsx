@@ -5,6 +5,7 @@ import React from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
 
 import {
+  ChartPriceHistoryWrapper,
   NavigationBar,
   TableAllTransaction,
   TableCurrentPortfolio,
@@ -38,6 +39,10 @@ const ROUTE_LIST: RouteListProps[] = [
   {
     path: "/transaction",
     element: <TableAllTransaction />,
+  },
+  {
+    path: "/chart/:isinCode",
+    element: <ChartPriceHistoryWrapper />,
   },
 ];
 

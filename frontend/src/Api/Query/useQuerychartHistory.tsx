@@ -21,7 +21,7 @@ const QUERY = gql`
   }
 `;
 
-interface PortfolioHoldings {
+interface ChartHistoryData {
   chartHistory: ChartHistoryRow[];
 }
 
@@ -41,12 +41,12 @@ interface ChartHistoryVariables {
  */
 export default function useQueryChartHistory(
   variables: ChartHistoryVariables,
-): QueryResult<PortfolioHoldings> {
-  const options: QueryHookOptions<PortfolioHoldings> = {
+): QueryResult<ChartHistoryData> {
+  const options: QueryHookOptions<ChartHistoryData> = {
     fetchPolicy: "network-only",
     client: LocalApolloClient,
     variables,
   };
 
-  return useQuery<PortfolioHoldings>(QUERY, options);
+  return useQuery<ChartHistoryData>(QUERY, options);
 }
