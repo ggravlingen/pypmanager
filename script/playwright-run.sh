@@ -3,8 +3,6 @@ set -e
 
 cd "$(dirname "$0")/../frontend"
 
-rm -rf ./static/main.js
-
 yarn build-prod
 
 # Check if the first argument is --update-snapshots
