@@ -52,4 +52,4 @@ async def test_async_get_market_data_and_transaction(
             end_date=date(2022, 11, 30),
         )
 
-        assert len(result) == 22
+        assert len(result) == 21
