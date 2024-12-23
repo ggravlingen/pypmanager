@@ -8,6 +8,7 @@ const commonConfig: webpack.Configuration = {
   resolve: {
     alias: {
       "@Api": path.resolve("src/Api"),
+      "@Const": path.resolve("src/Constant"),
       "@ContextProvider": path.resolve("src/ContextProvider"),
       "@Generic": path.resolve("src/GenericComponents"),
       "@Theme": path.resolve("src/Theme"),

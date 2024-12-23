@@ -19,6 +19,7 @@
     "baseUrl": "./src",
     "paths": {
       "@Api": ["Api"],
+      "@Const": ["Constant"],
       "@ContextProvider": ["ContextProvider"],
       "@Generic": ["GenericComponents"],
       "@Theme": ["Theme"],
