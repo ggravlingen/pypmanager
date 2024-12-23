@@ -64,7 +64,7 @@ async def async_get_market_data_and_transaction(
         ] = df_transactions.index
 
     # Filter the relevant start date
-    start_date_calc = min(
+    start_date_calc = max(
         # Convert start_date to pandas.Timestamp for comparison
         pd.Timestamp(start_date),
         df_transactions[TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value]
