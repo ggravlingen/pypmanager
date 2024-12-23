@@ -12,38 +12,16 @@ from typing import cast
 import numpy as np
 import pandas as pd
 
+from pypmanager.ingest.market_data.helpers import get_market_data
 from pypmanager.ingest.transaction import (
     AccountNameValues,
     ColumnNameValues,
     TransactionRegistryColNameValues,
 )
-from pypmanager.settings import Settings
 
 from .security import MutualFund
 
 LOGGER = logging.getLogger(__name__)
-
-
-def get_market_data(isin_code: str | None = None) -> pd.DataFrame:
-    """
-    Load all market data from CSV files and concatenate them into a single DataFrame.
-
-    Returns:
-        pd.DataFrame: A DataFrame containing all the market data concatenated together,
-        indexed by 'report_date'.
-    """
-    all_data_frames: list[pd.DataFrame] = []
-
-    for file in Settings.dir_market_data.glob("*.csv"):
-        df_market_data = pd.read_csv(file, sep=";", index_col="report_date")
-        all_data_frames.append(df_market_data)
-
-    merged_df = pd.concat(all_data_frames, ignore_index=False)
-
-    if isin_code:
-        return merged_df.query(f"isin_code == '{isin_code}'")
-
-    return merged_df
 
 
 @dataclass
