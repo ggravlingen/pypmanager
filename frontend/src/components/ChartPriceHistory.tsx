@@ -13,9 +13,13 @@ import {
   TooltipItem,
 } from "chart.js";
 import { Chart, ChartDataset, ChartMeta } from "chart.js";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import { useParams } from "react-router-dom";
+import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs, { Dayjs } from "dayjs";
+import { LocalStorageKey } from "@Const";
 
 ChartJS.register(
   CategoryScale,
@@ -83,6 +87,77 @@ const customPluginShowBuySellMarkers = {
 // Register the custom plugin globally
 ChartJS.register(customPluginShowBuySellMarkers);
 
+interface DateRangePickerProps {
+  startDate: string;
+  endDate: string;
+  onStartDateChange: (date: string) => void;
+  onEndDateChange: (date: string) => void;
+}
+
+const DateRangePicker: React.FC<DateRangePickerProps> = ({
+  startDate,
+  endDate,
+  onStartDateChange,
+  onEndDateChange,
+}) => {
+  const [start, setStart] = useState<Dayjs | null>(dayjs(startDate));
+  const [end, setEnd] = useState<Dayjs | null>(dayjs(endDate));
+
+  const handleStartDateChange = (date: Dayjs | null) => {
+    setStart(date);
+    if (date) {
+      onStartDateChange(date.format("YYYY-MM-DD"));
+    }
+  };
+
+  const handleEndDateChange = (date: Dayjs | null) => {
+    setEnd(date);
+    if (date) {
+      onEndDateChange(date.format("YYYY-MM-DD"));
+    }
+  };
+
+  return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Box
+        sx={{
+          width: "1200px",
+          margin: "20px",
+          padding: "20px",
+          display: "flex",
+          gap: 2,
+          marginTop: 2,
+          borderRadius: "16px",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <DatePicker
+          label="Start Date"
+          value={start}
+          onChange={handleStartDateChange}
+          format="YYYY-MM-DD"
+          slotProps={{
+            textField: {
+              fullWidth: true,
+            },
+          }}
+        />
+        <DatePicker
+          label="End Date"
+          value={end}
+          onChange={handleEndDateChange}
+          format="YYYY-MM-DD"
+          slotProps={{
+            textField: {
+              fullWidth: true,
+            },
+          }}
+        />
+      </Box>
+    </LocalizationProvider>
+  );
+};
+
 /**
  * Component to display the price history chart for a given ISIN code.
  * @param props - The component props.
@@ -93,11 +168,28 @@ ChartJS.register(customPluginShowBuySellMarkers);
  */
 function ChartPriceHistory({ isinCode }: { isinCode: string }) {
   const theme = useTheme();
+  const [startDate, setStartDate] = useState(
+    localStorage.getItem(LocalStorageKey.CHART_START_DATE) ||
+      new Date(new Date().setFullYear(new Date().getFullYear() - 1))
+        .toISOString()
+        .split("T")[0],
+  );
+  const [endDate, setEndDate] = useState(
+    new Date().toISOString().split("T")[0],
+  );
+
+  useEffect(() => {
+    localStorage.setItem(LocalStorageKey.CHART_START_DATE, startDate);
+  }, [startDate]);
+
+  useEffect(() => {
+    localStorage.setItem(LocalStorageKey.CHART_END_DATE, endDate);
+  }, [endDate]);
 
   const variables = {
     isinCode: isinCode,
-    startDate: "2024-01-01",
-    endDate: "2024-12-23",
+    startDate: startDate,
+    endDate: endDate,
   };
 
   const { loading, error, data } = useQueryChartHistory(variables);
@@ -110,7 +202,10 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
             width: "1200px",
             height: "700px",
             margin: "20px",
-            padding: "20px",
+            paddingTop: "20px",
+            paddingBottom: "0px",
+            paddingLeft: "20px",
+            paddingRight: "20px",
             borderRadius: "16px",
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
           }}
@@ -179,6 +274,7 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
               plugins: {
                 legend: {
                   display: true, // Show legend
+                  position: "bottom", // Position the legend below the x-axis
                 },
                 tooltip: {
                   callbacks: {
@@ -190,6 +286,12 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
           />
         </Box>
       )}
+      <DateRangePicker
+        startDate={startDate}
+        endDate={endDate}
+        onStartDateChange={setStartDate}
+        onEndDateChange={setEndDate}
+      />
     </QueryLoader>
   );
 }
