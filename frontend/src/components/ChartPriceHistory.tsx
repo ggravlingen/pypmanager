@@ -1,7 +1,7 @@
 import { QueryLoader, useQueryChartHistory } from "@Api";
 import { LocalStorageKey } from "@Const";
 import { StandardCard } from "@Generic";
-import { Box, Typography, useTheme } from "@mui/material";
+import { Typography, useTheme } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import {
