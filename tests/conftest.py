@@ -66,6 +66,7 @@ class DataFactory:
                 TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker A",
                 TransactionRegistryColNameValues.SOURCE_FX.value: 1.0,
                 TransactionRegistryColNameValues.SOURCE_FILE.value: "test-file",
+                TransactionRegistryColNameValues.SOURCE_ACCOUNT_NAME.value: "test",
             }
         )
         return self
@@ -97,6 +98,7 @@ class DataFactory:
                 TransactionRegistryColNameValues.SOURCE_BROKER.value: "Broker A",
                 TransactionRegistryColNameValues.SOURCE_FX.value: 1.0,
                 TransactionRegistryColNameValues.SOURCE_FILE.value: "test-file",
+                TransactionRegistryColNameValues.SOURCE_ACCOUNT_NAME.value: "test",
             }
         )
         return self

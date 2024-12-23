@@ -132,6 +132,7 @@ async def test_transaction_registry__columns(
             "source_broker",
             "source_fx_rate",
             "source_file_name",
+            "source_account_name",
             "amount",
             "calc_agg_sum_quantity_held",
             "calc_avg_price_per_unit",
