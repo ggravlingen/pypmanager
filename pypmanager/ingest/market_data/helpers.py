@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import pandas as pd
+import strawberry
 import yaml
 
 from pypmanager.error import DataError
@@ -181,6 +182,7 @@ def get_market_data(isin_code: str | None = None) -> pd.DataFrame:
     return merged_df
 
 
+@strawberry.type
 @dataclass
 class MarketDataOverviewRecord:
     """Market data overview record."""
@@ -205,13 +207,13 @@ async def async_get_market_data_overview() -> list[MarketDataOverviewRecord]:
         if pd.isna(df_market_data.index.min()):
             first_date = None
         else:
-            first_date = df_market_data.index.min()
+            first_date = pd.to_datetime(df_market_data.index.min()).date()
 
         # last_date should be None if the index max is nan
         if pd.isna(df_market_data.index.max()):
             last_date = None
         else:
-            last_date = df_market_data.index.max()
+            last_date = pd.to_datetime(df_market_data.index.max()).date()
 
         output_data.append(
             MarketDataOverviewRecord(

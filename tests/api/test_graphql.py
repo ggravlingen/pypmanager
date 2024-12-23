@@ -3,15 +3,16 @@
 from __future__ import annotations
 
 from datetime import date, datetime
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
-from unittest.mock import patch
+from unittest.mock import PropertyMock, patch
 
 from fastapi.testclient import TestClient
 from freezegun import freeze_time
 import pytest
 
 from pypmanager.api import app
-from pypmanager.settings import Settings
+from pypmanager.settings import Settings, TypedSettings
 
 if TYPE_CHECKING:
     from collections.abc import Generator
@@ -217,3 +218,29 @@ async def test_graphql_query__chart_history() -> None:
 
     assert response.status_code == 200
     assert len(response.json()["data"]["chartHistory"]) == 22
+
+
+@pytest.mark.asyncio
+@pytest.mark.usefixtures("_mock_market_data_graphql")
+async def test_graphql_query__market_data_overview() -> None:
+    """Test query chartHistory."""
+    query = """
+    query {
+        marketDataOverview {
+            isinCode
+            name
+            firstDate
+            lastDate
+        }
+    }
+    """
+
+    with patch.object(
+        TypedSettings, "file_market_data_config_local", new_callable=PropertyMock
+    ) as mock_file_market_data_config_local:
+        # Disable local market data config
+        mock_file_market_data_config_local.return_value = Path("foo.yaml")
+        response = client.post("/graphql", json={"query": query})
+
+        assert response.status_code == 200
+        assert len(response.json()["data"]["marketDataOverview"]) == 3
