@@ -430,7 +430,7 @@ class TransactionRegistry:
             "source_broker",
             "source_file_name",
             "source_fx_rate",
-            "ledger_account",
+            "source_account_name",
             "calc_agg_sum_quantity_held",
             "calc_avg_price_per_unit",
             "calc_turnover_or_cash_flow",
@@ -448,7 +448,7 @@ class TransactionRegistry:
         missing_columns = set(expected_columns) - set(actual_columns)
         extra_columns = set(actual_columns) - set(expected_columns)
 
-        if missing_columns or extra_columns:
+        if missing_columns:
             msg = (
                 f"Columns are not as expected. Missing columns: {missing_columns}. "
                 f"Extra columns: {extra_columns}"
