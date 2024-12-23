@@ -1,5 +1,5 @@
 import { QueryLoader, useQueryChartHistory } from "@Api";
-import { Box } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import {
   CategoryScale,
   Chart as ChartJS,
@@ -9,6 +9,7 @@ import {
   PointElement,
   Title,
   Tooltip,
+  TooltipItem,
 } from "chart.js";
 import { Chart, ChartDataset, ChartMeta } from "chart.js";
 import React from "react";
@@ -25,7 +26,31 @@ ChartJS.register(
   Legend,
 );
 
-const customPlugin = {
+/**
+ * Callback function to format the tooltip label.
+ * @param context - The tooltip context.
+ * @returns An array of strings to display in the tooltip.
+ */
+function tooltipLabelCallback(context: TooltipItem<"line">): string[] {
+  const item = context.raw as {
+    x: string;
+    y: number;
+    volumeBuy?: number;
+    volumeSell?: number;
+  };
+  const volumeBuy = item.volumeBuy ?? 0;
+  const volumeSell = item.volumeSell ?? 0;
+  const volumeLabel =
+    volumeBuy > 0
+      ? `Volume bought: ${volumeBuy}`
+      : volumeSell > 0
+        ? `Volume sold: ${volumeSell}`
+        : "";
+
+  return [`${context.dataset.label}: ${item.y}`, volumeLabel];
+}
+
+const customPluginShowBuySellMarkers = {
   id: "showBuySellMarkers",
   afterDatasetsDraw: (chart: Chart) => {
     const ctx = chart.ctx;
@@ -54,7 +79,7 @@ const customPlugin = {
 };
 
 // Register the custom plugin globally
-ChartJS.register(customPlugin);
+ChartJS.register(customPluginShowBuySellMarkers);
 
 /**
  * Component to display the price history chart for a given ISIN code.
@@ -65,6 +90,8 @@ ChartJS.register(customPlugin);
  * <ChartPriceHistory isinCode="US0378331005" />
  */
 function ChartPriceHistory({ isinCode }: { isinCode: string }) {
+  const theme = useTheme();
+
   const variables = {
     isinCode: isinCode,
     startDate: "2024-01-01",
@@ -82,6 +109,7 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
               labels: data.chartHistory.map((item) => item.xVal),
               datasets: [
                 {
+                  label: "Close",
                   data: data.chartHistory.map((item) => ({
                     x: item.xVal,
                     y: item.yVal,
@@ -89,30 +117,39 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
                     volumeSell: item.volumeSell,
                   })),
                   fill: false,
-                  backgroundColor: "rgba(75,192,192,0.4)",
-                  borderColor: "rgba(75,192,192,1)",
+                  borderColor: theme.palette.text.primary, // Use theme color
                   borderWidth: 1, // Make the line thinner
                   pointRadius: data.chartHistory.map((item) =>
                     (item.volumeBuy ?? 0) > 0 || (item.volumeSell ?? 0) > 0
                       ? 7
                       : 0,
                   ), // Add marker if volumeBuy > 0 or volumeSell > 0
-                  pointBackgroundColor: data.chartHistory.map((item) =>
-                    (item.volumeBuy ?? 0) > 0
-                      ? "blue"
-                      : (item.volumeSell ?? 0) > 0
-                        ? "red"
-                        : "rgba(75,192,192,0.4)",
-                  ), // Set marker color to blue if volumeBuy > 0, red if volumeSell > 0
+                  pointBackgroundColor: data.chartHistory.map(
+                    (item) =>
+                      (item.volumeBuy ?? 0) > 0
+                        ? theme.palette.info.main // Use theme color for buy
+                        : (item.volumeSell ?? 0) > 0
+                          ? theme.palette.error.main // Use theme color for sell
+                          : theme.palette.text.primary, // Use theme color for default
+                  ), // Set marker color based on theme
                   pointBorderWidth: 0, // No border
                 },
               ],
             }}
             options={{
               maintainAspectRatio: false,
+              interaction: {
+                mode: "nearest",
+                intersect: false,
+              },
               plugins: {
                 legend: {
-                  display: false, // Remove legend
+                  display: true, // Show legend
+                },
+                tooltip: {
+                  callbacks: {
+                    label: tooltipLabelCallback,
+                  },
                 },
               },
             }}
