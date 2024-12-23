@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
+from datetime import date  # noqa: TC003
 
 import numpy as np
 import pandas as pd
+import strawberry
 
 from pypmanager.analytics.holding import get_market_data
 from pypmanager.ingest.transaction.const import (
@@ -15,16 +16,14 @@ from pypmanager.ingest.transaction.const import (
 )
 from pypmanager.ingest.transaction.transaction_registry import TransactionRegistry
 
-if TYPE_CHECKING:
-    from datetime import date
 
-
+@strawberry.type
 @dataclass
 class ChartData:
     """Define chart data."""
 
     x_val: date
-    y_val: float
+    y_val: float | None
 
     volume_buy: float | None
     volume_sell: float | None

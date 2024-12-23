@@ -16,7 +16,7 @@ from pypmanager.settings import Settings
 if TYPE_CHECKING:
     from collections.abc import Generator
 
-    from tests.conftest import DataFactory
+    from tests.conftest import DataFactory, MarketDataFactory
 
 client = TestClient(app)
 
@@ -31,7 +31,7 @@ def _mock_transaction_list_graphql(
         factory.buy(
             transaction_date=datetime(2022, 11, 1, tzinfo=Settings.system_time_zone)
         )
-        .sell(transaction_date=datetime(2022, 12, 1, tzinfo=Settings.system_time_zone))
+        .sell(transaction_date=datetime(2022, 11, 2, tzinfo=Settings.system_time_zone))
         .df_transaction_list
     )
     with (
@@ -39,6 +39,29 @@ def _mock_transaction_list_graphql(
             "pypmanager.ingest.transaction.transaction_registry.TransactionRegistry."
             "_load_transaction_files",
             return_value=mocked_transactions,
+        ),
+    ):
+        yield
+
+
+@pytest.fixture(scope="module")
+def _mock_market_data_graphql(
+    market_data_factory: type[MarketDataFactory],
+) -> Generator[Any, Any, Any]:
+    """Mock market data."""
+    mocked_market_data = (
+        market_data_factory()
+        .add(isin_code="US1234567890", report_date=date(2022, 11, 1), price=100.0)
+        .add(
+            isin_code="US1234567890",
+            report_date=date(2022, 11, 2),
+            price=90.0,
+        )
+    ).df_market_data_list
+    with (
+        patch(
+            "pypmanager.helpers.chart.get_market_data",
+            return_value=mocked_market_data,
         ),
     ):
         yield
@@ -168,3 +191,29 @@ async def test_graphql_query__result_statement() -> None:
     response = client.post("/graphql", json={"query": query})
     assert response.status_code == 200
     assert len(response.json()["data"]["resultStatement"]) == 3
+
+
+@pytest.mark.asyncio
+@pytest.mark.usefixtures("_mock_transaction_list_graphql")
+@pytest.mark.usefixtures("_mock_market_data_graphql")
+async def test_graphql_query__chart_history() -> None:
+    """Test query chartHistory."""
+    query = """
+    query ($isinCode: String!, $startDate: String!, $endDate: String!) {
+        chartHistory(isinCode: $isinCode, startDate: $startDate, endDate: $endDate) {
+            yVal
+            xVal
+            volumeBuy
+            volumeSell
+        }
+    }
+    """
+    variables = {
+        "isinCode": "US1234567890",
+        "startDate": "2022-11-01",
+        "endDate": "2022-11-30",
+    }
+    response = client.post("/graphql", json={"query": query, "variables": variables})
+
+    assert response.status_code == 200
+    assert len(response.json()["data"]["chartHistory"]) == 22
