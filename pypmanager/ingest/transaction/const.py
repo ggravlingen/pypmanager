@@ -110,6 +110,12 @@ class TransactionRegistryColNameValues(StrEnum):
 
     Resets when the cumulative volume held is zero.
     """
+    SOURCE_ACCOUNT_NAME = "source_account_name"
+    """
+    The name of the account the transaction is associated with.
+
+    This value, if present, is ingested from the transaction source files.
+    """
     SOURCE_BROKER = "source_broker"
     """
     The name of the broker transactions are ingested from.
