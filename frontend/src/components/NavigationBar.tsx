@@ -1,3 +1,4 @@
+import { LocalStorageKey } from "@Const";
 import {
   DarkMode,
   Leaderboard,
@@ -134,7 +135,7 @@ export default function NavigationBar({
     const newColorMode = colorMode === "light" ? "dark" : "light";
 
     setColorMode(newColorMode);
-    localStorage.setItem("colorMode", newColorMode);
+    localStorage.setItem(LocalStorageKey.SYSTEM_COLOR_MODE, newColorMode);
   };
 
   // Function to toggle the collapse/expand state
