@@ -42,7 +42,7 @@ async def test_async_get_market_data_and_transaction(
             return_value=mocked_transactions,
         ),
         patch(
-            "pypmanager.helpers.chart.get_market_data",
+            "pypmanager.ingest.market_data.helpers",
             return_value=mocked_market_data,
         ),
     ):
