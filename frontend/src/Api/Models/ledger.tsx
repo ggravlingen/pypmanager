@@ -4,6 +4,7 @@
 
 export interface BaseTransactionRow {
   transactionDate?: Date;
+  isinCode?: string;
   broker?: string;
   source?: string;
   action?: string;

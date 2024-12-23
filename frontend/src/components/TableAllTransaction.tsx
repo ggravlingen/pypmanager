@@ -10,6 +10,27 @@ import {
 } from "@mui/material";
 import { formatNumber } from "@Utils";
 import React from "react";
+import { Link } from "react-router-dom";
+
+/**
+ * Component to render a column displaying security information.
+ * If the `isinCode` is present in the `rowData`, it renders a link to the chart page for that security.
+ * Otherwise, it simply displays the name of the security.
+ * @param props - The component props.
+ * @param props.rowData - The data for the row, containing security information.
+ * @returns The rendered column with security information.
+ */
+function ColumnSecurity({ rowData }: { rowData: TransactionRow }): JSX.Element {
+  return (
+    <Box>
+      {rowData.isinCode ? (
+        <Link to={`/chart/${rowData.isinCode}`}>{rowData.name}</Link>
+      ) : (
+        rowData.name
+      )}
+    </Box>
+  );
+}
 
 /**
  * Renders the PnL column for a transaction row.
@@ -103,10 +124,11 @@ const columnSettings = [
   },
   {
     headerName: "Security",
-    fieldPath: "name",
+    fieldPath: "",
     align: CellAlign.LEFT,
-    dataType: CellDataType.STRING,
+    dataType: CellDataType.CUSTOM,
     description: "The name of the security",
+    customComponent: ColumnSecurity,
   },
   {
     headerName: "Action",

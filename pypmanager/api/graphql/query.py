@@ -106,6 +106,8 @@ class Query:
         transaction_list = await TransactionRegistry(
             sort_by_date_descending=True
         ).async_get_registry()
+
+        transaction_list = transaction_list.replace("nan", np.nan)
         transaction_list = transaction_list.replace({np.nan: None})
 
         output_list: list[TransactionRow] = []
@@ -115,9 +117,18 @@ class Query:
             else:
                 commission = None
 
+            if (
+                row[TransactionRegistryColNameValues.SOURCE_ISIN.value] is not None
+                or row[TransactionRegistryColNameValues.SOURCE_ISIN.value] != 0
+            ):
+                isin_code = row[TransactionRegistryColNameValues.SOURCE_ISIN.value]
+            else:
+                isin_code = None
+
             output_list.append(
                 TransactionRow(
                     transaction_date=index,
+                    isin_code=isin_code,
                     broker=row[TransactionRegistryColNameValues.SOURCE_BROKER.value],
                     source=row[TransactionRegistryColNameValues.SOURCE_FILE.value],
                     action=cast(
