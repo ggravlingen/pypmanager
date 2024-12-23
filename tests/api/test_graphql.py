@@ -31,7 +31,7 @@ def _mock_transaction_list_graphql(
         factory.buy(
             transaction_date=datetime(2022, 11, 1, tzinfo=Settings.system_time_zone)
         )
-        .sell(transaction_date=datetime(2022, 12, 1, tzinfo=Settings.system_time_zone))
+        .sell(transaction_date=datetime(2022, 11, 2, tzinfo=Settings.system_time_zone))
         .df_transaction_list
     )
     with (
@@ -215,5 +215,6 @@ async def test_graphql_query__chart_history() -> None:
         "endDate": "2022-11-30",
     }
     response = client.post("/graphql", json={"query": query, "variables": variables})
+
     assert response.status_code == 200
     assert len(response.json()["data"]["chartHistory"]) == 22
