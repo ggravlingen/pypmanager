@@ -5,7 +5,7 @@
   "main": "index.tsx",
   "sideEffects": false,
   "dependencies": {
-    "@apollo/client": "3.12.3",
+    "@apollo/client": "3.12.4",
     "@babel/core": "7.26.0",
     "@babel/preset-env": "7.26.0",
     "@babel/preset-react": "7.26.3",
