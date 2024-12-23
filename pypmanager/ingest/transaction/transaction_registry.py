@@ -194,6 +194,9 @@ class TransactionRegistry:
         self._sort_transactions()
         self._filter_by_date()
 
+        # Validate columns
+        self._validate_columns()
+
     def _load_transaction_files(self: TransactionRegistry) -> pd.DataFrame:
         """Load transaction files and return a sorted DataFrame."""
         df_generic = GenericLoader().df_final
@@ -412,6 +415,45 @@ class TransactionRegistry:
             df_raw = df_raw.sort_index()
 
         self.df_all_transactions = df_raw
+
+    def _validate_columns(self: TransactionRegistry) -> None:
+        """Validate columns."""
+        expected_columns = [
+            "source_name",
+            "source_transaction_type",
+            "source_isin_code",
+            "source_volume",
+            "source_price",
+            "amount",
+            "source_fee",
+            "source_currency",
+            "source_broker",
+            "source_file_name",
+            "source_fx_rate",
+            "ledger_account",
+            "calc_agg_sum_quantity_held",
+            "calc_avg_price_per_unit",
+            "calc_turnover_or_cash_flow",
+            "calc_cf_net_fee_nominal_ccy",
+            "calc_cf_gross_fee_nominal_ccy",
+            "calc_pnl_transaction_dividend",
+            "calc_pnl_transaction_trade",
+            "calc_pnl_transaction_total",
+            "meta_transaction_year",
+        ]
+
+        actual_columns = self.df_all_transactions.columns.tolist()
+
+        # Find columns that are in actual_columns but not in expected_columns
+        missing_columns = set(expected_columns) - set(actual_columns)
+        extra_columns = set(actual_columns) - set(expected_columns)
+
+        if missing_columns or extra_columns:
+            msg = (
+                f"Columns are not as expected. Missing columns: {missing_columns}. "
+                f"Extra columns: {extra_columns}"
+            )
+            raise ValueError(msg)
 
     async def async_get_registry(self) -> pd.DataFrame:
         """Get registry."""
