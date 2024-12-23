@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from typing import cast
 
 import numpy as np
@@ -11,6 +12,7 @@ from pypmanager.analytics import async_get_historical_portfolio, async_get_holdi
 from pypmanager.general_ledger import (
     async_get_general_ledger_as_dict,
 )
+from pypmanager.helpers.chart import ChartData, async_get_market_data_and_transaction
 from pypmanager.ingest.transaction import (
     ColumnNameValues,
     TransactionRegistry,
@@ -193,3 +195,25 @@ class Query:
             )
 
         return output_list
+
+    @strawberry.field
+    async def chart_history(
+        self: Query,
+        isin_code: str,
+        start_date: str,
+        end_date: str,
+    ) -> list[ChartData]:
+        """Return historical prices for a series."""
+        calc_start_date = datetime.strptime(  # noqa: DTZ007
+            start_date, "%Y-%m-%d"
+        ).date()
+        calc_end_date = datetime.strptime(  # noqa: DTZ007
+            end_date,
+            "%Y-%m-%d",
+        ).date()
+
+        return await async_get_market_data_and_transaction(
+            isin_code=isin_code,
+            start_date=calc_start_date,
+            end_date=calc_end_date,
+        )

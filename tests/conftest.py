@@ -158,7 +158,7 @@ class MarketDataFactory:
         report_date: date,
         price: float = 10.0,
     ) -> MarketDataFactory:
-        """Add a buy transaction."""
+        """Add a market data entry."""
         self.market_data_list.append(
             {
                 "isin_code": isin_code,
