@@ -12,6 +12,7 @@ import {
   TableGeneralLedger,
   TableHistoricalPortfolio,
   TableIncomeStatement,
+  TableMarketDataOverview,
 } from "./components";
 
 interface RouteListProps {
@@ -35,6 +36,10 @@ const ROUTE_LIST: RouteListProps[] = [
   {
     path: "/ledger",
     element: <TableGeneralLedger />,
+  },
+  {
+    path: "/marketDataOverview",
+    element: <TableMarketDataOverview />,
   },
   {
     path: "/transaction",
