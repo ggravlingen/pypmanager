@@ -38,6 +38,9 @@ def calculate_results(data: pd.DataFrame) -> pd.DataFrame:
 
         dfs.append(df_result)
 
+    if not dfs:
+        return pd.DataFrame()
+
     with warnings.catch_warnings():
         warnings.simplefilter(action="ignore", category=FutureWarning)
 

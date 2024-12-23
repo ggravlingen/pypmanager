@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING, Any
 from unittest.mock import patch
 
 from fastapi.testclient import TestClient
+from freezegun import freeze_time
 import pytest
 
 from pypmanager.api import app
@@ -14,8 +15,6 @@ from pypmanager.settings import Settings
 
 if TYPE_CHECKING:
     from collections.abc import Generator
-
-    from freezegun.api import FrozenDateTimeFactory
 
     from tests.conftest import DataFactory, MarketDataFactory
 
@@ -32,7 +31,7 @@ def _mock_transaction_list_graphql(
         factory.buy(
             transaction_date=datetime(2022, 11, 1, tzinfo=Settings.system_time_zone)
         )
-        .sell(transaction_date=datetime(2022, 11, 2, tzinfo=Settings.system_time_zone))
+        .sell(transaction_date=datetime(2022, 12, 1, tzinfo=Settings.system_time_zone))
         .df_transaction_list
     )
     with (
@@ -125,12 +124,10 @@ async def test_graphql_query__current_portfolio() -> None:
 
 @pytest.mark.asyncio
 @pytest.mark.usefixtures("_mock_transaction_list_graphql")
-async def test_graphql_query__historical_portfolio(
-    freezer: FrozenDateTimeFactory,
-) -> None:
+@pytest.mark.usefixtures("_mock_market_data_graphql")
+@freeze_time("2022-11-01")
+async def test_graphql_query__historical_portfolio() -> None:
     """Test query historicalPortfolio."""
-    freezer.move_to(date(2023, 8, 5))
-
     query = """
     {
         historicalPortfolio {
