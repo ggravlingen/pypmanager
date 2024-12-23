@@ -15,7 +15,7 @@ from pypmanager.settings import TypedSettings
 
 
 def test_get_market_data() -> None:
-    """Test async_get_market_data_overview."""
+    """Test async_get_market_data."""
     with patch.object(
         TypedSettings, "file_market_data_config_local", new_callable=PropertyMock
     ) as mock_file_market_data_config_local:
@@ -24,7 +24,18 @@ def test_get_market_data() -> None:
 
         result = get_market_data()
 
+        assert result is not None
         assert len(result) == 1
+        assert result.iloc[0].isin_code == "LU0051755006"
+
+
+def test_get_market_data__filter() -> None:
+    """Test async_get_market_data with filter."""
+    result = get_market_data(isin_code="LU0051755006")
+
+    assert result is not None
+    assert len(result) == 1
+    assert result.iloc[0].isin_code == "LU0051755006"
 
 
 @pytest.mark.asyncio
