@@ -1,6 +1,7 @@
 import { QueryLoader, useQueryChartHistory } from "@Api";
 import { LocalStorageKey } from "@Const";
-import { Box, useTheme } from "@mui/material";
+import { StandardCard } from "@Generic";
+import { Box, Typography, useTheme } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import {
@@ -119,20 +120,12 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Box
-        sx={{
-          width: "1200px",
-          margin: "20px",
-          padding: "20px",
-          display: "flex",
-          gap: 2,
-          marginTop: 2,
-          borderRadius: "16px",
-          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-        }}
+      <StandardCard
+        height={"96px"}
+        sx={{ display: "flex", gap: 2, marginTop: 2 }}
       >
         <DatePicker
-          label="Start Date"
+          label="Start date"
           value={start}
           onChange={handleStartDateChange}
           format="YYYY-MM-DD"
@@ -143,7 +136,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
           }}
         />
         <DatePicker
-          label="End Date"
+          label="End date"
           value={end}
           onChange={handleEndDateChange}
           format="YYYY-MM-DD"
@@ -153,7 +146,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
             },
           }}
         />
-      </Box>
+      </StandardCard>
     </LocalizationProvider>
   );
 };
@@ -196,20 +189,13 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
 
   return (
     <QueryLoader loading={loading} data={data} error={error}>
+      <StandardCard height={"55px"} sx={{ paddingTop: "11px" }}>
+        <Typography variant="h6" gutterBottom>
+          {isinCode}
+        </Typography>
+      </StandardCard>
       {data && (
-        <Box
-          sx={{
-            width: "1200px",
-            height: "700px",
-            margin: "20px",
-            paddingTop: "20px",
-            paddingBottom: "0px",
-            paddingLeft: "20px",
-            paddingRight: "20px",
-            borderRadius: "16px",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-          }}
-        >
+        <StandardCard>
           <Line
             data={{
               labels: data.chartHistory.map((item) => item.xVal),
@@ -284,7 +270,7 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
               },
             }}
           />
-        </Box>
+        </StandardCard>
       )}
       <DateRangePicker
         startDate={startDate}
