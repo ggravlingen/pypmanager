@@ -5,6 +5,7 @@ import TableCurrentPortfolio from "./TableCurrentPortfolio";
 import TableGeneralLedger from "./TableGeneralLedger";
 import TableHistoricalPortfolio from "./TableHistoricalPortfolio";
 import TableIncomeStatement from "./TableIncomeStatement";
+import TableMarketDataOverview from "./TableMarketDataOverview";
 
 export {
   ChartPriceHistoryWrapper,
@@ -14,4 +15,5 @@ export {
   TableGeneralLedger,
   TableHistoricalPortfolio,
   TableIncomeStatement,
+  TableMarketDataOverview,
 };

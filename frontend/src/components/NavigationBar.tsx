@@ -1,6 +1,7 @@
 import { LocalStorageKey } from "@Const";
 import {
   DarkMode,
+  Insights,
   Leaderboard,
   LightMode,
   List as ListIcon,
@@ -204,6 +205,12 @@ export default function NavigationBar({
           label={"Income statement"}
           icon={<Leaderboard sx={IconSX} />}
           linkTo="/income_statement"
+        />
+        <NavigationItem
+          isExpanded={isExpanded}
+          label={"Market data"}
+          icon={<Insights sx={IconSX} />}
+          linkTo="/marketDataOverview"
         />
         <NavigationItem
           isExpanded={isExpanded}

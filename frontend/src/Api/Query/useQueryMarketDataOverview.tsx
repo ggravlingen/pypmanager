@@ -5,8 +5,8 @@ import gql from "graphql-tag";
 const QUERY = gql`
   query QueryMarketDataOverview {
     marketDataOverview {
-      isinCode
       name
+      isinCode
       firstDate
       lastDate
     }

@@ -224,4 +224,5 @@ async def async_get_market_data_overview() -> list[MarketDataOverviewRecord]:
             )
         )
 
-    return output_data
+    # Sort output data by name
+    return sorted(output_data, key=lambda x: x.name if x.name else "")
