@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
-from datetime import UTC, datetime
+from dataclasses import dataclass
+from datetime import UTC, date, datetime
 from typing import TYPE_CHECKING, Any
 
+import numpy as np
 import pandas as pd
 import yaml
 
@@ -152,3 +154,72 @@ async def async_download_market_data() -> None:
             UpdateMarketDataCsv(data=loader.to_source_data(), source_name=loader.source)
         except AttributeError:
             LOGGER.exception(f"Unable to load {loader}")
+
+
+def get_market_data(isin_code: str | None = None) -> pd.DataFrame:
+    """
+    Load all market data from CSV files and concatenate them into a single DataFrame.
+
+    Returns:
+        pd.DataFrame: A DataFrame containing all the market data concatenated together,
+        indexed by 'report_date'.
+    """
+    all_data_frames: list[pd.DataFrame] = []
+
+    for file in Settings.dir_market_data.glob("*.csv"):
+        df_market_data = pd.read_csv(file, sep=";", index_col="report_date")
+        all_data_frames.append(df_market_data)
+
+    merged_df = pd.concat(all_data_frames, ignore_index=False)
+
+    merged_df = merged_df.replace("nan", np.nan)
+    merged_df = merged_df.replace({np.nan: None})
+
+    if isin_code:
+        return merged_df.query(f"isin_code == '{isin_code}'")
+
+    return merged_df
+
+
+@dataclass
+class MarketDataOverviewRecord:
+    """Market data overview record."""
+
+    isin_code: str
+    name: str | None
+    first_date: date | None
+    last_date: date | None
+
+
+async def async_get_market_data_overview() -> list[MarketDataOverviewRecord]:
+    """Return an overview of the market data."""
+    sources = _load_sources()
+
+    output_data: list[MarketDataOverviewRecord] = []
+
+    # For each source, get first and last date or market data
+    for source in sources:
+        df_market_data = get_market_data(isin_code=source.isin_code)
+
+        # first_date should be None if the index min is nan
+        if pd.isna(df_market_data.index.min()):
+            first_date = None
+        else:
+            first_date = df_market_data.index.min()
+
+        # last_date should be None if the index max is nan
+        if pd.isna(df_market_data.index.max()):
+            last_date = None
+        else:
+            last_date = df_market_data.index.max()
+
+        output_data.append(
+            MarketDataOverviewRecord(
+                isin_code=source.isin_code,
+                name=source.name,
+                first_date=first_date,
+                last_date=last_date,
+            )
+        )
+
+    return output_data

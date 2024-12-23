@@ -40,25 +40,25 @@ class TypedSettings(BaseSettings):
     def dir_market_data(self: TypedSettings) -> Path:
         """Return folder path for market data."""
         folder_path = Path(self.dir_data)
-        return (folder_path / "market_data").resolve()
+        return folder_path / "market_data"
 
     @property
     def dir_transaction_data(self: TypedSettings) -> Path:
         """Return folder path for transaction data."""
         folder_path = Path(self.dir_data)
-        return (folder_path / "transactions").resolve()
+        return folder_path / "transactions"
 
     @property
     def file_market_data_config(self: TypedSettings) -> Path:
         """Return market data file."""
         folder_path = Path(self.dir_config)
-        return (folder_path / "market_data.yaml").resolve()
+        return folder_path / "market_data.yaml"
 
     @property
     def file_market_data_config_local(self: TypedSettings) -> Path | None:
         """Return local market data file."""
         folder_path = Path(self.dir_data)
-        local_market_data = (folder_path / "configuration/market_data.yaml").resolve()
+        local_market_data = folder_path / "configuration" / "market_data.yaml"
         if local_market_data.exists():
             return local_market_data
 
