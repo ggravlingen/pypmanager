@@ -1,7 +1,7 @@
 import { QueryLoader, useQueryChartHistory } from "@Api";
 import { LocalStorageKey } from "@Const";
 import { Box, useTheme } from "@mui/material";
-import { DatePicker,LocalizationProvider } from "@mui/x-date-pickers";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import {
   CategoryScale,
@@ -17,7 +17,7 @@ import {
 } from "chart.js";
 import { Chart, ChartDataset, ChartMeta } from "chart.js";
 import dayjs, { Dayjs } from "dayjs";
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { useParams } from "react-router-dom";
 
