@@ -38,7 +38,7 @@ class AvanzaLoader(TransactionLoader):
 
     col_map = {  # noqa: RUF012
         "Datum": TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE,
-        "Konto": ColumnNameValues.ACCOUNT,
+        "Konto": TransactionRegistryColNameValues.SOURCE_ACCOUNT_NAME,
         "Typ av transaktion": TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE,
         "Värdepapper/beskrivning": (
             TransactionRegistryColNameValues.SOURCE_NAME_SECURITY
