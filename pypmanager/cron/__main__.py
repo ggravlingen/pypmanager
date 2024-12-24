@@ -10,7 +10,7 @@ from apscheduler.events import EVENT_JOB_ERROR, EVENT_JOB_EXECUTED, JobExecution
 from apscheduler.executors.pool import ThreadPoolExecutor
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-from pypmanager.ingest.market_data.helpers import async_download_market_data
+from pypmanager.helpers.market_data import async_download_market_data
 from pypmanager.settings import Settings
 
 LOGGER = logging.getLogger(__name__)
