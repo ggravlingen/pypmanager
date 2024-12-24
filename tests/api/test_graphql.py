@@ -61,7 +61,7 @@ def _mock_market_data_graphql(
     ).df_market_data_list
     with (
         patch(
-            "pypmanager.ingest.market_data.helpers",
+            "pypmanager.helpers.market_data",
             return_value=mocked_market_data,
         ),
     ):

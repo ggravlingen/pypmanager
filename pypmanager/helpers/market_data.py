@@ -1,9 +1,10 @@
-"""Helper functions."""
+"""Helper functions for market data."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import UTC, date, datetime
+import logging
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
@@ -12,18 +13,17 @@ import strawberry
 import yaml
 
 from pypmanager.error import DataError
-from pypmanager.ingest.market_data.models import Sources
+from pypmanager.ingest.market_data.models import Source, SourceData, Sources
 from pypmanager.settings import Settings
 
-from .const import LOGGER
+LOGGER = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
-    from .base_loader import BaseMarketDataLoader
-    from .models import Source, SourceData
+    from pypmanager.ingest.market_data.base_loader import BaseMarketDataLoader
 
 
-def _load_sources() -> list[Source]:
-    """Load settings."""
+async def async_load_market_data_config() -> list[Source]:
+    """Load market data settings files."""
     output_data: list[Source] = []
     with Settings.file_market_data_config.open(encoding="UTF-8") as file:
         # Load the YAML content from the file
@@ -48,13 +48,79 @@ def _load_sources() -> list[Source]:
     return output_data
 
 
-def _class_importer(name: str) -> Any:  # noqa: ANN401
+def get_market_data(isin_code: str | None = None) -> pd.DataFrame:
     """
-    Load a class from a string representing a fully qualified class name.
+    Load all market data from CSV files and concatenate them into a single DataFrame.
 
-    :param class_path: The fully qualified name of the class to load and instantiate.
-    :return: An instance of the specified class.
+    Returns:
+        pd.DataFrame: A DataFrame containing all the market data concatenated together,
+        indexed by 'report_date'.
     """
+    all_data_frames: list[pd.DataFrame] = []
+
+    for file in Settings.dir_market_data.glob("*.csv"):
+        df_market_data = pd.read_csv(file, sep=";", index_col="report_date")
+        all_data_frames.append(df_market_data)
+
+    merged_df = pd.concat(all_data_frames, ignore_index=False)
+
+    merged_df = merged_df.replace("nan", np.nan)
+    merged_df = merged_df.replace({np.nan: None})
+
+    if isin_code:
+        return merged_df.query(f"isin_code == '{isin_code}'")
+
+    return merged_df
+
+
+@strawberry.type
+@dataclass
+class MarketDataOverviewRecord:
+    """Market data overview record."""
+
+    isin_code: str
+    name: str | None
+    first_date: date | None
+    last_date: date | None
+
+
+async def async_get_market_data_overview() -> list[MarketDataOverviewRecord]:
+    """Return an overview of the market data."""
+    sources = await async_load_market_data_config()
+
+    output_data: list[MarketDataOverviewRecord] = []
+
+    # For each source, get first and last date or market data
+    for source in sources:
+        df_market_data = get_market_data(isin_code=source.isin_code)
+
+        # first_date should be None if the index min is nan
+        if pd.isna(df_market_data.index.min()):
+            first_date = None
+        else:
+            first_date = pd.to_datetime(df_market_data.index.min()).date()
+
+        # last_date should be None if the index max is nan
+        if pd.isna(df_market_data.index.max()):
+            last_date = None
+        else:
+            last_date = pd.to_datetime(df_market_data.index.max()).date()
+
+        output_data.append(
+            MarketDataOverviewRecord(
+                isin_code=source.isin_code,
+                name=source.name,
+                first_date=first_date,
+                last_date=last_date,
+            )
+        )
+
+    # Sort output data by name
+    return sorted(output_data, key=lambda x: x.name if x.name else "")
+
+
+def _class_importer(name: str) -> Any:  # noqa: ANN401
+    """Load a class from a string representing a fully qualified class name."""
     # Split the class path into its individual components.
     components = name.split(".")
     class_name = components.pop()
@@ -65,6 +131,32 @@ def _class_importer(name: str) -> Any:  # noqa: ANN401
 
     # Get the class from the module.
     return getattr(module, class_name)
+
+
+async def async_download_market_data() -> None:
+    """Load JSON-data from a source."""
+    sources = await async_load_market_data_config()
+
+    for idx, source in enumerate(sources):
+        LOGGER.info(f"{idx}: Parsing {source.isin_code} using {source.loader_class}")
+
+        loader_class_full_path = f"pypmanager.ingest.market_data.{source.loader_class}"
+
+        try:
+            data_loader_klass = _class_importer(loader_class_full_path)
+        except AttributeError as err:
+            msg = "Unable to load data"
+            raise DataError(msg, err) from err
+
+        try:
+            loader: BaseMarketDataLoader = data_loader_klass(
+                lookup_key=source.lookup_key,
+                isin_code=source.isin_code,
+                name=source.name,
+            )
+            UpdateMarketDataCsv(data=loader.to_source_data(), source_name=loader.source)
+        except AttributeError:
+            LOGGER.exception(f"Unable to load {loader}")
 
 
 class UpdateMarketDataCsv:
@@ -129,100 +221,3 @@ class UpdateMarketDataCsv:
 
         # Write the merged DataFrame back to the CSV file
         df_final_output.to_csv(self.file_market_data, index=False, sep=";")
-
-
-async def async_download_market_data() -> None:
-    """Load JSON-data from a source."""
-    sources = _load_sources()
-
-    for idx, source in enumerate(sources):
-        LOGGER.info(f"{idx}: Parsing {source.isin_code} using {source.loader_class}")
-
-        loader_class_full_path = f"pypmanager.ingest.market_data.{source.loader_class}"
-
-        try:
-            data_loader_klass = _class_importer(loader_class_full_path)
-        except AttributeError as err:
-            msg = "Unable to load data"
-            raise DataError(msg, err) from err
-
-        try:
-            loader: BaseMarketDataLoader = data_loader_klass(
-                lookup_key=source.lookup_key,
-                isin_code=source.isin_code,
-                name=source.name,
-            )
-            UpdateMarketDataCsv(data=loader.to_source_data(), source_name=loader.source)
-        except AttributeError:
-            LOGGER.exception(f"Unable to load {loader}")
-
-
-def get_market_data(isin_code: str | None = None) -> pd.DataFrame:
-    """
-    Load all market data from CSV files and concatenate them into a single DataFrame.
-
-    Returns:
-        pd.DataFrame: A DataFrame containing all the market data concatenated together,
-        indexed by 'report_date'.
-    """
-    all_data_frames: list[pd.DataFrame] = []
-
-    for file in Settings.dir_market_data.glob("*.csv"):
-        df_market_data = pd.read_csv(file, sep=";", index_col="report_date")
-        all_data_frames.append(df_market_data)
-
-    merged_df = pd.concat(all_data_frames, ignore_index=False)
-
-    merged_df = merged_df.replace("nan", np.nan)
-    merged_df = merged_df.replace({np.nan: None})
-
-    if isin_code:
-        return merged_df.query(f"isin_code == '{isin_code}'")
-
-    return merged_df
-
-
-@strawberry.type
-@dataclass
-class MarketDataOverviewRecord:
-    """Market data overview record."""
-
-    isin_code: str
-    name: str | None
-    first_date: date | None
-    last_date: date | None
-
-
-async def async_get_market_data_overview() -> list[MarketDataOverviewRecord]:
-    """Return an overview of the market data."""
-    sources = _load_sources()
-
-    output_data: list[MarketDataOverviewRecord] = []
-
-    # For each source, get first and last date or market data
-    for source in sources:
-        df_market_data = get_market_data(isin_code=source.isin_code)
-
-        # first_date should be None if the index min is nan
-        if pd.isna(df_market_data.index.min()):
-            first_date = None
-        else:
-            first_date = pd.to_datetime(df_market_data.index.min()).date()
-
-        # last_date should be None if the index max is nan
-        if pd.isna(df_market_data.index.max()):
-            last_date = None
-        else:
-            last_date = pd.to_datetime(df_market_data.index.max()).date()
-
-        output_data.append(
-            MarketDataOverviewRecord(
-                isin_code=source.isin_code,
-                name=source.name,
-                first_date=first_date,
-                last_date=last_date,
-            )
-        )
-
-    # Sort output data by name
-    return sorted(output_data, key=lambda x: x.name if x.name else "")

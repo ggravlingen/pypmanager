@@ -7,7 +7,7 @@ from unittest.mock import PropertyMock, patch
 
 import pytest
 
-from pypmanager.ingest.market_data.helpers import (
+from pypmanager.helpers.market_data import (
     async_get_market_data_overview,
     get_market_data,
 )

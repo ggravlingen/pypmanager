@@ -13,7 +13,7 @@ from pypmanager.general_ledger import (
     async_get_general_ledger_as_dict,
 )
 from pypmanager.helpers.chart import ChartData, async_get_market_data_and_transaction
-from pypmanager.ingest.market_data.helpers import (
+from pypmanager.helpers.market_data import (
     MarketDataOverviewRecord,
     async_get_market_data_overview,
 )

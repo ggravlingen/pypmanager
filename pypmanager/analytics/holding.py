@@ -12,7 +12,7 @@ from typing import cast
 import numpy as np
 import pandas as pd
 
-from pypmanager.ingest.market_data.helpers import get_market_data
+from pypmanager.helpers.market_data import get_market_data
 from pypmanager.ingest.transaction import (
     AccountNameValues,
     ColumnNameValues,
