@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 from typing import TYPE_CHECKING
 from unittest.mock import PropertyMock, patch
@@ -10,6 +10,7 @@ from unittest.mock import PropertyMock, patch
 import pytest
 
 from pypmanager.helpers.market_data import (
+    _class_importer,
     async_get_market_data_overview,
     async_load_market_data_config,
     get_market_data,
@@ -109,3 +110,18 @@ async def test_async_get_market_data_overview__missing_data() -> None:
         assert result[0].name is None
         assert result[0].first_date is None
         assert result[0].last_date is None
+
+
+def test_class_importer() -> None:
+    """Test function _class_importer."""
+    class_name = "datetime.datetime"  # Define a fully qualified class name
+
+    # Use the _class_importer function to load the class
+    loaded_class = _class_importer(class_name)
+
+    # Verify that the loaded class is the correct class
+    assert loaded_class == datetime
+
+    # Verify that an instance of the loaded class can be created
+    instance = loaded_class(2023, 1, 1)
+    assert isinstance(instance, datetime) is True
