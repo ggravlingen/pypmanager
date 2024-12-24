@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from pypmanager.ingest.market_data.helpers import get_market_data
+from pypmanager.helpers.market_data import get_market_data
 
 
 def test_get_market_data() -> None:

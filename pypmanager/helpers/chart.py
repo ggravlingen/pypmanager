@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 import strawberry
 
-from pypmanager.ingest.market_data.helpers import get_market_data
+from pypmanager.helpers.market_data import get_market_data
 from pypmanager.ingest.transaction.const import (
     TransactionRegistryColNameValues,
     TransactionTypeValues,
