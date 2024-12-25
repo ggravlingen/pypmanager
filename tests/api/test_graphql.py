@@ -244,3 +244,27 @@ async def test_graphql_query__market_data_overview() -> None:
 
         assert response.status_code == 200
         assert len(response.json()["data"]["marketDataOverview"]) == 3
+
+
+@pytest.mark.asyncio
+async def test_graphql_query__security_info() -> None:
+    """Test query security_info."""
+    query = """
+    query($isinCode: String!) {
+        securityInfo(isinCode: $isinCode) {
+            isinCode
+            name
+        }
+    }
+    """
+    variables = {
+        "isinCode": "SE0005188836",
+    }
+    response = client.post("/graphql", json={"query": query, "variables": variables})
+
+    assert response.status_code == 200
+    assert len(response.json()["data"]["securityInfo"]) == 2
+    assert (
+        response.json()["data"]["securityInfo"]["name"]
+        == "Länsförsäkringar Global Index"
+    )
