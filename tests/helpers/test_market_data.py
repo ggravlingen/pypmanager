@@ -63,6 +63,7 @@ def test_get_market_data__filter() -> None:
 
 
 @pytest.mark.asyncio
+@pytest.mark.usefixtures("mock_file_security_config_local")
 async def test_async_get_market_data_overview(
     market_data_factory: type[MarketDataFactory],
 ) -> None:
@@ -94,6 +95,7 @@ async def test_async_get_market_data_overview(
 
 
 @pytest.mark.asyncio
+@pytest.mark.usefixtures("mock_file_security_config_local")
 async def test_async_get_market_data_overview__missing_data() -> None:
     """Test async_get_market_data_overview with missing data."""
     with (

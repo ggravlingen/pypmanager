@@ -13,6 +13,7 @@ import strawberry
 import yaml
 
 from pypmanager.error import DataError
+from pypmanager.helpers.security import async_load_security_data
 from pypmanager.ingest.market_data.models import Source, SourceData, Sources
 from pypmanager.settings import Settings
 
@@ -87,12 +88,17 @@ class MarketDataOverviewRecord:
 async def async_get_market_data_overview() -> list[MarketDataOverviewRecord]:
     """Return an overview of the market data."""
     sources = await async_load_market_data_config()
+    all_security = await async_load_security_data()
 
     output_data: list[MarketDataOverviewRecord] = []
 
     # For each source, get first and last date or market data
     for source in sources:
         df_market_data = get_market_data(isin_code=source.isin_code)
+
+        # Add the name of the security to the source
+        security_obj = all_security.get(source.isin_code)
+        name = security_obj.name if security_obj else source.name
 
         # first_date should be None if the index min is nan
         if pd.isna(df_market_data.index.min()):
@@ -109,7 +115,7 @@ async def async_get_market_data_overview() -> list[MarketDataOverviewRecord]:
         output_data.append(
             MarketDataOverviewRecord(
                 isin_code=source.isin_code,
-                name=source.name,
+                name=name,
                 first_date=first_date,
                 last_date=last_date,
             )
