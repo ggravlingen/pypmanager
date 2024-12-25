@@ -7,13 +7,12 @@ from datetime import date, datetime
 import logging
 from typing import cast
 
+from pypmanager.analytics.holding import Holding
+from pypmanager.analytics.portfolio import Portfolio
 from pypmanager.general_ledger import async_get_general_ledger
 from pypmanager.ingest.transaction.const import TransactionRegistryColNameValues
 from pypmanager.settings import Settings
 from pypmanager.utils.dt import async_get_last_n_quarters
-
-from .holding import Holding
-from .portfolio import Portfolio
 
 LOGGER = logging.getLogger(__package__)
 
