@@ -64,6 +64,22 @@ class TypedSettings(BaseSettings):
 
         return None
 
+    @property
+    def security_config(self: TypedSettings) -> Path:
+        """Return security configuration file."""
+        folder_path = Path(self.dir_config)
+        return folder_path / "security.yaml"
+
+    @property
+    def security_config_local(self: TypedSettings) -> Path | None:
+        """Return local security configuration file."""
+        folder_path = Path(self.dir_data)
+        local_market_data = folder_path / "configuration" / "security.yaml"
+        if local_market_data.exists():
+            return local_market_data
+
+        return None
+
     is_demo: bool = False
 
 
