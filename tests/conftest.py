@@ -20,6 +20,20 @@ if TYPE_CHECKING:
     from collections.abc import Generator
 
 
+@pytest.fixture
+def mock_file_security_config_local() -> Generator[Any, Any, Any]:
+    """
+    Mock the local security config file.
+
+    The purpose of doing this is to avoid loading the local data during tests.
+    """
+    with patch.object(
+        TypedSettings, "security_config_local", new_callable=PropertyMock
+    ) as mock:
+        mock.return_value = Settings.security_config
+        yield
+
+
 @pytest.fixture(scope="session", autouse=True)
 def _mock_dir_market_data() -> Generator[Any, Any, Any]:
     """Return the path to the market data."""
