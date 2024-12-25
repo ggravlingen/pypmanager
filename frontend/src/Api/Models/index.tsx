@@ -4,6 +4,7 @@ import { LedgerRow, TransactionRow } from "./ledger";
 import { MarketDataOverviewRecord } from "./marketData";
 import { PortfolioContentRow } from "./portfolio";
 import { ResultStatementRow } from "./resultStatement";
+import { SecurityInfo } from "./security";
 
 export {
   ChartHistoryRow,
@@ -12,5 +13,6 @@ export {
   MarketDataOverviewRecord,
   PortfolioContentRow,
   ResultStatementRow,
+  SecurityInfo,
   TransactionRow,
 };
