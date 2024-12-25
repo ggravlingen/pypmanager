@@ -5,6 +5,7 @@ import useQueryGetIncomeStatement from "./useQueryGetIncomeStatement";
 import useQueryGetLedger from "./useQueryGetLedger";
 import useQueryGetPortfolio from "./useQueryGetPortfolio";
 import useQueryMarketDataOverview from "./useQueryMarketDataOverview";
+import useQuerySecurityInfo from "./useQuerySecurityInfo";
 
 export {
   useQueryChartHistory,
@@ -14,4 +15,5 @@ export {
   useQueryGetLedger,
   useQueryGetPortfolio,
   useQueryMarketDataOverview,
+  useQuerySecurityInfo,
 };
