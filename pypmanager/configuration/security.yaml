@@ -1,3 +1,8 @@
+# This file contains security information
+# A local copy of this file, contaning your own data
+# and using the same file name, should be created in
+# the data/configuration folder
+---
 - name: Länsförsäkringar Global Index
   isin_code: SE0005188836
 - name: Lysa Global Equity Broad C
