@@ -13,5 +13,5 @@ async def test_async_load_security_data() -> None:
     """Test async_load_security_data."""
     result = await async_load_security_data()
 
-    assert len(result) == 1
+    assert len(result) == 2
     assert result["SE0005188836"].name == "Länsförsäkringar Global Index"
