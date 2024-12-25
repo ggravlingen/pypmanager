@@ -1,7 +1,7 @@
-import { QueryLoader, useQueryChartHistory } from "@Api";
+import { QueryLoader, SecurityInfo, useQueryChartHistory } from "@Api";
 import { LocalStorageKey } from "@Const";
 import { StandardCard } from "@Generic";
-import { Typography, useTheme } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import {
@@ -151,6 +151,50 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   );
 };
 
+interface SecurityInfoCardProps {
+  securityInfo: SecurityInfo | null;
+  isinCode: string;
+}
+
+/**
+ * A component to display security information.
+ * If `securityInfo` is provided, it displays the name on the left and the ISIN code on the right.
+ * If `securityInfo` is not provided, it displays an error message.
+ * @param props - The component props.
+ * @param props.securityInfo - The security information object containing name and ISIN code.
+ * @param props.isinCode - The ISIN code to display if `securityInfo` is not provided.
+ * @returns The rendered component.
+ */
+function SecurityInfoCard({
+  securityInfo,
+  isinCode,
+}: SecurityInfoCardProps): JSX.Element {
+  return (
+    <StandardCard height={"55px"} sx={{ paddingTop: "11px" }}>
+      {securityInfo ? (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h6" gutterBottom>
+            {securityInfo.name}
+          </Typography>
+          <Typography variant="h6" gutterBottom>
+            {securityInfo.isinCode}
+          </Typography>
+        </Box>
+      ) : (
+        <Typography variant="h6" gutterBottom>
+          {`${isinCode} does not exist in security database`}
+        </Typography>
+      )}
+    </StandardCard>
+  );
+}
+
 /**
  * Component to display the price history chart for a given ISIN code.
  * @param props - The component props.
@@ -189,88 +233,89 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
 
   return (
     <QueryLoader loading={loading} data={data} error={error}>
-      <StandardCard height={"55px"} sx={{ paddingTop: "11px" }}>
-        <Typography variant="h6" gutterBottom>
-          {isinCode}
-        </Typography>
-      </StandardCard>
       {data && (
-        <StandardCard>
-          <Line
-            data={{
-              labels: data.chartHistory.map((item) => item.xVal),
-              datasets: [
-                {
-                  label: "Close",
-                  data: data.chartHistory.map((item) => ({
-                    x: item.xVal,
-                    y: item.yVal,
-                    volumeBuy: item.volumeBuy,
-                    volumeSell: item.volumeSell,
-                  })),
-                  fill: false,
-                  borderColor: theme.palette.text.primary, // Use theme color
-                  borderWidth: 1, // Make the line thinner
-                  pointRadius: data.chartHistory.map((item) =>
-                    (item.volumeBuy ?? 0) > 0 || (item.volumeSell ?? 0) > 0
-                      ? 9
-                      : 0,
-                  ), // Add marker if volumeBuy > 0 or volumeSell > 0
-                  pointBackgroundColor: data.chartHistory.map(
-                    (item) =>
-                      (item.volumeBuy ?? 0) > 0
-                        ? theme.palette.info.main // Use theme color for buy
-                        : (item.volumeSell ?? 0) > 0
-                          ? theme.palette.error.main // Use theme color for sell
-                          : theme.palette.text.primary, // Use theme color for default
-                  ), // Set marker color based on theme
-                  pointBorderWidth: 0, // No border
-                },
-              ],
-            }}
-            options={{
-              maintainAspectRatio: false,
-              interaction: {
-                mode: "nearest",
-                intersect: false,
-              },
-              scales: {
-                x: {
-                  ticks: {
-                    maxTicksLimit: 12, // Reduce the number of ticks
-                    color: theme.palette.text.primary, // Set tick labels to primary color
-                  },
-                  grid: {
-                    display: false, // Hide x-axis grid lines
-                  },
-                },
-                y: {
-                  ticks: {
-                    maxTicksLimit: 10, // Reduce the number of ticks
-                    callback: function (value) {
-                      return value.toLocaleString(); // Format the tick labels
-                    },
-                    color: theme.palette.text.primary, // Set tick labels to primary color
-                  },
-                  grid: {
-                    display: false, // Hide x-axis grid lines
-                  },
-                },
-              },
-              plugins: {
-                legend: {
-                  display: true, // Show legend
-                  position: "bottom", // Position the legend below the x-axis
-                },
-                tooltip: {
-                  callbacks: {
-                    label: tooltipLabelCallback,
-                  },
-                },
-              },
-            }}
+        <>
+          <SecurityInfoCard
+            securityInfo={data.securityInfo}
+            isinCode={isinCode}
           />
-        </StandardCard>
+          <StandardCard height={"500px"}>
+            <Line
+              data={{
+                labels: data.chartHistory.map((item) => item.xVal),
+                datasets: [
+                  {
+                    label: "Close",
+                    data: data.chartHistory.map((item) => ({
+                      x: item.xVal,
+                      y: item.yVal,
+                      volumeBuy: item.volumeBuy,
+                      volumeSell: item.volumeSell,
+                    })),
+                    fill: false,
+                    borderColor: theme.palette.text.primary, // Use theme color
+                    borderWidth: 1, // Make the line thinner
+                    pointRadius: data.chartHistory.map((item) =>
+                      (item.volumeBuy ?? 0) > 0 || (item.volumeSell ?? 0) > 0
+                        ? 9
+                        : 0,
+                    ), // Add marker if volumeBuy > 0 or volumeSell > 0
+                    pointBackgroundColor: data.chartHistory.map(
+                      (item) =>
+                        (item.volumeBuy ?? 0) > 0
+                          ? theme.palette.info.main // Use theme color for buy
+                          : (item.volumeSell ?? 0) > 0
+                            ? theme.palette.error.main // Use theme color for sell
+                            : theme.palette.text.primary, // Use theme color for default
+                    ), // Set marker color based on theme
+                    pointBorderWidth: 0, // No border
+                  },
+                ],
+              }}
+              options={{
+                maintainAspectRatio: false,
+                interaction: {
+                  mode: "nearest",
+                  intersect: false,
+                },
+                scales: {
+                  x: {
+                    ticks: {
+                      maxTicksLimit: 12, // Reduce the number of ticks
+                      color: theme.palette.text.primary, // Set tick labels to primary color
+                    },
+                    grid: {
+                      display: false, // Hide x-axis grid lines
+                    },
+                  },
+                  y: {
+                    ticks: {
+                      maxTicksLimit: 10, // Reduce the number of ticks
+                      callback: function (value) {
+                        return value.toLocaleString(); // Format the tick labels
+                      },
+                      color: theme.palette.text.primary, // Set tick labels to primary color
+                    },
+                    grid: {
+                      display: false, // Hide x-axis grid lines
+                    },
+                  },
+                },
+                plugins: {
+                  legend: {
+                    display: true, // Show legend
+                    position: "bottom", // Position the legend below the x-axis
+                  },
+                  tooltip: {
+                    callbacks: {
+                      label: tooltipLabelCallback,
+                    },
+                  },
+                },
+              }}
+            />
+          </StandardCard>
+        </>
       )}
       <DateRangePicker
         startDate={startDate}

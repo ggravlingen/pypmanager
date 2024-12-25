@@ -1,4 +1,4 @@
-import { ChartHistoryRow, LocalApolloClient } from "@Api";
+import { ChartHistoryRow, LocalApolloClient, SecurityInfo } from "@Api";
 import { QueryHookOptions, QueryResult, useQuery } from "@apollo/client";
 import gql from "graphql-tag";
 
@@ -8,6 +8,10 @@ const QUERY = gql`
     $startDate: String!
     $endDate: String!
   ) {
+    securityInfo(isinCode: $isinCode) {
+      isinCode
+      name
+    }
     chartHistory(
       isinCode: $isinCode
       startDate: $startDate
@@ -22,6 +26,7 @@ const QUERY = gql`
 `;
 
 interface ChartHistoryData {
+  securityInfo: SecurityInfo;
   chartHistory: ChartHistoryRow[];
 }
 
