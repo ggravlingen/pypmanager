@@ -2,13 +2,12 @@
 
 from __future__ import annotations
 
-from pathlib import Path
 from unittest.mock import PropertyMock, patch
 
 import pytest
 
 from pypmanager.helpers.security import async_load_security_data
-from pypmanager.settings import TypedSettings
+from pypmanager.settings import Settings, TypedSettings
 
 
 @pytest.mark.asyncio
@@ -18,7 +17,7 @@ async def test_async_load_security_data() -> None:
         TypedSettings, "security_config_local", new_callable=PropertyMock
     ) as mock_file_security_config_local:
         # Disable local market data config
-        mock_file_security_config_local.return_value = Path("foo.yaml")
+        mock_file_security_config_local.return_value = Settings.security_config
         result = await async_load_security_data()
 
         assert len(result) == 1
