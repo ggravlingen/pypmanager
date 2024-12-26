@@ -3,4 +3,5 @@ export interface ChartHistoryRow {
   yVal?: number;
   volumeBuy?: number;
   volumeSell?: number;
+  costPriceAverage?: number;
 }

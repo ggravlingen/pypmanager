@@ -679,3 +679,38 @@ def test_turnover_or_other_cash_flow(
     """Test function turnover_or_other_cash_flow."""
     result = PandasAlgorithm.turnover_or_other_cash_flow(row_data)
     assert result == expected
+
+
+@pytest.mark.parametrize(
+    ("row_data", "expected"),
+    [
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value: (
+                        None
+                    ),
+                    TransactionRegistryColNameValues.PRICE_PER_UNIT.value: 1.0,
+                },
+            ),
+            None,
+        ),
+        (
+            pd.Series(
+                {
+                    TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value: (
+                        2.0
+                    ),
+                    TransactionRegistryColNameValues.PRICE_PER_UNIT.value: 1.0,
+                },
+            ),
+            1,
+        ),
+    ],
+)
+def test_return_price_per_unit_or_none(
+    row_data: pd.Series, expected: float | None
+) -> None:
+    """Test function return_price_per_unit_or_none."""
+    result = PandasAlgorithm.return_price_per_unit_or_none(row_data)
+    assert result == expected

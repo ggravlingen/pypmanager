@@ -14,6 +14,7 @@ from pypmanager.ingest.transaction.const import (
     TransactionRegistryColNameValues,
     TransactionTypeValues,
 )
+from pypmanager.ingest.transaction.pandas_algorithm import PandasAlgorithm
 from pypmanager.ingest.transaction.transaction_registry import TransactionRegistry
 
 
@@ -27,6 +28,8 @@ class ChartData:
 
     volume_buy: float | None
     volume_sell: float | None
+
+    cost_price_average: float | None = None
 
     @property
     def is_buy(self) -> bool:
@@ -48,6 +51,14 @@ async def async_get_market_data_and_transaction(
     """Create chart data for historical price development and buy/sell."""
     output_data: list[ChartData] = []
 
+    # These are the columns we extract from the transaction registry
+    extract_col_from_transaction_registry = [
+        TransactionRegistryColNameValues.SOURCE_VOLUME.value,
+        TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value,
+        TransactionRegistryColNameValues.PRICE_PER_UNIT.value,
+        TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value,
+    ]
+
     # Fetch all transactions
     df_transactions = await TransactionRegistry().async_get_registry()
 
@@ -63,26 +74,13 @@ async def async_get_market_data_and_transaction(
             TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value
         ] = df_transactions.index
 
-    # Filter the relevant start date
-    start_date_calc = max(
-        # Convert start_date to pandas.Timestamp for comparison
-        pd.Timestamp(start_date),
-        df_transactions[TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value]
-        .min()
-        .tz_localize(None),
-    )
-
-    # Filter the relevant end date
-    end_date_calc = max(
-        # Convert start_date to pandas.Timestamp for comparison
-        pd.Timestamp(end_date),
-        df_transactions[TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value]
-        .max()
-        .tz_localize(None),
-    )
-
     # Create a date range between start_date and end_date, excluding weekends
-    date_range = pd.date_range(start=start_date_calc, end=end_date_calc, freq="B")
+    # Set start date to 1980-01-01 to ensure all dates are included
+    date_range = pd.date_range(
+        start=pd.Timestamp("1980-01-01"),
+        end=pd.Timestamp("2030-12-31"),
+        freq="B",
+    )
 
     # Convert the date range to a DataFrame
     df_date_range = pd.DataFrame(date_range, columns=["date"])
@@ -99,15 +97,9 @@ async def async_get_market_data_and_transaction(
     df_transactions = df_transactions.set_index(
         TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value
     )
-
     # Merge the date range DataFrame with df_transactions on the date index
     df_transaction_with_date = df_date_range.join(
-        df_transactions[
-            [
-                TransactionRegistryColNameValues.SOURCE_VOLUME.value,
-                TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value,
-            ]
-        ],
+        df_transactions[extract_col_from_transaction_registry],
         how="left",
     )
 
@@ -124,15 +116,45 @@ async def async_get_market_data_and_transaction(
 
     # Keep only the date and price columns
     df_result = df_transaction_with_market_data[
-        [
-            "price",
-            TransactionRegistryColNameValues.SOURCE_VOLUME.value,
-            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value,
-        ]
+        ["price", *extract_col_from_transaction_registry]
     ]
+
+    # Fill rows with the previous value if NaN
+    for col in [
+        TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value,
+        TransactionRegistryColNameValues.PRICE_PER_UNIT.value,
+    ]:
+        df_result[col] = df_result[col].fillna(method="ffill")
+
+    # Convert df_result.index to datetime
+    df_result.index = pd.to_datetime(df_result.index)
+
+    # Filter the relevant start date
+    start_date_timestamp = pd.Timestamp(
+        start_date
+    )  # Convert start_date argument to pandas.Timestamp for comparison
+    min_transaction_date = df_result.index.min().tz_localize(None)
+    start_date_calc = max(start_date_timestamp, min_transaction_date)
+
+    # Filter the relevant end date
+    end_date_timestamp = pd.Timestamp(end_date)
+    max_transaction_date = df_result.index.max().tz_localize(None)
+    end_date_calc = min(end_date_timestamp, max_transaction_date)
+
+    # Filter the relevant date range
+    df_result = df_result[
+        (df_result.index >= start_date_calc) & (df_result.index <= end_date_calc)
+    ]
+
+    # Apply the custom function to adjust PRICE_PER_UNIT
+    df_result[TransactionRegistryColNameValues.PRICE_PER_UNIT.value] = df_result.apply(
+        PandasAlgorithm.return_price_per_unit_or_none, axis=1
+    )
 
     # Fill NaN values with None
     df_result = df_result.replace({np.nan: None})
+
+    df_result.to_excel("foo.xlsx")
 
     for index, row in df_result.iterrows():
         volume_buy = (
@@ -154,6 +176,9 @@ async def async_get_market_data_and_transaction(
                 y_val=row["price"],
                 volume_buy=volume_buy,
                 volume_sell=volume_sell,
+                # cost_price_average=row[
+                #     TransactionRegistryColNameValues.PRICE_PER_UNIT.value
+                # ],
             )
         )
 

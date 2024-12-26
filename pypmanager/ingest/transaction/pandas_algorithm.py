@@ -277,6 +277,31 @@ class PandasAlgorithm:
             float, row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
         )
 
+    @staticmethod
+    def return_price_per_unit_or_none(row: pd.Series) -> float | None:
+        """Return price per unit or None."""
+        if (
+            row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value]
+            == TransactionTypeValues.SELL.value
+        ) and (
+            round(
+                row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
+                - row[TransactionRegistryColNameValues.SOURCE_VOLUME.value],
+                0,
+            )
+            == 0
+        ):
+            return None
+
+        if row[
+            TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value
+        ] is None or pd.isna(
+            row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
+        ):
+            return None
+
+        return cast(float, row[TransactionRegistryColNameValues.PRICE_PER_UNIT.value])
+
 
 class PandasAlgorithmPnL:
     """Pandas algorithm for PnL transaction data."""
