@@ -245,6 +245,20 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
                 labels: data.chartHistory.map((item) => item.xVal),
                 datasets: [
                   {
+                    label: "Average cost",
+                    data: data.chartHistory.map((item) => ({
+                      x: item.xVal,
+                      y:
+                        item.costPriceAverage !== 0 && item.costPriceAverage
+                          ? item.costPriceAverage
+                          : null,
+                    })),
+                    fill: false,
+                    borderColor: theme.palette.secondary.main, // Use secondary theme color
+                    borderWidth: 3,
+                    pointRadius: 0, // No points
+                  },
+                  {
                     label: "Close",
                     data: data.chartHistory.map((item) => ({
                       x: item.xVal,

@@ -1,7 +1,7 @@
 export interface ChartHistoryRow {
   xVal: string;
-  yVal?: number;
-  volumeBuy?: number;
-  volumeSell?: number;
-  costPriceAverage?: number;
+  yVal: number;
+  volumeBuy: number;
+  volumeSell: number;
+  costPriceAverage: number;
 }
