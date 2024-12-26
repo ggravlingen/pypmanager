@@ -1,7 +1,11 @@
 """Date utilities."""
 
-from datetime import datetime, timedelta
+from __future__ import annotations
+
+from datetime import date, datetime, timedelta
 from enum import IntEnum
+
+import pandas as pd
 
 from pypmanager.settings import Settings
 
@@ -65,3 +69,29 @@ async def async_get_last_n_quarters(no_quarters: int) -> list[datetime]:
         quarter_ends.append(last_quarter)
 
     return quarter_ends[::-1]
+
+
+async def async_get_empty_df_with_datetime_index(
+    start_date: date | None = None,
+    end_date: date | None = None,
+) -> pd.DataFrame:
+    """
+    Return an empty DataFrame with a DatetimeIndex.
+
+    Only weekdays are included in the date range.
+    """
+    if start_date is None:
+        start_date = date(1980, 1, 1)
+
+    if end_date is None:
+        end_date = date(2030, 12, 31)
+
+    return pd.DataFrame(
+        pd.date_range(
+            start=pd.Timestamp(start_date),
+            end=pd.Timestamp(end_date),
+            freq="B",
+            tz=Settings.system_time_zone,
+        ),
+        columns=["date"],
+    ).set_index("date")

@@ -6,7 +6,11 @@ from freezegun.api import FrozenDateTimeFactory
 import pytest
 
 from pypmanager.settings import Settings
-from pypmanager.utils.dt import async_get_last_n_quarters, get_previous_quarter
+from pypmanager.utils.dt import (
+    async_get_empty_df_with_datetime_index,
+    async_get_last_n_quarters,
+    get_previous_quarter,
+)
 
 
 @pytest.mark.asyncio
@@ -46,3 +50,12 @@ async def test_async_get_last_n_quarters(
 def test_get_previous_quarter(report_date: datetime, expected_date: datetime) -> None:
     """Test function get_previous_quarter."""
     assert get_previous_quarter(report_date=report_date) == expected_date
+
+
+@pytest.mark.asyncio
+async def test_async_get_empty_df_with_datetime_index() -> None:
+    """Test function async_get_empty_df_with_datetime_index."""
+    result = await async_get_empty_df_with_datetime_index()
+    assert len(result) == 13306
+    assert result.index[0] == datetime(1980, 1, 1, tzinfo=Settings.system_time_zone)
+    assert result.index[-1] == datetime(2030, 12, 31, tzinfo=Settings.system_time_zone)
