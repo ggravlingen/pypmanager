@@ -55,20 +55,9 @@ async def async_get_market_data_and_transaction(
         TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value,
     ]
 
-    # Fetch all transactions
+    # Fetch all transactions and filter ISIN code
     df_transactions = await TransactionRegistry().async_get_registry()
-
-    # Filter transactions by ISIN code
     df_transactions = df_transactions.query("source_isin_code == @isin_code")
-
-    # Append the source transaction date as a column if it does not exist
-    if (
-        TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value
-        not in df_transactions.columns
-    ):
-        df_transactions[
-            TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value
-        ] = df_transactions.index
 
     # Create a date range between start_date and end_date, excluding weekends
     # Set start date to 1980-01-01 to ensure all dates are included
@@ -79,10 +68,8 @@ async def async_get_market_data_and_transaction(
         tz=Settings.system_time_zone,
     )
 
-    # Convert the date range to a DataFrame
-    df_date_range = pd.DataFrame(date_range, columns=["date"])
-
-    df_date_range = df_date_range.set_index("date")
+    # Convert the date range to a DataFrame and set index
+    df_date_range = pd.DataFrame(date_range, columns=["date"]).set_index("date")
 
     # Merge the date range DataFrame with df_transactions on the date index
     df_transaction_with_date = df_date_range.join(
