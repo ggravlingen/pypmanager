@@ -29,6 +29,8 @@ class ChartData:
     volume_buy: float | None
     volume_sell: float | None
 
+    cost_price_average: float | None = None
+
     @property
     def is_buy(self) -> bool:
         """Return if buy."""
