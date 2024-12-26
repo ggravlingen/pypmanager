@@ -63,7 +63,12 @@ async def test_transaction_registry__all_sold(
 
         assert_array_equal(actual_values, expected_values)
 
-        # calc_avg_price_per_unit
+        expected_values_is_reset = [False, True]
+        actual_values_is_reset = registry[
+            TransactionRegistryColNameValues.CALC_ADJUSTED_QUANTITY_HELD_IS_RESET.value
+        ].to_numpy()
+
+        assert_array_equal(actual_values_is_reset, expected_values_is_reset)
 
 
 @pytest.mark.asyncio
@@ -136,6 +141,7 @@ async def test_transaction_registry__columns(
             "amount",
             "calc_agg_sum_quantity_held",
             "calc_avg_price_per_unit",
+            "calc_agg_sum_quantity_held_is_reset",
             "calc_turnover_or_cash_flow",
             "calc_cf_net_fee_nominal_ccy",
             "calc_cf_gross_fee_nominal_ccy",
