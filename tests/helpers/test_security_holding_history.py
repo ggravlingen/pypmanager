@@ -53,7 +53,7 @@ async def test_security_holding_history__transaction_list() -> None:
         df_transaction_registry=transaction_registry,
     )
 
-    assert len(shh.transaction_list) == 6
+    assert len(shh.transaction_list) == 7
 
 
 @pytest.mark.usefixtures("mock_security_transaction_registry")
