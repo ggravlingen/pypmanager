@@ -55,7 +55,8 @@ def get_market_data(isin_code: str | None = None) -> pd.DataFrame:
 
     Returns:
         pd.DataFrame: A DataFrame containing all the market data concatenated together,
-        indexed by 'report_date'.
+        indexed by 'report_date'. If isin_code is provided, only the data for that
+        isin_code will be returned. In that case, the index is a datetime index.
     """
     all_data_frames: list[pd.DataFrame] = []
 
@@ -68,13 +69,14 @@ def get_market_data(isin_code: str | None = None) -> pd.DataFrame:
     merged_df = merged_df.replace("nan", np.nan)
     merged_df = merged_df.replace({np.nan: None})
 
-    # We want to merge the date range DataFrame with df_market_data on the date index so
-    # we need to convert the index to datetime
-    merged_df.index = pd.to_datetime(df_market_data.index)
-    merged_df.index = merged_df.index.tz_localize(Settings.system_time_zone)
-
     if isin_code:
-        return merged_df.query(f"isin_code == '{isin_code}'")
+        df_queried = merged_df.query(f"isin_code == '{isin_code}'")
+        # We want to merge the date range DataFrame with df_market_data on the date
+        # index so we need to convert the index to datetime
+        df_queried.index = pd.to_datetime(df_queried.index).tz_localize(
+            Settings.system_time_zone
+        )
+        return df_queried
 
     return merged_df
 
