@@ -3,13 +3,17 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 from unittest.mock import patch
 
 from numpy.testing import assert_array_equal
+import pandas as pd
 import pytest
 
-from pypmanager.helpers.security_holding_history import SecurityHoldingHistory
+from pypmanager.helpers.security_holding_history import (
+    SecurityHoldingHistory,
+    SecurityHoldingHistoryPandasAlgorithm,
+)
 from pypmanager.ingest.transaction.const import TransactionRegistryColNameValues
 from pypmanager.ingest.transaction.transaction_registry import TransactionRegistry
 from pypmanager.settings import Settings
@@ -184,3 +188,41 @@ async def test_security_holding_history__df_transaction_filled() -> None:
         actual_average_price,
         expected_average_price,
     )
+
+
+@pytest.mark.parametrize(
+    ("row_data", "expected"),
+    [
+        (
+            {
+                TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value: 10,
+                TransactionRegistryColNameValues.PRICE_PER_UNIT.value: 100,
+                TransactionRegistryColNameValues.CALC_ADJUSTED_QUANTITY_HELD_IS_RESET.value: False,  # noqa: E501
+            },
+            100.0,
+        ),
+        (
+            {
+                TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value: 0,
+                TransactionRegistryColNameValues.PRICE_PER_UNIT.value: 100,
+                TransactionRegistryColNameValues.CALC_ADJUSTED_QUANTITY_HELD_IS_RESET.value: True,  # noqa: E501
+            },
+            0.0,
+        ),
+        (
+            {
+                TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value: 0,
+                TransactionRegistryColNameValues.PRICE_PER_UNIT.value: 100,
+                TransactionRegistryColNameValues.CALC_ADJUSTED_QUANTITY_HELD_IS_RESET.value: False,  # noqa: E501
+            },
+            None,
+        ),
+    ],
+)
+def test_clean_calc_agg_sum_quantity_held(
+    row_data: dict[str, Any], expected: float | None
+) -> None:
+    """Test SecurityHoldingHistoryPandasAlgorithm.clean_calc_agg_sum_quantity_held."""
+    row = pd.Series(row_data)
+    result = SecurityHoldingHistoryPandasAlgorithm.clean_calc_agg_sum_quantity_held(row)
+    assert result == expected
