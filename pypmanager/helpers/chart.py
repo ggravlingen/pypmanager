@@ -57,13 +57,13 @@ async def async_get_market_data_and_transaction(
     extract_col_from_transaction_registry = [
         TransactionRegistryColNameValues.SOURCE_VOLUME.value,
         TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value,
+        TransactionRegistryColNameValues.PRICE_PER_UNIT.value,
     ]
 
     # Fetch all transactions and filter ISIN code
     df_transactions = await TransactionRegistry().async_get_registry()
 
-    # implement this
-    await SecurityHoldingHistory(
+    df_security_holding_history = await SecurityHoldingHistory(
         isin_code=isin_code,
         df_transaction_registry=df_transactions,
     ).async_get_data()
@@ -75,7 +75,7 @@ async def async_get_market_data_and_transaction(
 
     # Merge the date range DataFrame with df_transactions on the date index
     df_transaction_with_date = df_date_range.join(
-        df_transactions[extract_col_from_transaction_registry],
+        df_security_holding_history[extract_col_from_transaction_registry],
         how="left",
     )
 
@@ -136,6 +136,9 @@ async def async_get_market_data_and_transaction(
                 y_val=row["price"],
                 volume_buy=volume_buy,
                 volume_sell=volume_sell,
+                cost_price_average=row[
+                    TransactionRegistryColNameValues.PRICE_PER_UNIT.value
+                ],
             )
         )
 
