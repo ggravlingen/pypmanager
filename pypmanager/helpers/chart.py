@@ -10,6 +10,7 @@ import pandas as pd
 import strawberry
 
 from pypmanager.helpers.market_data import get_market_data
+from pypmanager.helpers.security_holding_history import SecurityHoldingHistory
 from pypmanager.ingest.transaction.const import (
     TransactionRegistryColNameValues,
     TransactionTypeValues,
@@ -59,19 +60,25 @@ async def async_get_market_data_and_transaction(
 
     # Fetch all transactions and filter ISIN code
     df_transactions = await TransactionRegistry().async_get_registry()
-    df_transactions = df_transactions.query("source_isin_code == @isin_code")
+
+    # implement this
+    await SecurityHoldingHistory(
+        isin_code=isin_code,
+        df_transaction_registry=df_transactions,
+    ).async_get_data()
 
     # Create a date range between start_date and end_date, excluding weekends
     # Set start date to 1980-01-01 to ensure all dates are included
-    date_range = pd.date_range(
-        start=pd.Timestamp("1980-01-01"),
-        end=pd.Timestamp("2030-12-31"),
-        freq="B",
-        tz=Settings.system_time_zone,
-    )
-
     # Convert the date range to a DataFrame and set index
-    df_date_range = pd.DataFrame(date_range, columns=["date"]).set_index("date")
+    df_date_range = pd.DataFrame(
+        pd.date_range(
+            start=pd.Timestamp("1980-01-01"),
+            end=pd.Timestamp("2030-12-31"),
+            freq="B",
+            tz=Settings.system_time_zone,
+        ),
+        columns=["date"],
+    ).set_index("date")
 
     # Merge the date range DataFrame with df_transactions on the date index
     df_transaction_with_date = df_date_range.join(
