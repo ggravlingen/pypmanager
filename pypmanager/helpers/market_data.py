@@ -68,6 +68,11 @@ def get_market_data(isin_code: str | None = None) -> pd.DataFrame:
     merged_df = merged_df.replace("nan", np.nan)
     merged_df = merged_df.replace({np.nan: None})
 
+    # We want to merge the date range DataFrame with df_market_data on the date index so
+    # we need to convert the index to datetime
+    merged_df.index = pd.to_datetime(df_market_data.index)
+    merged_df.index = merged_df.index.tz_localize(Settings.system_time_zone)
+
     if isin_code:
         return merged_df.query(f"isin_code == '{isin_code}'")
 
