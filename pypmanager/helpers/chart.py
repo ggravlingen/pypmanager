@@ -17,6 +17,7 @@ from pypmanager.ingest.transaction.const import (
 )
 from pypmanager.ingest.transaction.transaction_registry import TransactionRegistry
 from pypmanager.settings import Settings
+from pypmanager.utils.dt import async_get_empty_df_with_datetime_index
 
 
 @strawberry.type
@@ -70,15 +71,7 @@ async def async_get_market_data_and_transaction(
     # Create a date range between start_date and end_date, excluding weekends
     # Set start date to 1980-01-01 to ensure all dates are included
     # Convert the date range to a DataFrame and set index
-    df_date_range = pd.DataFrame(
-        pd.date_range(
-            start=pd.Timestamp("1980-01-01"),
-            end=pd.Timestamp("2030-12-31"),
-            freq="B",
-            tz=Settings.system_time_zone,
-        ),
-        columns=["date"],
-    ).set_index("date")
+    df_date_range = await async_get_empty_df_with_datetime_index()
 
     # Merge the date range DataFrame with df_transactions on the date index
     df_transaction_with_date = df_date_range.join(
