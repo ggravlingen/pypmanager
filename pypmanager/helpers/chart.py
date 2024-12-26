@@ -89,11 +89,6 @@ async def async_get_market_data_and_transaction(
     # Get all market data for the ISIN
     df_market_data = get_market_data(isin_code=isin_code)
 
-    # We want to merge the date range DataFrame with df_market_data on the date index so
-    # we need to convert the index to datetime
-    df_market_data.index = pd.to_datetime(df_market_data.index)
-    df_market_data.index = df_market_data.index.tz_localize(Settings.system_time_zone)
-
     # Merge the resulting DataFrame with df_market_data on the date index
     df_transaction_with_market_data = df_transaction_with_date.join(
         df_market_data[["price"]], how="left"
