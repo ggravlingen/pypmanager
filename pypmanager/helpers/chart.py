@@ -92,9 +92,6 @@ async def async_get_market_data_and_transaction(
         ["price", *extract_col_from_transaction_registry]
     ]
 
-    # Convert df_result.index to datetime
-    df_result.index = pd.to_datetime(df_result.index)
-
     # Filter the relevant start date
     start_date_timestamp = pd.Timestamp(
         start_date
