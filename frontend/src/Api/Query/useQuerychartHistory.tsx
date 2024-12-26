@@ -21,6 +21,7 @@ const QUERY = gql`
       xVal
       volumeBuy
       volumeSell
+      costPriceAverage
     }
   }
 `;
