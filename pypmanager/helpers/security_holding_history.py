@@ -64,7 +64,7 @@ class SecurityHoldingHistory:
     """
     Build a dataframe what contains historical metrics for a held security.
 
-    The end result is available in the method async_get_security_holding_history().
+    The end result is available in the method async_get_data().
     """
 
     COLS_TO_DROP: ClassVar = [
@@ -166,3 +166,7 @@ class SecurityHoldingHistory:
         df_raw = df_raw.replace({np.nan: None})
 
         self.df_transaction_filled = df_raw
+
+    async def async_get_data(self) -> pd.DataFrame:
+        """Return the DataFrame."""
+        return self.df_transaction_filled
