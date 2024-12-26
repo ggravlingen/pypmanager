@@ -196,6 +196,11 @@ class PandasAlgorithm:
                 TransactionRegistryColNameValues.INTERNAL_TURNOVER.value
             ]
 
+            group.at[  # noqa: PD008
+                index,
+                TransactionRegistryColNameValues.CALC_ADJUSTED_QUANTITY_HELD_IS_RESET.value,
+            ] = False
+
             if (
                 row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value]
                 == TransactionTypeValues.BUY.value
@@ -234,6 +239,10 @@ class PandasAlgorithm:
                 group.at[  # noqa: PD008
                     index, TransactionRegistryColNameValues.INTERNAL_TURNOVER.value
                 ] = None
+                group.at[  # noqa: PD008
+                    index,
+                    TransactionRegistryColNameValues.CALC_ADJUSTED_QUANTITY_HELD_IS_RESET.value,
+                ] = True
 
             last_entry_price = group.at[  # noqa: PD008
                 index, TransactionRegistryColNameValues.PRICE_PER_UNIT.value

@@ -89,6 +89,8 @@ class TransactionRegistryColNameValues(StrEnum):
     """
     META_TRANSACTION_YEAR = "meta_transaction_year"
     """The year of the transaction (based on transaction date)."""
+    CALC_ADJUSTED_QUANTITY_HELD_IS_RESET = "calc_agg_sum_quantity_held_is_reset"
+    """True if all securities have been sold and the adjusted average cost is reset."""
     CALC_TURNOVER_OR_OTHER_CF = "calc_turnover_or_cash_flow"
     """
     Either return turnover or other cash flow.
