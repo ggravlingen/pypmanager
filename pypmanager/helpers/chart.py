@@ -15,6 +15,7 @@ from pypmanager.ingest.transaction.const import (
     TransactionTypeValues,
 )
 from pypmanager.ingest.transaction.transaction_registry import TransactionRegistry
+from pypmanager.settings import Settings
 
 
 @strawberry.type
@@ -48,74 +49,41 @@ async def async_get_market_data_and_transaction(
     """Create chart data for historical price development and buy/sell."""
     output_data: list[ChartData] = []
 
-    # Fetch all transactions
-    df_transactions = await TransactionRegistry().async_get_registry()
+    # These are the columns we extract from the transaction registry
+    extract_col_from_transaction_registry = [
+        TransactionRegistryColNameValues.SOURCE_VOLUME.value,
+        TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value,
+    ]
 
-    # Filter transactions by ISIN code
+    # Fetch all transactions and filter ISIN code
+    df_transactions = await TransactionRegistry().async_get_registry()
     df_transactions = df_transactions.query("source_isin_code == @isin_code")
 
-    # Append the source transaction date as a column if it does not exist
-    if (
-        TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value
-        not in df_transactions.columns
-    ):
-        df_transactions[
-            TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value
-        ] = df_transactions.index
-
-    # Filter the relevant start date
-    start_date_calc = max(
-        # Convert start_date to pandas.Timestamp for comparison
-        pd.Timestamp(start_date),
-        df_transactions[TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value]
-        .min()
-        .tz_localize(None),
-    )
-
-    # Filter the relevant end date
-    end_date_calc = max(
-        # Convert start_date to pandas.Timestamp for comparison
-        pd.Timestamp(end_date),
-        df_transactions[TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value]
-        .max()
-        .tz_localize(None),
-    )
-
     # Create a date range between start_date and end_date, excluding weekends
-    date_range = pd.date_range(start=start_date_calc, end=end_date_calc, freq="B")
-
-    # Convert the date range to a DataFrame
-    df_date_range = pd.DataFrame(date_range, columns=["date"])
-
-    # Ensure the date column is the index and formatted as yyyy-mm-dd
-    df_date_range["date"] = df_date_range["date"].dt.strftime("%Y-%m-%d")
-    df_date_range = df_date_range.set_index("date")
-
-    df_transactions[TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value] = (
-        df_transactions[
-            TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value
-        ].dt.strftime("%Y-%m-%d")
+    # Set start date to 1980-01-01 to ensure all dates are included
+    date_range = pd.date_range(
+        start=pd.Timestamp("1980-01-01"),
+        end=pd.Timestamp("2030-12-31"),
+        freq="B",
+        tz=Settings.system_time_zone,
     )
-    df_transactions = df_transactions.set_index(
-        TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value
-    )
+
+    # Convert the date range to a DataFrame and set index
+    df_date_range = pd.DataFrame(date_range, columns=["date"]).set_index("date")
 
     # Merge the date range DataFrame with df_transactions on the date index
     df_transaction_with_date = df_date_range.join(
-        df_transactions[
-            [
-                TransactionRegistryColNameValues.SOURCE_VOLUME.value,
-                TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value,
-            ]
-        ],
+        df_transactions[extract_col_from_transaction_registry],
         how="left",
     )
 
     # Get all market data for the ISIN
     df_market_data = get_market_data(isin_code=isin_code)
 
-    # Merge the date range DataFrame with df_market_data on the date index
-    df_market_data.index = pd.to_datetime(df_market_data.index).strftime("%Y-%m-%d")
+    # We want to merge the date range DataFrame with df_market_data on the date index so
+    # we need to convert the index to datetime
+    df_market_data.index = pd.to_datetime(df_market_data.index)
+    df_market_data.index = df_market_data.index.tz_localize(Settings.system_time_zone)
 
     # Merge the resulting DataFrame with df_market_data on the date index
     df_transaction_with_market_data = df_transaction_with_date.join(
@@ -124,11 +92,31 @@ async def async_get_market_data_and_transaction(
 
     # Keep only the date and price columns
     df_result = df_transaction_with_market_data[
-        [
-            "price",
-            TransactionRegistryColNameValues.SOURCE_VOLUME.value,
-            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value,
-        ]
+        ["price", *extract_col_from_transaction_registry]
+    ]
+
+    # Convert df_result.index to datetime
+    df_result.index = pd.to_datetime(df_result.index)
+
+    # Filter the relevant start date
+    start_date_timestamp = pd.Timestamp(
+        start_date
+    )  # Convert start_date argument to pandas.Timestamp for comparison
+    min_transaction_date = df_result.index.min().tz_localize(None)
+    start_date_calc = max(start_date_timestamp, min_transaction_date).tz_localize(
+        Settings.system_time_zone
+    )
+
+    # Filter the relevant end date
+    end_date_timestamp = pd.Timestamp(end_date)
+    max_transaction_date = df_result.index.max().tz_localize(None)
+    end_date_calc = min(end_date_timestamp, max_transaction_date).tz_localize(
+        Settings.system_time_zone
+    )
+
+    # Filter the relevant date range
+    df_result = df_result[
+        (df_result.index >= start_date_calc) & (df_result.index <= end_date_calc)
     ]
 
     # Fill NaN values with None
