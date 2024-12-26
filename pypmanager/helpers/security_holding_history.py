@@ -11,7 +11,11 @@ from pypmanager.settings import Settings
 
 
 class SecurityHoldingHistory:
-    """Build a dataframe what contains historical metrics for a held security."""
+    """
+    Build a dataframe what contains historical metrics for a held security.
+
+    The end result is available in the method async_get_security_holding_history().
+    """
 
     def __init__(self, isin_code: str, df_transaction_registry: pd.DataFrame) -> None:
         """Init class."""
