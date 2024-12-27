@@ -89,7 +89,7 @@ class SecurityHoldingHistory:
 
     COLS_TO_DROP_LEVEL_2: ClassVar = [
         TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD,
-        # TransactionRegistryColNameValues.CALC_ADJUSTED_QUANTITY_HELD_IS_RESET.value,
+        TransactionRegistryColNameValues.CALC_ADJUSTED_QUANTITY_HELD_IS_RESET.value,
     ]
 
     df_base: pd.DataFrame
