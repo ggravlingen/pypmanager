@@ -239,7 +239,7 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
             securityInfo={data.securityInfo}
             isinCode={isinCode}
           />
-          <StandardCard height={"500px"}>
+          <StandardCard height={"465px"}>
             <Line
               data={{
                 labels: data.chartHistory.map((item) => item.xVal),
