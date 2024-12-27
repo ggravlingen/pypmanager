@@ -15,3 +15,5 @@ async def test_async_load_security_data() -> None:
 
     assert len(result) == 2
     assert result["SE0005188836"].name == "Länsförsäkringar Global Index"
+    assert result["SE0005188836"].isin_code == "SE0005188836"
+    assert result["SE0005188836"].currency == "SEK"

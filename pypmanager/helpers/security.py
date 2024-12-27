@@ -14,7 +14,11 @@ class Security(BaseModel):
     """Represent a security."""
 
     name: str
+    """The name of the security."""
     isin_code: str
+    """The ISIN code of the security."""
+    currency: str | None = None
+    """The currency of the security's price."""
 
 
 async def async_load_security_data() -> dict[str, Security]:

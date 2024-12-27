@@ -5,5 +5,7 @@
 ---
 - name: Länsförsäkringar Global Index
   isin_code: SE0005188836
+  currency: SEK
 - name: Lysa Global Equity Broad C
   isin_code: SE0009268584
+  currency: SEK
