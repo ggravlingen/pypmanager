@@ -7,6 +7,7 @@ const QUERY = gql`
     securityInfo(isinCode: $isinCode) {
       isinCode
       name
+      currency
     }
   }
 `;

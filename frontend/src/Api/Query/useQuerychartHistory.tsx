@@ -11,6 +11,7 @@ const QUERY = gql`
     securityInfo(isinCode: $isinCode) {
       isinCode
       name
+      currency
     }
     chartHistory(
       isinCode: $isinCode
