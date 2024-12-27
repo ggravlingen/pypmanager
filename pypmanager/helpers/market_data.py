@@ -90,6 +90,7 @@ class MarketDataOverviewRecord:
     name: str | None
     first_date: date | None
     last_date: date | None
+    currency: str | None
 
 
 async def async_get_market_data_overview() -> list[MarketDataOverviewRecord]:
@@ -106,6 +107,7 @@ async def async_get_market_data_overview() -> list[MarketDataOverviewRecord]:
         # Add the name of the security to the source
         security_obj = all_security.get(source.isin_code)
         name = security_obj.name if security_obj else source.name
+        currency = security_obj.currency if security_obj else None
 
         # first_date should be None if the index min is nan
         if pd.isna(df_market_data.index.min()):
@@ -125,6 +127,7 @@ async def async_get_market_data_overview() -> list[MarketDataOverviewRecord]:
                 name=name,
                 first_date=first_date,
                 last_date=last_date,
+                currency=currency,
             )
         )
 

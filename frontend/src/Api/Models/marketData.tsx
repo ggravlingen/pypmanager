@@ -3,4 +3,5 @@ export interface MarketDataOverviewRecord {
   name?: string;
   firstDate?: Date;
   lastDate?: Date;
+  currency?: Date;
 }

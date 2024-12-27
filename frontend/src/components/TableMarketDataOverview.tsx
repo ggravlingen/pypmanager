@@ -14,6 +14,13 @@ const columnSettings = [
     customComponent: ColumnSecurity,
   },
   {
+    headerName: "Currency",
+    fieldPath: "currency",
+    align: CellAlign.RIGHT,
+    dataType: CellDataType.STRING,
+    description: "The currency of the security",
+  },
+  {
     headerName: "Start",
     fieldPath: "firstDate",
     align: CellAlign.RIGHT,
