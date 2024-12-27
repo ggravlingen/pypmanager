@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from collections.abc import Awaitable, Callable
+from collections.abc import AsyncGenerator, Awaitable, Callable
+from contextlib import asynccontextmanager
 from typing import cast
 
 from fastapi import FastAPI, Request, Response
@@ -12,8 +13,18 @@ from fastapi.staticfiles import StaticFiles
 from pypmanager.settings import Settings
 
 from .graphql import graphql_app
+from .scheduler import scheduler
 
-app = FastAPI()
+
+@asynccontextmanager
+async def async_lifespan(_: FastAPI) -> AsyncGenerator[None, None]:
+    """Start and shutdown the scheduler."""
+    scheduler.start()
+    yield
+    scheduler.shutdown()
+
+
+app = FastAPI(lifespan=async_lifespan)
 
 TypeGraphQL = Callable[[Request], Awaitable[Response] | Response]
 
