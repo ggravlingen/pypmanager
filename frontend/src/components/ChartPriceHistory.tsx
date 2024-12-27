@@ -1,7 +1,7 @@
 import { QueryLoader, SecurityInfo, useQueryChartHistory } from "@Api";
 import { LocalStorageKey } from "@Const";
 import { StandardCard } from "@Generic";
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, Button, Typography, useTheme } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import {
@@ -118,11 +118,47 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
     }
   };
 
+  const handleYTDClick = () => {
+    const startOfYear = dayjs().startOf("year");
+    const today = dayjs();
+    setStart(startOfYear);
+    setEnd(today);
+    onStartDateChange(startOfYear.format("YYYY-MM-DD"));
+    onEndDateChange(today.format("YYYY-MM-DD"));
+  };
+
+  const handleLastCalendarYearClick = () => {
+    const oneYearAgo = dayjs().subtract(1, "year");
+    const today = dayjs();
+    setStart(oneYearAgo);
+    setEnd(today);
+    onStartDateChange(oneYearAgo.format("YYYY-MM-DD"));
+    onEndDateChange(today.format("YYYY-MM-DD"));
+  };
+
+  const handleLastThreeYearsClick = () => {
+    const threeYearsAgo = dayjs().subtract(3, "year");
+    const today = dayjs();
+    setStart(threeYearsAgo);
+    setEnd(today);
+    onStartDateChange(threeYearsAgo.format("YYYY-MM-DD"));
+    onEndDateChange(today.format("YYYY-MM-DD"));
+  };
+
+  const handleLastFiveYearsClick = () => {
+    const fiveYearsAgo = dayjs().subtract(5, "year");
+    const today = dayjs();
+    setStart(fiveYearsAgo);
+    setEnd(today);
+    onStartDateChange(fiveYearsAgo.format("YYYY-MM-DD"));
+    onEndDateChange(today.format("YYYY-MM-DD"));
+  };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <StandardCard
         height={"96px"}
-        sx={{ display: "flex", gap: 2, marginTop: 2 }}
+        sx={{ display: "flex", gap: 2, marginTop: 2, alignItems: "center" }}
       >
         <DatePicker
           label="Start date"
@@ -146,6 +182,42 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
             },
           }}
         />
+        <Button
+          variant="contained"
+          onClick={handleYTDClick}
+          sx={{ height: "46px" }}
+        >
+          <Typography variant="button" fontSize="11px">
+            YTD
+          </Typography>
+        </Button>
+        <Button
+          variant="contained"
+          onClick={handleLastCalendarYearClick}
+          sx={{ height: "46px" }}
+        >
+          <Typography variant="button" fontSize="11px">
+            Last year
+          </Typography>
+        </Button>
+        <Button
+          variant="contained"
+          onClick={handleLastThreeYearsClick}
+          sx={{ height: "46px" }}
+        >
+          <Typography variant="button" fontSize="11px">
+            Last 3 years
+          </Typography>
+        </Button>
+        <Button
+          variant="contained"
+          onClick={handleLastFiveYearsClick}
+          sx={{ height: "46px" }}
+        >
+          <Typography variant="button" fontSize="11px">
+            Last 5 years
+          </Typography>
+        </Button>
       </StandardCard>
     </LocalizationProvider>
   );
