@@ -216,9 +216,13 @@ class PandasAlgorithm:
                 row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value]
                 == TransactionTypeValues.SELL.value
             ):
+                # When selling the last remaining hooldings, the last_entry_price
+                # will be 0 and we should return None
+                return_value = None if last_entry_price == 0.0 else last_entry_price
+
                 group.at[  # noqa: PD008
                     index, TransactionRegistryColNameValues.PRICE_PER_UNIT.value
-                ] = last_entry_price
+                ] = return_value
 
             # There might be fractional rounding errors when closing a position so we
             # guard against that here

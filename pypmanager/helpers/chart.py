@@ -100,6 +100,11 @@ async def async_get_market_data_and_transaction(
         end_date=end_date,
     )
 
+    # Fill missing values
+    df_result[TransactionRegistryColNameValues.PRICE_PER_UNIT.value] = df_result[
+        TransactionRegistryColNameValues.PRICE_PER_UNIT.value
+    ].ffill()
+
     # Fill NaN values with None
     df_result = df_result.replace({np.nan: None})
 
