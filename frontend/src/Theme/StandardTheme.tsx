@@ -10,6 +10,8 @@ const cellPadding = {
 };
 
 enum FontSize {
+  TYPO_H1 = "15px",
+  TYPO_BUTTON = "11px",
   TOOLTIP = "14px",
   TABLE_CELL = "12px",
   FORM_INPUT = "13px",
@@ -20,6 +22,18 @@ const StandardTheme = (mode: PaletteMode) => {
 
   const updatedTheme = {
     palette: Palette,
+    typography: {
+      h1: {
+        fontSize: FontSize.TYPO_H1,
+        fontWeight: "bold",
+        color: Palette.text.primary,
+      },
+      button: {
+        fontSize: FontSize.TYPO_BUTTON,
+        lineHeight: 1.5,
+        color: Palette.primary.contrastText,
+      },
+    },
     components: {
       MuiTableRow: {
         styleOverrides: {
@@ -75,6 +89,17 @@ const StandardTheme = (mode: PaletteMode) => {
         styleOverrides: {
           root: {
             color: Palette.text.primary,
+          },
+        },
+      },
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            backgroundColor: Palette.primary.main,
+            color: Palette.primary.contrastText,
+            "&:hover": {
+              backgroundColor: Palette.primary.dark,
+            },
           },
         },
       },
