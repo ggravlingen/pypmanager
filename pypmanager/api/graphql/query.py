@@ -113,7 +113,6 @@ class Query:
             sort_by_date_descending=True
         ).async_get_registry()
 
-        transaction_list = transaction_list.replace("nan", np.nan)
         transaction_list = transaction_list.replace({np.nan: None})
 
         output_list: list[TransactionRow] = []
