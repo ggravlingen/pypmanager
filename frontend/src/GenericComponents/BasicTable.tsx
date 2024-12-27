@@ -24,6 +24,7 @@ export enum CellAlign {
 
 export enum CellDataType {
   DATE = "date",
+  DATE_RELATIVE = "date_relative",
   NUMBER = "number",
   PER_CENT = "per_cent",
   STRING = "string",
@@ -83,7 +84,9 @@ function getCellValue(
   }
 
   if (columnSetting.dataType === CellDataType.DATE) {
-    return formatDate(extractedValue);
+    return formatDate(extractedValue, false);
+  } else if (columnSetting.dataType === CellDataType.DATE_RELATIVE) {
+    return formatDate(extractedValue, true);
   } else if (columnSetting.dataType === CellDataType.NUMBER) {
     return formatNumber(extractedValue, columnSetting.noDecimal ?? 1, false);
   } else if (columnSetting.dataType === CellDataType.PER_CENT) {

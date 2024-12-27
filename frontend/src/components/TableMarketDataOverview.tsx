@@ -24,7 +24,7 @@ const columnSettings = [
     headerName: "End",
     fieldPath: "lastDate",
     align: CellAlign.RIGHT,
-    dataType: CellDataType.DATE,
+    dataType: CellDataType.DATE_RELATIVE,
     description: "The last date of the market data",
   },
 ];
