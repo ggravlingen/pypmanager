@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import React from "react";
 
 interface StandardCardProps {
@@ -23,6 +23,8 @@ export default function StandardCard({
   children,
   sx,
 }: StandardCardProps): JSX.Element {
+  const theme = useTheme();
+
   return (
     <Box
       sx={{
@@ -37,8 +39,16 @@ export default function StandardCard({
         paddingLeft: "20px",
         paddingRight: "20px",
         borderRadius: "16px",
-        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-        border: "1px solid rgba(0, 0, 0, 0.1)",
+        boxShadow:
+          theme.palette.mode === "dark"
+            ? "0 4px 8px rgba(0, 0, 0, 0.5)"
+            : "0 4px 8px rgba(0, 0, 0, 0.1)",
+        border:
+          theme.palette.mode === "dark"
+            ? "1px solid rgba(255, 255, 255, 0.1)"
+            : "1px solid rgba(0, 0, 0, 0.1)",
+        backgroundColor: theme.palette.background.paper,
+        color: theme.palette.text.primary,
         ...sx,
       }}
     >

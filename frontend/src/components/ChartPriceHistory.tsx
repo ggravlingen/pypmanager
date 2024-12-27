@@ -1,7 +1,7 @@
 import { QueryLoader, SecurityInfo, useQueryChartHistory } from "@Api";
 import { LocalStorageKey } from "@Const";
 import { StandardCard } from "@Generic";
-import { Box, Button, Typography, useTheme } from "@mui/material";
+import { Box, Button, Divider, Typography, useTheme } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import {
@@ -189,8 +189,14 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <StandardCard
-        height={"96px"}
-        sx={{ marginTop: "0px", display: "flex", gap: 2, alignItems: "center" }}
+        height={"85px"}
+        sx={{
+          paddingTop: "6px",
+          marginTop: "5px",
+          display: "flex",
+          gap: 2,
+          alignItems: "center",
+        }}
       >
         <DatePicker
           label="Start date"
@@ -259,13 +265,21 @@ function SecurityInfoCard({
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
             alignItems: "center",
           }}
         >
           <Typography variant="h1" gutterBottom>
             {securityInfo.name}
           </Typography>
+          <Divider
+            orientation="vertical"
+            flexItem
+            sx={{
+              mx: 1.5,
+              borderColor: `text.primary`,
+              height: "20px",
+            }}
+          />
           <Typography variant="h1" gutterBottom>
             {securityInfo.isinCode}
           </Typography>
@@ -337,7 +351,7 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
                       x: item.xVal,
                       y:
                         item.costPriceAverage !== 0 && item.costPriceAverage
-                          ? item.costPriceAverage
+                          ? parseFloat(item.costPriceAverage.toFixed(4))
                           : null,
                     })),
                     fill: false,
@@ -349,7 +363,7 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
                     label: "Close",
                     data: data.chartHistory.map((item) => ({
                       x: item.xVal,
-                      y: item.yVal,
+                      y: item.yVal ? parseFloat(item.yVal.toFixed(4)) : null,
                       volumeBuy: item.volumeBuy,
                       volumeSell: item.volumeSell,
                     })),
