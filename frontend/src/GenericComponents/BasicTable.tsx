@@ -171,7 +171,7 @@ export default function BasicTable({
     <TableContainer component={Paper} style={{ maxHeight: "100vh" }}>
       <Table stickyHeader>
         <TableHead>
-          <TableRow>
+          <TableRow key={"header"}>
             {columnSettings.map((columnSetting) => (
               <TableHeaderCell
                 key={columnSetting.fieldPath}
@@ -183,9 +183,9 @@ export default function BasicTable({
         <TableBody>
           {data?.map((row, index) => (
             <TableRow key={index}>
-              {columnSettings.map((columnSetting) => (
+              {columnSettings.map((columnSetting, cellIndex) => (
                 <TableCell
-                  key={columnSetting.fieldPath}
+                  key={`${index}-${cellIndex}`}
                   align={columnSetting.align}
                 >
                   {getCellValue(columnSetting, row)}
@@ -196,7 +196,7 @@ export default function BasicTable({
         </TableBody>
         {showTableFooter && (
           <TableFooter>
-            <TableRow>
+            <TableRow key={"footer"}>
               {columnSettings.map((columnSetting, index) => (
                 <TableCell
                   key={columnSetting.fieldPath}
