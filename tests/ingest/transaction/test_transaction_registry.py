@@ -8,7 +8,10 @@ from numpy.testing import assert_array_equal
 import pytest
 
 from pypmanager.ingest.transaction import TransactionRegistry
-from pypmanager.ingest.transaction.const import TransactionRegistryColNameValues
+from pypmanager.ingest.transaction.const import (
+    ColumnNameValues,
+    TransactionRegistryColNameValues,
+)
 from pypmanager.settings import Settings
 
 from tests.conftest import DataFactory
@@ -40,12 +43,29 @@ async def test_transaction_registry(
 
 
 @pytest.mark.asyncio
-async def test_transaction_registry__all_sold(
+async def test_transaction_registry__all_sold__then_buy(
     data_factory: type[DataFactory],
 ) -> None:
-    """Test the registry when everything has been sold."""
+    """Test the registry when everything has been sold and then we buy again."""
     factory = data_factory()
-    mocked_transactions = factory.buy().sell().df_transaction_list
+    mocked_transactions = (
+        factory.buy(
+            transaction_date=datetime(2021, 1, 1, tzinfo=Settings.system_time_zone)
+        )
+        .buy(
+            price=20,
+            transaction_date=datetime(2021, 2, 1, tzinfo=Settings.system_time_zone),
+        )
+        .sell(transaction_date=datetime(2021, 3, 1, tzinfo=Settings.system_time_zone))
+        .sell(
+            price=1.0,
+            transaction_date=datetime(2021, 4, 1, tzinfo=Settings.system_time_zone),
+        )
+        .buy(
+            transaction_date=datetime(2021, 5, 1, tzinfo=Settings.system_time_zone),
+        )
+        .df_transaction_list
+    )
     with (
         patch(
             "pypmanager.ingest.transaction.transaction_registry.TransactionRegistry."
@@ -54,21 +74,91 @@ async def test_transaction_registry__all_sold(
         ),
     ):
         registry = await TransactionRegistry().async_get_registry()
-        assert len(registry) == 2
 
-        expected_values = [10.0, np.nan]
-        actual_values = registry[
-            TransactionRegistryColNameValues.PRICE_PER_UNIT.value
-        ].to_numpy()
+        assert len(registry) == 5
 
-        assert_array_equal(actual_values, expected_values)
+        # Check volume
+        assert_array_equal(
+            registry[TransactionRegistryColNameValues.SOURCE_VOLUME.value].to_numpy(),
+            [10.0, 10.0, 10.0, 10.0, 10.0],
+        )
 
-        expected_values_is_reset = [False, True]
-        actual_values_is_reset = registry[
-            TransactionRegistryColNameValues.CALC_ADJUSTED_QUANTITY_HELD_IS_RESET.value
-        ].to_numpy()
+        # Check price
+        assert_array_equal(
+            registry[TransactionRegistryColNameValues.SOURCE_PRICE.value].to_numpy(),
+            [10.0, 20.0, 15.0, 1.0, 10.0],
+        )
 
-        assert_array_equal(actual_values_is_reset, expected_values_is_reset)
+        # Check amount
+        assert_array_equal(
+            registry[ColumnNameValues.AMOUNT.value].to_numpy(),
+            [100.0, 200.0, 150.0, 10.0, 100.0],
+        )
+
+        # Check quantity held
+        assert_array_equal(
+            registry[
+                TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value
+            ].to_numpy(),
+            [10.0, 20.0, 10.0, np.nan, 10.0],
+        )
+
+        assert_array_equal(
+            registry[TransactionRegistryColNameValues.PRICE_PER_UNIT.value].to_numpy(),
+            [10.0, 15.0, 15.0, np.nan, 10.0],
+        )
+
+        assert_array_equal(
+            registry[
+                TransactionRegistryColNameValues.CALC_ADJUSTED_QUANTITY_HELD_IS_RESET.value
+            ].to_numpy(),
+            [False, False, False, True, False],
+        )
+
+        assert_array_equal(
+            registry[
+                TransactionRegistryColNameValues.CALC_TURNOVER_OR_OTHER_CF.value
+            ].to_numpy(),
+            [-100.0, -200.0, 150.0, 10.0, -100.0],
+        )
+
+        assert_array_equal(
+            registry[
+                TransactionRegistryColNameValues.CASH_FLOW_NET_FEE_NOMINAL.value
+            ].to_numpy(),
+            [-101.0, -201.0, 149.0, 9.0, -101.0],
+        )
+
+        assert_array_equal(
+            registry[
+                TransactionRegistryColNameValues.CASH_FLOW_GROSS_FEE_NOMINAL.value
+            ].to_numpy(),
+            [-100.0, -200.0, 150.0, 10.0, -100.0],
+        )
+
+        assert_array_equal(
+            registry[
+                TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value
+            ].to_numpy(),
+            [None, None, None, None, None],
+        )
+
+        assert_array_equal(
+            registry[TransactionRegistryColNameValues.CALC_PNL_TRADE.value].to_numpy(),
+            [np.nan, np.nan, -1.0, -141.0, np.nan],
+        )
+
+        assert_array_equal(
+            registry[TransactionRegistryColNameValues.CALC_PNL_TOTAL.value].to_numpy(),
+            [0, 0, -1.0, -141.0, 0],
+        )
+
+        assert_array_equal(
+            registry[
+                TransactionRegistryColNameValues.META_TRANSACTION_YEAR.value
+            ].to_numpy(),
+            [2021, 2021, 2021, 2021, 2021],
+        )
 
 
 @pytest.mark.asyncio
