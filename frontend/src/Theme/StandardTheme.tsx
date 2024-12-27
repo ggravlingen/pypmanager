@@ -12,6 +12,7 @@ const cellPadding = {
 enum FontSize {
   TOOLTIP = "14px",
   TABLE_CELL = "12px",
+  FORM_INPUT = "13px",
 }
 
 const StandardTheme = (mode: PaletteMode) => {
@@ -60,6 +61,20 @@ const StandardTheme = (mode: PaletteMode) => {
             fontSize: FontSize.TOOLTIP,
             backgroundColor: Palette.primary.main,
             color: Palette.primary.contrastText,
+          },
+        },
+      },
+      MuiInputBase: {
+        styleOverrides: {
+          input: {
+            fontSize: FontSize.FORM_INPUT,
+          },
+        },
+      },
+      MuiInputLabel: {
+        styleOverrides: {
+          root: {
+            color: Palette.text.primary,
           },
         },
       },
