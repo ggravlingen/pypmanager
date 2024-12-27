@@ -16,8 +16,10 @@ from pypmanager.ingest.transaction.const import (
     TransactionTypeValues,
 )
 from pypmanager.ingest.transaction.transaction_registry import TransactionRegistry
-from pypmanager.settings import Settings
-from pypmanager.utils.dt import async_get_empty_df_with_datetime_index
+from pypmanager.utils.dt import (
+    async_filter_df_by_date_range,
+    async_get_empty_df_with_datetime_index,
+)
 
 
 @strawberry.type
@@ -92,26 +94,11 @@ async def async_get_market_data_and_transaction(
         ["price", *extract_col_from_transaction_registry]
     ]
 
-    # Filter the relevant start date
-    start_date_timestamp = pd.Timestamp(
-        start_date
-    )  # Convert start_date argument to pandas.Timestamp for comparison
-    min_transaction_date = df_result.index.min().tz_localize(None)
-    start_date_calc = max(start_date_timestamp, min_transaction_date).tz_localize(
-        Settings.system_time_zone
+    df_result = await async_filter_df_by_date_range(
+        df_to_filter=df_result,
+        start_date=start_date,
+        end_date=end_date,
     )
-
-    # Filter the relevant end date
-    end_date_timestamp = pd.Timestamp(end_date)
-    max_transaction_date = df_result.index.max().tz_localize(None)
-    end_date_calc = min(end_date_timestamp, max_transaction_date).tz_localize(
-        Settings.system_time_zone
-    )
-
-    # Filter the relevant date range
-    df_result = df_result[
-        (df_result.index >= start_date_calc) & (df_result.index <= end_date_calc)
-    ]
 
     # Fill NaN values with None
     df_result = df_result.replace({np.nan: None})
