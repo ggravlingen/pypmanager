@@ -1,4 +1,9 @@
-import { QueryLoader, TransactionRow, useQueryGetAllTransaction } from "@Api";
+import {
+  QueryLoader,
+  TransactionRow,
+  TransactionTypeValues,
+  useQueryGetAllTransaction,
+} from "@Api";
 import { BasicTable, CellAlign, CellDataType } from "@Generic";
 import {
   Box,
@@ -81,6 +86,26 @@ function ColumnPrice({ rowData }: { rowData: TransactionRow }): JSX.Element {
   );
 }
 
+/**
+ * Component to display the quantity held in a table row.
+ * @param props - The component props.
+ * @param props.rowData - The data for the table row.
+ * @returns The JSX element representing the quantity held.
+ * This component checks if the transaction is a "Sell" action and if the quantity held is zero or not defined.
+ * If both conditions are met, it displays a dash ("-"). Otherwise, it formats and displays the quantity held.
+ */
+function ColumnNoHeld({ rowData }: { rowData: TransactionRow }): JSX.Element {
+  if (
+    rowData.noTraded &&
+    rowData.action &&
+    rowData.action.toLowerCase() === TransactionTypeValues.SELL &&
+    (rowData.quantityHeld === 0 || !rowData.quantityHeld)
+  ) {
+    return <Box>-</Box>;
+  }
+  return <Box>{formatNumber(rowData.quantityHeld, 0, false)}</Box>;
+}
+
 const columnSettings = [
   {
     headerName: "Transaction date",
@@ -128,10 +153,10 @@ const columnSettings = [
   },
   {
     headerName: "Held",
-    fieldPath: "quantityHeld",
+    fieldPath: "",
     align: CellAlign.RIGHT,
-    dataType: CellDataType.NUMBER,
-    noDecimal: 0,
+    dataType: CellDataType.CUSTOM,
+    customComponent: ColumnNoHeld,
     description: "The number of units held efter the transaction",
   },
   {

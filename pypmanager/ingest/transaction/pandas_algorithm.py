@@ -223,6 +223,10 @@ class PandasAlgorithm:
                 group.at[  # noqa: PD008
                     index, TransactionRegistryColNameValues.PRICE_PER_UNIT.value
                 ] = return_value
+                group.at[  # noqa: PD008
+                    index,
+                    TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value,
+                ] = None
 
             # There might be fractional rounding errors when closing a position so we
             # guard against that here
