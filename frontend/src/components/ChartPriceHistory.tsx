@@ -410,6 +410,7 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
                         return value.toLocaleString(); // Format the tick labels
                       },
                       color: theme.palette.text.primary, // Set tick labels to primary color
+                      padding: -2,
                     },
                     grid: {
                       display: false, // Hide x-axis grid lines
