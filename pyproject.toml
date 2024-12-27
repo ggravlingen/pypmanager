@@ -49,6 +49,7 @@ version = {file = "pypmanager/VERSION"}
 exclude = ["tests", "tests*"]
 
 [tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "function"
 filterwarnings = [
     "ignore:'typing.ByteString' is deprecated and slated for removal in Python 3.14",
 ]
