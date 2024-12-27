@@ -414,6 +414,12 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
                     grid: {
                       display: false, // Hide x-axis grid lines
                     },
+                    title: {
+                      display: !!data.securityInfo.currency,
+                      text: data.securityInfo.currency,
+                      align: "center",
+                      color: theme.palette.text.primary,
+                    },
                   },
                 },
                 plugins: {
