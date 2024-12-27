@@ -108,7 +108,7 @@ interface TableHeaderCellProps {
  */
 function TableHeaderCell({ columnSetting }: TableHeaderCellProps): JSX.Element {
   return (
-    <TableCell key={columnSetting.fieldPath}>
+    <TableCell key={`${columnSetting.fieldPath}-${columnSetting.headerName}`}>
       <Box
         display="flex"
         alignItems="center"
@@ -172,9 +172,9 @@ export default function BasicTable({
       <Table stickyHeader>
         <TableHead>
           <TableRow key={"header"}>
-            {columnSettings.map((columnSetting) => (
+            {columnSettings.map((columnSetting, index) => (
               <TableHeaderCell
-                key={columnSetting.fieldPath}
+                key={`header-${index}`}
                 columnSetting={columnSetting}
               />
             ))}
@@ -198,10 +198,7 @@ export default function BasicTable({
           <TableFooter>
             <TableRow key={"footer"}>
               {columnSettings.map((columnSetting, index) => (
-                <TableCell
-                  key={columnSetting.fieldPath}
-                  align={columnSetting.align}
-                >
+                <TableCell key={`footer-${index}`} align={columnSetting.align}>
                   {index === 0
                     ? "Total"
                     : columnSetting.showSubtotal
