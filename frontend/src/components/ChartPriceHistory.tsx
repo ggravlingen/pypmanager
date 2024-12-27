@@ -319,6 +319,10 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
                   legend: {
                     display: true, // Show legend
                     position: "bottom", // Position the legend below the x-axis
+                    labels: {
+                      usePointStyle: true, // Use point style
+                      pointStyle: "line", // Set point style to line
+                    },
                   },
                   tooltip: {
                     callbacks: {
