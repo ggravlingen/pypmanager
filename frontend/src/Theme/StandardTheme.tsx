@@ -77,7 +77,7 @@ const StandardTheme = (mode: PaletteMode) => {
             color: Palette.text.primary,
           },
         },
-      }
+      },
     },
   };
 
