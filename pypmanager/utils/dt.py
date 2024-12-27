@@ -95,3 +95,35 @@ async def async_get_empty_df_with_datetime_index(
         ),
         columns=["date"],
     ).set_index("date")
+
+
+async def async_filter_df_by_date_range(
+    df_to_filter: pd.DataFrame,
+    start_date: date,
+    end_date: date,
+) -> pd.DataFrame:
+    """
+    Filter a DataFrame by a date range.
+
+    Filters by the highest of the start_date and the minimum date in the DataFrame as
+    the start date and the lowest of the end_date and the maximum date in the DataFrame.
+    """
+    start_date_timestamp = pd.Timestamp(  # Filter the relevant start date
+        start_date
+    )  # Convert start_date argument to pandas.Timestamp for comparison
+    min_df_date_range = df_to_filter.index.min().tz_localize(None)
+    start_date_calc = max(start_date_timestamp, min_df_date_range).tz_localize(
+        Settings.system_time_zone
+    )
+
+    # Filter the relevant end date
+    end_date_timestamp = pd.Timestamp(end_date)
+    max_df_date_range = df_to_filter.index.max().tz_localize(None)
+    end_date_calc = min(end_date_timestamp, max_df_date_range).tz_localize(
+        Settings.system_time_zone
+    )
+
+    # Filter the relevant date range
+    return df_to_filter[
+        (df_to_filter.index >= start_date_calc) & (df_to_filter.index <= end_date_calc)
+    ]
