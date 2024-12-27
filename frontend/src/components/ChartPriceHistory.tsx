@@ -154,11 +154,43 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
     onEndDateChange(today.format("YYYY-MM-DD"));
   };
 
+  /**
+   * A button component with a label.
+   * @param props - The component props.
+   * @param props.label - The label for the button.
+   * @param props.handleClick - The function to call when the button is clicked.
+   * @returns The rendered button component.
+   */
+  function ButtonWithLabel({
+    label,
+    handleClick,
+  }: {
+    label: string;
+    handleClick: () => void;
+  }): JSX.Element {
+    return (
+      <Button
+        variant="contained"
+        onClick={handleClick}
+        sx={{
+          height: "46px",
+          display: "flex",
+          alignItems: "flex-start",
+          justifyContent: "center",
+        }}
+      >
+        <Typography variant="button" sx={{ display: "flex" }}>
+          {label}
+        </Typography>
+      </Button>
+    );
+  }
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <StandardCard
         height={"96px"}
-        sx={{ display: "flex", gap: 2, marginTop: 2, alignItems: "center" }}
+        sx={{ marginTop: "0px", display: "flex", gap: 2, alignItems: "center" }}
       >
         <DatePicker
           label="Start date"
@@ -182,42 +214,19 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
             },
           }}
         />
-        <Button
-          variant="contained"
-          onClick={handleYTDClick}
-          sx={{ height: "46px" }}
-        >
-          <Typography variant="button" fontSize="11px">
-            YTD
-          </Typography>
-        </Button>
-        <Button
-          variant="contained"
-          onClick={handleLastCalendarYearClick}
-          sx={{ height: "46px" }}
-        >
-          <Typography variant="button" fontSize="11px">
-            Last year
-          </Typography>
-        </Button>
-        <Button
-          variant="contained"
-          onClick={handleLastThreeYearsClick}
-          sx={{ height: "46px" }}
-        >
-          <Typography variant="button" fontSize="11px">
-            Last 3 years
-          </Typography>
-        </Button>
-        <Button
-          variant="contained"
-          onClick={handleLastFiveYearsClick}
-          sx={{ height: "46px" }}
-        >
-          <Typography variant="button" fontSize="11px">
-            Last 5 years
-          </Typography>
-        </Button>
+        <ButtonWithLabel label="YTD" handleClick={handleYTDClick} />
+        <ButtonWithLabel
+          label="Last year"
+          handleClick={handleLastCalendarYearClick}
+        />
+        <ButtonWithLabel
+          label="Last 3 years"
+          handleClick={handleLastThreeYearsClick}
+        />
+        <ButtonWithLabel
+          label="Last 5 years"
+          handleClick={handleLastFiveYearsClick}
+        />
       </StandardCard>
     </LocalizationProvider>
   );
@@ -242,7 +251,10 @@ function SecurityInfoCard({
   isinCode,
 }: SecurityInfoCardProps): JSX.Element {
   return (
-    <StandardCard height={"55px"} sx={{ paddingTop: "11px" }}>
+    <StandardCard
+      height={"40px"}
+      sx={{ paddingTop: "11px", marginBottom: "3px" }}
+    >
       {securityInfo ? (
         <Box
           sx={{
@@ -251,10 +263,10 @@ function SecurityInfoCard({
             alignItems: "center",
           }}
         >
-          <Typography variant="h6" gutterBottom>
+          <Typography variant="h1" gutterBottom>
             {securityInfo.name}
           </Typography>
-          <Typography variant="h6" gutterBottom>
+          <Typography variant="h1" gutterBottom>
             {securityInfo.isinCode}
           </Typography>
         </Box>
@@ -311,7 +323,10 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
             securityInfo={data.securityInfo}
             isinCode={isinCode}
           />
-          <StandardCard height={"465px"}>
+          <StandardCard
+            height={"560px"}
+            sx={{ marginTop: "5px", marginBottom: "0px", paddingLeft: "16px" }}
+          >
             <Line
               data={{
                 labels: data.chartHistory.map((item) => item.xVal),
@@ -361,7 +376,7 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
               options={{
                 maintainAspectRatio: false,
                 interaction: {
-                  mode: "nearest",
+                  mode: "index",
                   intersect: false,
                 },
                 scales: {
@@ -394,6 +409,7 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
                     labels: {
                       usePointStyle: true, // Use point style
                       pointStyle: "line", // Set point style to line
+                      color: theme.palette.text.primary, // Set text color to primary text color
                     },
                   },
                   tooltip: {
