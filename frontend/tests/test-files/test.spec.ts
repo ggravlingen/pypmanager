@@ -3,6 +3,18 @@ import { graphql, HttpResponse } from "msw";
 
 import { expect, test } from "../baseTest.ts";
 
+const QueryMarketDataOverviewData = {
+  marketDataOverview: [
+    {
+      name: "Test Fund 1",
+      isinCode: "SE0013720000",
+      firstDate: "2020-03-06",
+      lastDate: "2024-12-23",
+      currency: "SEK",
+    },
+  ],
+};
+
 const ResultStatementData = {
   resultStatement: [
     {
@@ -144,6 +156,27 @@ test.describe.parallel("Test views", () => {
     );
 
     await page.goto("/#/income_statement");
+    await page.waitForTimeout(2000);
+
+    await page.mouse.move(100, 100);
+
+    await expect(page).toHaveScreenshot("1.png");
+  });
+
+  test("Test loading the market data overview table", async ({
+    page,
+    worker,
+  }) => {
+    await worker.use(
+      graphql.query("QueryMarketDataOverview", ({ query, variables }) => {
+        console.log("Intercepted QueryMarketDataOverview");
+        return HttpResponse.json({
+          data: QueryMarketDataOverviewData,
+        });
+      }),
+    );
+
+    await page.goto("/#/marketDataOverview");
     await page.waitForTimeout(2000);
 
     await page.mouse.move(100, 100);

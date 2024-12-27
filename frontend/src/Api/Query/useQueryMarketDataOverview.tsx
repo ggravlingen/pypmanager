@@ -9,6 +9,7 @@ const QUERY = gql`
       isinCode
       firstDate
       lastDate
+      currency
     }
   }
 `;
