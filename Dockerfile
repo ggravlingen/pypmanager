@@ -1,4 +1,6 @@
-FROM python:3.12
+# docker build . --tag removeme
+# docker run -p 8001:8001 removeme
+FROM python:3.12-bullseye
 
 # Set timezone
 ENV TZ=Europe/Stockholm
@@ -14,7 +16,10 @@ RUN apt-get update && \
         ca-certificates \
         curl \
         gnupg \
-        libgnutls30
+        libgnutls30 && \
+        rm -rf /var/cache/apt && \
+        apt-get clean && \
+        apt-get autoremove
 
 # Add node source
 RUN mkdir -p /etc/apt/keyrings && \
@@ -24,7 +29,8 @@ RUN mkdir -p /etc/apt/keyrings && \
 # Install node and yarn
 RUN apt-get update && \
     apt-get install -y \
-        nodejs && \
+        nodejs \
+        supervisor && \
     npm install -g yarn
 
 # Copy code dir
@@ -32,6 +38,7 @@ COPY . /code/app
 
 # Install backend dependencies
 RUN pip install --upgrade pip wheel \
+    && cd /code/app \
     && pip install --no-cache-dir -e .
 
 # Build frontend

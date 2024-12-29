@@ -11,3 +11,11 @@ tests
 
 # Temporary files
 **/__pycache__
+
+data/*
+
+# Dev
+.mypy_cache
+.pytest_cache
+prof
+frontend/node_modules
