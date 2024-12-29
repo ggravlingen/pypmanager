@@ -10,6 +10,9 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # Don't install node dev dependencies
 ENV NODE_ENV="production"
 
+# Used for being able to quickly install Pandas on armv7
+ENV PIP_EXTRA_INDEX_URL=https://wheels.home-assistant.io/musllinux-index/
+
 # Install node
 # Install node dependencies
 RUN apt-get update && \
