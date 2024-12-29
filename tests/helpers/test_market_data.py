@@ -62,6 +62,20 @@ def test_get_market_data__filter() -> None:
     assert result.iloc[0].isin_code == "LU0051755006"
 
 
+def test_get_market_data__no_global() -> None:
+    """Test async_get_market_data with empty global data."""
+    with patch.object(
+        TypedSettings, "dir_market_data", new_callable=PropertyMock
+    ) as mock_file_market_data_config_local:
+        # Disable local market data config
+        mock_file_market_data_config_local.return_value = Path("tmp")
+
+        result = get_market_data()
+
+        assert result is not None
+        assert len(result) == 0
+
+
 @pytest.mark.asyncio
 @pytest.mark.usefixtures("mock_file_security_config_local")
 async def test_async_get_market_data_overview(
