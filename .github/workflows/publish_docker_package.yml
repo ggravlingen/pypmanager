@@ -15,6 +15,11 @@ jobs:
     permissions:
       packages: write
       contents: read
+    strategy:
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
 
     steps:
       - uses: actions/checkout@v4.2.2
@@ -37,11 +42,9 @@ jobs:
       - name: Build, tag, and push image to Github Container Registry
         id: docker_build
         env:
-          PLATFORMS: linux/amd64,linux/arm64,linux/arm/v7
-          FULL_TAG: ghcr.io/ggravlingen/pypmanager:${{ github.ref_name || inputs.image_tag }}
+          FULL_TAG: ghcr.io/ggravlingen/pypmanager:${{ github.ref_name }}
         run: |
-          echo $FULL_TAG
-          docker buildx build --push --platform ${PLATFORMS} -t $FULL_TAG  .
+          docker buildx build --push --platform ${{ matrix.platform }} -t $FULL_TAG .
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
