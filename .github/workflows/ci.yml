@@ -302,29 +302,29 @@ jobs:
           retention-days: 1
           compression-level: 1
 
-qa-docker:
-    name: Test to build docker image
-    continue-on-error: true
-    needs:
-      - info
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    if: needs.info.outputs.run_pipeline_docker == 'true'
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4.2.2
+  qa-docker:
+      name: Test to build docker image
+      continue-on-error: true
+      needs:
+        - info
+      runs-on: ubuntu-latest
+      timeout-minutes: 20
+      if: needs.info.outputs.run_pipeline_docker == 'true'
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4.2.2
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3.2.0
+        - name: Set up QEMU
+          uses: docker/setup-qemu-action@v3.2.0
 
-      - name: Set up Docker Buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v3.8.0
+        - name: Set up Docker Buildx
+          id: buildx
+          uses: docker/setup-buildx-action@v3.8.0
 
-      - name: Build docker image
-        id: docker_build
-        run: |
+        - name: Build docker image
+          id: docker_build
+          run: |
 
-          docker buildx build --platform linux/amd64 -t removeme .
-        env:
-          CI: true
+            docker buildx build --platform linux/amd64 -t removeme .
+          env:
+            CI: true
