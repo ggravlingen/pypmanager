@@ -238,6 +238,9 @@ jobs:
 
       - name: Install requirements
         run: |
+          # Enable corepack to allow using another version of yarn
+          corepack enable
+
           cd frontend
           yarn
 
@@ -277,6 +280,9 @@ jobs:
 
       - name: Install requirements
         run: |
+          # Enable corepack to allow using another version of yarn
+          corepack enable
+
           cd frontend
           yarn
 
