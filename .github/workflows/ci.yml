@@ -30,6 +30,7 @@ jobs:
     outputs:
       run_pipeline: ${{ steps.changes.outputs.core }}
       run_pipeline_frontend: ${{ steps.changes.outputs.frontend }}
+      run_pipeline_docker: ${{ steps.changes.outputs.docker }}
       python_versions: ${{ steps.info.outputs.python_versions }}
       python_cache_key: ${{ steps.generate_python_cache_key.outputs.key }}
       node_versions: ${{ steps.info.outputs.node_versions }}
@@ -51,6 +52,8 @@ jobs:
             frontend:
               - frontend/**/*
               - .github/**/*.yml
+            docker:
+              - Dockerfile
 
       - name: Generate partial Python venv restore key
         id: generate_python_cache_key
@@ -298,3 +301,30 @@ jobs:
           path: frontend/test-results/
           retention-days: 1
           compression-level: 1
+
+  qa-docker:
+      name: Test to build docker image
+      continue-on-error: true
+      needs:
+        - info
+      runs-on: ubuntu-latest
+      timeout-minutes: 20
+      if: needs.info.outputs.run_pipeline_docker == 'true'
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4.2.2
+
+        - name: Set up QEMU
+          uses: docker/setup-qemu-action@v3.2.0
+
+        - name: Set up Docker Buildx
+          id: buildx
+          uses: docker/setup-buildx-action@v3.8.0
+
+        - name: Build docker image
+          id: docker_build
+          run: |
+
+            docker buildx build --platform linux/amd64 -t removeme .
+          env:
+            CI: true
