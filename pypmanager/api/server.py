@@ -7,7 +7,7 @@ from contextlib import asynccontextmanager
 from typing import cast
 
 from fastapi import FastAPI, Request, Response
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
 from pypmanager.settings import Settings
@@ -37,6 +37,12 @@ app.mount("/static", StaticFiles(directory=Settings.dir_static), name="static")
 async def get_favicon() -> FileResponse:
     """Return favicon."""
     return FileResponse(f"{Settings.dir_static}/favicon.ico")
+
+
+@app.get("/status")
+def get_index() -> HTMLResponse:
+    """Return status OK."""
+    return HTMLResponse(content="OK")
 
 
 @app.get("/", response_class=FileResponse)
