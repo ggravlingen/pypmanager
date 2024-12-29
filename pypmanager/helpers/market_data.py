@@ -64,6 +64,9 @@ def get_market_data(isin_code: str | None = None) -> pd.DataFrame:
         df_market_data = pd.read_csv(file, sep=";", index_col="report_date")
         all_data_frames.append(df_market_data)
 
+    if not all_data_frames:
+        return pd.DataFrame()
+
     merged_df = pd.concat(all_data_frames, ignore_index=False)
 
     merged_df = merged_df.replace("nan", np.nan)
