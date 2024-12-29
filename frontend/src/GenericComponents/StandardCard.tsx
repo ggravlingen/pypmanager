@@ -2,7 +2,7 @@ import { Box, useTheme } from "@mui/material";
 import React from "react";
 
 interface StandardCardProps {
-  width?: string;
+  maxWidth?: string;
   height?: string;
   sx?: object;
   children: React.ReactNode;
@@ -11,14 +11,14 @@ interface StandardCardProps {
 /**
  * A standard card component that wraps its children with a styled Box.
  * @param props - The properties for the StandardCard component.
- * @param props.width - The width of the card. Default is "1200px".
+ * @param props.maxWidth - The maximum width of the card. Default is "1375px".
  * @param props.height - The height of the card. Default is "700px".
  * @param props.children - The content to be displayed inside the card.
  * @param props.sx - Additional styling to be applied to the Box component.
  * @returns The rendered StandardCard component.
  */
 export default function StandardCard({
-  width = "1375px",
+  maxWidth = "1360px",
   height = "700px",
   children,
   sx,
@@ -28,7 +28,8 @@ export default function StandardCard({
   return (
     <Box
       sx={{
-        width: width,
+        maxWidth: maxWidth,
+        width: "100%",
         height: height ?? "auto",
         marginTop: "10px",
         marginLeft: "12px",

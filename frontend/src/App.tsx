@@ -76,7 +76,7 @@ export default function MainLayout() {
       <HashRouter>
         <Box sx={{ display: "flex" }}>
           <NavigationBar colorMode={colorMode} setColorMode={setColorMode} />
-          <Box style={{ flexGrow: 1 }}>
+          <Box style={{ flexGrow: 1, maxWidth: "95%" }}>
             <Routes>
               {ROUTE_LIST.map(({ path, element }) => (
                 <Route key={path} path={path} element={element} />
