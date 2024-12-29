@@ -1,5 +1,6 @@
 # docker build . --tag removeme
 # docker run -p 8001:8001 removeme
+# Version 1
 FROM python:3.12-bullseye
 
 # Set timezone
