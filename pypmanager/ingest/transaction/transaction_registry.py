@@ -179,6 +179,10 @@ class TransactionRegistry:
         self._202_normalize_data()
         self._203_convert_data_types()
 
+        # There are no transactions to process so we can return
+        if self.df_all_transactions.empty:
+            return
+
         self._300_calculate_average_price()
 
         # Set index
