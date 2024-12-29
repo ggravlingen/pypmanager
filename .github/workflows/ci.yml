@@ -303,7 +303,7 @@ jobs:
           compression-level: 1
 
   qa-docker:
-      name: Test to build docker image
+      name: "Docker: try building image"
       continue-on-error: true
       needs:
         - info
