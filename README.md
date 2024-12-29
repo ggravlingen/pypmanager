@@ -53,6 +53,12 @@ Currently, there is support for loading data from the following sites:
 - The Financial Times
 - Svenska Handelsbanken
 
+## Running the Docker
+
+First, you need to builder the Docker image file: `docker build . --tag pypmanager:latest`.
+
+The, you run it and mount your data folders: `docker run -p 8001:8001 -v ./data:/code/app/data pypmanager:latest`
+
 ## Unimplemented ideas
 
 - Calculate IRR per security and on a total.
