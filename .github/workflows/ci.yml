@@ -310,6 +310,12 @@ jobs:
       runs-on: ubuntu-latest
       timeout-minutes: 20
       if: needs.info.outputs.run_pipeline_docker == 'true'
+      strategy:
+        matrix:
+          platform:
+            - linux/amd64
+            - linux/arm64
+            - linux/arm/v7
       steps:
         - name: Checkout code
           uses: actions/checkout@v4.2.2
@@ -325,6 +331,6 @@ jobs:
           id: docker_build
           run: |
 
-            docker buildx build --platform linux/amd64 -t removeme .
+            docker buildx build --platform ${{ matrix.platform }} -t removeme .
           env:
             CI: true
