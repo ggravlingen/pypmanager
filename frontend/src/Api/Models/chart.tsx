@@ -3,5 +3,6 @@ export interface ChartHistoryRow {
   yVal?: number;
   volumeBuy?: number;
   volumeSell?: number;
+  dividendPerSecurity?: number;
   costPriceAverage?: number;
 }

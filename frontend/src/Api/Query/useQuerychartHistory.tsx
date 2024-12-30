@@ -22,6 +22,7 @@ const QUERY = gql`
       xVal
       volumeBuy
       volumeSell
+      dividendPerSecurity
       costPriceAverage
     }
   }
