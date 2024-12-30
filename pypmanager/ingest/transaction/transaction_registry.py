@@ -17,6 +17,7 @@ from pypmanager.ingest.transaction.const import (
 from pypmanager.settings import Settings
 
 from .avanza import AvanzaLoader
+from .const import LOGGER
 from .generic import GenericLoader
 from .lysa import LysaLoader
 from .pandas_algorithm import PandasAlgorithm, PandasAlgorithmPnL
@@ -198,8 +199,9 @@ class TransactionRegistry:
         self._sort_transactions()
         self._filter_by_date()
 
-        # Validate columns
+        # Validation
         self._validate_columns()
+        self._validate_index()
 
     def _load_transaction_files(self: TransactionRegistry) -> pd.DataFrame:
         """Load transaction files and return a sorted DataFrame."""
@@ -458,6 +460,16 @@ class TransactionRegistry:
                 f"Extra columns: {extra_columns}"
             )
             raise ValueError(msg)
+
+    def _validate_index(self: TransactionRegistry) -> None:
+        """Validate index."""
+        duplicates = self.df_all_transactions.index[
+            self.df_all_transactions.index.duplicated()
+        ].tolist()
+
+        if duplicates:
+            msg = f"Index has duplicate dates: {duplicates}"
+            LOGGER.error(msg)
 
     async def async_get_registry(self) -> pd.DataFrame:
         """Get registry."""

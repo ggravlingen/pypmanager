@@ -43,6 +43,31 @@ async def test_transaction_registry(
 
 
 @pytest.mark.asyncio
+async def test_transaction_registry__duplicate_index(
+    data_factory: type[DataFactory], caplog: pytest.LogCaptureFixture
+) -> None:
+    """Test function async_aggregate_ledger_by_year."""
+    factory = data_factory()
+    mocked_transactions = (
+        factory.buy(
+            transaction_date=datetime(2021, 1, 1, tzinfo=Settings.system_time_zone)
+        )
+        .buy(transaction_date=datetime(2021, 1, 1, tzinfo=Settings.system_time_zone))
+        .df_transaction_list
+    )
+    with (
+        patch(
+            "pypmanager.ingest.transaction.transaction_registry.TransactionRegistry."
+            "_load_transaction_files",
+            return_value=mocked_transactions,
+        ),
+    ):
+        registry = await TransactionRegistry().async_get_registry()
+        assert len(registry) == 2
+        assert "Index has duplicate dates" in caplog.text
+
+
+@pytest.mark.asyncio
 async def test_transaction_registry__all_sold__then_buy(
     data_factory: type[DataFactory],
 ) -> None:
