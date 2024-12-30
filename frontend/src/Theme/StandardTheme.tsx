@@ -103,6 +103,16 @@ const StandardTheme = (mode: PaletteMode) => {
           },
         },
       },
+      MuiCssBaseline: {
+        styleOverrides: {
+          a: {
+            color: Palette.primary.light,
+            "&:hover": {
+              color: Palette.primary.main,
+            },
+          },
+        },
+      },
     },
   };
 
