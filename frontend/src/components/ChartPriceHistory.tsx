@@ -396,7 +396,9 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
                     borderColor: theme.palette.text.primary, // Use theme color
                     borderWidth: 1, // Make the line thinner
                     pointRadius: data.chartHistory.map((item) =>
-                      (item.volumeBuy ?? 0) > 0 || (item.volumeSell ?? 0) > 0
+                      (item.volumeBuy ?? 0) > 0 ||
+                      (item.volumeSell ?? 0) > 0 ||
+                      (item.dividendPerSecurity ?? 0) > 0
                         ? 9
                         : 0,
                     ), // Add marker if volumeBuy > 0 or volumeSell > 0
