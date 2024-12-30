@@ -83,6 +83,8 @@ const customPluginShowBuySellMarkers = {
           const volumeSell = item.volumeSell ?? 0;
           const dividendPerSecurity = item.dividendPerSecurity ?? 0;
 
+          console.log(dividendPerSecurity);
+
           let label = "";
           switch (true) {
             case dividendPerSecurity > 0:
@@ -390,6 +392,7 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
                       y: item.yVal ? parseFloat(item.yVal.toFixed(4)) : null,
                       volumeBuy: item.volumeBuy,
                       volumeSell: item.volumeSell,
+                      dividendPerSecurity: item.dividendPerSecurity,
                     })),
                     fill: false,
                     borderColor: theme.palette.text.primary, // Use theme color

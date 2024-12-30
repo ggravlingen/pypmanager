@@ -58,6 +58,7 @@ async def async_get_market_data_and_transaction(
 
     # These are the columns we extract from the transaction registry
     extract_col_from_transaction_registry = [
+        TransactionRegistryColNameValues.SOURCE_PRICE.value,
         TransactionRegistryColNameValues.SOURCE_VOLUME.value,
         TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value,
         TransactionRegistryColNameValues.PRICE_PER_UNIT.value,
@@ -123,8 +124,8 @@ async def async_get_market_data_and_transaction(
             else None
         )
         dividend_per_security = (
-            row[TransactionRegistryColNameValues.PRICE_PER_UNIT.value]
-            if row[TransactionRegistryColNameValues.PRICE_PER_UNIT.value]
+            row[TransactionRegistryColNameValues.SOURCE_PRICE.value]
+            if row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value]
             == TransactionTypeValues.DIVIDEND.value
             else None
         )
