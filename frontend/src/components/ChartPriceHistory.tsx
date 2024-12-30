@@ -83,8 +83,6 @@ const customPluginShowBuySellMarkers = {
           const volumeSell = item.volumeSell ?? 0;
           const dividendPerSecurity = item.dividendPerSecurity ?? 0;
 
-          console.log(dividendPerSecurity);
-
           let label = "";
           switch (true) {
             case dividendPerSecurity > 0:
