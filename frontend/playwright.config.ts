@@ -4,6 +4,7 @@ import { devices } from "@playwright/test";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require("dotenv").config();
 
+const isUpdateSnapshots = process.argv.includes('--update-snapshots');
 const RES = { width: 1920, height: 1080 };
 
 /**
@@ -12,6 +13,7 @@ const RES = { width: 1920, height: 1080 };
 const config: PlaywrightTestConfig = {
   testDir: "./tests/test-files/",
   testMatch: /.*\.ts/,
+  updateSnapshots: isUpdateSnapshots ? 'all' : 'none',
   snapshotPathTemplate:
     "./tests/__screenshots__{/projectName}/{testFilePath}/{testName}/{arg}{ext}",
   /* Maximum time one test can run for. */
@@ -31,8 +33,8 @@ const config: PlaywrightTestConfig = {
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  /* No need to run retries */
+  retries: 0,
   /*
     Reporter to use. See https://playwright.dev/docs/test-reporters
     Uses dot in CI/CD
