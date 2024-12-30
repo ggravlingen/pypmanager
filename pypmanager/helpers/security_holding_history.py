@@ -82,7 +82,6 @@ class SecurityHoldingHistory:
         TransactionRegistryColNameValues.SOURCE_BROKER,
         TransactionRegistryColNameValues.SOURCE_FX,
         TransactionRegistryColNameValues.SOURCE_ISIN,
-        TransactionRegistryColNameValues.SOURCE_PRICE,
         TransactionRegistryColNameValues.SOURCE_FEE,
         ColumnNameValues.AMOUNT,
     ]
