@@ -44,15 +44,24 @@ function tooltipLabelCallback(context: TooltipItem<"line">): string[] {
     y: number;
     volumeBuy?: number;
     volumeSell?: number;
+    dividendPerSecurity?: number;
   };
   const volumeBuy = item.volumeBuy ?? 0;
   const volumeSell = item.volumeSell ?? 0;
-  const volumeLabel =
-    volumeBuy > 0
-      ? `Volume bought: ${volumeBuy}`
-      : volumeSell > 0
-        ? `Volume sold: ${volumeSell}`
-        : "";
+  const dividendPerSecurity = item.dividendPerSecurity ?? 0;
+
+  let volumeLabel = "";
+  switch (true) {
+    case dividendPerSecurity > 0:
+      volumeLabel = `Dividend per security: ${dividendPerSecurity}`;
+      break;
+    case volumeBuy > 0:
+      volumeLabel = `Volume bought: ${volumeBuy}`;
+      break;
+    case volumeSell > 0:
+      volumeLabel = `Volume sold: ${volumeSell}`;
+      break;
+  }
 
   return [`${context.dataset.label}: ${item.y}`, volumeLabel];
 }
@@ -68,10 +77,25 @@ const customPluginShowBuySellMarkers = {
           const item = dataset.data[index] as {
             volumeBuy?: number;
             volumeSell?: number;
+            dividendPerSecurity?: number;
           };
           const volumeBuy = item.volumeBuy ?? 0;
           const volumeSell = item.volumeSell ?? 0;
-          const label = volumeBuy > 0 ? "B" : volumeSell > 0 ? "S" : "";
+          const dividendPerSecurity = item.dividendPerSecurity ?? 0;
+
+          let label = "";
+          switch (true) {
+            case dividendPerSecurity > 0:
+              label = "D";
+              break;
+            case volumeBuy > 0:
+              label = "B";
+              break;
+            case volumeSell > 0:
+              label = "S";
+              break;
+          }
+
           if (label) {
             ctx.fillStyle = "white";
             ctx.font = "10px Arial";

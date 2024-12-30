@@ -32,6 +32,7 @@ class ChartData:
 
     volume_buy: float | None
     volume_sell: float | None
+    dividend_per_security: float | None
 
     cost_price_average: float | None = None
 
@@ -121,6 +122,12 @@ async def async_get_market_data_and_transaction(
             == TransactionTypeValues.SELL.value
             else None
         )
+        dividend_per_security = (
+            row[TransactionRegistryColNameValues.PRICE_PER_UNIT.value]
+            if row[TransactionRegistryColNameValues.PRICE_PER_UNIT.value]
+            == TransactionTypeValues.DIVIDEND.value
+            else None
+        )
 
         output_data.append(
             ChartData(
@@ -128,6 +135,7 @@ async def async_get_market_data_and_transaction(
                 y_val=row["price"],
                 volume_buy=volume_buy,
                 volume_sell=volume_sell,
+                dividend_per_security=dividend_per_security,
                 cost_price_average=row[
                     TransactionRegistryColNameValues.PRICE_PER_UNIT.value
                 ],
