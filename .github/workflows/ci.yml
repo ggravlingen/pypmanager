@@ -196,24 +196,6 @@ jobs:
 
           pytest tests --timeout=30 --cov pypmanager --cov-report term-missing --cov-branch --cov-report xml --cov-report term
 
-      # - name: Coverage comment
-      #   id: coverage_comment
-      #   uses: py-cov-action/python-coverage-comment-action@v3.29
-      #   with:
-      #     GITHUB_TOKEN: ${{ github.token }}
-      #     ANNOTATE_MISSING_LINES: true
-      #     ANNOTATION_TYPE: warning
-
-      # - name: Store Pull Request comment to be posted
-      #   uses: actions/upload-artifact@v4.5.0
-      #   if: steps.coverage_comment.outputs.COMMENT_FILE_WRITTEN == 'true'
-      #   with:
-      #     # If you use a different name, update COMMENT_ARTIFACT_NAME accordingly
-      #     name: python-coverage-comment-action
-      #     # If you use a different name, update COMMENT_FILENAME accordingly
-      #     path: python-coverage-comment-action.txt
-      #     coverage_data_branch: python-coverage-comment-action-data
-
       - name: Coveralls
         uses: coverallsapp/github-action@v2.3.4
 
