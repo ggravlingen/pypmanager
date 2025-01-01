@@ -11,6 +11,7 @@ from pypmanager.analytics.holding import Holding
 from pypmanager.analytics.portfolio import Portfolio
 from pypmanager.general_ledger import async_get_general_ledger
 from pypmanager.ingest.transaction.const import TransactionRegistryColNameValues
+from pypmanager.ingest.transaction.transaction_registry import TransactionRegistry
 from pypmanager.settings import Settings
 from pypmanager.utils.dt import async_get_last_n_quarters
 
@@ -42,6 +43,33 @@ async def async_get_holdings(report_date: datetime | None = None) -> list[Holdin
 
     # Order by name
     return sorted(holdings, key=lambda x: x.name)
+
+
+@dataclass
+class Holdingv2:
+    """Represent a security."""
+
+    name: str
+    current_holding: float
+    current_market_value: float
+
+
+async def async_async_get_holdings_v2() -> list[Holdingv2]:
+    """Get a list of current holdings, including current market value."""
+    output_data: list[Holdingv2] = []
+    transaction_registry = await TransactionRegistry().async_get_current_holding()
+    for _, row in transaction_registry.iterrows():
+        output_data.append(
+            Holdingv2(
+                name=row[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY.value],
+                current_holding=row[
+                    TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value
+                ],
+                current_market_value=0.0,
+            )
+        )
+
+    return output_data
 
 
 @dataclass
