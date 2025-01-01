@@ -1,43 +1,66 @@
 # PyLocalP(portfolio)Manager
 
-Summarize transactions in funds into a simple portfolio report.
+Summarize transactions in securities into a portfolio report tool.
 
 Available features:
 
+- Holdings overview: a table of your current holdings, and the market value of the positions.
 - A transaction list: merge data from multiple sources into one transaction list.
+- A transaction chart: show historical price data along with markers for purchases and divestments.
 - Profit- and loss statement: show the historical result from your transactions.
 
-## Screenshots from app
+## What is this exactly?
 
-Transaction list
-![Screenshot of the transaction list.](/docs/assets/transaction_list.png)
-
-Income statement:
-![Screenshot of the general ledger.](/docs/assets/income_statement.png)
+It's a web app running on your computer.
 
 ## Why
 
-I have been looking for a library where I can download a set of transactions from my broker and pension fund manager use the merged data for analysis.
+I've been looking for a library where I can download a set of transactions from my broker and pension fund manager use the merged data for analysis. When I couldn't find one, I decided to build it instead.
 
-## Local-only data
+## No-cloud storage
 
-Alternative solutions expected me to store my data in the cloud. I don't want that, so I wrote this library where your data is stored locally. The only thing cloud is that the library allows you to fetch market data from the Internet.
+Your data is stored locally. The only thing cloud is that the library allows you to fetch market data from the Internet.
+
+## Screenshots from app
+
+Click the images to view a larger version.
+
+### Portfolio overview
+
+![Screenshot of the general ledger.](/docs/assets/portfolio_overview.png)
+
+### Transaction list
+
+![Screenshot of the transaction list.](/docs/assets/transaction_list.png)
+
+### Income statement
+
+![Screenshot of the general ledger.](/docs/assets/income_statement.png)
 
 ## Installing
 
-There are other ways of getting this to work but this is how I use it:
+Choose one of the two options below. I'm personally using (1).
+
+### (1) Running in VS Code
 
 - Clone the library from GitHub: `git clone https://github.com/ggravlingen/pypmanager.git`
-- Install Docker Desktop
-- Install `VSCode` from Microsoft and the `Dev Containers` extension.
+- Install [Docker Desktop](https://www.docker.com/products/docker-desktop/) on your computer.
+- Install [VSCode](https://code.visualstudio.com/download) from Microsoft.
+- Install the [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension.
 - Open the library in VSCode and choose the option to open the folder in a container.
-- Run the install script `./scipt/install.sh`.
-- Start the server `uvicorn --port 8001 pypmanager.api:app` or, in VSCode, use `Run and Debug` and `Pypmanager server`.
+- Run the install script by typing `./scipt/install.sh`.
+- Start the server in VSCode by clicking `Run and Debug` and then `Pypmanager server`.
 - Browse to the transaction list on `http://localhost:8001/#/transaction`.
 
-## Where to store your data
+### (2) Running as a stand-alone Docker service
 
-Your own data goes into the folder `data`. If you make contributions to this library, no files in this folder should be committed to the library.
+- Build the Docker image file: `docker build . --tag pypmanager:latest`.
+- Spin up a container and mount your data folders: `docker run -p 8001:8001 -v ./data:/code/app/data pypmanager:latest`.
+- Browse to the transaction list on `http://localhost:8001/#/transaction`.
+
+## How do add transactions
+
+Your own data goes into the folder `data/transactions`. If you make contributions to this library, _no_ files from the `data` folder should be committed to the library as it contains your own, private, data.
 
 ## Market data (end-of-day prices on funds and equities)
 
@@ -53,14 +76,4 @@ Currently, there is support for loading data from the following sites:
 - The Financial Times
 - Svenska Handelsbanken
 
-## Running the Docker
-
-First, you need to builder the Docker image file: `docker build . --tag pypmanager:latest`.
-
-The, you run it and mount your data folders: `docker run -p 8001:8001 -v ./data:/code/app/data pypmanager:latest`
-
-## Unimplemented ideas
-
-- Calculate IRR per security and on a total.
-- Split the overview by account or maybe tag.
-- Investments made in other currencies
+Please feel free to subsmit your own data source.
