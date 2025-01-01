@@ -84,6 +84,17 @@ def get_market_data(isin_code: str | None = None) -> pd.DataFrame:
     return merged_df
 
 
+async def async_get_last_market_data_df() -> pd.DataFrame:
+    """Return a DataFrame with the last found value per ISIN code."""
+    df_market_data = get_market_data()
+
+    df_market_data_clean = df_market_data[["isin_code", "price"]]
+
+    # Transform df_market_data so that only the last record per isin is kept
+    df_market_data_clean = df_market_data_clean.sort_index(ascending=True)
+    return df_market_data_clean.drop_duplicates(subset=["isin_code"], keep="last")
+
+
 @strawberry.type
 @dataclass
 class MarketDataOverviewRecord:
