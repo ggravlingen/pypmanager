@@ -11,15 +11,15 @@ Available features:
 - A transaction chart: show historical price data along with markers for purchases and divestments.
 - Profit- and loss statement: show the historical result from your transactions.
 
-## What is this exactly?
+## What exactly is this?
 
 It's a web app running on your computer.
 
-## Why
+## But why
 
 I've been looking for a library where I can download a set of transactions from my broker and pension fund manager use the merged data for analysis. When I couldn't find one, I decided to build it instead.
 
-## No-cloud storage
+## Could storage? No.
 
 Your data is stored locally. The only thing cloud is that the library allows you to fetch market data from the Internet.
 
@@ -41,7 +41,7 @@ Click the images to view a larger version.
 
 ## Installing
 
-Choose one of the two options below. I'm personally using (1).
+Choose one of the options below. I'm personally using (1).
 
 ### (1) Running in VS Code
 
@@ -54,10 +54,16 @@ Choose one of the two options below. I'm personally using (1).
 - Start the server in VSCode by clicking `Run and Debug` and then `Pypmanager server`.
 - Browse to the transaction list on `http://localhost:8001/#/transaction`.
 
-### (2) Running as a stand-alone Docker service
+### (2) Building a Docker image from the source and Running as a stand-alone Docker service
 
 - Build the Docker image file: `docker build . --tag pypmanager:latest`.
 - Spin up a container and mount your data folders: `docker run -p 8001:8001 -v ./data:/code/app/data pypmanager:latest`.
+- Browse to the transaction list on `http://localhost:8001/#/transaction`.
+
+### (3) Running a pre-build docker
+
+- Fetch the docker image `docker pull ghcr.io/ggravlingen/pypmanager:2024.12.4`, where `2024.12.4` is the version you want to install.
+- Spin up a container and mount your data folders: `docker run -p 8001:8001 -v ./data:/code/app/data pypmanager:2024.12.4`.
 - Browse to the transaction list on `http://localhost:8001/#/transaction`.
 
 ## How do add transactions
