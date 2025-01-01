@@ -362,7 +362,7 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
             isinCode={isinCode}
           />
           <StandardCard
-            height={"564px"}
+            height={"560px"}
             sx={{ marginTop: "5px", marginBottom: "0px", paddingLeft: "16px" }}
           >
             <Line

@@ -18,7 +18,7 @@ interface StandardCardProps {
  * @returns The rendered StandardCard component.
  */
 export default function StandardCard({
-  width = "1375px",
+  width = "1360px",
   height = "700px",
   children,
   sx,
