@@ -69,36 +69,6 @@ def _mock_market_data_graphql(
 
 @pytest.mark.asyncio
 @pytest.mark.usefixtures("_mock_transaction_list_graphql")
-async def test_graphql_query__all_general_ledger() -> None:
-    """Test query allGeneralLedger."""
-    query = """
-    {
-        allGeneralLedger {
-            transactionDate
-            broker
-            source
-            action
-            name
-            noTraded
-            aggBuyVolume
-            amount
-            commission
-            cashFlow
-            fx
-            averageFxRate
-            account
-            credit
-            debit
-        }
-    }
-    """
-    response = client.post("/graphql", json={"query": query})
-    assert response.status_code == 200
-    assert len(response.json()["data"]["allGeneralLedger"]) == 6
-
-
-@pytest.mark.asyncio
-@pytest.mark.usefixtures("_mock_transaction_list_graphql")
 async def test_graphql_query__current_portfolio() -> None:
     """Test query currentPortfolio."""
     query = """

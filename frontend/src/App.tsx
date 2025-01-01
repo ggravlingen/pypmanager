@@ -9,7 +9,6 @@ import {
   NavigationBar,
   TableAllTransaction,
   TableCurrentPortfolio,
-  TableGeneralLedger,
   TableIncomeStatement,
   TableMarketDataOverview,
 } from "./components";
@@ -27,10 +26,6 @@ const ROUTE_LIST: RouteListProps[] = [
   {
     path: "/income_statement",
     element: <TableIncomeStatement />,
-  },
-  {
-    path: "/ledger",
-    element: <TableGeneralLedger />,
   },
   {
     path: "/marketDataOverview",

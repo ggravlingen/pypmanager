@@ -1,7 +1,3 @@
-/**
- * LedgerRow represents a single row in a ledger.
- */
-
 export interface BaseTransactionRow {
   transactionDate?: Date;
   isinCode?: string;
@@ -23,14 +19,4 @@ export interface TransactionRow extends BaseTransactionRow {
   pnlTotal?: number;
   pnlTrade?: number;
   pnlDividend?: number;
-}
-
-export interface LedgerRow extends BaseTransactionRow {
-  aggBuyVolume?: number;
-  amount?: number;
-  cashFlow?: number;
-  averageFx?: number;
-  account?: string;
-  credit?: number;
-  debit?: number;
 }
