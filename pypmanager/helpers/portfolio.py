@@ -84,18 +84,21 @@ async def async_async_get_holdings_v2() -> list[Holdingv2]:
         try:
             market_price = df_market_data.loc[df_market_data.index[-1], isin_code]
             current_market_value_amount = market_price * no_units
+            pnl_unrealized = current_market_value_amount - invested_amount
         except KeyError:
             LOGGER.warning(
                 "Could not find market data for isin_code: %s",
                 isin_code,
             )
             current_market_value_amount = 0.0
+            pnl_unrealized = 0.0
 
         output_data.append(
             Holdingv2(
                 name=row[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY.value],
                 invested_amount=invested_amount,
                 current_market_value_amount=current_market_value_amount,
+                pnl_unrealized=pnl_unrealized,
             )
         )
 

@@ -39,3 +39,4 @@ async def test_async_async_get_holdings_v2(
         assert result[0].name == "Company A"
         assert result[0].invested_amount == 100.0
         assert result[0].current_market_value_amount == 0.0
+        assert result[0].pnl_unrealized == 0.0
