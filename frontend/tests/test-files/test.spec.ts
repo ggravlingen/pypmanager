@@ -3,6 +3,33 @@ import { graphql, HttpResponse } from "msw";
 
 import { expect, test } from "../baseTest.ts";
 
+const QueryCurrentPortfolio = {
+  currentPortfolio: [
+    {
+      name: "Test Fund 1",
+      isinCode: "SE0013720000",
+      investedAmount: 1000,
+      currentMarketValueAmount: 2000,
+      pnlTotal: 1000,
+      pnlRealized: 500,
+      pnlUnrealized: 500,
+      marketValueDate: "2024-12-23",
+      marketValuePrice: 200,
+    },
+    {
+      name: "Security A, Inc",
+      isinCode: "SE0013720001",
+      investedAmount: 1000,
+      currentMarketValueAmount: 2000,
+      pnlTotal: 1000,
+      pnlRealized: 500,
+      pnlUnrealized: 500,
+      marketValueDate: "2024-12-23",
+      marketValuePrice: 200,
+    },
+  ],
+}
+
 const QueryMarketDataOverviewData = {
   marketDataOverview: [
     {
@@ -177,6 +204,27 @@ test.describe.parallel("Test views", () => {
     );
 
     await page.goto("/#/marketDataOverview");
+    await page.waitForTimeout(2000);
+
+    await page.mouse.move(100, 100);
+
+    await expect(page).toHaveScreenshot("1.png");
+  });
+
+  test("Test loading current portfolio table", async ({
+    page,
+    worker,
+  }) => {
+    await worker.use(
+      graphql.query("QueryCurrentPortfolio", ({ query, variables }) => {
+        console.log("Intercepted QueryCurrentPortfolio");
+        return HttpResponse.json({
+          data: QueryCurrentPortfolio,
+        });
+      }),
+    );
+
+    await page.goto("/#/");
     await page.waitForTimeout(2000);
 
     await page.mouse.move(100, 100);
