@@ -7,6 +7,7 @@ import {
   List as ListIcon,
   Menu,
   MenuOpen,
+  Summarize,
 } from "@mui/icons-material";
 import {
   Drawer,
@@ -182,12 +183,7 @@ export default function NavigationBar({
             )
           }
         />
-        {/* <NavigationItem
-          isExpanded={isExpanded}
-          label="Current portfolio"
-          icon={<AccountBalance sx={IconSX} />}
-          linkTo="/"
-        />
+        {/*
         <NavigationItem
           isExpanded={isExpanded}
           label={"Historical portfolio"}
@@ -200,6 +196,12 @@ export default function NavigationBar({
           icon={<Dataset sx={IconSX} />}
           linkTo="/ledger"
         /> */}
+        <NavigationItem
+          isExpanded={isExpanded}
+          label="Current portfolio"
+          icon={<Summarize sx={IconSX} />}
+          linkTo="/"
+        />
         <NavigationItem
           isExpanded={isExpanded}
           label={"Income statement"}
