@@ -1,13 +1,11 @@
 export interface PortfolioContentRow {
   name?: string;
-  dateMarketValue?: Date | null;
+  isinCode?: string | null;
+  currentMarketValueAmount?: number;
   investedAmount?: number | null;
-  marketValue?: number | null;
-  currentHoldings?: number | null;
-  currentPrice?: number | null;
-  averagePrice?: number | null;
-  returnPct?: number | null;
-  totalPnl?: number;
-  realizedPnl?: number;
-  unrealizedPnl?: number;
+  pnlTotal?: number | null;
+  pnlRealized?: number | null;
+  pnlUnrealized?: number | null;
+  marketValueDate?: Date | null;
+  marketValuePrice?: number | null;
 }

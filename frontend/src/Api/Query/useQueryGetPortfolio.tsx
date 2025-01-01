@@ -6,16 +6,14 @@ const QUERY = gql`
   query QueryCurrentPortfolio {
     currentPortfolio {
       name
-      dateMarketValue
+      isinCode
       investedAmount
-      marketValue
-      currentHoldings
-      currentPrice
-      averagePrice
-      returnPct
-      totalPnl
-      realizedPnl
-      unrealizedPnl
+      currentMarketValueAmount
+      pnlTotal
+      pnlRealized
+      pnlUnrealized
+      marketValueDate
+      marketValuePrice
     }
   }
 `;

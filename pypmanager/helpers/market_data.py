@@ -92,7 +92,17 @@ async def async_get_last_market_data_df() -> pd.DataFrame:
 
     # Transform df_market_data so that only the last record per isin is kept
     df_market_data_clean = df_market_data_clean.sort_index(ascending=True)
-    return df_market_data_clean.drop_duplicates(subset=["isin_code"], keep="last")
+
+    # Keep only the last record per isin
+    df_filtered = df_market_data_clean.drop_duplicates(
+        subset=["isin_code"], keep="last"
+    )
+
+    df_filtered.index = pd.to_datetime(df_filtered.index).tz_localize(
+        Settings.system_time_zone
+    )
+
+    return df_filtered
 
 
 @strawberry.type

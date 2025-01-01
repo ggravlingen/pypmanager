@@ -2,18 +2,28 @@ import { QueryLoader, useQueryGetPortfolio } from "@Api";
 import { BasicTable, CellAlign, CellDataType } from "@Generic";
 import React from "react";
 
+import { ColumnSecurity } from "./common";
+
 const columnSettings = [
   {
-    headerName: "Name",
-    fieldPath: "name",
+    headerName: "Security",
+    fieldPath: "",
     align: CellAlign.LEFT,
-    dataType: CellDataType.STRING,
+    dataType: CellDataType.CUSTOM,
+    description: "The name of the security",
+    customComponent: ColumnSecurity,
   },
   {
-    fieldPath: "dateMarketValue",
+    fieldPath: "marketValueDate",
     headerName: "Date of market value",
     align: CellAlign.RIGHT,
     dataType: CellDataType.DATE,
+  },
+  {
+    fieldPath: "marketValuePrice",
+    headerName: "Price",
+    align: CellAlign.RIGHT,
+    dataType: CellDataType.NUMBER,
   },
   {
     fieldPath: "investedAmount",
@@ -24,7 +34,7 @@ const columnSettings = [
     showSubtotal: true,
   },
   {
-    fieldPath: "marketValue",
+    fieldPath: "currentMarketValueAmount",
     headerName: "Market value",
     align: CellAlign.RIGHT,
     dataType: CellDataType.NUMBER,
@@ -32,34 +42,7 @@ const columnSettings = [
     showSubtotal: true,
   },
   {
-    fieldPath: "currentHoldings",
-    headerName: "Current holdings",
-    align: CellAlign.RIGHT,
-    dataType: CellDataType.NUMBER,
-    noDecimal: 0,
-  },
-  {
-    fieldPath: "currentPrice",
-    headerName: "Current price",
-    align: CellAlign.RIGHT,
-    dataType: CellDataType.NUMBER,
-    noDecimal: 2,
-  },
-  {
-    fieldPath: "averagePrice",
-    headerName: "Average price",
-    align: CellAlign.RIGHT,
-    dataType: CellDataType.NUMBER,
-  },
-  {
-    fieldPath: "returnPct",
-    headerName: "Return %",
-    align: CellAlign.RIGHT,
-    dataType: CellDataType.PER_CENT,
-    noDecimal: 0,
-  },
-  {
-    fieldPath: "totalPnl",
+    fieldPath: "pnlTotal",
     headerName: "Total P&L",
     align: CellAlign.RIGHT,
     dataType: CellDataType.NUMBER,
@@ -67,7 +50,7 @@ const columnSettings = [
     showSubtotal: true,
   },
   {
-    fieldPath: "realizedPnl",
+    fieldPath: "pnlRealized",
     headerName: "Realized P&L",
     align: CellAlign.RIGHT,
     dataType: CellDataType.NUMBER,
@@ -75,7 +58,7 @@ const columnSettings = [
     showSubtotal: true,
   },
   {
-    fieldPath: "unrealizedPnl",
+    fieldPath: "pnlUnrealized",
     headerName: "Unrealized P&L",
     align: CellAlign.RIGHT,
     dataType: CellDataType.NUMBER,
