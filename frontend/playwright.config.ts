@@ -7,6 +7,10 @@ require("dotenv").config();
 const isUpdateSnapshots = process.argv.includes("--update-snapshots");
 const RES = { width: 1920, height: 1080 };
 
+if(isUpdateSnapshots){
+  console.log("Running config with updating snapshots settings");
+}
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -26,7 +30,7 @@ const config: PlaywrightTestConfig = {
     timeout: 5000,
     toHaveScreenshot: {
       // an acceptable amount of pixels that could be different, unset by default.
-      maxDiffPixels: 700,
+      maxDiffPixels: isUpdateSnapshots ? 0 : 700,
     },
   },
   /* Run tests in files in parallel */
