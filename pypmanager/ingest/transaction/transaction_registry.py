@@ -474,3 +474,11 @@ class TransactionRegistry:
     async def async_get_registry(self) -> pd.DataFrame:
         """Get registry."""
         return self.df_all_transactions
+
+    async def async_get_current_holding(self) -> pd.DataFrame:
+        """Get all current holdings."""
+        return (
+            self.df_all_transactions.sort_index()
+            .groupby(TransactionRegistryColNameValues.SOURCE_ISIN)
+            .tail(1)
+        )
