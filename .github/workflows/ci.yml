@@ -219,6 +219,12 @@ jobs:
           path: python-coverage-comment-action.txt
           coverage_data_branch: python-coverage-comment-action-data
 
+      - name: Coveralls
+        uses: coverallsapp/github-action@v2.3.4
+        with:
+          flag-name: run-${{ join(matrix.*, '-') }}
+          parallel: true
+
   frontend-linter:
     name: "Frontend: run code linters"
     continue-on-error: true
