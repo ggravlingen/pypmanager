@@ -7,6 +7,8 @@ const QUERY = gql`
     currentPortfolio {
       name
       isinCode
+      quantityHeld
+      costBaseAverage
       investedAmount
       currentMarketValueAmount
       pnlTotal

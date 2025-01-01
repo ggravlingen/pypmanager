@@ -15,6 +15,8 @@ const QueryCurrentPortfolio = {
       pnlUnrealized: 500,
       marketValueDate: "2024-12-23",
       marketValuePrice: 200,
+      quantityHeld: 10.0,
+      costBaseAverage: 15.0,
     },
     {
       name: "Security A, Inc",
@@ -26,6 +28,8 @@ const QueryCurrentPortfolio = {
       pnlUnrealized: 500,
       marketValueDate: "2024-12-23",
       marketValuePrice: 200,
+      quantityHeld: 10.0,
+      costBaseAverage: 15.0,
     },
   ],
 };
