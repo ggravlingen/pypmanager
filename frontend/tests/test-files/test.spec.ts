@@ -28,7 +28,7 @@ const QueryCurrentPortfolio = {
       marketValuePrice: 200,
     },
   ],
-}
+};
 
 const QueryMarketDataOverviewData = {
   marketDataOverview: [
@@ -211,10 +211,7 @@ test.describe.parallel("Test views", () => {
     await expect(page).toHaveScreenshot("1.png");
   });
 
-  test("Test loading current portfolio table", async ({
-    page,
-    worker,
-  }) => {
+  test("Test loading current portfolio table", async ({ page, worker }) => {
     await worker.use(
       graphql.query("QueryCurrentPortfolio", ({ query, variables }) => {
         console.log("Intercepted QueryCurrentPortfolio");
