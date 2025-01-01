@@ -476,7 +476,11 @@ class TransactionRegistry:
         return self.df_all_transactions
 
     async def async_get_current_holding(self) -> pd.DataFrame:
-        """Get all current holdings."""
+        """
+        Get all current holdings.
+
+        The returned DataFrame contains rows even if everything has been sold.
+        """
         return (
             self.df_all_transactions.sort_index()
             .groupby(TransactionRegistryColNameValues.SOURCE_ISIN)
