@@ -25,7 +25,17 @@ async def test_async_async_get_holdings_v2(
         # US1234567890
         factory.buy(
             transaction_date=datetime(2021, 1, 1, tzinfo=Settings.system_time_zone)
-        ).df_transaction_list
+        )
+        # US1234567891
+        .buy(
+            transaction_date=datetime(2021, 1, 1, tzinfo=Settings.system_time_zone),
+            isin_code="US1234567891",
+        )
+        .sell(
+            transaction_date=datetime(2021, 1, 2, tzinfo=Settings.system_time_zone),
+            isin_code="US1234567891",
+        )
+        .df_transaction_list
     )
     with (
         patch(
@@ -35,7 +45,7 @@ async def test_async_async_get_holdings_v2(
         ),
     ):
         result = await async_async_get_holdings_v2()
-        assert len(result) == 1
+        assert len(result) == 2
         assert result[0].name == "Company A"
         assert result[0].invested_amount == 100.0
         assert result[0].current_market_value_amount == 0.0
