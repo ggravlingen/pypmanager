@@ -70,18 +70,6 @@ class PortfolioContentRow:
 
 
 @strawberry.type
-class HistoricalPortfolioRow:
-    """Represent a row in the historical portfolio content."""
-
-    report_date: date
-    invested_amount: float | None
-    market_value: float | None
-    return_pct: float | None
-    realized_pnl: float | None
-    unrealized_pnl: float | None
-
-
-@strawberry.type
 class ResultStatementRow:
     """Represent a row in the result statement."""
 

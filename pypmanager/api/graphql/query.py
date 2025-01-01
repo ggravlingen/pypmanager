@@ -11,7 +11,6 @@ import strawberry
 from pypmanager.general_ledger import (
     async_get_general_ledger_as_dict,
 )
-from pypmanager.helpers import async_get_historical_portfolio
 from pypmanager.helpers.chart import ChartData, async_get_market_data_and_transaction
 from pypmanager.helpers.market_data import (
     MarketDataOverviewRecord,
@@ -27,7 +26,6 @@ from pypmanager.ingest.transaction import (
 )
 
 from .models import (
-    HistoricalPortfolioRow,
     LedgerRow,
     ResultStatementRow,
     SecurityResponse,
@@ -71,23 +69,6 @@ class Query:
     async def current_portfolio(self: Query) -> list[Holdingv2]:
         """Return the current state of the portfolio."""
         return await async_async_get_holdings_v2()
-
-    @strawberry.field
-    async def historical_portfolio(self: Query) -> list[HistoricalPortfolioRow]:
-        """Return historical portfolio data."""
-        historical_portfolio = await async_get_historical_portfolio()
-
-        return [
-            HistoricalPortfolioRow(
-                report_date=row.report_date,
-                invested_amount=row.portfolio.invested_amount,
-                market_value=row.portfolio.market_value,
-                return_pct=row.portfolio.return_pct,
-                realized_pnl=row.portfolio.realized_pnl,
-                unrealized_pnl=row.portfolio.unrealized_pnl,
-            )
-            for row in historical_portfolio
-        ]
 
     @strawberry.field
     async def all_transaction(self: Query) -> list[TransactionRow]:

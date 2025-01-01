@@ -8,7 +8,6 @@ from typing import TYPE_CHECKING, Any
 from unittest.mock import PropertyMock, patch
 
 from fastapi.testclient import TestClient
-from freezegun import freeze_time
 import pytest
 
 from pypmanager.api import app
@@ -121,28 +120,6 @@ async def test_graphql_query__current_portfolio() -> None:
     response_data = response.json()["data"]["currentPortfolio"]
     assert len(response_data) == 1
     assert response_data[0]["name"] == "Company A"
-
-
-@pytest.mark.asyncio
-@pytest.mark.usefixtures("_mock_transaction_list_graphql")
-@freeze_time(date(2022, 12, 5))
-async def test_graphql_query__historical_portfolio() -> None:
-    """Test query historicalPortfolio."""
-    query = """
-    {
-        historicalPortfolio {
-            reportDate
-            investedAmount
-            marketValue
-            returnPct
-            realizedPnl
-            unrealizedPnl
-        }
-    }
-    """
-    response = client.post("/graphql", json={"query": query})
-    assert response.status_code == 200
-    assert len(response.json()["data"]["historicalPortfolio"]) == 1
 
 
 @pytest.mark.asyncio
