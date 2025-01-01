@@ -1,4 +1,4 @@
-# PyLocalP(portfolio)Manager
+# Local Portfolio Manager
 
 [![Coverage Status](https://coveralls.io/repos/github/ggravlingen/pypmanager/badge.svg?branch=main)](https://coveralls.io/github/ggravlingen/pypmanager?branch=main)
 
