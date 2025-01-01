@@ -37,5 +37,5 @@ async def test_async_async_get_holdings_v2(
         result = await async_async_get_holdings_v2()
         assert len(result) == 1
         assert result[0].name == "Company A"
-        assert result[0].current_holding == 10.0
-        assert result[0].current_market_value == 0.0
+        assert result[0].invested_amount == 100.0
+        assert result[0].current_market_value_amount == 0.0

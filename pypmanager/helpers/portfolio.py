@@ -10,6 +10,7 @@ from typing import cast
 from pypmanager.analytics.holding import Holding
 from pypmanager.analytics.portfolio import Portfolio
 from pypmanager.general_ledger import async_get_general_ledger
+from pypmanager.helpers.market_data import async_get_last_market_data_df
 from pypmanager.ingest.transaction.const import TransactionRegistryColNameValues
 from pypmanager.ingest.transaction.transaction_registry import TransactionRegistry
 from pypmanager.settings import Settings
@@ -50,26 +51,55 @@ class Holdingv2:
     """Represent a security."""
 
     name: str
-    current_holding: float
-    current_market_value: float
+    invested_amount: float
+    current_market_value_amount: float
+
+    pnl_total: float | None = None
+    pnl_realized: float | None = None
+    pnl_unrealized: float | None = None
 
 
 async def async_async_get_holdings_v2() -> list[Holdingv2]:
     """Get a list of current holdings, including current market value."""
     output_data: list[Holdingv2] = []
     transaction_registry = await TransactionRegistry().async_get_current_holding()
+
+    df_market_data = await async_get_last_market_data_df()
+
     for _, row in transaction_registry.iterrows():
+        no_units = row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
+
+        if round(no_units, 0) == 0:
+            continue
+
+        invested_amount = (
+            row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
+            * row[TransactionRegistryColNameValues.PRICE_PER_UNIT.value]
+        )
+
+        isin_code = row[TransactionRegistryColNameValues.SOURCE_ISIN.value]
+
+        # Fetch the current market value from df_market_data, where isin_code is a
+        # column
+        try:
+            market_price = df_market_data.loc[df_market_data.index[-1], isin_code]
+            current_market_value_amount = market_price * no_units
+        except KeyError:
+            LOGGER.warning(
+                "Could not find market data for isin_code: %s",
+                isin_code,
+            )
+            current_market_value_amount = 0.0
+
         output_data.append(
             Holdingv2(
                 name=row[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY.value],
-                current_holding=row[
-                    TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value
-                ],
-                current_market_value=0.0,
+                invested_amount=invested_amount,
+                current_market_value_amount=current_market_value_amount,
             )
         )
 
-    return output_data
+    return sorted(output_data, key=lambda x: x.name)
 
 
 @dataclass
