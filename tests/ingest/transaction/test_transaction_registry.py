@@ -43,6 +43,43 @@ async def test_transaction_registry(
 
 
 @pytest.mark.asyncio
+async def test_transaction_registry__async_get_current_holding(
+    data_factory: type[DataFactory],
+) -> None:
+    """Test function async_get_current_holding."""
+    factory = data_factory()
+    mocked_transactions = (
+        # US1234567890
+        factory.buy(
+            transaction_date=datetime(2021, 1, 1, tzinfo=Settings.system_time_zone)
+        )
+        .buy(transaction_date=datetime(2021, 1, 2, tzinfo=Settings.system_time_zone))
+        .sell(transaction_date=datetime(2021, 1, 3, tzinfo=Settings.system_time_zone))
+        # US1234567891
+        .buy(
+            transaction_date=datetime(2021, 1, 15, tzinfo=Settings.system_time_zone),
+            isin_code="US1234567891",
+        )
+        .df_transaction_list
+    )
+    with (
+        patch(
+            "pypmanager.ingest.transaction.transaction_registry.TransactionRegistry."
+            "_load_transaction_files",
+            return_value=mocked_transactions,
+        ),
+    ):
+        registry = await TransactionRegistry().async_get_current_holding()
+        assert len(registry) == 2
+        assert registry.index[0] == datetime(
+            2021, 1, 3, tzinfo=Settings.system_time_zone
+        )
+        assert registry.index[1] == datetime(
+            2021, 1, 15, tzinfo=Settings.system_time_zone
+        )
+
+
+@pytest.mark.asyncio
 async def test_transaction_registry__duplicate_index(
     data_factory: type[DataFactory], caplog: pytest.LogCaptureFixture
 ) -> None:

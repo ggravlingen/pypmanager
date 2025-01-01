@@ -61,6 +61,7 @@ class DataFactory:
         no_traded: float = 10.0,
         price: float = 10.0,
         commission: float = -1.0,
+        isin_code: str = "US1234567890",
     ) -> DataFactory:
         """Add a buy transaction."""
         self.transaction_list.append(
@@ -72,7 +73,7 @@ class DataFactory:
                     TransactionTypeValues.BUY.value
                 ),
                 TransactionRegistryColNameValues.SOURCE_NAME_SECURITY: "Company A",
-                TransactionRegistryColNameValues.SOURCE_ISIN: "US1234567890",
+                TransactionRegistryColNameValues.SOURCE_ISIN: isin_code,
                 TransactionRegistryColNameValues.SOURCE_VOLUME.value: no_traded,
                 TransactionRegistryColNameValues.SOURCE_PRICE.value: price,
                 TransactionRegistryColNameValues.SOURCE_FEE.value: commission,
