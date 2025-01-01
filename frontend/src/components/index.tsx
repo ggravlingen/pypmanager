@@ -3,7 +3,6 @@ import NavigationBar from "./NavigationBar";
 import TableAllTransaction from "./TableAllTransaction";
 import TableCurrentPortfolio from "./TableCurrentPortfolio";
 import TableGeneralLedger from "./TableGeneralLedger";
-import TableHistoricalPortfolio from "./TableHistoricalPortfolio";
 import TableIncomeStatement from "./TableIncomeStatement";
 import TableMarketDataOverview from "./TableMarketDataOverview";
 
@@ -13,7 +12,6 @@ export {
   TableAllTransaction,
   TableCurrentPortfolio,
   TableGeneralLedger,
-  TableHistoricalPortfolio,
   TableIncomeStatement,
   TableMarketDataOverview,
 };
