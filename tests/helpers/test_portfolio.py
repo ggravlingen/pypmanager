@@ -72,8 +72,8 @@ async def test_async_async_get_holdings_v2(
 
         assert result[1].name == "Company B"
         assert result[1].invested_amount is None
-        assert result[1].current_market_value_amount == 0.0
-        assert result[1].pnl_unrealized == 0.0
+        assert result[1].current_market_value_amount is None
+        assert result[1].pnl_unrealized is None
         assert result[1].market_value_price is None
         assert result[1].market_value_date is None
         assert result[1].cost_base_average is None

@@ -23,7 +23,7 @@ class Holdingv2:
 
     isin_code: str
     name: str
-    current_market_value_amount: float
+    current_market_value_amount: float | None = None
 
     quantity_held: float | None = None
     cost_base_average: float | None = None
@@ -64,8 +64,8 @@ async def async_async_get_holdings_v2() -> list[Holdingv2]:
         filtered_market_data = df_market_data.query(f"isin_code == '{isin_code}'")
 
         if filtered_market_data.empty:
-            current_market_value_amount = 0.0
-            pnl_unrealized = 0.0
+            current_market_value_amount = None
+            pnl_unrealized = None
             market_value_date = None
             market_value_price = None
         else:
@@ -75,11 +75,11 @@ async def async_async_get_holdings_v2() -> list[Holdingv2]:
             if no_units:
                 current_market_value_amount = market_value_price * no_units
             else:
-                current_market_value_amount = 0.0
+                current_market_value_amount = None
 
             if pd.isna(current_market_value_amount):
-                current_market_value_amount = 0.0
-                pnl_unrealized = 0.0
+                current_market_value_amount = None
+                pnl_unrealized = None
 
             if invested_amount:
                 pnl_unrealized = current_market_value_amount - invested_amount
