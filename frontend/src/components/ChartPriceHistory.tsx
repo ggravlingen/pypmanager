@@ -178,6 +178,15 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
     onEndDateChange(today.format("YYYY-MM-DD"));
   };
 
+  const handleLastTenYearsClick = () => {
+    const fiveYearsAgo = dayjs().subtract(10, "year");
+    const today = dayjs();
+    setStart(fiveYearsAgo);
+    setEnd(today);
+    onStartDateChange(fiveYearsAgo.format("YYYY-MM-DD"));
+    onEndDateChange(today.format("YYYY-MM-DD"));
+  };
+
   /**
    * A button component with a label.
    * @param props - The component props.
@@ -246,16 +255,20 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
         />
         <ButtonWithLabel label="YTD" handleClick={handleYTDClick} />
         <ButtonWithLabel
-          label="Last year"
+          label="1 year"
           handleClick={handleLastCalendarYearClick}
         />
         <ButtonWithLabel
-          label="Last 3 years"
+          label="3 years"
           handleClick={handleLastThreeYearsClick}
         />
         <ButtonWithLabel
-          label="Last 5 years"
+          label="5 years"
           handleClick={handleLastFiveYearsClick}
+        />
+        <ButtonWithLabel
+          label="10 years"
+          handleClick={handleLastTenYearsClick}
         />
       </StandardCard>
     </LocalizationProvider>
