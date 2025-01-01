@@ -6,7 +6,6 @@ from datetime import date, datetime
 from typing import TYPE_CHECKING
 from unittest.mock import patch
 
-import numpy as np
 import pytest
 
 from pypmanager.helpers.portfolio import async_async_get_holdings_v2
@@ -69,7 +68,7 @@ async def test_async_async_get_holdings_v2(
         assert result[0].date_market_value == date(2021, 1, 1)
 
         assert result[1].name == "Company B"
-        assert np.isnan(result[1].invested_amount)
+        assert result[1].invested_amount is None
         assert result[1].current_market_value_amount == 0.0
         assert result[1].pnl_unrealized == 0.0
         assert result[1].date_market_value is None
