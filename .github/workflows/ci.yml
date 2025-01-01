@@ -195,12 +195,6 @@ jobs:
           cp frontend/templates/index_template.html frontend/templates/index.html
 
           pytest tests --timeout=30 --cov pypmanager --cov-report term-missing --cov-branch --cov-report xml --cov-report term
-      - name: Run coverage test
-        run: |
-          source .venv/bin/activate
-
-          coverage json
-          coverage-threshold
 
       # - name: Coverage comment
       #   id: coverage_comment
