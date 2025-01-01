@@ -1,6 +1,6 @@
 # Local Portfolio Manager
 
-[![Coverage Status](https://coveralls.io/repos/github/ggravlingen/pypmanager/badge.svg?branch=main)](https://coveralls.io/github/ggravlingen/pypmanager?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/ggravlingen/pypmanager/badge.svg)](https://coveralls.io/github/ggravlingen/pypmanager?branch=main)
 
 Summarize transactions in securities into a portfolio report tool.
 
