@@ -221,9 +221,6 @@ jobs:
 
       - name: Coveralls
         uses: coverallsapp/github-action@v2.3.4
-        with:
-          flag-name: run-${{ join(matrix.*, '-') }}
-          parallel: true
 
   frontend-linter:
     name: "Frontend: run code linters"
