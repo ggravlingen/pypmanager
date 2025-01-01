@@ -57,8 +57,20 @@ async def test_transaction_registry__async_get_current_holding(
         .sell(transaction_date=datetime(2021, 1, 3, tzinfo=Settings.system_time_zone))
         # US1234567891
         .buy(
+            name="Company B",
             transaction_date=datetime(2021, 1, 15, tzinfo=Settings.system_time_zone),
             isin_code="US1234567891",
+        )
+        # US1234567892
+        .buy(
+            name="Company C",
+            transaction_date=datetime(2021, 1, 15, tzinfo=Settings.system_time_zone),
+            isin_code="US1234567892",
+        )
+        .sell(
+            name="Company C",
+            transaction_date=datetime(2021, 1, 16, tzinfo=Settings.system_time_zone),
+            isin_code="US1234567892",
         )
         .df_transaction_list
     )
@@ -70,7 +82,7 @@ async def test_transaction_registry__async_get_current_holding(
         ),
     ):
         registry = await TransactionRegistry().async_get_current_holding()
-        assert len(registry) == 2
+        assert len(registry) == 3
         assert registry.index[0] == datetime(
             2021, 1, 3, tzinfo=Settings.system_time_zone
         )

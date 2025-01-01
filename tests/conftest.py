@@ -53,8 +53,9 @@ class DataFactory:
         """Initialize the class."""
         self.transaction_list = []
 
-    def buy(
+    def buy(  # noqa: PLR0913
         self,
+        name: str = "Company A",
         transaction_date: datetime = datetime(
             2021, 1, 1, tzinfo=Settings.system_time_zone
         ),
@@ -72,7 +73,7 @@ class DataFactory:
                 TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
                     TransactionTypeValues.BUY.value
                 ),
-                TransactionRegistryColNameValues.SOURCE_NAME_SECURITY: "Company A",
+                TransactionRegistryColNameValues.SOURCE_NAME_SECURITY: name,
                 TransactionRegistryColNameValues.SOURCE_ISIN: isin_code,
                 TransactionRegistryColNameValues.SOURCE_VOLUME.value: no_traded,
                 TransactionRegistryColNameValues.SOURCE_PRICE.value: price,
@@ -86,8 +87,9 @@ class DataFactory:
         )
         return self
 
-    def sell(
+    def sell(  # noqa: PLR0913
         self,
+        name: str = "Company A",
         transaction_date: datetime = datetime(
             2021, 2, 1, tzinfo=Settings.system_time_zone
         ),
@@ -105,7 +107,7 @@ class DataFactory:
                 TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value: (
                     TransactionTypeValues.SELL.value
                 ),
-                TransactionRegistryColNameValues.SOURCE_NAME_SECURITY: "Company A",
+                TransactionRegistryColNameValues.SOURCE_NAME_SECURITY: name,
                 TransactionRegistryColNameValues.SOURCE_ISIN: isin_code,
                 TransactionRegistryColNameValues.SOURCE_VOLUME.value: no_traded,
                 TransactionRegistryColNameValues.SOURCE_PRICE.value: price,
