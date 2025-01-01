@@ -108,19 +108,18 @@ async def test_graphql_query__current_portfolio() -> None:
             name
             dateMarketValue
             investedAmount
-            marketValue
-            currentHoldings
-            currentPrice
-            averagePrice
-            returnPct
-            totalPnl
-            realizedPnl
-            unrealizedPnl
+            currentMarketValueAmount
+            pnlTotal
+            pnlRealized
+            pnlUnrealized
         }
     }
     """
     response = client.post("/graphql", json={"query": query})
     assert response.status_code == 200
+    response_data = response.json()["data"]["currentPortfolio"]
+    assert len(response_data) == 1
+    assert response_data[0]["name"] == "Company A"
 
 
 @pytest.mark.asyncio

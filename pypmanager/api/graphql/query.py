@@ -11,12 +11,13 @@ import strawberry
 from pypmanager.general_ledger import (
     async_get_general_ledger_as_dict,
 )
-from pypmanager.helpers import async_get_historical_portfolio, async_get_holdings
+from pypmanager.helpers import async_get_historical_portfolio
 from pypmanager.helpers.chart import ChartData, async_get_market_data_and_transaction
 from pypmanager.helpers.market_data import (
     MarketDataOverviewRecord,
     async_get_market_data_overview,
 )
+from pypmanager.helpers.portfolio import Holdingv2, async_async_get_holdings_v2
 from pypmanager.helpers.security import async_load_security_data
 from pypmanager.ingest.transaction import (
     ColumnNameValues,
@@ -28,7 +29,6 @@ from pypmanager.ingest.transaction import (
 from .models import (
     HistoricalPortfolioRow,
     LedgerRow,
-    PortfolioContentRow,
     ResultStatementRow,
     SecurityResponse,
     TransactionRow,
@@ -68,26 +68,9 @@ class Query:
         ]
 
     @strawberry.field
-    async def current_portfolio(self: Query) -> list[PortfolioContentRow]:
+    async def current_portfolio(self: Query) -> list[Holdingv2]:
         """Return the current state of the portfolio."""
-        holdings = await async_get_holdings()
-
-        return [
-            PortfolioContentRow(
-                name=holding.name,
-                date_market_value=cast(str, holding.date_market_value),
-                invested_amount=holding.invested_amount,
-                market_value=holding.market_value,
-                current_holdings=holding.current_holdings,
-                current_price=holding.current_price,
-                average_price=holding.average_price,
-                return_pct=holding.return_pct,
-                total_pnl=holding.total_pnl,
-                realized_pnl=holding.realized_pnl,
-                unrealized_pnl=holding.unrealized_pnl,
-            )
-            for holding in holdings
-        ]
+        return await async_async_get_holdings_v2()
 
     @strawberry.field
     async def historical_portfolio(self: Query) -> list[HistoricalPortfolioRow]:

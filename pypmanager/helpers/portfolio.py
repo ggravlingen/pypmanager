@@ -7,6 +7,9 @@ from datetime import date, datetime
 import logging
 from typing import cast
 
+import pandas as pd
+import strawberry
+
 from pypmanager.analytics.holding import Holding
 from pypmanager.analytics.portfolio import Portfolio
 from pypmanager.general_ledger import async_get_general_ledger
@@ -20,7 +23,11 @@ LOGGER = logging.getLogger(__package__)
 
 
 async def async_get_holdings(report_date: datetime | None = None) -> list[Holding]:
-    """Return a list of current holdings."""
+    """
+    Return a list of current holdings.
+
+    Deprecated.
+    """
     df_general_ledger = await async_get_general_ledger(report_date=report_date)
     all_securities = cast(
         list[str],
@@ -47,13 +54,14 @@ async def async_get_holdings(report_date: datetime | None = None) -> list[Holdin
 
 
 @dataclass
+@strawberry.type
 class Holdingv2:
     """Represent a security."""
 
     name: str
-    invested_amount: float
     current_market_value_amount: float
 
+    invested_amount: float | None = None
     date_market_value: date | None = None
 
     pnl_total: float | None = None
@@ -71,10 +79,13 @@ async def async_async_get_holdings_v2() -> list[Holdingv2]:
     for _, row in transaction_registry.iterrows():
         no_units = row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
 
-        invested_amount = (
-            row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
-            * row[TransactionRegistryColNameValues.PRICE_PER_UNIT.value]
-        )
+        if pd.isna(no_units):
+            invested_amount = None
+        else:
+            invested_amount = (
+                row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
+                * row[TransactionRegistryColNameValues.PRICE_PER_UNIT.value]
+            )
 
         isin_code = row[TransactionRegistryColNameValues.SOURCE_ISIN.value]
 
@@ -88,7 +99,10 @@ async def async_async_get_holdings_v2() -> list[Holdingv2]:
             date_market_value = filtered_market_data.index
             market_price = filtered_market_data.iloc[0]["price"]
             current_market_value_amount = market_price * no_units
-            pnl_unrealized = current_market_value_amount - invested_amount
+            if invested_amount:
+                pnl_unrealized = current_market_value_amount - invested_amount
+            else:
+                pnl_unrealized = 0.0
 
         output_data.append(
             Holdingv2(
