@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 async def async_aggregate_income_statement_by_year(
     report_date: datetime | None = None,
 ) -> pd.DataFrame:
-    """Aggregate the general ledger by year."""
+    """Aggregate the transaction registry by year."""
     df_transaction_registry = await TransactionRegistry(
         report_date=report_date
     ).async_get_registry()

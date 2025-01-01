@@ -8,9 +8,6 @@ from typing import cast
 import numpy as np
 import strawberry
 
-from pypmanager.general_ledger import (
-    async_get_general_ledger_as_dict,
-)
 from pypmanager.helpers.chart import ChartData, async_get_market_data_and_transaction
 from pypmanager.helpers.market_data import (
     MarketDataOverviewRecord,
@@ -19,14 +16,12 @@ from pypmanager.helpers.market_data import (
 from pypmanager.helpers.portfolio import Holdingv2, async_async_get_holdings_v2
 from pypmanager.helpers.security import async_load_security_data
 from pypmanager.ingest.transaction import (
-    ColumnNameValues,
     TransactionRegistry,
     TransactionRegistryColNameValues,
     async_aggregate_income_statement_by_year,
 )
 
 from .models import (
-    LedgerRow,
     ResultStatementRow,
     SecurityResponse,
     TransactionRow,
@@ -36,34 +31,6 @@ from .models import (
 @strawberry.type
 class Query:
     """GraphQL query."""
-
-    @strawberry.field
-    async def all_general_ledger(self: Query) -> list[LedgerRow]:
-        """Return all general ledger rows."""
-        output_dict = await async_get_general_ledger_as_dict()
-
-        return [
-            LedgerRow(
-                transaction_date=row[
-                    TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE
-                ],
-                broker=row[TransactionRegistryColNameValues.SOURCE_BROKER.value],
-                source=row[TransactionRegistryColNameValues.SOURCE_FILE.value],
-                action=row[ColumnNameValues.TRANSACTION_TYPE_INTERNAL],
-                name=row[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY],
-                no_traded=row[TransactionRegistryColNameValues.SOURCE_VOLUME.value],
-                agg_buy_volume=row[ColumnNameValues.NO_HELD],
-                amount=row[ColumnNameValues.AMOUNT],
-                commission=row[TransactionRegistryColNameValues.SOURCE_FEE],
-                cash_flow=row[ColumnNameValues.CASH_FLOW_LOCAL],
-                fx=row[TransactionRegistryColNameValues.SOURCE_FX.value],
-                average_fx_rate=row[ColumnNameValues.AVG_FX],
-                credit=row[ColumnNameValues.CREDIT],
-                debit=row[ColumnNameValues.DEBIT],
-                account=row[ColumnNameValues.ACCOUNT],
-            )
-            for row in output_dict
-        ]
 
     @strawberry.field
     async def current_portfolio(self: Query) -> list[Holdingv2]:

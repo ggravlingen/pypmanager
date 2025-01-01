@@ -40,19 +40,6 @@ class TransactionRow(BaseTransactionRow):
 
 
 @strawberry.type
-class LedgerRow(BaseTransactionRow):
-    """Represent a row in the general ledger."""
-
-    agg_buy_volume: float | None
-    amount: float | None
-    cash_flow: float | None
-    average_fx_rate: float | None
-    account: str
-    credit: float | None
-    debit: float | None
-
-
-@strawberry.type
 class PortfolioContentRow:
     """Represent a row in the current portfolio content."""
 

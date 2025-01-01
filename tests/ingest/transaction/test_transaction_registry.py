@@ -21,7 +21,7 @@ from tests.conftest import DataFactory
 async def test_transaction_registry(
     data_factory: type[DataFactory],
 ) -> None:
-    """Test function async_aggregate_ledger_by_year."""
+    """Test function async_get_registry."""
     factory = data_factory()
     mocked_transactions = (
         factory.buy(
@@ -95,7 +95,7 @@ async def test_transaction_registry__async_get_current_holding(
 async def test_transaction_registry__duplicate_index(
     data_factory: type[DataFactory], caplog: pytest.LogCaptureFixture
 ) -> None:
-    """Test function async_aggregate_ledger_by_year."""
+    """Test function async_get_registry with duplicate index on the same date."""
     factory = data_factory()
     mocked_transactions = (
         factory.buy(
@@ -239,7 +239,7 @@ async def test_transaction_registry__all_sold__then_buy(
 async def test_transaction_registry__date_filter(
     data_factory: type[DataFactory],
 ) -> None:
-    """Test function async_aggregate_ledger_by_year."""
+    """Test function async_get_registry when using the date filter."""
     factory = data_factory()
     mocked_transactions = factory.buy().sell().df_transaction_list
     with (
@@ -259,7 +259,7 @@ async def test_transaction_registry__date_filter(
 async def test_transaction_registry__date_filter__raises(
     data_factory: type[DataFactory],
 ) -> None:
-    """Test function async_aggregate_ledger_by_year."""
+    """Test function async_get_registry with an error."""
     factory = data_factory()
     mocked_transactions = factory.buy().sell().df_transaction_list
     with (

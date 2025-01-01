@@ -18,10 +18,10 @@ if TYPE_CHECKING:
 
 
 @pytest.mark.asyncio
-async def test_async_aggregate_ledger_by_year(
+async def test_async__async_aggregate_income_statement_by_year(
     data_factory: type[DataFactory],
 ) -> None:
-    """Test function async_aggregate_ledger_by_year."""
+    """Test function async_aggregate_income_statement_by_year."""
     factory = data_factory()
     mocked_transactions = (
         factory.buy()
