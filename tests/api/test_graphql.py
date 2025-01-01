@@ -106,12 +106,13 @@ async def test_graphql_query__current_portfolio() -> None:
     {
         currentPortfolio {
             name
-            dateMarketValue
             investedAmount
             currentMarketValueAmount
             pnlTotal
             pnlRealized
             pnlUnrealized
+            marketValueDate
+            marketValuePrice
         }
     }
     """

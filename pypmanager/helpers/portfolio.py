@@ -58,11 +58,13 @@ async def async_get_holdings(report_date: datetime | None = None) -> list[Holdin
 class Holdingv2:
     """Represent a security."""
 
+    isin_code: str
     name: str
     current_market_value_amount: float
 
     invested_amount: float | None = None
-    date_market_value: date | None = None
+    market_value_date: date | None = None
+    market_value_price: float | None = None
 
     pnl_total: float | None = None
     pnl_realized: float | None = None
@@ -78,8 +80,9 @@ async def async_async_get_holdings_v2() -> list[Holdingv2]:
 
     for _, row in transaction_registry.iterrows():
         no_units = row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
+        average_cost = row[TransactionRegistryColNameValues.PRICE_PER_UNIT.value]
 
-        if pd.isna(no_units):
+        if pd.isna(no_units) or pd.isna(average_cost):
             invested_amount = None
         else:
             invested_amount = (
@@ -94,23 +97,31 @@ async def async_async_get_holdings_v2() -> list[Holdingv2]:
         if filtered_market_data.empty:
             current_market_value_amount = 0.0
             pnl_unrealized = 0.0
-            date_market_value = None
+            market_value_date = None
+            market_value_price = None
         else:
-            date_market_value = filtered_market_data.index
-            market_price = filtered_market_data.iloc[0]["price"]
-            current_market_value_amount = market_price * no_units
+            market_value_date = filtered_market_data.index[0].date()
+            market_value_price = filtered_market_data.iloc[0]["price"]
+            current_market_value_amount = market_value_price * no_units
+
+            if pd.isna(current_market_value_amount):
+                current_market_value_amount = 0.0
+                pnl_unrealized = 0.0
+
             if invested_amount:
                 pnl_unrealized = current_market_value_amount - invested_amount
             else:
-                pnl_unrealized = 0.0
+                pnl_unrealized = None
 
         output_data.append(
             Holdingv2(
+                isin_code=isin_code,
                 name=row[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY.value],
                 invested_amount=invested_amount,
                 current_market_value_amount=current_market_value_amount,
                 pnl_unrealized=pnl_unrealized,
-                date_market_value=date_market_value,
+                market_value_date=market_value_date,
+                market_value_price=market_value_price,
             )
         )
 
