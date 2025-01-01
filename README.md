@@ -19,7 +19,7 @@ It's a web app running on your computer.
 
 I've been looking for a library where I can download a set of transactions from my broker and pension fund manager use the merged data for analysis. When I couldn't find one, I decided to build it instead.
 
-## Could storage? No.
+## Cloud storage? No.
 
 Your data is stored locally. The only thing cloud is that the library allows you to fetch market data from the Internet.
 
