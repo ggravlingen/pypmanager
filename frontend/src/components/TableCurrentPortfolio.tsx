@@ -20,10 +20,12 @@ const columnSettings = [
     dataType: CellDataType.DATE,
   },
   {
-    fieldPath: "marketValuePrice",
-    headerName: "Price",
+    fieldPath: "currentMarketValueAmount",
+    headerName: "Market value",
     align: CellAlign.RIGHT,
     dataType: CellDataType.NUMBER,
+    noDecimal: 0,
+    showSubtotal: true,
   },
   {
     fieldPath: "investedAmount",
@@ -34,12 +36,24 @@ const columnSettings = [
     showSubtotal: true,
   },
   {
-    fieldPath: "currentMarketValueAmount",
-    headerName: "Market value",
+    fieldPath: "quantityHeld",
+    headerName: "Number of units",
     align: CellAlign.RIGHT,
     dataType: CellDataType.NUMBER,
-    noDecimal: 0,
-    showSubtotal: true,
+    noDecimal: 2,
+  },
+  {
+    fieldPath: "costBaseAverage",
+    headerName: "Average cost",
+    align: CellAlign.RIGHT,
+    dataType: CellDataType.NUMBER,
+    noDecimal: 2,
+  },
+  {
+    fieldPath: "marketValuePrice",
+    headerName: "Price",
+    align: CellAlign.RIGHT,
+    dataType: CellDataType.NUMBER,
   },
   {
     fieldPath: "pnlTotal",
