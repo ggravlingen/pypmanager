@@ -54,6 +54,8 @@ class Holdingv2:
     invested_amount: float
     current_market_value_amount: float
 
+    date_market_value: date | None = None
+
     pnl_total: float | None = None
     pnl_realized: float | None = None
     pnl_unrealized: float | None = None
@@ -69,9 +71,6 @@ async def async_async_get_holdings_v2() -> list[Holdingv2]:
     for _, row in transaction_registry.iterrows():
         no_units = row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
 
-        if round(no_units, 0) == 0:
-            continue
-
         invested_amount = (
             row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
             * row[TransactionRegistryColNameValues.PRICE_PER_UNIT.value]
@@ -85,6 +84,7 @@ async def async_async_get_holdings_v2() -> list[Holdingv2]:
             market_price = df_market_data.loc[df_market_data.index[-1], isin_code]
             current_market_value_amount = market_price * no_units
             pnl_unrealized = current_market_value_amount - invested_amount
+            date_market_value = df_market_data.index[-1]
         except KeyError:
             LOGGER.warning(
                 "Could not find market data for isin_code: %s",
@@ -92,6 +92,7 @@ async def async_async_get_holdings_v2() -> list[Holdingv2]:
             )
             current_market_value_amount = 0.0
             pnl_unrealized = 0.0
+            date_market_value = None
 
         output_data.append(
             Holdingv2(
@@ -99,6 +100,7 @@ async def async_async_get_holdings_v2() -> list[Holdingv2]:
                 invested_amount=invested_amount,
                 current_market_value_amount=current_market_value_amount,
                 pnl_unrealized=pnl_unrealized,
+                date_market_value=date_market_value,
             )
         )
 
