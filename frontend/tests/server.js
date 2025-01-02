@@ -2,6 +2,7 @@
 const express = require("express");
 const path = require("path");
 const http = require("http");
+const RateLimit = require("express-rate-limit");
 
 // Paths
 const FRONTEND_DIR = path.join(__dirname, "../");
@@ -16,6 +17,15 @@ console.log("---");
 
 const app = express();
 const server = http.createServer(app);
+
+// set up rate limiter: maximum of 100 requests per 15 minutes
+const limiter = RateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // max 100 requests per windowMs
+});
+
+// apply rate limiter to all requests
+app.use(limiter);
 
 // Serving the files in the static folder
 app.use("/static", express.static(STATIC_DIR));
