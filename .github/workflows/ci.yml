@@ -51,10 +51,10 @@ jobs:
               - tests/**/*.py
               - pypmanager/**/*.yaml
               - pyproject.toml
-              - .github/**/*.yml
+              - .github/workflows/ci.yml
             frontend:
               - frontend/**/*
-              - .github/**/*.yml
+              - .github/workflows/ci.yml
             docker:
               - Dockerfile
 
