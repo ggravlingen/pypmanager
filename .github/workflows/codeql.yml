@@ -46,4 +46,4 @@ jobs:
         with:
           path: ${{ steps.code-analysis.outputs.sarifFile }}
           wait-for-processing: true
-          category: ${{ matrix.language }}"-code-scan
+          category: "${{ matrix.language }}-code-scan"
