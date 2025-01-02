@@ -200,7 +200,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   }: {
     label: string;
     handleClick: () => void;
-  }): JSX.Element {
+  }): React.JSX.Element {
     return (
       <Button
         variant="contained"
@@ -292,7 +292,7 @@ interface SecurityInfoCardProps {
 function SecurityInfoCard({
   securityInfo,
   isinCode,
-}: SecurityInfoCardProps): JSX.Element {
+}: SecurityInfoCardProps): React.JSX.Element {
   return (
     <StandardCard
       height={"40px"}
@@ -500,7 +500,7 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
  * If no ISIN code is provided, it displays an error message.
  * @returns The price history chart component or an error message.
  */
-export default function ChartPriceHistoryWrapper(): JSX.Element {
+export default function ChartPriceHistoryWrapper(): React.JSX.Element {
   const { isinCode } = useParams<{ isinCode: string }>();
 
   if (!isinCode) {

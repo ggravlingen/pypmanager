@@ -68,7 +68,7 @@ function NavigationItem({
   label,
   icon,
   linkTo,
-}: NavigationItemProps): JSX.Element {
+}: NavigationItemProps): React.JSX.Element {
   const constTooltipLabel =
     label === "Portfolio Manager" ? "Open navigation" : label;
 

@@ -22,7 +22,7 @@ export default function StandardCard({
   height = "700px",
   children,
   sx,
-}: StandardCardProps): JSX.Element {
+}: StandardCardProps): React.JSX.Element {
   const theme = useTheme();
 
   return (

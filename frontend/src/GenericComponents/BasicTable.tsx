@@ -41,7 +41,7 @@ interface ColumnSetting {
   description?: string;
   // We must allow any here as row data can by be anything
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  customComponent?: (rowData: any) => JSX.Element;
+  customComponent?: (rowData: any) => React.JSX.Element;
 }
 
 interface BasicTableProps {
@@ -66,7 +66,7 @@ function getCellValue(
   columnSetting: ColumnSetting,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   rowData: any,
-): string | JSX.Element | null {
+): string | React.JSX.Element | null {
   if (columnSetting.dataType === CellDataType.CUSTOM) {
     return columnSetting?.customComponent
       ? columnSetting.customComponent({ rowData: rowData })
@@ -106,7 +106,9 @@ interface TableHeaderCellProps {
  * @param props.columnSetting The settings for the column, including the header name and alignment.
  * @returns The table header cell.
  */
-function TableHeaderCell({ columnSetting }: TableHeaderCellProps): JSX.Element {
+function TableHeaderCell({
+  columnSetting,
+}: TableHeaderCellProps): React.JSX.Element {
   return (
     <TableCell key={`${columnSetting.fieldPath}-${columnSetting.headerName}`}>
       <Box
@@ -145,7 +147,7 @@ function TableHeaderCell({ columnSetting }: TableHeaderCellProps): JSX.Element {
 export default function BasicTable({
   data,
   columnSettings,
-}: BasicTableProps): JSX.Element | null {
+}: BasicTableProps): React.JSX.Element | null {
   if (data === undefined) {
     return null;
   }

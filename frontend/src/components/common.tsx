@@ -15,7 +15,7 @@ export function ColumnSecurity({
   rowData,
 }: {
   rowData: TransactionRow;
-}): JSX.Element {
+}): React.JSX.Element {
   const securityName = rowData.name ? rowData.name : "No name";
 
   return (

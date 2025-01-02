@@ -24,7 +24,11 @@ import { ColumnSecurity } from "./common";
  * @param rowData.rowData - The data for the transaction row.
  * @returns The JSX element representing the PnL column.
  */
-function ColumnPnL({ rowData }: { rowData: TransactionRow }): JSX.Element {
+function ColumnPnL({
+  rowData,
+}: {
+  rowData: TransactionRow;
+}): React.JSX.Element {
   return (
     <Tooltip
       title={
@@ -60,7 +64,11 @@ function ColumnPnL({ rowData }: { rowData: TransactionRow }): JSX.Element {
  * @param props.rowData - The data for the transaction row.
  * @returns The rendered price column.
  */
-function ColumnPrice({ rowData }: { rowData: TransactionRow }): JSX.Element {
+function ColumnPrice({
+  rowData,
+}: {
+  rowData: TransactionRow;
+}): React.JSX.Element {
   return (
     <Tooltip
       title={
@@ -94,7 +102,11 @@ function ColumnPrice({ rowData }: { rowData: TransactionRow }): JSX.Element {
  * This component checks if the transaction is a "Sell" action and if the quantity held is zero or not defined.
  * If both conditions are met, it displays a dash ("-"). Otherwise, it formats and displays the quantity held.
  */
-function ColumnNoHeld({ rowData }: { rowData: TransactionRow }): JSX.Element {
+function ColumnNoHeld({
+  rowData,
+}: {
+  rowData: TransactionRow;
+}): React.JSX.Element {
   if (
     rowData.noTraded &&
     rowData.action &&
@@ -207,7 +219,7 @@ const columnSettings = [
  * Renders a table component displaying all historical transactions.
  * @returns The JSX element representing the table component.
  */
-export default function TableAllTransaction(): JSX.Element {
+export default function TableAllTransaction(): React.JSX.Element {
   const { data, loading, error } = useQueryGetAllTransaction();
 
   return (

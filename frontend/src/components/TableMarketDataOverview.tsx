@@ -40,7 +40,7 @@ const columnSettings = [
  * Renders a table component displaying market data overview.
  * @returns The JSX element representing the table component.
  */
-export default function TableMarketDataOverview(): JSX.Element {
+export default function TableMarketDataOverview(): React.JSX.Element {
   const { data, loading, error } = useQueryMarketDataOverview();
 
   return (

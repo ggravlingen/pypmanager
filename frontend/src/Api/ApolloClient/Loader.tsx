@@ -35,7 +35,7 @@ export default function QueryLoader({
   data,
   error,
   children,
-}: QueryLoaderProps): JSX.Element {
+}: QueryLoaderProps): React.JSX.Element {
   if (loading) {
     return (
       <Box
