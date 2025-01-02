@@ -25,9 +25,6 @@ class TypedSettings(BaseSettings):
     @property
     def dir_data(self: TypedSettings) -> Path:
         """Return data directory."""
-        if self.is_demo:
-            return Path("data-demo").resolve()
-
         return Path("data").resolve()
 
     dir_config: Path = Path("pypmanager/configuration").resolve()
@@ -79,8 +76,6 @@ class TypedSettings(BaseSettings):
             return local_market_data
 
         return None
-
-    is_demo: bool = False
 
 
 Settings = TypedSettings()
