@@ -463,12 +463,36 @@ class TransactionRegistry:
 
     def _validate_index(self: TransactionRegistry) -> None:
         """Validate index."""
-        duplicates = self.df_all_transactions.index[
-            self.df_all_transactions.index.duplicated()
-        ].tolist()
+        df_copy = self.df_all_transactions.copy()
 
-        if duplicates:
-            msg = f"Index has duplicate dates: {duplicates}"
+        # Filter only rows where isin_code is not nan
+        df_copy = df_copy.query(
+            f"{TransactionRegistryColNameValues.SOURCE_ISIN.value} != 'nan'"
+        )
+
+        # Create a column with the index as a column
+        df_copy["index_as_date"] = df_copy.index.date
+
+        # Filter only rows that have duplicates
+        duplicates = df_copy[
+            df_copy.duplicated(
+                subset=[
+                    TransactionRegistryColNameValues.SOURCE_ISIN.value,
+                    "index_as_date",
+                ],
+                keep=False,
+            )
+        ]
+
+        if not duplicates.empty:
+            # Extract the unique combination of isin and index_date that are duplicated
+            duplicates = duplicates[
+                [
+                    TransactionRegistryColNameValues.SOURCE_ISIN.value,
+                    "index_as_date",
+                ]
+            ].drop_duplicates()
+            msg = f"Index has {len(duplicates)} duplicate dates: {duplicates}"
             LOGGER.error(msg)
 
     async def async_get_registry(self) -> pd.DataFrame:

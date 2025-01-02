@@ -113,7 +113,7 @@ async def test_transaction_registry__duplicate_index(
     ):
         registry = await TransactionRegistry().async_get_registry()
         assert len(registry) == 2
-        assert "Index has duplicate dates" in caplog.text
+        assert "duplicate dates" in caplog.text
 
 
 @pytest.mark.asyncio
