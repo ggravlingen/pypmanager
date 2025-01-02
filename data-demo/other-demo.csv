@@ -1,2 +1,0 @@
-transaction_date;transaction_type;name;isin_code;no_traded;price;amount;commission;currency;broker
-2018-01-01;buy;Storebrand Global All Countries A SEK;SE0000671919;1000.0;100.0;;;SEK;Storebrand
