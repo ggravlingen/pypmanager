@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 
 
 @pytest.fixture
-def mock_ft_data_response() -> Generator[FTLoader, None, None]:
+def mock_ft_data_response() -> Generator[None, None, None]:
     """Mock response."""
     response_data = {
         "Dates": ["2024-12-23T00:00:00", "2024-12-27T00:00:00", "2024-12-30T00:00:00"],
