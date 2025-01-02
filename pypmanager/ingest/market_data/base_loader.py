@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Any, cast
 
 import requests
 
-from .const import HttpResponseCodeLabels
+from pypmanager.const import HttpStatusCodes
 
 if TYPE_CHECKING:
     from io import BytesIO
@@ -39,7 +39,7 @@ class BaseMarketDataLoader(ABC):
         """Get data endpoint."""
         response = requests.get(self.full_url, timeout=10)
 
-        if response.status_code == HttpResponseCodeLabels.OK:
+        if response.status_code == HttpStatusCodes.OK:
             return cast(dict[str, Any], json.loads(response.text))
 
         msg = "Unable to load data"
