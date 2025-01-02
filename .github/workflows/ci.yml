@@ -57,6 +57,7 @@ jobs:
               - .github/workflows/ci.yml
             docker:
               - Dockerfile
+              - .github/workflows/ci.yml
 
       - name: Generate partial Python venv restore key
         id: generate_python_cache_key
