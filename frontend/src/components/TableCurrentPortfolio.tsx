@@ -90,7 +90,7 @@ const columnSettings = [
  * is configured with predefined `columnSettings` to format and display the portfolio data.
  * @returns A component that displays the current portfolio in a table format.
  */
-export default function TableCurrentPortfolio(): JSX.Element {
+export default function TableCurrentPortfolio(): React.JSX.Element {
   const { data, loading, error } = useQueryGetPortfolio();
 
   return (

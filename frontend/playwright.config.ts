@@ -7,7 +7,7 @@ require("dotenv").config();
 const isUpdateSnapshots = process.argv.includes("--update-snapshots");
 const RES = { width: 1920, height: 1080 };
 
-if(isUpdateSnapshots){
+if (isUpdateSnapshots) {
   console.log("Running config with updating snapshots settings");
 }
 

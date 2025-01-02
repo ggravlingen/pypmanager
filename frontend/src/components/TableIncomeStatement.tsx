@@ -31,9 +31,9 @@ const SX_SUBTOTAL = {
 
 /**
  * Renders a table component for displaying the income statement.
- * @returns JSX.Element representing the table component.
+ * @returns React.JSX.Element representing the table component.
  */
-export default function TableIncomeStatement(): JSX.Element {
+export default function TableIncomeStatement(): React.JSX.Element {
   const { data, loading, error } = useQueryGetIncomeStatement();
 
   return (
