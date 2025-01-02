@@ -4,6 +4,10 @@ on:
     # Run on mondays
     - cron: "0 0 * * 1"
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   auto-update:
     runs-on: ubuntu-latest
