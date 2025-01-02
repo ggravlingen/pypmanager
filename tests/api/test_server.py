@@ -1,12 +1,30 @@
 """Tests for FastAPI server endpoints."""
 
+import asyncio
+
 from fastapi.testclient import TestClient
 import pytest
 
 from pypmanager.api import app
+from pypmanager.api.scheduler import scheduler
+from pypmanager.api.server import async_lifespan
 from pypmanager.const import HttpStatusCodes
 
 client = TestClient(app)
+
+
+@pytest.mark.asyncio
+async def test_async_lifespan() -> None:
+    """Test the async_lifespan function."""
+    async with async_lifespan(app):
+        # Wait a moment to ensure the scheduler has started
+        await asyncio.sleep(1)
+        assert scheduler.running
+
+    # Wait a moment to ensure the scheduler has shut down
+    await asyncio.sleep(1)
+    # Check if the scheduler has shut down
+    assert not scheduler.running
 
 
 @pytest.mark.asyncio
