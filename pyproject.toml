@@ -15,7 +15,7 @@ dependencies    = [
   "pandas==2.2.3",
   "pyarrow==18.1.0",
   "pydantic==2.10.4",
-  "pydantic-settings==2.7.0",
+  "pydantic-settings==2.7.1",
   "requests==2.32.3",
   "strawberry_graphql[debug-server]==0.256.1",
   "uvicorn[standard]==0.34.0",
@@ -24,11 +24,11 @@ dependencies    = [
 [project.optional-dependencies]
 test = [
   "httpx==0.28.1",
-  "mypy_dev==1.14.0a7",
+  "mypy_dev==1.15.0a1",
   "pre-commit==4.0.1",
   "pylint==3.3.3",
   "pytest==8.3.4",
-  "pytest-asyncio==0.25.0",
+  "pytest-asyncio==0.25.1",
   "pytest-cov==6.0.0",
   "pytest-freezer==0.4.9",
   "pytest-profiling==1.8.1",
