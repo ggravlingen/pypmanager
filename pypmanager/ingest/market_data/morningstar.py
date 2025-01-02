@@ -8,8 +8,10 @@ from io import BytesIO
 import pandas as pd
 import requests
 
+from pypmanager.const import HttpStatusCodes
+
 from .base_loader import BaseMarketDataLoader
-from .const import LOAD_HISTORY_DAYS, LOGGER, HttpResponseCodeLabels
+from .const import LOAD_HISTORY_DAYS, LOGGER
 from .models import SourceData
 
 
@@ -84,7 +86,7 @@ class MorningstarLoaderSHB(BaseMarketDataLoader):
         """Get reqponse."""
         response = requests.get(self.full_url, timeout=10)
 
-        if response.status_code == HttpResponseCodeLabels.OK:
+        if response.status_code == HttpStatusCodes.OK:
             self.raw_response_io = BytesIO(response.content)
         else:
             LOGGER.warning("Unable to load data")

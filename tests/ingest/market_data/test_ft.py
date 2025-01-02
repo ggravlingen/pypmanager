@@ -9,7 +9,7 @@ from unittest import mock
 
 import pytest
 
-from pypmanager.ingest.market_data.const import HttpResponseCodeLabels
+from pypmanager.const import HttpStatusCodes
 from pypmanager.ingest.market_data.ft import FTLoader
 from pypmanager.ingest.market_data.models import SourceData
 
@@ -96,7 +96,7 @@ def mock_ft_data_response() -> Generator[None, None, None]:
         "pypmanager.ingest.market_data.base_loader.requests.post",
     ) as mock_get:
         mock_response = mock_get.return_value
-        mock_response.status_code = HttpResponseCodeLabels.OK
+        mock_response.status_code = HttpStatusCodes.OK
         mock_response.text = json.dumps(response_data)
         yield
 
