@@ -29,6 +29,10 @@ const testFactory = (config?: Config) =>
     worker: createWorkerFixture(handlers, config),
     http,
     page: async ({ page }, use, testInfo) => {
+      // Set the current time to 2024-12-31 10:00:00 to avoid issues with
+      // date-based tests
+      await page.clock.setFixedTime(new Date("2024-12-31T10:00:00"));
+
       const fileName = testInfo.titlePath[0].replace(/[./-]/g, "_");
       page.on("console", async (msg) => {
         const filePath = `./${LOG_FOLDER_NAME}/${fileName}.log`;
