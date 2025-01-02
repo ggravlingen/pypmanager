@@ -6,7 +6,10 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import {
   CategoryScale,
+  Chart,
   Chart as ChartJS,
+  ChartDataset,
+  ChartMeta,
   Legend,
   LinearScale,
   LineElement,
@@ -16,7 +19,6 @@ import {
   Tooltip,
   TooltipItem,
 } from "chart.js";
-import { Chart, ChartDataset, ChartMeta } from "chart.js";
 import dayjs, { Dayjs } from "dayjs";
 import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
