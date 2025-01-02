@@ -122,3 +122,14 @@ def test_ft_loader__to_source_data() -> None:
             price="286.3586",
         ),
     ]
+
+
+@pytest.mark.usefixtures("mock_morningstar_data_response")
+def test_ft_loader__to_source_data__no_name() -> None:
+    """Test FTLoader.to_source_data with no name."""
+    loader = MorningstarLoader(
+        isin_code="SE0005796331",
+        lookup_key="535627197",
+        name=None,
+    )
+    assert loader.to_source_data() == []
