@@ -49,6 +49,7 @@
     "eslint-plugin-simple-import-sort": "12.1.1",
     "eslint-plugin-unused-imports": "4.1.4",
     "express": "4.21.2",
+    "express-rate-limit": "7.5.0",
     "msw": "2.7.0",
     "playwright-msw": "3.0.1",
     "prettier": "3.4.2",
