@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from datetime import datetime
 import json
+from pathlib import Path
 from typing import TYPE_CHECKING
 from unittest import mock
 
@@ -54,8 +55,9 @@ def mock_morningstar_shb_data_response() -> Generator[None, None, None]:
     ) as mock_get:
         mock_response = mock_get.return_value
         mock_response.status_code = HttpResponseCodeLabels.OK
-        mock_response.content = b"test"
-        yield
+        with Path("tests/fixtures/market_data/mstar_shb.xlsx").open("rb") as f:
+            mock_response.content = f.read()
+            yield
 
 
 @pytest.mark.usefixtures("mock_morningstar_data_response")
@@ -172,3 +174,27 @@ def test_morningstar_loader_shb__source() -> None:
         name="test",
     )
     assert loader.source == "Svenska Handelsbanken"
+
+
+@pytest.mark.usefixtures("mock_morningstar_shb_data_response")
+def test_morningstar_loader_shb__to_source_data() -> None:
+    """Test MorningstarLoaderSHB.to_source_data."""
+    loader = MorningstarLoaderSHB(
+        isin_code="SE0005796331",
+        lookup_key="535627197",
+        name="test",
+    )
+    assert loader.to_source_data() == [
+        SourceData(
+            report_date=datetime(2020, 1, 3, 0, 0),  # noqa: DTZ001
+            isin_code="SE0005796331",
+            name="Handelsbanken Sverige 100 Index Criteria",
+            price=279.13,
+        ),
+        SourceData(
+            report_date=datetime(2020, 1, 2, 0, 0),  # noqa: DTZ001
+            isin_code="SE0005796331",
+            name="Handelsbanken Sverige 100 Index Criteria",
+            price=282.22,
+        ),
+    ]
