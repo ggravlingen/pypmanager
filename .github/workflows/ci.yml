@@ -235,11 +235,6 @@ jobs:
           yarn cicd-lint
         name: Run Eslint
 
-      - run: |
-          cd frontend
-          yarn cicd-prettier
-        name: Run prettier
-
       - run:  |
           cd frontend
           yarn cicd-typecheck

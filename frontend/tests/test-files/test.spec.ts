@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { graphql, HttpResponse } from "msw";
 
 import { expect, test } from "../baseTest.ts";

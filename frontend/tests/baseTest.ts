@@ -69,6 +69,7 @@ const testFactory = (config?: Config) =>
         );
       });
 
+      /* eslint-disable react-hooks/rules-of-hooks */
       await use(page);
     },
   });
