@@ -1,8 +1,11 @@
-/* eslint-disable */
-const express = require("express");
-const path = require("path");
-const http = require("http");
-const RateLimit = require("express-rate-limit");
+import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
+import http from "http";
+import RateLimit from "express-rate-limit";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Paths
 const FRONTEND_DIR = path.join(__dirname, "../");

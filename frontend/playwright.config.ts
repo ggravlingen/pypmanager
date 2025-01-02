@@ -1,8 +1,9 @@
 import type { PlaywrightTestConfig } from "@playwright/test";
 import { devices } from "@playwright/test";
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-require("dotenv").config();
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const isUpdateSnapshots = process.argv.includes("--update-snapshots");
 const RES = { width: 1920, height: 1080 };
