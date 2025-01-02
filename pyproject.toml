@@ -24,7 +24,7 @@ dependencies    = [
 [project.optional-dependencies]
 test = [
   "httpx==0.28.1",
-  "mypy_dev==1.14.0a7",
+  "mypy_dev==1.15.0a1",
   "pre-commit==4.0.1",
   "pylint==3.3.3",
   "pytest==8.3.4",
