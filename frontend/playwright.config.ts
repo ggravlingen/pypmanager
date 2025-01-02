@@ -1,6 +1,5 @@
 import type { PlaywrightTestConfig } from "@playwright/test";
 import { devices } from "@playwright/test";
-
 import dotenv from "dotenv";
 
 dotenv.config();

@@ -47,6 +47,7 @@ export default [
       "simple-import-sort/imports": "error",
       "simple-import-sort/exports": "error",
       "prettier/prettier": "error",
+      "@typescript-eslint/no-explicit-any": "error",
     },
   },
 ];
