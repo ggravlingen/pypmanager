@@ -9,6 +9,7 @@ const LOG_FOLDER_NAME = "logs";
 
 const handlers: RequestHandler[] = [
   graphql.operation(({ query }) => {
+    // eslint-disable-next-line no-console
     console.error(`
       Unhandled GraphQL operation:
 
@@ -63,6 +64,7 @@ const testFactory = (config?: Config) =>
           () => {},
         );
 
+        // eslint-disable-next-line no-console
         console.debug(
           "Wrote console log output to file:",
           path.resolve(filePath),

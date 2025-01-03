@@ -1,3 +1,4 @@
+/* eslint no-console: "off" */
 import { graphql, HttpResponse } from "msw";
 
 import { expect, test } from "../baseTest.ts";

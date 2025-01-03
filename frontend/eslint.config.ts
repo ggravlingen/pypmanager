@@ -1,15 +1,16 @@
-import react from "eslint-plugin-react";
-import typescriptEslint from "@typescript-eslint/eslint-plugin";
-import prettier from "eslint-plugin-prettier";
-import jsdoc from "eslint-plugin-jsdoc";
-import tsParser from "@typescript-eslint/parser";
-import _import from "eslint-plugin-import";
-import reactHooks from "eslint-plugin-react-hooks";
-import unusedImports from "eslint-plugin-unused-imports";
-import simpleImportSort from "eslint-plugin-simple-import-sort";
 import { fixupPluginRules } from "@eslint/compat";
+import typescriptEslint from "@typescript-eslint/eslint-plugin";
+import tsParser from "@typescript-eslint/parser";
+import { Linter } from "eslint";
+import _import from "eslint-plugin-import";
+import jsdoc from "eslint-plugin-jsdoc";
+import prettier from "eslint-plugin-prettier";
+import pluginReact from "eslint-plugin-react";
+import pluginHooks from "eslint-plugin-react-hooks";
+import simpleImportSort from "eslint-plugin-simple-import-sort";
+import unusedImports from "eslint-plugin-unused-imports";
 
-export default [
+const config: Linter.Config[] = [
   {
     name: "frontend",
     files: ["**/*.ts", "**/*.tsx"],
@@ -29,9 +30,9 @@ export default [
       },
     },
     plugins: {
-      react,
+      pluginReact,
       "@typescript-eslint": typescriptEslint,
-      "react-hooks": reactHooks,
+      "react-hooks": pluginHooks,
       "unused-imports": unusedImports,
       "simple-import-sort": simpleImportSort,
       jsdoc,
@@ -39,15 +40,21 @@ export default [
       prettier,
     },
     rules: {
-      "react-hooks/rules-of-hooks": "error",
+      ...pluginHooks.configs.recommended.rules,
+
+      // warn
       "jsdoc/require-description": "warn",
-      "import/no-duplicates": "error",
-      "react-hooks/exhaustive-deps": "warn",
-      "unused-imports/no-unused-imports": "error",
-      "simple-import-sort/imports": "error",
-      "simple-import-sort/exports": "error",
-      "prettier/prettier": "error",
+      "no-console": "warn",
+
+      // error
       "@typescript-eslint/no-explicit-any": "error",
+      "import/no-duplicates": "error",
+      "prettier/prettier": "error",
+      "simple-import-sort/exports": "error",
+      "simple-import-sort/imports": "error",
+      "unused-imports/no-unused-imports": "error",
     },
   },
 ];
+
+export default config;
