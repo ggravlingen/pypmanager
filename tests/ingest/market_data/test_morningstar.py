@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 from unittest import mock
 
+from freezegun import freeze_time
 import pytest
 
 from pypmanager.const import HttpStatusCodes
@@ -63,16 +64,17 @@ def mock_morningstar_shb_data_response() -> Generator[None, None, None]:
 @pytest.mark.usefixtures("mock_morningstar_data_response")
 def test_morningstar_loader__full_url() -> None:
     """Test MorningstarLoader.full_url."""
-    loader = MorningstarLoader(
-        isin_code="SE0005796331",
-        lookup_key="535627197",
-        name="test",
-    )
-    assert loader.full_url == (
-        "https://tools.morningstar.se/api/rest.svc/timeseries_price/"
-        "n4omw1k3rh?id=535627197&currencyId=SEK&idtype=Morningstar&"
-        "frequency=daily&startDate=2024-07-06&endDate=2025-01-02&outputType=JSON"
-    )
+    with freeze_time("2025-01-03"):
+        loader = MorningstarLoader(
+            isin_code="SE0005796331",
+            lookup_key="535627197",
+            name="test",
+        )
+        assert loader.full_url == (
+            "https://tools.morningstar.se/api/rest.svc/timeseries_price/"
+            "n4omw1k3rh?id=535627197&currencyId=SEK&idtype=Morningstar&"
+            "frequency=daily&startDate=2024-07-07&endDate=2025-01-03&outputType=JSON"
+        )
 
 
 @pytest.mark.usefixtures("mock_morningstar_data_response")
