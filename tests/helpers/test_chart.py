@@ -8,11 +8,37 @@ from unittest.mock import patch
 
 import pytest
 
-from pypmanager.helpers.chart import async_get_market_data_and_transaction
+from pypmanager.helpers.chart import ChartData, async_get_market_data_and_transaction
 from pypmanager.settings import Settings
 
 if TYPE_CHECKING:
     from tests.conftest import DataFactory, MarketDataFactory
+
+
+def test_dataclass__chart_data__is_buy() -> None:
+    """Test ChartData.is_buy."""
+    chart_data = ChartData(
+        x_val=date(2022, 11, 1),
+        y_val=100.0,
+        volume_buy=100.0,
+        volume_sell=None,
+        dividend_per_security=None,
+    )
+
+    assert chart_data.is_buy is True
+
+
+def test_dataclass__chart_data__is_sell() -> None:
+    """Test ChartData.is_sell."""
+    chart_data = ChartData(
+        x_val=date(2022, 11, 1),
+        y_val=100.0,
+        volume_buy=None,
+        volume_sell=100.0,
+        dividend_per_security=None,
+    )
+
+    assert chart_data.is_sell is True
 
 
 @pytest.mark.asyncio
