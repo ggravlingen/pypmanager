@@ -1,4 +1,4 @@
-import { TransactionRow } from "@Api";
+import type { TransactionRow } from "@Api";
 import { Box } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";

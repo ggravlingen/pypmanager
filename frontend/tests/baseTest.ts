@@ -1,6 +1,7 @@
 import { expect, test as base } from "@playwright/test";
 import * as fs from "fs";
-import { graphql, http, RequestHandler } from "msw";
+import type { RequestHandler } from "msw";
+import { graphql, http } from "msw";
 import * as path from "path";
 import type { Config, MockServiceWorker } from "playwright-msw";
 import { createWorkerFixture } from "playwright-msw";
@@ -9,6 +10,7 @@ const LOG_FOLDER_NAME = "logs";
 
 const handlers: RequestHandler[] = [
   graphql.operation(({ query }) => {
+    // eslint-disable-next-line no-console
     console.error(`
       Unhandled GraphQL operation:
 
@@ -63,6 +65,7 @@ const testFactory = (config?: Config) =>
           () => {},
         );
 
+        // eslint-disable-next-line no-console
         console.debug(
           "Wrote console log output to file:",
           path.resolve(filePath),

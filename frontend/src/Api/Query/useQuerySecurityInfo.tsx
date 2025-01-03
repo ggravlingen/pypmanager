@@ -1,5 +1,7 @@
-import { LocalApolloClient, SecurityInfo } from "@Api";
-import { QueryHookOptions, QueryResult, useQuery } from "@apollo/client";
+import type { SecurityInfo } from "@Api";
+import { LocalApolloClient } from "@Api";
+import type { QueryHookOptions, QueryResult } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import gql from "graphql-tag";
 
 const QUERY = gql`

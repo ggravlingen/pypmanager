@@ -1,4 +1,5 @@
-import { QueryLoader, SecurityInfo, useQueryChartHistory } from "@Api";
+import type { SecurityInfo } from "@Api";
+import { QueryLoader, useQueryChartHistory } from "@Api";
 import { LocalStorageKey } from "@Const";
 import { StandardCard } from "@Generic";
 import { Box, Button, Divider, Typography, useTheme } from "@mui/material";
@@ -6,10 +7,10 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import {
   CategoryScale,
-  Chart,
+  type Chart,
   Chart as ChartJS,
-  ChartDataset,
-  ChartMeta,
+  type ChartDataset,
+  type ChartMeta,
   Legend,
   LinearScale,
   LineElement,
@@ -17,9 +18,10 @@ import {
   TimeScale,
   Title,
   Tooltip,
-  TooltipItem,
+  type TooltipItem,
 } from "chart.js";
-import dayjs, { Dayjs } from "dayjs";
+import type { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { useParams } from "react-router-dom";
