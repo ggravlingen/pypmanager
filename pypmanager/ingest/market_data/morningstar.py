@@ -11,7 +11,7 @@ import requests
 from pypmanager.const import HttpStatusCodes
 
 from .base_loader import BaseMarketDataLoader
-from .const import LOAD_HISTORY_DAYS, LOGGER
+from .const import LOAD_HISTORY_DAYS
 from .models import SourceData
 
 
@@ -85,11 +85,10 @@ class MorningstarLoaderSHB(BaseMarketDataLoader):
     def get_response(self: MorningstarLoaderSHB) -> None:
         """Get reqponse."""
         response = requests.get(self.full_url, timeout=10)
+        response.raise_for_status()
 
         if response.status_code == HttpStatusCodes.OK:
             self.raw_response_io = BytesIO(response.content)
-        else:
-            LOGGER.warning("Unable to load data")
 
     @property
     def source(self: MorningstarLoaderSHB) -> str:
