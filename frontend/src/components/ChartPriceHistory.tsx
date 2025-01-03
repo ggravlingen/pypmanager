@@ -326,7 +326,7 @@ function SecurityInfoCard({
           </Typography>
         </Box>
       ) : (
-        <Typography variant="h6" gutterBottom>
+        <Typography variant="h1" gutterBottom>
           {`${isinCode} does not exist in security database`}
         </Typography>
       )}
@@ -460,8 +460,8 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
                       display: false, // Hide x-axis grid lines
                     },
                     title: {
-                      display: !!data.securityInfo.currency,
-                      text: data.securityInfo.currency,
+                      display: !!data.securityInfo,
+                      text: data.securityInfo ? data.securityInfo.currency : "",
                       align: "center",
                       color: theme.palette.text.primary,
                     },
