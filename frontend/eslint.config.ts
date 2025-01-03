@@ -46,7 +46,12 @@ const config: Linter.Config[] = [
       "no-console": "warn",
 
       // error
-      "@typescript-eslint/consistent-type-imports": "error",
+      "@typescript-eslint/consistent-type-imports": [
+        "error",
+        {
+          fixStyle: "inline-type-imports",
+        },
+      ],
       "@typescript-eslint/no-explicit-any": "error",
       "import/no-duplicates": "error",
       "prettier/prettier": "error",

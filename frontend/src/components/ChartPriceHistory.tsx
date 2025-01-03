@@ -5,9 +5,9 @@ import { StandardCard } from "@Generic";
 import { Box, Button, Divider, Typography, useTheme } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import type {
+import {
   CategoryScale,
-  Chart,
+  type Chart,
   Chart as ChartJS,
   type ChartDataset,
   type ChartMeta,
