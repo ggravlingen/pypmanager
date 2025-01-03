@@ -74,7 +74,7 @@ Your own data goes into the folder `data/transactions`. If you make contribution
 
 This library is capable of calculating the current value of your portfolio. For this, we need end-of-day prices on funds and equities (market data).
 
-I have provided a few data sources built-in. Download this data using `python -m pypmanager -l`.
+I have provided a few data sources built-in. Download this data using `make load-data`.
 
 Configuration is done by appending `pypmanager/configuration/market_data.yaml` with the securities you want to download data for.
 
