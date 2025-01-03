@@ -1,4 +1,4 @@
-import { PaletteOptions as _PaletteOptions } from "@mui/material";
+import type { PaletteOptions as _PaletteOptions } from "@mui/material";
 
 /**
  * Represents the color shades in a palette.

@@ -1,4 +1,5 @@
-import { Box, CssBaseline, PaletteMode, ThemeProvider } from "@mui/material";
+import type { PaletteMode } from "@mui/material";
+import { Box, CssBaseline, ThemeProvider } from "@mui/material";
 import { StandardTheme } from "@Theme";
 import React from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";

@@ -1,5 +1,7 @@
-import { LocalApolloClient, TransactionRow } from "@Api";
-import { QueryHookOptions, QueryResult, useQuery } from "@apollo/client";
+import type { TransactionRow } from "@Api";
+import { LocalApolloClient } from "@Api";
+import type { QueryHookOptions, QueryResult } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import gql from "graphql-tag";
 
 const QUERY = gql`

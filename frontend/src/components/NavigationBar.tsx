@@ -9,6 +9,7 @@ import {
   MenuOpen,
   Summarize,
 } from "@mui/icons-material";
+import type { PaletteMode } from "@mui/material";
 import {
   Drawer,
   IconButton,
@@ -16,10 +17,10 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  PaletteMode,
   Tooltip,
 } from "@mui/material";
-import React, { ReactElement } from "react";
+import type { ReactElement } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
 const ExpandedNavigationBarWidth = 185;

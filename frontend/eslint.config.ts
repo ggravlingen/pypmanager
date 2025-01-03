@@ -1,8 +1,7 @@
-import { fixupPluginRules } from "@eslint/compat";
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
-import { Linter } from "eslint";
-import _import from "eslint-plugin-import";
+import { type Linter } from "eslint";
+import importPlugin from "eslint-plugin-import";
 import jsdoc from "eslint-plugin-jsdoc";
 import prettier from "eslint-plugin-prettier";
 import pluginReact from "eslint-plugin-react";
@@ -36,7 +35,7 @@ const config: Linter.Config[] = [
       "unused-imports": unusedImports,
       "simple-import-sort": simpleImportSort,
       jsdoc,
-      import: fixupPluginRules(_import),
+      import: importPlugin,
       prettier,
     },
     rules: {
@@ -47,6 +46,7 @@ const config: Linter.Config[] = [
       "no-console": "warn",
 
       // error
+      "@typescript-eslint/consistent-type-imports": "error",
       "@typescript-eslint/no-explicit-any": "error",
       "import/no-duplicates": "error",
       "prettier/prettier": "error",

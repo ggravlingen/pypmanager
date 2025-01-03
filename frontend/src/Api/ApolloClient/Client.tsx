@@ -6,7 +6,7 @@ import {
   type NormalizedCacheObject,
   type ServerError,
 } from "@apollo/client";
-import { ErrorResponse, onError } from "@apollo/client/link/error";
+import { type ErrorResponse, onError } from "@apollo/client/link/error";
 
 /**
  * Error handling for network errors in Apollo Client.

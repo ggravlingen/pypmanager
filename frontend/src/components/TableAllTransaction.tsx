@@ -1,6 +1,6 @@
+import type { TransactionRow } from "@Api";
 import {
   QueryLoader,
-  TransactionRow,
   TransactionTypeValues,
   useQueryGetAllTransaction,
 } from "@Api";
