@@ -1,7 +1,7 @@
 name: Code quality tests
 
 env:
-  ALL_PYTHON_VERSIONS: "['3.12','3.13']"
+  ALL_PYTHON_VERSIONS: "['3.13']"
   ALL_NODE_VERSIONS: "['20']"
   CACHE_VERSION: 1
 

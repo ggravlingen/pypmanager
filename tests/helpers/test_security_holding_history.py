@@ -27,7 +27,7 @@ if TYPE_CHECKING:
 @pytest.fixture
 def mock_security_transaction_registry(
     data_factory: type[DataFactory],
-) -> Generator[None, None, None]:
+) -> Generator[None]:
     """Mock the transaction registry."""
     mocked_transactions = (
         data_factory()

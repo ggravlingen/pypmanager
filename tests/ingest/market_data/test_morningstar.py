@@ -23,7 +23,7 @@ if TYPE_CHECKING:
 
 
 @pytest.fixture
-def mock_morningstar_data_response() -> Generator[None, None, None]:
+def mock_morningstar_data_response() -> Generator[None]:
     """Mock response."""
     response_data = {
         "TimeSeries": {
@@ -49,7 +49,7 @@ def mock_morningstar_data_response() -> Generator[None, None, None]:
 
 
 @pytest.fixture
-def mock_morningstar_shb_data_response() -> Generator[None, None, None]:
+def mock_morningstar_shb_data_response() -> Generator[None]:
     """Mock response."""
     with mock.patch(
         "pypmanager.ingest.market_data.base_loader.requests.get",
