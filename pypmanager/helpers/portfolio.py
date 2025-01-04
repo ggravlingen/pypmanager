@@ -106,16 +106,13 @@ async def async_async_get_holdings_v2() -> list[Holdingv2]:
 
 async def async_get_pnl_map(
     *,
-    df_transaction_registry: pd.DataFrame | None = None,
+    df_transaction_registry: pd.DataFrame,
 ) -> dict[str, float]:
     """
     Extract PnL data from the transaction registry.
 
     The function returns a dictionary with isin_code as key and pnl_total as value.
     """
-    if df_transaction_registry is None:
-        df_transaction_registry = await TransactionRegistry().async_get_registry()
-
     # Group data and sum pnl_realized and pnl_unrealized by isin_code
     df_pnl = cast(
         pd.DataFrame,
