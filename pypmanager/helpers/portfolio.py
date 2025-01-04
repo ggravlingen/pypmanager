@@ -58,48 +58,40 @@ async def async_async_get_holdings_v2() -> list[Holdingv2]:
     df_market_data = await async_get_last_market_data_df()
 
     for _, row in df_transaction_registry_current_holding.iterrows():
-        no_units = row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
-        average_cost = row[TransactionRegistryColNameValues.PRICE_PER_UNIT.value]
-
-        if pd.isna(no_units):
-            no_units = None
-
-        if pd.isna(average_cost):
-            average_cost = None
-
-        if not no_units or not average_cost:
-            invested_amount = None
-        else:
-            invested_amount = no_units * average_cost
-
-        isin_code = row[TransactionRegistryColNameValues.SOURCE_ISIN.value]
+        # We only want to include securities with an ISIN code
+        if (isin_code := row[TransactionRegistryColNameValues.SOURCE_ISIN.value]) in [
+            "nan",
+            "0",
+        ]:
+            continue
 
         filtered_market_data = df_market_data.query(f"isin_code == '{isin_code}'")
 
+        no_units = row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
+        average_cost = row[TransactionRegistryColNameValues.PRICE_PER_UNIT.value]
+
+        no_units = None if pd.isna(no_units) else no_units
+        average_cost = None if pd.isna(average_cost) else average_cost
+
+        invested_amount = (
+            None if not no_units or not average_cost else no_units * average_cost
+        )
+
         if filtered_market_data.empty:
-            current_market_value_amount = None
-            pnl_unrealized = None
-            market_value_date = None
-            market_value_price = None
+            current_market_value_amount = pnl_unrealized = market_value_date = (
+                market_value_price
+            ) = None
         else:
             market_value_date = filtered_market_data.index[0].date()
             market_value_price = filtered_market_data.iloc[0]["price"]
-
-            if no_units:
-                current_market_value_amount = market_value_price * no_units
-            else:
-                current_market_value_amount = None
-
-            if pd.isna(current_market_value_amount):
-                current_market_value_amount = None
-                pnl_unrealized = None
-
-            if invested_amount:
-                pnl_unrealized = current_market_value_amount - invested_amount
-            else:
-                pnl_unrealized = None
-
-        # Get PnL data for the specific security
+            current_market_value_amount = (
+                market_value_price * no_units if no_units else None
+            )
+            pnl_unrealized = (
+                None
+                if pd.isna(current_market_value_amount) or invested_amount is None
+                else current_market_value_amount - invested_amount
+            )
         pnl_data = pnl_map.get(isin_code, None)
 
         output_data.append(
