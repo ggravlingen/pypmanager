@@ -14,7 +14,8 @@ const QUERY = gql`
       investedAmount
       currentMarketValueAmount
       pnlTotal
-      pnlRealized
+      pnlTrade
+      pnlDividend
       pnlUnrealized
       marketValueDate
       marketValuePrice

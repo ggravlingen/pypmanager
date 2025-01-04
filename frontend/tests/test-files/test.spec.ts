@@ -11,7 +11,8 @@ const QueryCurrentPortfolio = {
       investedAmount: 1000,
       currentMarketValueAmount: 2000,
       pnlTotal: 1000,
-      pnlRealized: 500,
+      pnlTrade: 500,
+      pnlDividend: 0,
       pnlUnrealized: 500,
       marketValueDate: "2024-12-23",
       marketValuePrice: 200,
@@ -24,13 +25,15 @@ const QueryCurrentPortfolio = {
       investedAmount: 1000,
       currentMarketValueAmount: 2000,
       pnlTotal: 1000,
-      pnlRealized: 500,
+      pnlTrade: 500,
+      pnlDividend: 300,
       pnlUnrealized: 500,
       marketValueDate: "2024-12-23",
       marketValuePrice: 200,
       quantityHeld: 10.0,
       costBaseAverage: 15.0,
     },
+
   ],
 };
 
