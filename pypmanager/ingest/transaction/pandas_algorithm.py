@@ -316,7 +316,12 @@ class PandasAlgorithmPnL:
         ]:
             return None
 
-        commission = row.get(TransactionRegistryColNameValues.SOURCE_FEE.value, 0.0)
+        commission = float(
+            row.get(TransactionRegistryColNameValues.SOURCE_FEE.value, 0.0)
+        )
+
+        if pd.isna(commission):
+            commission = 0.0
 
         if (
             TransactionRegistryColNameValues.SOURCE_PRICE.value not in row
@@ -333,10 +338,7 @@ class PandasAlgorithmPnL:
                 * row[TransactionRegistryColNameValues.SOURCE_VOLUME.value]
             )
 
-        return cast(
-            float,
-            (transaction_result + commission),
-        )
+        return transaction_result + commission
 
     @staticmethod
     def calculate_pnl_dividend(row: pd.DataFrame) -> float | None:
