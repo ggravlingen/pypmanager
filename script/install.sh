@@ -12,8 +12,4 @@ python3 -m pip install -e .'[test]'
 
 # Instasll frontend
 echo "Installing frontend"
-cd frontend
-yarn
-
-# Build the frontend
-yarn build-prod
+script/install-frontend.sh

@@ -29,7 +29,7 @@ SAMPLE_RESPONSE = {
 
 
 @pytest.fixture
-def mock_levler_data_response() -> Generator[None, None, None]:
+def mock_levler_data_response() -> Generator[None]:
     """Mock response."""
     with mock.patch(
         "pypmanager.ingest.market_data.base_loader.requests.post"

@@ -17,7 +17,7 @@ from .scheduler import scheduler
 
 
 @asynccontextmanager
-async def async_lifespan(_: FastAPI) -> AsyncGenerator[None, None]:
+async def async_lifespan(_: FastAPI) -> AsyncGenerator[None]:
     """Start and shutdown the scheduler."""
     scheduler.start()
     yield
