@@ -33,7 +33,6 @@ const QueryCurrentPortfolio = {
       quantityHeld: 10.0,
       costBaseAverage: 15.0,
     },
-
   ],
 };
 
