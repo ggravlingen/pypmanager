@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import contextlib
 from dataclasses import dataclass
+from functools import cached_property
 from typing import TYPE_CHECKING
 
 import pandas as pd
@@ -495,9 +496,14 @@ class TransactionRegistry:
             msg = f"Index has {len(duplicates)} duplicate dates: {duplicates}"
             LOGGER.error(msg)
 
+    @cached_property
+    def all_calculations_run(self: TransactionRegistry) -> pd.DataFrame:
+        """Cache the final dataframe."""
+        return self.df_all_transactions
+
     async def async_get_registry(self) -> pd.DataFrame:
         """Get registry."""
-        return self.df_all_transactions
+        return self.all_calculations_run
 
     async def async_get_current_holding(self) -> pd.DataFrame:
         """
@@ -506,7 +512,7 @@ class TransactionRegistry:
         The returned DataFrame contains rows even if everything has been sold.
         """
         return (
-            self.df_all_transactions.sort_index()
+            self.all_calculations_run.sort_index()
             .groupby(TransactionRegistryColNameValues.SOURCE_ISIN)
             .tail(1)
         )
