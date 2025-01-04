@@ -41,14 +41,22 @@ class Holdingv2:
 async def async_async_get_holdings_v2() -> list[Holdingv2]:
     """Get a list of current holdings, including current market value."""
     output_data: list[Holdingv2] = []
-    transaction_registry = await TransactionRegistry().async_get_current_holding()
 
-    # Load PnL data
-    pnl_map = await async_get_pnl_map(df_transaction_registry=transaction_registry)
+    # Fetch transaction data
+    transaction_registry_obj = TransactionRegistry()
+    df_transaction_registry_current_holding = (
+        await transaction_registry_obj.async_get_current_holding()
+    )
+    df_transaction_registry_all = await transaction_registry_obj.async_get_registry()
+
+    # Calculate PnL data
+    pnl_map = await async_get_isin_pnl_map(
+        df_transaction_registry_all=df_transaction_registry_all
+    )
 
     df_market_data = await async_get_last_market_data_df()
 
-    for _, row in transaction_registry.iterrows():
+    for _, row in df_transaction_registry_current_holding.iterrows():
         no_units = row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
         average_cost = row[TransactionRegistryColNameValues.PRICE_PER_UNIT.value]
 
@@ -90,6 +98,9 @@ async def async_async_get_holdings_v2() -> list[Holdingv2]:
             else:
                 pnl_unrealized = None
 
+        # Get PnL data for the specific security
+        pnl_data = pnl_map.get(isin_code, None)
+
         output_data.append(
             Holdingv2(
                 isin_code=isin_code,
@@ -99,7 +110,7 @@ async def async_async_get_holdings_v2() -> list[Holdingv2]:
                 invested_amount=invested_amount,
                 current_market_value_amount=current_market_value_amount,
                 pnl_unrealized=pnl_unrealized,
-                pnl_realized=pnl_map.get(isin_code, None),
+                pnl_realized=pnl_data.pnl_realized if pnl_data else None,
                 market_value_date=market_value_date,
                 market_value_price=market_value_price,
             )
@@ -108,10 +119,19 @@ async def async_async_get_holdings_v2() -> list[Holdingv2]:
     return sorted(output_data, key=lambda x: x.name)
 
 
-async def async_get_pnl_map(
+@dataclass
+class PnLData:
+    """Represent PnL for a security."""
+
+    pnl_total: float | None = None
+    pnl_realized: float | None = None
+    pnl_unrealized: float | None = None
+
+
+async def async_get_isin_pnl_map(
     *,
-    df_transaction_registry: pd.DataFrame,
-) -> dict[str, float]:
+    df_transaction_registry_all: pd.DataFrame,
+) -> dict[str, PnLData]:
     """
     Extract PnL data from the transaction registry.
 
@@ -120,20 +140,20 @@ async def async_get_pnl_map(
     # Group data and sum pnl_realized and pnl_unrealized by isin_code
     df_pnl = cast(
         pd.DataFrame,
-        df_transaction_registry.groupby(
+        df_transaction_registry_all.groupby(
             TransactionRegistryColNameValues.SOURCE_ISIN.value
         )
         .agg(
             {
-                TransactionRegistryColNameValues.CALC_PNL_TOTAL.value: "sum",
+                TransactionRegistryColNameValues.CALC_PNL_TRADE.value: "sum",
             }
         )
         .reset_index(),
     )
 
     return {
-        row[TransactionRegistryColNameValues.SOURCE_ISIN.value]: row[
-            TransactionRegistryColNameValues.CALC_PNL_TOTAL.value
-        ]
+        row[TransactionRegistryColNameValues.SOURCE_ISIN.value]: PnLData(
+            pnl_realized=row[TransactionRegistryColNameValues.CALC_PNL_TRADE.value],
+        )
         for _, row in df_pnl.iterrows()
     }

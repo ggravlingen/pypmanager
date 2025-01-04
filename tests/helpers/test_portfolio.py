@@ -8,7 +8,10 @@ from unittest.mock import patch
 
 import pytest
 
-from pypmanager.helpers.portfolio import async_async_get_holdings_v2, async_get_pnl_map
+from pypmanager.helpers.portfolio import (
+    async_async_get_holdings_v2,
+    async_get_isin_pnl_map,
+)
 from pypmanager.ingest.transaction.transaction_registry import TransactionRegistry
 from pypmanager.settings import Settings
 
@@ -116,12 +119,12 @@ async def test_async_get_pnl(
         "_load_transaction_files",
         return_value=mocked_transactions,
     ):
-        df_transaction_registry = await TransactionRegistry().async_get_registry()
+        df_transaction_registry_all = await TransactionRegistry().async_get_registry()
 
-        result = await async_get_pnl_map(
-            df_transaction_registry=df_transaction_registry
+        result = await async_get_isin_pnl_map(
+            df_transaction_registry_all=df_transaction_registry_all
         )
 
-        assert result.get("US1234567890") == 49.0
-        assert result.get("US1234567891") == -101.0
+        assert result.get("US1234567890").pnl_realized == 49.0
+        assert result.get("US1234567891").pnl_realized == -101.0
         assert result.get("US1234567892") is None
