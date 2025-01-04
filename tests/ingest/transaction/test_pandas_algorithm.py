@@ -263,6 +263,9 @@ def test_calculate_adjusted_price_per_unit(
             price=1.0,
         )
         # We hold 200 after this transaction
+        .dividend(
+            transaction_date=datetime(2021, 1, 7, tzinfo=Settings.system_time_zone),
+        )
         .buy(
             transaction_date=datetime(2021, 1, 6, tzinfo=Settings.system_time_zone),
             no_traded=100.0,
@@ -309,8 +312,8 @@ def test_calculate_adjusted_price_per_unit(
         TransactionRegistryColNameValues.SOURCE_NAME_SECURITY.value
     ).apply(PandasAlgorithm.calculate_adjusted_price_per_unit, include_groups=False)
 
-    assert len(df_mocked_transactions) == 6
-    expected_values = [10.0, 10.0, 10.0, 10.0, 1.0, 2.0]
+    assert len(df_mocked_transactions) == 7
+    expected_values = [10.0, 10.0, 10.0, 10.0, 1.0, 2.0, 0.0]
     actual_values = df_mocked_transactions[
         TransactionRegistryColNameValues.PRICE_PER_UNIT.value
     ].to_numpy()
