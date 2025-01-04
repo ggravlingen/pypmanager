@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     import pandas as pd
 
 
-def _replace_fee_name(row: pd.DataFrame) -> str:
+def _replace_fee_name(row: pd.Series) -> str:
     """Replace interest flows with cash and equivalemts."""
     if (
         row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE]
