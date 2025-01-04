@@ -192,6 +192,15 @@ class PandasAlgorithm:
 
         current_turnover = 0.0
         for index, row in group.iterrows():
+            # We only want to apply the logic to buy and sell transactions
+            if row[
+                TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value
+            ] not in [
+                TransactionTypeValues.BUY.value,
+                TransactionTypeValues.SELL.value,
+            ]:
+                continue
+
             current_turnover += row[
                 TransactionRegistryColNameValues.INTERNAL_TURNOVER.value
             ]
@@ -216,9 +225,14 @@ class PandasAlgorithm:
                 row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value]
                 == TransactionTypeValues.SELL.value
             ):
-                # When selling the last remaining hooldings, the last_entry_price
+                # When selling the last remaining holdings, the last_entry_price
                 # will be 0 and we should return None
-                return_value = None if last_entry_price == 0.0 else last_entry_price
+                if isinstance(last_entry_price, pd.Series):
+                    return_value = (
+                        None if last_entry_price.iloc[0] else last_entry_price
+                    )
+                else:
+                    return_value = None if last_entry_price == 0.0 else last_entry_price
 
                 group.at[  # noqa: PD008
                     index, TransactionRegistryColNameValues.PRICE_PER_UNIT.value
