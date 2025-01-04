@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import date  # noqa: TC003
 import logging
+from typing import cast
 
 import pandas as pd
 import strawberry
@@ -101,3 +102,26 @@ async def async_async_get_holdings_v2() -> list[Holdingv2]:
         )
 
     return sorted(output_data, key=lambda x: x.name)
+
+
+async def async_get_df_pnl(
+    *,
+    df_transaction_registry: pd.DataFrame | None = None,
+) -> pd.DataFrame:
+    """Extract PnL data from the transaction registry."""
+    if df_transaction_registry is None:
+        df_transaction_registry = await TransactionRegistry().async_get_registry()
+
+    # Group data and sum pnl_realized and pnl_unrealized by isin_code
+    return cast(
+        pd.DataFrame,
+        df_transaction_registry.groupby(
+            TransactionRegistryColNameValues.SOURCE_ISIN.value
+        )
+        .agg(
+            {
+                TransactionRegistryColNameValues.CALC_PNL_TOTAL.value: "sum",
+            }
+        )
+        .reset_index(),
+    )

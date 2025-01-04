@@ -6,9 +6,12 @@ from datetime import date, datetime
 from typing import TYPE_CHECKING
 from unittest.mock import patch
 
+import pandas as pd
 import pytest
 
-from pypmanager.helpers.portfolio import async_async_get_holdings_v2
+from pypmanager.helpers.portfolio import async_async_get_holdings_v2, async_get_df_pnl
+from pypmanager.ingest.transaction.const import TransactionRegistryColNameValues
+from pypmanager.ingest.transaction.transaction_registry import TransactionRegistry
 from pypmanager.settings import Settings
 
 if TYPE_CHECKING:
@@ -78,3 +81,57 @@ async def test_async_async_get_holdings_v2(
         assert result[1].market_value_date is None
         assert result[1].cost_base_average is None
         assert result[1].quantity_held is None
+
+
+@pytest.mark.asyncio
+async def test_async_get_pnl(
+    data_factory: type[DataFactory],
+) -> None:
+    """Test async_get_pnl."""
+    factory = data_factory()
+    mocked_transactions = (
+        factory.buy(
+            transaction_date=datetime(2021, 1, 1, tzinfo=Settings.system_time_zone)
+        )
+        .sell(
+            transaction_date=datetime(2021, 1, 2, tzinfo=Settings.system_time_zone),
+        )
+        # Company B
+        .buy(
+            name="Company B",
+            isin_code="US1234567891",
+            transaction_date=datetime(2021, 1, 3, tzinfo=Settings.system_time_zone),
+        )
+        .sell(
+            name="Company B",
+            isin_code="US1234567891",
+            transaction_date=datetime(2021, 1, 4, tzinfo=Settings.system_time_zone),
+            price=0.0,
+        )
+        .df_transaction_list
+    )
+
+    with patch(
+        "pypmanager.ingest.transaction.transaction_registry.TransactionRegistry."
+        "_load_transaction_files",
+        return_value=mocked_transactions,
+    ):
+        df_transaction_registry = await TransactionRegistry().async_get_registry()
+
+        result = await async_get_df_pnl(df_transaction_registry=df_transaction_registry)
+
+        pd.testing.assert_frame_equal(
+            result,
+            pd.DataFrame(
+                {
+                    TransactionRegistryColNameValues.SOURCE_ISIN.value: [
+                        "US1234567890",
+                        "US1234567891",
+                    ],
+                    TransactionRegistryColNameValues.CALC_PNL_TOTAL.value: [
+                        49.0,
+                        -101.0,
+                    ],
+                },
+            ),
+        )
