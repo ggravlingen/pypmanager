@@ -18,12 +18,6 @@ from .models import SourceData
 class MorningstarLoader(BaseMarketDataLoader):
     """Load data from Morningstar."""
 
-    start_date = (datetime.now(UTC) - timedelta(days=LOAD_HISTORY_DAYS)).strftime(
-        "%Y-%m-%d",
-    )
-    end_date = datetime.now(UTC).strftime("%Y-%m-%d")
-    currency = "SEK"
-
     url = (
         "https://tools.morningstar.se/api/rest.svc/timeseries_price/n4omw1k3rh?"
         "id={lookup_key}&currencyId={currency}&idtype=Morningstar&frequency=daily"
@@ -33,11 +27,17 @@ class MorningstarLoader(BaseMarketDataLoader):
     @property
     def full_url(self: MorningstarLoader) -> str:
         """Return full URL, including lookup key."""
+        start_date = (datetime.now(UTC) - timedelta(days=LOAD_HISTORY_DAYS)).strftime(
+            "%Y-%m-%d",
+        )
+        end_date = datetime.now(UTC).strftime("%Y-%m-%d")
+        currency = "SEK"
+
         return self.url.format(
             lookup_key=self.lookup_key,
-            start_date=self.start_date,
-            end_date=self.end_date,
-            currency=self.currency,
+            start_date=start_date,
+            end_date=end_date,
+            currency=currency,
         )
 
     def get_response(self: MorningstarLoader) -> None:
