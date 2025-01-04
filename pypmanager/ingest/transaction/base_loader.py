@@ -18,7 +18,7 @@ from .const import (
 
 def _get_filename(file_path: Path) -> str:
     """Return name of file."""
-    filename = file_path.resolve().name.replace(".csv", "")
+    filename = file_path.name.replace(".csv", "")
     splitted_file_path = filename.split("-")
 
     if len(splitted_file_path) == 2:  # noqa: PLR2004
