@@ -209,6 +209,7 @@ jobs:
           parallel: true
 
   finish:
+    name: "Backend: post result to coveralls"
     needs: backend-pytest
     if: ${{ always() }}
     runs-on: ubuntu-latest
