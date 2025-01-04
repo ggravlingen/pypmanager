@@ -34,7 +34,8 @@ class Holdingv2:
     market_value_price: float | None = None
 
     pnl_total: float | None = None
-    pnl_realized: float | None = None
+    pnl_trade: float | None = None
+    pnl_dividend: float | None = None
     pnl_unrealized: float | None = None
 
 
@@ -110,7 +111,8 @@ async def async_async_get_holdings_v2() -> list[Holdingv2]:
                 invested_amount=invested_amount,
                 current_market_value_amount=current_market_value_amount,
                 pnl_unrealized=pnl_unrealized,
-                pnl_realized=pnl_data.pnl_realized if pnl_data else None,
+                pnl_trade=pnl_data.pnl_trade if pnl_data else None,
+                pnl_dividend=pnl_data.pnl_dividend if pnl_data else None,
                 market_value_date=market_value_date,
                 market_value_price=market_value_price,
             )
@@ -124,7 +126,8 @@ class PnLData:
     """Represent PnL for a security."""
 
     pnl_total: float | None = None
-    pnl_realized: float | None = None
+    pnl_trade: float | None = None
+    pnl_dividend: float | None = None
     pnl_unrealized: float | None = None
 
 
@@ -146,6 +149,7 @@ async def async_get_isin_pnl_map(
         .agg(
             {
                 TransactionRegistryColNameValues.CALC_PNL_TRADE.value: "sum",
+                TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value: "sum",
             }
         )
         .reset_index(),
@@ -153,7 +157,8 @@ async def async_get_isin_pnl_map(
 
     return {
         row[TransactionRegistryColNameValues.SOURCE_ISIN.value]: PnLData(
-            pnl_realized=row[TransactionRegistryColNameValues.CALC_PNL_TRADE.value],
+            pnl_trade=row[TransactionRegistryColNameValues.CALC_PNL_TRADE.value],
+            pnl_dividend=row[TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value],
         )
         for _, row in df_pnl.iterrows()
     }
