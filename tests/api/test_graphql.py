@@ -78,7 +78,8 @@ async def test_graphql_query__current_portfolio() -> None:
             investedAmount
             currentMarketValueAmount
             pnlTotal
-            pnlRealized
+            pnlTrade
+            pnlDividend
             pnlUnrealized
             marketValueDate
             marketValuePrice

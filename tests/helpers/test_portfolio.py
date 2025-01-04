@@ -69,7 +69,8 @@ async def test_async_async_get_holdings_v2(
         assert result[0].invested_amount == 100.0
         assert result[0].current_market_value_amount == 1000.0
         assert result[0].pnl_unrealized == 900.0
-        assert result[0].pnl_realized == 0.0
+        assert result[0].pnl_trade == 0.0
+        assert result[0].pnl_dividend == 0.0
         assert result[0].market_value_price == 100.0
         assert result[0].market_value_date == date(2021, 1, 1)
         assert result[0].cost_base_average == 10.0
@@ -79,7 +80,8 @@ async def test_async_async_get_holdings_v2(
         assert result[1].invested_amount is None
         assert result[1].current_market_value_amount is None
         assert result[1].pnl_unrealized is None
-        assert result[0].pnl_realized == 0.0
+        assert result[0].pnl_trade == 0.0
+        assert result[0].pnl_dividend == 0.0
         assert result[1].market_value_price is None
         assert result[1].market_value_date is None
         assert result[1].cost_base_average is None
@@ -111,6 +113,16 @@ async def test_async_get_pnl(
             transaction_date=datetime(2021, 1, 4, tzinfo=Settings.system_time_zone),
             price=0.0,
         )
+        # Company C
+        .buy(
+            name="Company C",
+            isin_code="US1234567893",
+            transaction_date=datetime(2021, 1, 3, tzinfo=Settings.system_time_zone),
+        )
+        .dividend(
+            name="Company C",
+            isin_code="US1234567893",
+        )
         .df_transaction_list
     )
 
@@ -125,6 +137,13 @@ async def test_async_get_pnl(
             df_transaction_registry_all=df_transaction_registry_all
         )
 
-        assert result.get("US1234567890").pnl_realized == 49.0
-        assert result.get("US1234567891").pnl_realized == -101.0
+        assert result.get("US1234567890").pnl_trade == 49.0
+        assert result.get("US1234567890").pnl_dividend == 0
+
+        assert result.get("US1234567891").pnl_trade == -101.0
+        assert result.get("US1234567891").pnl_dividend == 0
+
         assert result.get("US1234567892") is None
+
+        assert result.get("US1234567893").pnl_trade == 0
+        assert result.get("US1234567893").pnl_dividend == 150.0
