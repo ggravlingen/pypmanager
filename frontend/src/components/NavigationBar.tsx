@@ -184,22 +184,9 @@ export default function NavigationBar({
             )
           }
         />
-        {/*
         <NavigationItem
           isExpanded={isExpanded}
-          label={"Historical portfolio"}
-          icon={<ShowChart sx={IconSX} />}
-          linkTo="/history"
-        />
-        <NavigationItem
-          isExpanded={isExpanded}
-          label={"General ledger"}
-          icon={<Dataset sx={IconSX} />}
-          linkTo="/ledger"
-        /> */}
-        <NavigationItem
-          isExpanded={isExpanded}
-          label="Current portfolio"
+          label="Portfolio summary"
           icon={<Summarize sx={IconSX} />}
           linkTo="/"
         />
