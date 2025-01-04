@@ -43,6 +43,9 @@ async def async_async_get_holdings_v2() -> list[Holdingv2]:
     output_data: list[Holdingv2] = []
     transaction_registry = await TransactionRegistry().async_get_current_holding()
 
+    # Load PnL data
+    pnl_map = await async_get_pnl_map(df_transaction_registry=transaction_registry)
+
     df_market_data = await async_get_last_market_data_df()
 
     for _, row in transaction_registry.iterrows():
@@ -96,6 +99,7 @@ async def async_async_get_holdings_v2() -> list[Holdingv2]:
                 invested_amount=invested_amount,
                 current_market_value_amount=current_market_value_amount,
                 pnl_unrealized=pnl_unrealized,
+                pnl_realized=pnl_map.get(isin_code, None),
                 market_value_date=market_value_date,
                 market_value_price=market_value_price,
             )
