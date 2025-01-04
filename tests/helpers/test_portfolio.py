@@ -6,11 +6,9 @@ from datetime import date, datetime
 from typing import TYPE_CHECKING
 from unittest.mock import patch
 
-import pandas as pd
 import pytest
 
-from pypmanager.helpers.portfolio import async_async_get_holdings_v2, async_get_df_pnl
-from pypmanager.ingest.transaction.const import TransactionRegistryColNameValues
+from pypmanager.helpers.portfolio import async_async_get_holdings_v2, async_get_pnl_map
 from pypmanager.ingest.transaction.transaction_registry import TransactionRegistry
 from pypmanager.settings import Settings
 
@@ -118,20 +116,10 @@ async def test_async_get_pnl(
     ):
         df_transaction_registry = await TransactionRegistry().async_get_registry()
 
-        result = await async_get_df_pnl(df_transaction_registry=df_transaction_registry)
-
-        pd.testing.assert_frame_equal(
-            result,
-            pd.DataFrame(
-                {
-                    TransactionRegistryColNameValues.SOURCE_ISIN.value: [
-                        "US1234567890",
-                        "US1234567891",
-                    ],
-                    TransactionRegistryColNameValues.CALC_PNL_TOTAL.value: [
-                        49.0,
-                        -101.0,
-                    ],
-                },
-            ),
+        result = await async_get_pnl_map(
+            df_transaction_registry=df_transaction_registry
         )
+
+        assert result.get("US1234567890") == 49.0
+        assert result.get("US1234567891") == -101.0
+        assert result.get("US1234567892") is None
