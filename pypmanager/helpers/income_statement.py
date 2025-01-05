@@ -117,9 +117,6 @@ async def async_pnl_by_year(
             df_ledger_by_year["index"] == row_index_name
         ].reset_index()
 
-        if filtered_ledger.empty:
-            continue
-
         filtered_ledger = filtered_ledger.replace({0: None, np.nan: None})
 
         values_list = filtered_ledger.loc[0, year_list].tolist()
