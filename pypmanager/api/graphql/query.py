@@ -14,12 +14,11 @@ from pypmanager.helpers.market_data import (
     async_get_market_data_overview,
 )
 from pypmanager.helpers.portfolio import Holdingv2, async_async_get_holdings_v2
-from pypmanager.helpers.security import async_load_security_data
-from pypmanager.helpers.transaction import TransactionRow, async_get_all_transactions
-
-from .models import (
-    SecurityResponse,
+from pypmanager.helpers.security import (
+    SecurityDataResponse,
+    async_security_map_isin_to_security,
 )
+from pypmanager.helpers.transaction import TransactionRow, async_get_all_transactions
 
 
 @strawberry.type
@@ -74,7 +73,7 @@ class Query:
     async def security_info(
         self: Query,
         isin_code: str,
-    ) -> SecurityResponse | None:
+    ) -> SecurityDataResponse | None:
         """Return information about a security."""
-        all_security = await async_load_security_data()
-        return cast(SecurityResponse | None, all_security.get(isin_code))
+        all_security = await async_security_map_isin_to_security()
+        return cast(SecurityDataResponse | None, all_security.get(isin_code))

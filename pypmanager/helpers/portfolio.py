@@ -12,7 +12,7 @@ import strawberry
 from pypmanager.ingest.transaction.const import TransactionRegistryColNameValues
 from pypmanager.ingest.transaction.transaction_registry import TransactionRegistry
 
-from .income_statement import async_pnl_get_isin_map
+from .income_statement import async_pnl_map_isin_to_pnl_data
 from .market_data import async_get_last_market_data_df
 
 LOGGER = logging.getLogger(__package__)
@@ -52,7 +52,7 @@ async def async_async_get_holdings_v2() -> list[Holdingv2]:
     df_transaction_registry_all = await transaction_registry_obj.async_get_registry()
 
     # Calculate PnL data
-    pnl_map = await async_pnl_get_isin_map(
+    pnl_map = await async_pnl_map_isin_to_pnl_data(
         df_transaction_registry_all=df_transaction_registry_all
     )
 

@@ -10,7 +10,7 @@ import pytest
 
 from pypmanager.helpers.income_statement import (
     async_pnl_by_year,
-    async_pnl_get_isin_map,
+    async_pnl_map_isin_to_pnl_data,
 )
 from pypmanager.ingest.transaction.transaction_registry import TransactionRegistry
 from pypmanager.settings import Settings
@@ -64,7 +64,7 @@ async def test_async_get_pnl(
     ):
         df_transaction_registry_all = await TransactionRegistry().async_get_registry()
 
-        result = await async_pnl_get_isin_map(
+        result = await async_pnl_map_isin_to_pnl_data(
             df_transaction_registry_all=df_transaction_registry_all
         )
 
