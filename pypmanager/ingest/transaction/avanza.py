@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+import pandas as pd
 
 from .base_loader import TransactionLoader
 from .const import (
@@ -10,9 +10,6 @@ from .const import (
     TransactionRegistryColNameValues,
     TransactionTypeValues,
 )
-
-if TYPE_CHECKING:
-    import pandas as pd
 
 
 def _transaction_type(row: pd.DataFrame) -> pd.Series:
@@ -47,9 +44,15 @@ class AvanzaLoader(TransactionLoader):
         "Kurs": TransactionRegistryColNameValues.SOURCE_PRICE,
         "Belopp": ColumnNameValues.AMOUNT,
         "Courtage": TransactionRegistryColNameValues.SOURCE_FEE,
+        "Courtage (SEK)": TransactionRegistryColNameValues.SOURCE_FEE,
         "Valuta": TransactionRegistryColNameValues.SOURCE_CURRENCY.value,
+        "Instrumentvaluta": TransactionRegistryColNameValues.SOURCE_CURRENCY.value,
+        "Transaktionsvaluta": (
+            TransactionRegistryColNameValues.SOURCE_CURRENCY_NOMINAL.value
+        ),
         "ISIN": TransactionRegistryColNameValues.SOURCE_ISIN,
         "FX": TransactionRegistryColNameValues.SOURCE_FX.value,
+        "Valutakurs": TransactionRegistryColNameValues.SOURCE_FX.value,
     }
 
     file_pattern = "avanza*.csv"
@@ -62,12 +65,20 @@ class AvanzaLoader(TransactionLoader):
         df_raw[TransactionRegistryColNameValues.SOURCE_BROKER.value] = "Avanza"
 
         # We don't need this column as we calculate it in this library
-        if "Resultat" in df_raw.columns:
-            df_raw = df_raw.drop(columns=["Resultat"])
+        for drop_col in [
+            "Resultat",
+            TransactionRegistryColNameValues.SOURCE_CURRENCY_NOMINAL.value,
+        ]:
+            if drop_col in df_raw.columns:
+                df_raw = df_raw.drop(columns=[drop_col])
 
         df_raw[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE] = df_raw.apply(
             _transaction_type,
             axis=1,
         )
+
+        # Merge columns with the same name and keep the value that is not NaN
+        with pd.option_context("future.no_silent_downcasting", True):  # noqa: FBT003
+            df_raw = df_raw.T.groupby(level=0).apply(lambda x: x.bfill().iloc[0]).T
 
         self.df_final = df_raw
