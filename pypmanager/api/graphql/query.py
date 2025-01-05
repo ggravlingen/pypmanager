@@ -15,8 +15,8 @@ from pypmanager.helpers.market_data import (
 )
 from pypmanager.helpers.portfolio import Holdingv2, async_async_get_holdings_v2
 from pypmanager.helpers.security import async_load_security_data
+from pypmanager.helpers.transaction import TransactionRow, async_get_all_transactions
 from pypmanager.ingest.transaction import (
-    TransactionRegistry,
     TransactionRegistryColNameValues,
     async_aggregate_income_statement_by_year,
 )
@@ -24,7 +24,6 @@ from pypmanager.ingest.transaction import (
 from .models import (
     ResultStatementRow,
     SecurityResponse,
-    TransactionRow,
 )
 
 
@@ -40,73 +39,7 @@ class Query:
     @strawberry.field
     async def all_transaction(self: Query) -> list[TransactionRow]:
         """Return all transactions."""
-        transaction_list = await TransactionRegistry(
-            sort_by_date_descending=True
-        ).async_get_registry()
-
-        transaction_list = transaction_list.replace({np.nan: None})
-
-        output_list: list[TransactionRow] = []
-        for index, row in transaction_list.iterrows():
-            if row[TransactionRegistryColNameValues.SOURCE_FEE.value] is not None:
-                commission = row[TransactionRegistryColNameValues.SOURCE_FEE.value]
-            else:
-                commission = None
-
-            if (
-                row[TransactionRegistryColNameValues.SOURCE_ISIN.value] is not None
-                or row[TransactionRegistryColNameValues.SOURCE_ISIN.value] != 0
-            ):
-                isin_code = row[TransactionRegistryColNameValues.SOURCE_ISIN.value]
-            else:
-                isin_code = None
-
-            output_list.append(
-                TransactionRow(
-                    transaction_date=index,
-                    isin_code=isin_code,
-                    broker=row[TransactionRegistryColNameValues.SOURCE_BROKER.value],
-                    source=row[TransactionRegistryColNameValues.SOURCE_FILE.value],
-                    action=cast(
-                        str,
-                        row[
-                            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value
-                        ],
-                    ).capitalize(),
-                    name=row[
-                        TransactionRegistryColNameValues.SOURCE_NAME_SECURITY.value
-                    ],
-                    no_traded=row[TransactionRegistryColNameValues.SOURCE_VOLUME.value],
-                    currency=row[
-                        TransactionRegistryColNameValues.SOURCE_CURRENCY.value
-                    ],
-                    price=row[TransactionRegistryColNameValues.SOURCE_PRICE.value],
-                    # It makes more sense to use the absolute value of the commission in
-                    # this context
-                    commission=commission,
-                    cash_flow=row[
-                        TransactionRegistryColNameValues.CASH_FLOW_NET_FEE_NOMINAL.value
-                    ],
-                    fx=row[TransactionRegistryColNameValues.SOURCE_FX.value],
-                    cost_base_average=row[
-                        TransactionRegistryColNameValues.PRICE_PER_UNIT.value
-                    ],
-                    pnl_total=row[
-                        TransactionRegistryColNameValues.CALC_PNL_TOTAL.value
-                    ],
-                    pnl_trade=row[
-                        TransactionRegistryColNameValues.CALC_PNL_TRADE.value
-                    ],
-                    pnl_dividend=row[
-                        TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value
-                    ],
-                    quantity_held=row[
-                        TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value
-                    ],
-                )
-            )
-
-        return output_list
+        return await async_get_all_transactions()
 
     @strawberry.field
     async def result_statement(self: Query) -> list[ResultStatementRow]:
