@@ -58,4 +58,10 @@ class LysaLoader(TransactionLoader):
             CurrencyValues.SEK
         )
 
+        # The exported CSV data contains special characters like � that we need to
+        # replace
+        df_raw[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY] = df_raw[
+            TransactionRegistryColNameValues.SOURCE_NAME_SECURITY
+        ].str.replace("�", "ä")
+
         self.df_final = df_raw

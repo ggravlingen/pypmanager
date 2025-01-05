@@ -23,6 +23,7 @@ dependencies    = [
 
 [project.optional-dependencies]
 test = [
+  "asgiref==3.8.1",
   "httpx==0.28.1",
   "mypy_dev==1.15.0a1",
   "pre-commit==4.0.1",
