@@ -206,9 +206,9 @@ class TransactionRegistry:
 
     def _load_transaction_files(self: TransactionRegistry) -> pd.DataFrame:
         """Load transaction files and return a sorted DataFrame."""
-        df_generic = GenericLoader().df_final
-        df_avanza = AvanzaLoader().df_final
-        df_lysa = LysaLoader().df_final
+        df_generic = GenericLoader().load().df_final
+        df_avanza = AvanzaLoader().load().df_final
+        df_lysa = LysaLoader().load().df_final
 
         return pd.concat([df_generic, df_avanza, df_lysa])
 

@@ -12,11 +12,13 @@ from pypmanager.ingest.transaction.generic import GenericLoader, _replace_fee_na
 from pypmanager.settings import TypedSettings
 
 
+@pytest.mark.asyncio
 @patch.object(TypedSettings, "dir_transaction_data", "tests/fixtures/transactions")
-def test_misc_loader() -> None:
+async def test_generic_loader() -> None:
     """Test GenericLoader."""
-    df_misc = GenericLoader().df_final
-
+    loader = GenericLoader()
+    await loader.async_load()
+    df_misc = loader.df_final
     assert len(df_misc) > 0
 
 

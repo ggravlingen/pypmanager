@@ -11,12 +11,14 @@ from pypmanager.ingest.transaction.lysa import LysaLoader, _replace_fee_name
 from pypmanager.settings import TypedSettings
 
 
+@pytest.mark.asyncio
 @patch.object(TypedSettings, "dir_transaction_data", "tests/fixtures/transactions")
-def test_lysa_loader() -> None:
+async def test_lysa_loader() -> None:
     """Test LysaLoader."""
-    df_lysa = LysaLoader().df_final
-
-    assert len(df_lysa) > 0
+    loader = LysaLoader()
+    await loader.async_load()
+    df_misc = loader.df_final
+    assert len(df_misc) > 0
 
 
 @pytest.mark.parametrize(
