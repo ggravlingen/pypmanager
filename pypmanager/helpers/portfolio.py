@@ -20,7 +20,7 @@ LOGGER = logging.getLogger(__package__)
 
 @dataclass
 @strawberry.type
-class Holdingv2:
+class Holding:
     """Represent a security."""
 
     isin_code: str
@@ -40,9 +40,9 @@ class Holdingv2:
     pnl_unrealized: float | None = None
 
 
-async def async_async_get_holdings_v2() -> list[Holdingv2]:
+async def async_async_get_holdings() -> list[Holding]:
     """Get a list of current holdings, including current market value."""
-    output_data: list[Holdingv2] = []
+    output_data: list[Holding] = []
 
     # Fetch transaction data
     transaction_registry_obj = TransactionRegistry()
@@ -52,7 +52,7 @@ async def async_async_get_holdings_v2() -> list[Holdingv2]:
     df_transaction_registry_all = await transaction_registry_obj.async_get_registry()
 
     # Calculate PnL data
-    pnl_map = await async_pnl_map_isin_to_pnl_data(
+    pnl_map_isin_to_pnl_data = await async_pnl_map_isin_to_pnl_data(
         df_transaction_registry_all=df_transaction_registry_all
     )
 
@@ -93,10 +93,10 @@ async def async_async_get_holdings_v2() -> list[Holdingv2]:
                 if pd.isna(current_market_value_amount) or invested_amount is None
                 else current_market_value_amount - invested_amount
             )
-        pnl_data = pnl_map.get(isin_code, None)
+        pnl_data = pnl_map_isin_to_pnl_data.get(isin_code, None)
 
         output_data.append(
-            Holdingv2(
+            Holding(
                 isin_code=isin_code,
                 name=row[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY.value],
                 quantity_held=no_units,

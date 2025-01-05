@@ -18,7 +18,7 @@ from pypmanager.helpers.market_data import (
     MarketDataOverviewRecord,
     async_get_market_data_overview,
 )
-from pypmanager.helpers.portfolio import Holdingv2, async_async_get_holdings_v2
+from pypmanager.helpers.portfolio import Holding, async_async_get_holdings
 from pypmanager.helpers.transaction import TransactionRow, async_get_all_transactions
 
 
@@ -27,9 +27,9 @@ class Query:
     """GraphQL query."""
 
     @strawberry.field
-    async def current_portfolio(self: Query) -> list[Holdingv2]:
+    async def current_portfolio(self: Query) -> list[Holding]:
         """Return the current state of the portfolio."""
-        return await async_async_get_holdings_v2()
+        return await async_async_get_holdings()
 
     @strawberry.field
     async def all_transaction(self: Query) -> list[TransactionRow]:
