@@ -45,11 +45,11 @@ async def async_async_get_holdings() -> list[Holding]:
     output_data: list[Holding] = []
 
     # Fetch transaction data
-    transaction_registry_obj = TransactionRegistry()
-    df_transaction_registry_full_portfolio = (
-        await transaction_registry_obj.async_get_full_portfolio()
-    )
-    df_transaction_registry_all = await transaction_registry_obj.async_get_registry()
+    async with TransactionRegistry() as registry_obj:
+        df_transaction_registry_full_portfolio = (
+            await registry_obj.async_get_full_portfolio()
+        )
+        df_transaction_registry_all = await registry_obj.async_get_registry()
 
     # Calculate PnL data
     pnl_map_isin_to_pnl_data = await async_pnl_map_isin_to_pnl_data(

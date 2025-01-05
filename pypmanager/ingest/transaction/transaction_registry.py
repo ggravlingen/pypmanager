@@ -5,7 +5,7 @@ from __future__ import annotations
 import contextlib
 from dataclasses import dataclass
 from functools import cached_property
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Self
 
 import pandas as pd
 
@@ -26,6 +26,7 @@ from .pandas_algorithm import PandasAlgorithm, PandasAlgorithmPnL
 if TYPE_CHECKING:
     from collections.abc import Callable
     from datetime import datetime
+    from types import TracebackType
 
 
 DTYPES_MAP: dict[str, type[str | float] | str] = {
@@ -152,6 +153,8 @@ class TransactionRegistry:
     This registry is the basis for all other calculations.
     """
 
+    df_all_transactions: pd.DataFrame
+
     def __init__(
         self: TransactionRegistry,
         report_date: datetime | None = None,
@@ -169,6 +172,8 @@ class TransactionRegistry:
         self.report_date = report_date
         self.sort_by_date_descending = sort_by_date_descending
 
+    async def __aenter__(self) -> Self:
+        """Enter context manager."""
         # Load all transaction files into a dataframe
         self.df_all_transactions = self._load_transaction_files()
 
@@ -183,7 +188,8 @@ class TransactionRegistry:
 
         # There are no transactions to process so we can return
         if self.df_all_transactions.empty:
-            return
+            msg = "No transactions to process"
+            raise ValueError(msg)
 
         self._300_calculate_average_price()
 
@@ -203,6 +209,16 @@ class TransactionRegistry:
         # Validation
         self._validate_columns()
         self._validate_index()
+
+        return self
+
+    async def __aexit__(
+        self: TransactionRegistry,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        tb: TracebackType | None,
+    ) -> None:
+        """Exit context manager."""
 
     def _load_transaction_files(self: TransactionRegistry) -> pd.DataFrame:
         """Load transaction files and return a sorted DataFrame."""

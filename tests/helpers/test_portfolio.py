@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 
 
 @pytest.mark.asyncio
-async def test_async_async_get_holdings_v2(
+async def test_async_async_get_holdings(
     data_factory: type[DataFactory],
     market_data_factory: type[MarketDataFactory],
 ) -> None:

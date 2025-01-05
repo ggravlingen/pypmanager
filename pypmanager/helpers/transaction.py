@@ -39,9 +39,8 @@ class TransactionRow:
 
 async def async_get_all_transactions() -> list[TransactionRow]:
     """Get all transactions."""
-    transaction_list = await TransactionRegistry(
-        sort_by_date_descending=True
-    ).async_get_registry()
+    async with TransactionRegistry(sort_by_date_descending=True) as registry_obj:
+        transaction_list = await registry_obj.async_get_registry()
 
     transaction_list = transaction_list.replace({np.nan: None})
 
