@@ -28,7 +28,7 @@ class SecurityDataResponse:
 
 
 async def async_security_map_isin_to_security() -> dict[str, SecurityData]:
-    """Asynchronously load security data from a YAML file."""
+    """Return a dict to get security information from an ISIN."""
     with Settings.security_config.open(encoding="UTF-8") as file:
         yaml_data = yaml.safe_load(file)
 
@@ -44,3 +44,9 @@ async def async_security_map_isin_to_security() -> dict[str, SecurityData]:
             )
 
     return security_data
+
+
+async def async_security_map_name_to_isin() -> dict[str, str]:
+    """Return a dict to get the ISIN code from a security name."""
+    security_data = await async_security_map_isin_to_security()
+    return {security.name: isin for isin, security in security_data.items()}
