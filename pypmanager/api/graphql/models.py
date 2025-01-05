@@ -2,41 +2,10 @@
 
 from __future__ import annotations
 
-from datetime import date  # noqa: TC003
-
 import strawberry
 from strawberry.experimental.pydantic import type as pydantic_type
 
 from pypmanager.helpers.security import Security
-
-
-@strawberry.type
-class BaseTransactionRow:
-    """Represent a base transaction row."""
-
-    transaction_date: date
-    broker: str
-    source: str
-    action: str
-    name: str | None
-    no_traded: float | None
-    commission: float | None
-    fx: float | None
-
-
-@strawberry.type
-class TransactionRow(BaseTransactionRow):
-    """Represent a transaction row."""
-
-    isin_code: str | None
-    price: float | None
-    currency: str | None
-    cash_flow: float | None
-    cost_base_average: float | None
-    pnl_total: float | None
-    pnl_trade: float | None
-    pnl_dividend: float | None
-    quantity_held: float | None
 
 
 @strawberry.type
