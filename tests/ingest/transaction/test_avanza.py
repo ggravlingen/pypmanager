@@ -15,17 +15,15 @@ from pypmanager.ingest.transaction.const import (
 from pypmanager.settings import TypedSettings
 
 
+@pytest.mark.asyncio
 @patch.object(TypedSettings, "dir_transaction_data", "tests/fixtures/transactions")
-def test_avanza_loader() -> None:
+async def test_avanza_loader() -> None:
     """Test AvanzaLoader."""
     loader = AvanzaLoader()
+    await loader.async_load()
 
-    # Test the pre_process_df method
-    loader.pre_process_df()
-
-    assert "Resultat" not in loader.df_final.columns
-
-    df_avanza = AvanzaLoader().df_final
+    df_avanza = loader.df_final
+    assert "Resultat" not in df_avanza.columns
 
     assert len(df_avanza) > 0
 

@@ -40,9 +40,11 @@ def test_get_filename(file_path: Path, expected: str) -> None:
     assert _get_filename(file_path) == expected
 
 
-def test_empty_loader() -> None:
+@pytest.mark.asyncio
+async def test_empty_loader() -> None:
     """Test the base loader class with empty data."""
     mock_loader = MockLoader()
+    await mock_loader.async_load()
     assert len(mock_loader.df_final) == 0
 
 

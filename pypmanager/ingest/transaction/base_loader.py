@@ -57,9 +57,18 @@ class TransactionLoader(ABC):
     file_pattern: str
     date_format_pattern: str
 
-    def __init__(self: TransactionLoader) -> None:
-        """Init class."""
-        # The order is important here
+    def load(self: TransactionLoader) -> TransactionLoader:
+        """Load data."""
+        self.load_data_files()
+        self.rename_and_filter()
+        self.pre_process_df()
+        self.normalize_transaction_date()
+        self.validate()
+
+        return self
+
+    async def async_load(self: TransactionLoader) -> None:
+        """Load data async."""
         self.load_data_files()
         self.rename_and_filter()
         self.pre_process_df()
