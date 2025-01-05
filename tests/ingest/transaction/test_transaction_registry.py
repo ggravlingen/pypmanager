@@ -43,10 +43,10 @@ async def test_transaction_registry(
 
 
 @pytest.mark.asyncio
-async def test_transaction_registry__async_get_current_holding(
+async def test_transaction_registry__async_get_full_portfolio(
     data_factory: type[DataFactory],
 ) -> None:
-    """Test function async_get_current_holding."""
+    """Test function async_get_full_portfolio."""
     factory = data_factory()
     mocked_transactions = (
         # US1234567890
@@ -81,7 +81,7 @@ async def test_transaction_registry__async_get_current_holding(
             return_value=mocked_transactions,
         ),
     ):
-        registry = await TransactionRegistry().async_get_current_holding()
+        registry = await TransactionRegistry().async_get_full_portfolio()
         assert len(registry) == 3
         assert registry.index[0] == datetime(
             2021, 1, 3, tzinfo=Settings.system_time_zone
