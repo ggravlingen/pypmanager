@@ -5,14 +5,15 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import date  # noqa: TC003
 import logging
-from typing import cast
 
 import pandas as pd
 import strawberry
 
-from pypmanager.helpers.market_data import async_get_last_market_data_df
 from pypmanager.ingest.transaction.const import TransactionRegistryColNameValues
 from pypmanager.ingest.transaction.transaction_registry import TransactionRegistry
+
+from .income_statement import async_pnl_get_isin_map
+from .market_data import async_get_last_market_data_df
 
 LOGGER = logging.getLogger(__package__)
 
@@ -51,7 +52,7 @@ async def async_async_get_holdings_v2() -> list[Holdingv2]:
     df_transaction_registry_all = await transaction_registry_obj.async_get_registry()
 
     # Calculate PnL data
-    pnl_map = await async_get_isin_pnl_map(
+    pnl_map = await async_pnl_get_isin_map(
         df_transaction_registry_all=df_transaction_registry_all
     )
 
@@ -111,46 +112,3 @@ async def async_async_get_holdings_v2() -> list[Holdingv2]:
         )
 
     return sorted(output_data, key=lambda x: x.name)
-
-
-@dataclass
-class PnLData:
-    """Represent PnL for a security."""
-
-    pnl_total: float | None = None
-    pnl_trade: float | None = None
-    pnl_dividend: float | None = None
-    pnl_unrealized: float | None = None
-
-
-async def async_get_isin_pnl_map(
-    *,
-    df_transaction_registry_all: pd.DataFrame,
-) -> dict[str, PnLData]:
-    """
-    Extract PnL data from the transaction registry.
-
-    The function returns a dictionary with isin_code as key and pnl_total as value.
-    """
-    # Group data and sum pnl_realized and pnl_unrealized by isin_code
-    df_pnl = cast(
-        pd.DataFrame,
-        df_transaction_registry_all.groupby(
-            TransactionRegistryColNameValues.SOURCE_ISIN.value
-        )
-        .agg(
-            {
-                TransactionRegistryColNameValues.CALC_PNL_TRADE.value: "sum",
-                TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value: "sum",
-            }
-        )
-        .reset_index(),
-    )
-
-    return {
-        row[TransactionRegistryColNameValues.SOURCE_ISIN.value]: PnLData(
-            pnl_trade=row[TransactionRegistryColNameValues.CALC_PNL_TRADE.value],
-            pnl_dividend=row[TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value],
-        )
-        for _, row in df_pnl.iterrows()
-    }
