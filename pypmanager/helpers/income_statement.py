@@ -24,7 +24,7 @@ class PnLData:
     pnl_unrealized: float | None = None
 
 
-async def async_pnl_get_isin_map(
+async def async_pnl_map_isin_to_pnl_data(
     *,
     df_transaction_registry_all: pd.DataFrame,
 ) -> dict[str, PnLData]:

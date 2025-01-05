@@ -13,7 +13,7 @@ import strawberry
 import yaml
 
 from pypmanager.error import DataError
-from pypmanager.helpers.security import async_load_security_data
+from pypmanager.helpers.security import async_security_map_isin_to_security
 from pypmanager.ingest.market_data.models import Source, SourceData, Sources
 from pypmanager.settings import Settings
 
@@ -120,7 +120,7 @@ class MarketDataOverviewRecord:
 async def async_get_market_data_overview() -> list[MarketDataOverviewRecord]:
     """Return an overview of the market data."""
     sources = await async_load_market_data_config()
-    all_security = await async_load_security_data()
+    all_security = await async_security_map_isin_to_security()
 
     output_data: list[MarketDataOverviewRecord] = []
 
