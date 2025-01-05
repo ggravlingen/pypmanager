@@ -54,7 +54,8 @@ async def async_get_all_transactions() -> list[TransactionRow]:
 
         if (
             row[TransactionRegistryColNameValues.SOURCE_ISIN.value] is not None
-            or row[TransactionRegistryColNameValues.SOURCE_ISIN.value] != 0
+            and row[TransactionRegistryColNameValues.SOURCE_ISIN.value] != 0
+            and row[TransactionRegistryColNameValues.SOURCE_ISIN.value] != "None"
         ):
             isin_code = row[TransactionRegistryColNameValues.SOURCE_ISIN.value]
         else:
