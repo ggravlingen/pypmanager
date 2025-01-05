@@ -8,4 +8,4 @@ class HttpStatusCodes(IntEnum):
 
     OK = 200
     NOT_FOUND = 404
-    SERVER_ERROR = 500
+    INTERNAL_SERVER_ERROR = 500

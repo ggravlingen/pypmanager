@@ -38,12 +38,12 @@ class BaseMarketDataLoader(ABC):
     def query_endpoint(self: BaseMarketDataLoader) -> dict[str, Any]:
         """Get data endpoint."""
         response = requests.get(self.full_url, timeout=10)
+        response.raise_for_status()
 
         if response.status_code == HttpStatusCodes.OK:
             return cast(dict[str, Any], json.loads(response.text))
 
-        msg = "Unable to load data"
-        raise ValueError(msg)
+        return {}
 
     @abstractmethod
     def get_response(self: BaseMarketDataLoader) -> None:
