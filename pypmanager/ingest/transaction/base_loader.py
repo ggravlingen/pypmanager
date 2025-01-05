@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+import logging
 from pathlib import Path
 
 import pandas as pd
@@ -14,6 +15,8 @@ from .const import (
     CSVSeparator,
     TransactionRegistryColNameValues,
 )
+
+_LOGGER = logging.getLogger(__package__)
 
 
 def _get_filename(file_path: Path) -> str:
@@ -61,6 +64,7 @@ class TransactionLoader(ABC):
         self.rename_and_filter()
         self.pre_process_df()
         self.normalize_transaction_date()
+        self.validate()
 
     def load_data_files(self: TransactionLoader) -> None:
         """Parse CSV-files and load them into a data frame."""
@@ -108,6 +112,15 @@ class TransactionLoader(ABC):
         )
 
         self.df_final = df_raw
+
+    def validate(self: TransactionLoader) -> None:
+        """Validate the data frame."""
+        if (
+            TransactionRegistryColNameValues.SOURCE_ISIN.value
+            not in self.df_final.columns
+        ):
+            msg = f"ISIN code is missing in {self.file_pattern}"
+            _LOGGER.error(msg)
 
     @abstractmethod
     def pre_process_df(self: TransactionLoader) -> None:
