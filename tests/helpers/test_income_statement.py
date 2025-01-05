@@ -68,14 +68,17 @@ async def test_async_get_pnl(
             df_transaction_registry_all=df_transaction_registry_all
         )
 
+        assert result.get("US1234567890").pnl_total == 49.0
         assert result.get("US1234567890").pnl_trade == 49.0
         assert result.get("US1234567890").pnl_dividend == 0
 
+        assert result.get("US1234567891").pnl_total == -101.0
         assert result.get("US1234567891").pnl_trade == -101.0
         assert result.get("US1234567891").pnl_dividend == 0
 
         assert result.get("US1234567892") is None
 
+        assert result.get("US1234567893").pnl_total == 150.0
         assert result.get("US1234567893").pnl_trade == 0
         assert result.get("US1234567893").pnl_dividend == 150.0
 

@@ -103,9 +103,10 @@ async def async_async_get_holdings_v2() -> list[Holdingv2]:
                 cost_base_average=average_cost,
                 invested_amount=invested_amount,
                 current_market_value_amount=current_market_value_amount,
-                pnl_unrealized=pnl_unrealized,
+                pnl_total=pnl_data.pnl_total if pnl_data else None,
                 pnl_trade=pnl_data.pnl_trade if pnl_data else None,
                 pnl_dividend=pnl_data.pnl_dividend if pnl_data else None,
+                pnl_unrealized=pnl_unrealized,
                 market_value_date=market_value_date,
                 market_value_price=market_value_price,
             )

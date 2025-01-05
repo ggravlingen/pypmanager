@@ -41,6 +41,7 @@ async def async_pnl_get_isin_map(
         )
         .agg(
             {
+                TransactionRegistryColNameValues.CALC_PNL_TOTAL.value: "sum",
                 TransactionRegistryColNameValues.CALC_PNL_TRADE.value: "sum",
                 TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value: "sum",
             }
@@ -50,6 +51,7 @@ async def async_pnl_get_isin_map(
 
     return {
         row[TransactionRegistryColNameValues.SOURCE_ISIN.value]: PnLData(
+            pnl_total=row[TransactionRegistryColNameValues.CALC_PNL_TOTAL.value],
             pnl_trade=row[TransactionRegistryColNameValues.CALC_PNL_TRADE.value],
             pnl_dividend=row[TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value],
         )
