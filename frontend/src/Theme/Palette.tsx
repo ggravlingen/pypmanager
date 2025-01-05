@@ -48,7 +48,7 @@ export const LightPalette: PaletteOptions = {
   mode: "light",
   primary: {
     main: "#005f99",
-    light: "#4a90d9",
+    light: "#3a7bc1",
     dark: "#003f66",
     contrastText: "#ffffff",
   },
