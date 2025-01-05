@@ -46,8 +46,8 @@ async def async_async_get_holdings() -> list[Holding]:
 
     # Fetch transaction data
     transaction_registry_obj = TransactionRegistry()
-    df_transaction_registry_current_holding = (
-        await transaction_registry_obj.async_get_current_holding()
+    df_transaction_registry_full_portfolio = (
+        await transaction_registry_obj.async_get_full_portfolio()
     )
     df_transaction_registry_all = await transaction_registry_obj.async_get_registry()
 
@@ -58,7 +58,7 @@ async def async_async_get_holdings() -> list[Holding]:
 
     df_market_data = await async_get_last_market_data_df()
 
-    for _, row in df_transaction_registry_current_holding.iterrows():
+    for _, row in df_transaction_registry_full_portfolio.iterrows():
         # We only want to include securities with an ISIN code
         if (isin_code := row[TransactionRegistryColNameValues.SOURCE_ISIN.value]) in [
             "nan",

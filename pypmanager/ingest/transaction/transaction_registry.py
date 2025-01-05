@@ -505,9 +505,9 @@ class TransactionRegistry:
         """Get registry."""
         return self.all_calculations_run
 
-    async def async_get_current_holding(self) -> pd.DataFrame:
+    async def async_get_full_portfolio(self) -> pd.DataFrame:
         """
-        Get all current holdings.
+        Get all current and historical holdings in the portfolio.
 
         The returned DataFrame contains rows even if everything has been sold.
         """
