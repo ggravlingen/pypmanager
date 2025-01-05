@@ -8,10 +8,7 @@ from unittest.mock import patch
 
 import pytest
 
-from pypmanager.helpers.income_statement import (
-    async_pnl_by_year,
-    async_pnl_map_isin_to_pnl_data,
-)
+from pypmanager.helpers import async_pnl_by_year, async_pnl_map_isin_to_pnl_data
 from pypmanager.ingest.transaction.transaction_registry import TransactionRegistry
 from pypmanager.settings import Settings
 
