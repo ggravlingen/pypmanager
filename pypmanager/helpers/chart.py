@@ -65,7 +65,8 @@ async def async_get_market_data_and_transaction(
     ]
 
     # Fetch all transactions and filter ISIN code
-    df_transactions = await TransactionRegistry().async_get_registry()
+    async with TransactionRegistry() as registry_obj:
+        df_transactions = await registry_obj.async_get_registry()
 
     df_security_holding_history = await SecurityHoldingHistory(
         isin_code=isin_code,

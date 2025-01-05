@@ -51,143 +51,149 @@ def mock_security_transaction_registry(
 @pytest.mark.asyncio
 async def test_security_holding_history__transaction_list() -> None:
     """Test SecurityHoldingHistory.series_date_range."""
-    transaction_registry = await TransactionRegistry().async_get_registry()
-    shh = SecurityHoldingHistory(
-        isin_code="US1234567890",
-        df_transaction_registry=transaction_registry,
-    )
+    async with TransactionRegistry() as registry_obj:
+        transaction_registry = await registry_obj.async_get_registry()
+        shh = SecurityHoldingHistory(
+            isin_code="US1234567890",
+            df_transaction_registry=transaction_registry,
+        )
 
-    assert len(shh.transaction_list) == 7
+        assert len(shh.transaction_list) == 7
 
 
 @pytest.mark.usefixtures("mock_security_transaction_registry")
 @pytest.mark.asyncio
 async def test_security_holding_history__series_date_range() -> None:
     """Test SecurityHoldingHistory.series_date_range."""
-    transaction_registry = await TransactionRegistry().async_get_registry()
-    shh = SecurityHoldingHistory(
-        isin_code="US1234567890",
-        df_transaction_registry=transaction_registry,
-    )
+    async with TransactionRegistry() as registry_obj:
+        transaction_registry = await registry_obj.async_get_registry()
+        shh = SecurityHoldingHistory(
+            isin_code="US1234567890",
+            df_transaction_registry=transaction_registry,
+        )
 
-    # Test the series_date_range property
-    assert shh.series_date_range is not None
-    assert len(shh.series_date_range) == 40
-    assert shh.series_date_range[0] == shh.series_start_date
-    assert shh.series_date_range[-1] == shh.series_end_date
+        # Test the series_date_range property
+        assert shh.series_date_range is not None
+        assert len(shh.series_date_range) == 40
+        assert shh.series_date_range[0] == shh.series_start_date
+        assert shh.series_date_range[-1] == shh.series_end_date
 
 
 @pytest.mark.usefixtures("mock_security_transaction_registry")
 @pytest.mark.asyncio
 async def test_security_holding_history__df_base() -> None:
     """Test SecurityHoldingHistory.df_base."""
-    transaction_registry = await TransactionRegistry().async_get_registry()
-    shh = SecurityHoldingHistory(
-        isin_code="US1234567890",
-        df_transaction_registry=transaction_registry,
-    )
+    async with TransactionRegistry() as registry_obj:
+        transaction_registry = await registry_obj.async_get_registry()
+        shh = SecurityHoldingHistory(
+            isin_code="US1234567890",
+            df_transaction_registry=transaction_registry,
+        )
 
-    assert shh.df_base is not None
-    assert len(shh.df_base) == 40
-    assert shh.df_base.index[0] == shh.series_start_date
-    assert shh.df_base.index[-1] == shh.series_end_date
+        assert shh.df_base is not None
+        assert len(shh.df_base) == 40
+        assert shh.df_base.index[0] == shh.series_start_date
+        assert shh.df_base.index[-1] == shh.series_end_date
 
 
 @pytest.mark.usefixtures("mock_security_transaction_registry")
 @pytest.mark.asyncio
 async def test_security_holding_history__df_base_with_transactions() -> None:
     """Test SecurityHoldingHistory.df_base_with_transactions."""
-    transaction_registry = await TransactionRegistry().async_get_registry()
-    shh = SecurityHoldingHistory(
-        isin_code="US1234567890",
-        df_transaction_registry=transaction_registry,
-    )
+    async with TransactionRegistry() as registry_obj:
+        transaction_registry = await registry_obj.async_get_registry()
+        shh = SecurityHoldingHistory(
+            isin_code="US1234567890",
+            df_transaction_registry=transaction_registry,
+        )
 
-    assert shh.df_base_with_transactions is not None
-    assert len(shh.df_base_with_transactions) == 40
-    assert shh.df_base.index[0] == shh.series_start_date
-    assert shh.df_base.index[-1] == shh.series_end_date
+        assert shh.df_base_with_transactions is not None
+        assert len(shh.df_base_with_transactions) == 40
+        assert shh.df_base.index[0] == shh.series_start_date
+        assert shh.df_base.index[-1] == shh.series_end_date
 
 
 @pytest.mark.usefixtures("mock_security_transaction_registry")
 @pytest.mark.asyncio
 async def test_security_holding_history__df_transaction_clean() -> None:
     """Test SecurityHoldingHistory.df_base_with_transactions."""
-    transaction_registry = await TransactionRegistry().async_get_registry()
-    shh = SecurityHoldingHistory(
-        isin_code="US1234567890",
-        df_transaction_registry=transaction_registry,
-    )
+    async with TransactionRegistry() as registry_obj:
+        transaction_registry = await registry_obj.async_get_registry()
+        shh = SecurityHoldingHistory(
+            isin_code="US1234567890",
+            df_transaction_registry=transaction_registry,
+        )
 
-    assert shh.df_transaction_clean is not None
-    assert len(shh.df_transaction_clean) == 40
+        assert shh.df_transaction_clean is not None
+        assert len(shh.df_transaction_clean) == 40
 
-    assert shh.df_base.index[0] == shh.series_start_date
-    assert shh.df_base.index[-1] == shh.series_end_date
+        assert shh.df_base.index[0] == shh.series_start_date
+        assert shh.df_base.index[-1] == shh.series_end_date
 
 
 @pytest.mark.usefixtures("mock_security_transaction_registry")
 @pytest.mark.asyncio
 async def test_security_holding_history__df_transaction_filled() -> None:
     """Test SecurityHoldingHistory.df_transaction_filled."""
-    transaction_registry = await TransactionRegistry().async_get_registry()
-    shh = SecurityHoldingHistory(
-        isin_code="US1234567890",
-        df_transaction_registry=transaction_registry,
-    )
+    async with TransactionRegistry() as registry_obj:
+        transaction_registry = await registry_obj.async_get_registry()
+        shh = SecurityHoldingHistory(
+            isin_code="US1234567890",
+            df_transaction_registry=transaction_registry,
+        )
 
-    assert shh.df_transaction_filled is not None
-    assert len(shh.df_transaction_filled) == 40
+        assert shh.df_transaction_filled is not None
+        assert len(shh.df_transaction_filled) == 40
 
-    actual_average_price = shh.df_transaction_filled[
-        TransactionRegistryColNameValues.PRICE_PER_UNIT.value
-    ].to_numpy()
-    expected_average_price = [
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        10.0,
-        0.0,
-        10.0,
-        10.0,
-    ]
-    assert_array_equal(
-        actual_average_price,
-        expected_average_price,
-    )
+        actual_average_price = shh.df_transaction_filled[
+            TransactionRegistryColNameValues.PRICE_PER_UNIT.value
+        ].to_numpy()
+        expected_average_price = [
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            0.0,
+            10.0,
+            10.0,
+        ]
+        assert_array_equal(
+            actual_average_price,
+            expected_average_price,
+        )
 
 
 @pytest.mark.parametrize(

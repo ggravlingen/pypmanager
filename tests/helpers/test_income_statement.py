@@ -59,25 +59,26 @@ async def test_async_get_pnl(
         "_load_transaction_files",
         return_value=mocked_transactions,
     ):
-        df_transaction_registry_all = await TransactionRegistry().async_get_registry()
+        async with TransactionRegistry() as registry_obj:
+            df_transaction_registry_all = await registry_obj.async_get_registry()
 
-        result = await async_pnl_map_isin_to_pnl_data(
-            df_transaction_registry_all=df_transaction_registry_all
-        )
+            result = await async_pnl_map_isin_to_pnl_data(
+                df_transaction_registry_all=df_transaction_registry_all
+            )
 
-        assert result.get("US1234567890").pnl_total == 49.0
-        assert result.get("US1234567890").pnl_trade == 49.0
-        assert result.get("US1234567890").pnl_dividend == 0
+            assert result.get("US1234567890").pnl_total == 49.0
+            assert result.get("US1234567890").pnl_trade == 49.0
+            assert result.get("US1234567890").pnl_dividend == 0
 
-        assert result.get("US1234567891").pnl_total == -101.0
-        assert result.get("US1234567891").pnl_trade == -101.0
-        assert result.get("US1234567891").pnl_dividend == 0
+            assert result.get("US1234567891").pnl_total == -101.0
+            assert result.get("US1234567891").pnl_trade == -101.0
+            assert result.get("US1234567891").pnl_dividend == 0
 
-        assert result.get("US1234567892") is None
+            assert result.get("US1234567892") is None
 
-        assert result.get("US1234567893").pnl_total == 150.0
-        assert result.get("US1234567893").pnl_trade == 0
-        assert result.get("US1234567893").pnl_dividend == 150.0
+            assert result.get("US1234567893").pnl_total == 150.0
+            assert result.get("US1234567893").pnl_trade == 0
+            assert result.get("US1234567893").pnl_dividend == 150.0
 
 
 @pytest.mark.asyncio

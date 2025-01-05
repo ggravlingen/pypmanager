@@ -76,60 +76,60 @@ async def async_pnl_by_year(
     """Aggregate the transaction registry by year."""
     output_list: list[ResultStatementRow] = []
 
-    df_transaction_registry = await TransactionRegistry(
-        report_date=report_date
-    ).async_get_registry()
+    async with TransactionRegistry(report_date=report_date) as registry_obj:
+        df_transaction_registry = await registry_obj.async_get_registry()
+        filtered_df_copy = df_transaction_registry.copy()
 
-    filtered_df_copy = df_transaction_registry.copy()
-
-    df_grouped_data = (
-        filtered_df_copy.groupby(
-            [
-                TransactionRegistryColNameValues.META_TRANSACTION_YEAR.value,
+        df_grouped_data = (
+            filtered_df_copy.groupby(
+                [
+                    TransactionRegistryColNameValues.META_TRANSACTION_YEAR.value,
+                ]
+            )[
+                [
+                    TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value,
+                    TransactionRegistryColNameValues.CALC_PNL_TRADE.value,
+                    TransactionRegistryColNameValues.CALC_PNL_TOTAL.value,
+                ]
             ]
-        )[
-            [
+            .sum()
+            .reset_index()
+        )
+
+        df_ledger_by_year = df_grouped_data.pivot_table(
+            values=[
                 TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value,
                 TransactionRegistryColNameValues.CALC_PNL_TRADE.value,
                 TransactionRegistryColNameValues.CALC_PNL_TOTAL.value,
-            ]
+            ],
+            columns=TransactionRegistryColNameValues.META_TRANSACTION_YEAR.value,
+            fill_value=None,
+        ).reset_index()
+
+        year_list = [
+            column for column in df_ledger_by_year.columns if column != "index"
         ]
-        .sum()
-        .reset_index()
-    )
 
-    df_ledger_by_year = df_grouped_data.pivot_table(
-        values=[
-            TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value,
-            TransactionRegistryColNameValues.CALC_PNL_TRADE.value,
-            TransactionRegistryColNameValues.CALC_PNL_TOTAL.value,
-        ],
-        columns=TransactionRegistryColNameValues.META_TRANSACTION_YEAR.value,
-        fill_value=None,
-    ).reset_index()
+        for row_index_name, is_total in (
+            (TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value, False),
+            (TransactionRegistryColNameValues.CALC_PNL_TRADE.value, False),
+            (TransactionRegistryColNameValues.CALC_PNL_TOTAL.value, True),
+        ):
+            filtered_ledger = df_ledger_by_year[
+                df_ledger_by_year["index"] == row_index_name
+            ].reset_index()
 
-    year_list = [column for column in df_ledger_by_year.columns if column != "index"]
+            filtered_ledger = filtered_ledger.replace({0: None, np.nan: None})
 
-    for row_index_name, is_total in (
-        (TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value, False),
-        (TransactionRegistryColNameValues.CALC_PNL_TRADE.value, False),
-        (TransactionRegistryColNameValues.CALC_PNL_TOTAL.value, True),
-    ):
-        filtered_ledger = df_ledger_by_year[
-            df_ledger_by_year["index"] == row_index_name
-        ].reset_index()
+            values_list = filtered_ledger.loc[0, year_list].tolist()
 
-        filtered_ledger = filtered_ledger.replace({0: None, np.nan: None})
-
-        values_list = filtered_ledger.loc[0, year_list].tolist()
-
-        output_list.append(
-            ResultStatementRow(
-                item_name=row_index_name,
-                year_list=year_list,
-                amount_list=values_list,
-                is_total=is_total,
+            output_list.append(
+                ResultStatementRow(
+                    item_name=row_index_name,
+                    year_list=year_list,
+                    amount_list=values_list,
+                    is_total=is_total,
+                )
             )
-        )
 
-    return output_list
+        return output_list
