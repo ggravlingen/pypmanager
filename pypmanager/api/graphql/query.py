@@ -5,10 +5,10 @@ from __future__ import annotations
 from datetime import datetime
 from typing import cast
 
-import numpy as np
 import strawberry
 
 from pypmanager.helpers.chart import ChartData, async_get_market_data_and_transaction
+from pypmanager.helpers.income_statement import ResultStatementRow, async_pnl_by_year
 from pypmanager.helpers.market_data import (
     MarketDataOverviewRecord,
     async_get_market_data_overview,
@@ -16,13 +16,8 @@ from pypmanager.helpers.market_data import (
 from pypmanager.helpers.portfolio import Holdingv2, async_async_get_holdings_v2
 from pypmanager.helpers.security import async_load_security_data
 from pypmanager.helpers.transaction import TransactionRow, async_get_all_transactions
-from pypmanager.ingest.transaction import (
-    TransactionRegistryColNameValues,
-    async_aggregate_income_statement_by_year,
-)
 
 from .models import (
-    ResultStatementRow,
     SecurityResponse,
 )
 
@@ -44,37 +39,7 @@ class Query:
     @strawberry.field
     async def result_statement(self: Query) -> list[ResultStatementRow]:
         """Return the result statement."""
-        ledger_by_year = await async_aggregate_income_statement_by_year()
-        output_list: list[ResultStatementRow] = []
-
-        year_list = [column for column in ledger_by_year.columns if column != "index"]
-
-        for row_index_name, is_total in (
-            (TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value, False),
-            (TransactionRegistryColNameValues.CALC_PNL_TRADE.value, False),
-            (TransactionRegistryColNameValues.CALC_PNL_TOTAL.value, True),
-        ):
-            filtered_ledger = ledger_by_year[
-                ledger_by_year["index"] == row_index_name
-            ].reset_index()
-
-            if filtered_ledger.empty:
-                continue
-
-            filtered_ledger = filtered_ledger.replace({0: None, np.nan: None})
-
-            values_list = filtered_ledger.loc[0, year_list].tolist()
-
-            output_list.append(
-                ResultStatementRow(
-                    item_name=row_index_name,
-                    year_list=year_list,
-                    amount_list=values_list,
-                    is_total=is_total,
-                )
-            )
-
-        return output_list
+        return await async_pnl_by_year()
 
     @strawberry.field
     async def chart_history(
