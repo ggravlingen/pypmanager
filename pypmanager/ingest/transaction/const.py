@@ -130,6 +130,12 @@ class TransactionRegistryColNameValues(StrEnum):
 
     Ingested from the transaction source files.
     """
+    SOURCE_CURRENCY_NOMINAL = "source_currency_nominal"
+    """
+    The nominal of the transaction.
+
+    Ingested from the transaction source files.
+    """
     SOURCE_FILE = "source_file_name"
     """
     The name of the file the transaction was ingested from.
