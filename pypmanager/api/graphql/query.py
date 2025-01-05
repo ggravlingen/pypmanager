@@ -7,17 +7,18 @@ from typing import cast
 
 import strawberry
 
+from pypmanager.helpers import (
+    ResultStatementRow,
+    SecurityDataResponse,
+    async_pnl_by_year,
+    async_security_map_isin_to_security,
+)
 from pypmanager.helpers.chart import ChartData, async_get_market_data_and_transaction
-from pypmanager.helpers.income_statement import ResultStatementRow, async_pnl_by_year
 from pypmanager.helpers.market_data import (
     MarketDataOverviewRecord,
     async_get_market_data_overview,
 )
 from pypmanager.helpers.portfolio import Holdingv2, async_async_get_holdings_v2
-from pypmanager.helpers.security import (
-    SecurityDataResponse,
-    async_security_map_isin_to_security,
-)
 from pypmanager.helpers.transaction import TransactionRow, async_get_all_transactions
 
 

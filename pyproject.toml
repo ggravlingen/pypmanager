@@ -177,6 +177,7 @@ known-first-party = [
 
 "tests/*" = [
  "S101",  # Use of `assert` detected
+ # This rule is needed in tests so that we can compare against values, eg 150.0
  "PLR2004",  # Magic value used in comparison, consider replacing with a constant variable
 ]
 
