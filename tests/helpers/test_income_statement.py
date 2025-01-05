@@ -8,7 +8,10 @@ from unittest.mock import patch
 
 import pytest
 
-from pypmanager.helpers.income_statement import async_pnl_get_isin_map
+from pypmanager.helpers.income_statement import (
+    async_pnl_by_year,
+    async_pnl_get_isin_map,
+)
 from pypmanager.ingest.transaction.transaction_registry import TransactionRegistry
 from pypmanager.settings import Settings
 
@@ -75,3 +78,47 @@ async def test_async_get_pnl(
 
         assert result.get("US1234567893").pnl_trade == 0
         assert result.get("US1234567893").pnl_dividend == 150.0
+
+
+@pytest.mark.asyncio
+async def test_async_pnl_by_year(
+    data_factory: type[DataFactory],
+) -> None:
+    """Test function async_pnl_by_year."""
+    factory = data_factory()
+    mocked_transactions = (
+        factory.buy()
+        .sell()
+        .dividend(
+            transaction_date=datetime(
+                2022,
+                2,
+                1,
+                tzinfo=Settings.system_time_zone,
+            ),
+        )
+        .df_transaction_list
+    )
+    with (
+        patch(
+            "pypmanager.ingest.transaction.transaction_registry.TransactionRegistry."
+            "_load_transaction_files",
+            return_value=mocked_transactions,
+        ),
+    ):
+        income_statement_list = await async_pnl_by_year()
+
+        assert income_statement_list[0].year_list == [2021, 2022]
+        assert income_statement_list[0].item_name == "calc_pnl_transaction_dividend"
+        assert income_statement_list[0].amount_list == [None, 150.0]
+        assert income_statement_list[0].is_total is False
+
+        assert income_statement_list[1].year_list == [2021, 2022]
+        assert income_statement_list[1].item_name == "calc_pnl_transaction_trade"
+        assert income_statement_list[1].amount_list == [49.0, None]
+        assert income_statement_list[1].is_total is False
+
+        assert income_statement_list[2].year_list == [2021, 2022]
+        assert income_statement_list[2].item_name == "calc_pnl_transaction_total"
+        assert income_statement_list[2].amount_list == [49.0, 150.0]
+        assert income_statement_list[2].is_total is True
