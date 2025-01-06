@@ -10,7 +10,7 @@ import strawberry
 from pypmanager.helpers import (
     ResultStatementRow,
     SecurityDataResponse,
-    async_pnl_by_year,
+    async_pnl_by_year_from_tr,
     async_security_map_isin_to_security,
 )
 from pypmanager.helpers.chart import ChartData, async_get_market_data_and_transaction
@@ -20,6 +20,7 @@ from pypmanager.helpers.market_data import (
 )
 from pypmanager.helpers.portfolio import Holding, async_async_get_holdings
 from pypmanager.helpers.transaction import TransactionRow, async_get_all_transactions
+from pypmanager.ingest.transaction.transaction_registry import TransactionRegistry
 
 
 @strawberry.type
@@ -39,7 +40,11 @@ class Query:
     @strawberry.field
     async def result_statement(self: Query) -> list[ResultStatementRow]:
         """Return the result statement."""
-        return await async_pnl_by_year()
+        async with TransactionRegistry() as registry_obj:
+            df_transaction_registry_all = await registry_obj.async_get_registry()
+            return await async_pnl_by_year_from_tr(
+                df_transaction_registry_all=df_transaction_registry_all
+            )
 
     @strawberry.field
     async def chart_history(
