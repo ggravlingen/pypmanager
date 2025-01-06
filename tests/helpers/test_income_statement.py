@@ -8,7 +8,7 @@ from unittest.mock import patch
 
 import pytest
 
-from pypmanager.helpers import async_pnl_by_year, async_pnl_map_isin_to_pnl_data
+from pypmanager.helpers import async_pnl_by_year_from_tr, async_pnl_map_isin_to_pnl_data
 from pypmanager.ingest.transaction.transaction_registry import TransactionRegistry
 from pypmanager.settings import Settings
 
@@ -107,19 +107,23 @@ async def test_async_pnl_by_year(
             return_value=mocked_transactions,
         ),
     ):
-        income_statement_list = await async_pnl_by_year()
+        async with TransactionRegistry() as registry_obj:
+            df_transaction_registry_all = await registry_obj.async_get_registry()
+            income_statement_list = await async_pnl_by_year_from_tr(
+                df_transaction_registry_all=df_transaction_registry_all
+            )
 
-        assert income_statement_list[0].year_list == [2021, 2022]
-        assert income_statement_list[0].item_name == "calc_pnl_transaction_dividend"
-        assert income_statement_list[0].amount_list == [None, 150.0]
-        assert income_statement_list[0].is_total is False
+            assert income_statement_list[0].year_list == [2021, 2022]
+            assert income_statement_list[0].item_name == "calc_pnl_transaction_dividend"
+            assert income_statement_list[0].amount_list == [None, 150.0]
+            assert income_statement_list[0].is_total is False
 
-        assert income_statement_list[1].year_list == [2021, 2022]
-        assert income_statement_list[1].item_name == "calc_pnl_transaction_trade"
-        assert income_statement_list[1].amount_list == [49.0, None]
-        assert income_statement_list[1].is_total is False
+            assert income_statement_list[1].year_list == [2021, 2022]
+            assert income_statement_list[1].item_name == "calc_pnl_transaction_trade"
+            assert income_statement_list[1].amount_list == [49.0, None]
+            assert income_statement_list[1].is_total is False
 
-        assert income_statement_list[2].year_list == [2021, 2022]
-        assert income_statement_list[2].item_name == "calc_pnl_transaction_total"
-        assert income_statement_list[2].amount_list == [49.0, 150.0]
-        assert income_statement_list[2].is_total is True
+            assert income_statement_list[2].year_list == [2021, 2022]
+            assert income_statement_list[2].item_name == "calc_pnl_transaction_total"
+            assert income_statement_list[2].amount_list == [49.0, 150.0]
+            assert income_statement_list[2].is_total is True
