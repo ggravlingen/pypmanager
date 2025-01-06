@@ -149,4 +149,4 @@ def test_validate(
         loader = MockLoader()
         loader.df_final = pd.DataFrame({"A": [1, 2]})
         loader.validate()
-        assert "ISIN code is missing" in caplog.text
+        assert "ISIN column is missing in abc123" in caplog.text
