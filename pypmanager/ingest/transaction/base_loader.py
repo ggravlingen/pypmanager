@@ -131,7 +131,7 @@ class TransactionLoader(ABC):
             TransactionRegistryColNameValues.SOURCE_ISIN.value
             not in self.df_final.columns
         ):
-            msg = f"ISIN code is missing in {self.file_pattern}"
+            msg = f"ISIN column column is missing in {self.file_pattern}"
             _LOGGER.error(msg)
 
     @abstractmethod

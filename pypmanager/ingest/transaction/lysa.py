@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING, cast
+
+from pypmanager.helpers.security import async_security_map_name_to_isin
 
 from .base_loader import TransactionLoader
 from .const import (
@@ -12,6 +15,8 @@ from .const import (
     TransactionRegistryColNameValues,
     TransactionTypeValues,
 )
+
+_LOGGER = logging.getLogger(__package__)
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -64,4 +69,30 @@ class LysaLoader(TransactionLoader):
             TransactionRegistryColNameValues.SOURCE_NAME_SECURITY
         ].str.replace("�", "ä")
 
+        security_map_name_to_isin = await async_security_map_name_to_isin()
+
+        df_raw[TransactionRegistryColNameValues.SOURCE_ISIN.value] = df_raw[
+            TransactionRegistryColNameValues.SOURCE_NAME_SECURITY
+        ].map(security_map_name_to_isin)
+
+        # Validate that ISIN exists for all relewant rows
+        await self.async_validate_isin()
+
         self.df_final = df_raw
+
+    async def async_validate_isin(self: LysaLoader) -> None:
+        """Validate that an ISIN exists for all buy and sell transactions."""
+        df_raw = self.df_final.copy()
+
+        df_raw = df_raw.query(
+            f"{TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value} in "
+            f"['Buy', 'Sell']"
+        )
+
+        # Log an error if the name is not found in the dictionary
+        missing_isin = df_raw[
+            df_raw[TransactionRegistryColNameValues.SOURCE_ISIN.value].isna()
+        ][TransactionRegistryColNameValues.SOURCE_NAME_SECURITY]
+
+        for name in missing_isin:
+            _LOGGER.error(f"ISIN code not found for security name: {name}")
