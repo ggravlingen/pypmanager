@@ -51,7 +51,7 @@ async def test_async_async_get_holdings(
     with (
         patch(
             "pypmanager.ingest.transaction.transaction_registry.TransactionRegistry."
-            "_load_transaction_files",
+            "_async_load_transaction_files",
             return_value=mocked_transactions,
         ),
         patch(

@@ -64,7 +64,7 @@ async def test_async_get_market_data_and_transaction(
 
     with (
         patch(
-            "pypmanager.helpers.chart.TransactionRegistry._load_transaction_files",
+            "pypmanager.helpers.chart.TransactionRegistry._async_load_transaction_files",
             return_value=mocked_transactions,
         ),
         patch(

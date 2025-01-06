@@ -19,13 +19,10 @@ from pypmanager.settings import TypedSettings
 @patch.object(TypedSettings, "dir_transaction_data", "tests/fixtures/transactions")
 async def test_avanza_loader() -> None:
     """Test AvanzaLoader."""
-    loader = AvanzaLoader()
-    await loader.async_load()
-
-    df_avanza = loader.df_final
-    assert "Resultat" not in df_avanza.columns
-
-    assert len(df_avanza) > 0
+    async with AvanzaLoader() as loader:
+        df_avanza = loader.df_final
+        assert "Resultat" not in df_avanza.columns
+        assert len(df_avanza) > 0
 
 
 @pytest.mark.parametrize(

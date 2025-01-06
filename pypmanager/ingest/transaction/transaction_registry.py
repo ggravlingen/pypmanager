@@ -175,7 +175,7 @@ class TransactionRegistry:
     async def __aenter__(self) -> Self:
         """Enter context manager."""
         # Load all transaction files into a dataframe
-        self.df_all_transactions = self._load_transaction_files()
+        self.df_all_transactions = await self._async_load_transaction_files()
 
         # Cleanup must be done before converting data types
         self._100_cleanup_df()
@@ -220,13 +220,14 @@ class TransactionRegistry:
     ) -> None:
         """Exit context manager."""
 
-    def _load_transaction_files(self: TransactionRegistry) -> pd.DataFrame:
+    async def _async_load_transaction_files(self: TransactionRegistry) -> pd.DataFrame:
         """Load transaction files and return a sorted DataFrame."""
-        df_generic = GenericLoader().load().df_final
-        df_avanza = AvanzaLoader().load().df_final
-        df_lysa = LysaLoader().load().df_final
+        df_data_list: list[pd.DataFrame] = []
+        for klass in (GenericLoader, AvanzaLoader, LysaLoader):
+            async with klass() as loader:
+                df_data_list.append(loader.df_final)
 
-        return pd.concat([df_generic, df_avanza, df_lysa])
+        return pd.concat(df_data_list)
 
     def _100_cleanup_df(self: TransactionRegistry) -> None:
         """Cleanup dataframe."""

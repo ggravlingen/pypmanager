@@ -41,7 +41,7 @@ def mock_security_transaction_registry(
         .df_transaction_list
     )
     with patch(
-        "pypmanager.helpers.chart.TransactionRegistry._load_transaction_files",
+        "pypmanager.helpers.chart.TransactionRegistry._async_load_transaction_files",
         return_value=mocked_transactions,
     ):
         yield
