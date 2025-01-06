@@ -29,7 +29,7 @@ class GenericLoader(TransactionLoader):
     file_pattern = "other*.csv"
     date_format_pattern = "%Y-%m-%d"
 
-    def pre_process_df(self: GenericLoader) -> None:
+    async def async_pre_process_df(self: GenericLoader) -> None:
         """Load CSV."""
         df_raw = self.df_final
 

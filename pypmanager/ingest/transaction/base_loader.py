@@ -65,7 +65,7 @@ class TransactionLoader(ABC):
         """Enter context manager."""
         self.load_data_files()
         self.rename_and_filter()
-        self.pre_process_df()
+        await self.async_pre_process_df()
         self.normalize_transaction_date()
         self.validate()
         return self
@@ -135,5 +135,5 @@ class TransactionLoader(ABC):
             _LOGGER.error(msg)
 
     @abstractmethod
-    def pre_process_df(self: TransactionLoader) -> None:
+    async def async_pre_process_df(self: TransactionLoader) -> None:
         """Broker specific manipulation of the data frame."""

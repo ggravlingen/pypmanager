@@ -23,7 +23,7 @@ class MockLoader(TransactionLoader):
     file_pattern = "abc123"
     date_format_pattern = "%Y-%m-%d"
 
-    def pre_process_df(self: MockLoader) -> None:
+    async def async_pre_process_df(self: MockLoader) -> None:
         """Mock method."""
 
 
