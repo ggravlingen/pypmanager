@@ -20,6 +20,19 @@ async def test_lysa_loader() -> None:
         assert len(df_lysa) > 0
 
 
+@pytest.mark.asyncio
+@patch.object(TypedSettings, "dir_transaction_data", "tests/fixtures/transactions")
+async def test_lysa_loader__async_validate_isin(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    """Test LysaLoader.async_validate_isin."""
+    async with LysaLoader() as loader:
+        # Replace all ISIN values with None for test purposes
+        loader.df_final[TransactionRegistryColNameValues.SOURCE_ISIN.value] = None
+        await loader.async_validate_isin()
+        assert "ISIN code not found for security name" in caplog.text
+
+
 @pytest.mark.parametrize(
     ("transaction_type", "name", "expected_result"),
     [
