@@ -220,7 +220,6 @@ class UpdateMarketDataCsv:
         """Init class."""
         self.data = data
         self.source_name = source_name
-
         self.file_market_data = Settings.dir_market_data / f"{source_name}.csv"
 
     async def __aenter__(self) -> Self:
