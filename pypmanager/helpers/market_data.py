@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import UTC, date, datetime
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Self
 
 import numpy as np
 import pandas as pd
@@ -20,6 +20,8 @@ from pypmanager.settings import Settings
 LOGGER = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
+    from types import TracebackType
+
     from pypmanager.ingest.market_data.base_loader import BaseMarketDataLoader
 
 
@@ -194,7 +196,11 @@ async def async_download_market_data() -> None:
                 isin_code=source.isin_code,
                 name=source.name,
             )
-            UpdateMarketDataCsv(data=loader.to_source_data(), source_name=loader.source)
+            data_list = loader.to_source_data()
+
+            async with UpdateMarketDataCsv(data=data_list, source_name=loader.source):
+                pass
+
         except AttributeError:
             LOGGER.exception(f"Unable to load {loader}")
 
@@ -207,7 +213,9 @@ class UpdateMarketDataCsv:
     df_source_data: pd.DataFrame
 
     def __init__(
-        self: UpdateMarketDataCsv, data: list[SourceData], source_name: str
+        self: UpdateMarketDataCsv,
+        data: list[SourceData],
+        source_name: str,
     ) -> None:
         """Init class."""
         self.data = data
@@ -215,9 +223,20 @@ class UpdateMarketDataCsv:
 
         self.file_market_data = Settings.dir_market_data / f"{source_name}.csv"
 
+    async def __aenter__(self) -> Self:
+        """Enter async context manager."""
         self.prepare_source_data()
         self.concat_data()
         self.save_to_csv()
+        return self
+
+    async def __aexit__(
+        self: UpdateMarketDataCsv,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        tb: TracebackType | None,
+    ) -> None:
+        """Exit context manager."""
 
     @property
     def target_file_exists(self: UpdateMarketDataCsv) -> bool:
