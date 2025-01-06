@@ -56,7 +56,7 @@ async def test_async_get_pnl(
 
     with patch(
         "pypmanager.ingest.transaction.transaction_registry.TransactionRegistry."
-        "_load_transaction_files",
+        "_async_load_transaction_files",
         return_value=mocked_transactions,
     ):
         async with TransactionRegistry() as registry_obj:
@@ -103,7 +103,7 @@ async def test_async_pnl_by_year(
     with (
         patch(
             "pypmanager.ingest.transaction.transaction_registry.TransactionRegistry."
-            "_load_transaction_files",
+            "_async_load_transaction_files",
             return_value=mocked_transactions,
         ),
     ):

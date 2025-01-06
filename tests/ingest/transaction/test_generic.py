@@ -16,10 +16,9 @@ from pypmanager.settings import TypedSettings
 @patch.object(TypedSettings, "dir_transaction_data", "tests/fixtures/transactions")
 async def test_generic_loader() -> None:
     """Test GenericLoader."""
-    loader = GenericLoader()
-    await loader.async_load()
-    df_misc = loader.df_final
-    assert len(df_misc) > 0
+    async with GenericLoader() as loader:
+        df_generic = loader.df_final
+        assert len(df_generic) > 0
 
 
 @pytest.mark.parametrize(

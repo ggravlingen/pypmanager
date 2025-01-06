@@ -34,7 +34,7 @@ async def test_transaction_registry(
     with (
         patch(
             "pypmanager.ingest.transaction.transaction_registry.TransactionRegistry."
-            "_load_transaction_files",
+            "_async_load_transaction_files",
             return_value=mocked_transactions,
         ),
     ):
@@ -78,7 +78,7 @@ async def test_transaction_registry__async_get_full_portfolio(
     with (
         patch(
             "pypmanager.ingest.transaction.transaction_registry.TransactionRegistry."
-            "_load_transaction_files",
+            "_async_load_transaction_files",
             return_value=mocked_transactions,
         ),
     ):
@@ -109,7 +109,7 @@ async def test_transaction_registry__duplicate_index(
     with (
         patch(
             "pypmanager.ingest.transaction.transaction_registry.TransactionRegistry."
-            "_load_transaction_files",
+            "_async_load_transaction_files",
             return_value=mocked_transactions,
         ),
     ):
@@ -146,7 +146,7 @@ async def test_transaction_registry__all_sold__then_buy(
     with (
         patch(
             "pypmanager.ingest.transaction.transaction_registry.TransactionRegistry."
-            "_load_transaction_files",
+            "_async_load_transaction_files",
             return_value=mocked_transactions,
         ),
     ):
@@ -259,7 +259,7 @@ async def test_transaction_registry__date_filter(
     with (
         patch(
             "pypmanager.ingest.transaction.transaction_registry.TransactionRegistry."
-            "_load_transaction_files",
+            "_async_load_transaction_files",
             return_value=mocked_transactions,
         ),
     ):
@@ -280,7 +280,7 @@ async def test_transaction_registry__date_filter__raises(
     with (
         patch(
             "pypmanager.ingest.transaction.transaction_registry.TransactionRegistry."
-            "_load_transaction_files",
+            "_async_load_transaction_files",
             return_value=mocked_transactions,
         ),
         pytest.raises(ValueError, match="report_date argument must be time zone aware"),
@@ -301,7 +301,7 @@ async def test_transaction_registry__columns(
     with (
         patch(
             "pypmanager.ingest.transaction.transaction_registry.TransactionRegistry."
-            "_load_transaction_files",
+            "_async_load_transaction_files",
             return_value=mocked_transactions,
         ),
     ):

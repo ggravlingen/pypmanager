@@ -5,6 +5,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 import logging
 from pathlib import Path
+from typing import TYPE_CHECKING, Self
 
 import pandas as pd
 
@@ -17,6 +18,9 @@ from .const import (
 )
 
 _LOGGER = logging.getLogger(__package__)
+
+if TYPE_CHECKING:
+    from types import TracebackType
 
 
 def _get_filename(file_path: Path) -> str:
@@ -57,23 +61,22 @@ class TransactionLoader(ABC):
     file_pattern: str
     date_format_pattern: str
 
-    def load(self: TransactionLoader) -> TransactionLoader:
-        """Load data."""
+    async def __aenter__(self) -> Self:
+        """Enter context manager."""
         self.load_data_files()
         self.rename_and_filter()
         self.pre_process_df()
         self.normalize_transaction_date()
         self.validate()
-
         return self
 
-    async def async_load(self: TransactionLoader) -> None:
-        """Load data async."""
-        self.load_data_files()
-        self.rename_and_filter()
-        self.pre_process_df()
-        self.normalize_transaction_date()
-        self.validate()
+    async def __aexit__(  # noqa: B027
+        self: TransactionLoader,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        tb: TracebackType | None,
+    ) -> None:
+        """Exit context manager."""
 
     def load_data_files(self: TransactionLoader) -> None:
         """Parse CSV-files and load them into a data frame."""
