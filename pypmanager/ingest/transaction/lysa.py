@@ -44,7 +44,7 @@ class LysaLoader(TransactionLoader):
     file_pattern = "lysa*.csv"
     date_format_pattern = "%Y-%m-%dT%H:%M:%S.%fZ"
 
-    def pre_process_df(self: LysaLoader) -> None:
+    async def async_pre_process_df(self: LysaLoader) -> None:
         """Load CSV."""
         df_raw = self.df_final
 
