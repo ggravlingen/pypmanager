@@ -64,9 +64,9 @@
     "build-test": "webpack --config webpack/playwright.tsx",
     "build-prod": "find ./static -name '*.js' -exec rm -f {} + && webpack --config webpack/config.production.tsx",
     "test-ci": "jest --ci --reporters=default --reporters=jest-junit --coverage",
-    "cicd-lint": "eslint --flag",
+    "cicd-lint": "eslint",
     "cicd-typecheck": "tsc-strict --project tsconfig.json --noEmit",
-    "fix": "eslint  --flag --fix",
+    "fix": "eslint  --fix",
     "playwright-cicd": "playwright test ./tests/",
     "playwright-server": "node ./tests/server.js",
     "playwright-update-snapshots": "playwright test . --update-snapshots"
