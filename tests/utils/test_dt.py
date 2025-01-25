@@ -57,10 +57,14 @@ def test_get_previous_quarter(report_date: datetime, expected_date: datetime) ->
 @pytest.mark.asyncio
 async def test_async_get_empty_df_with_datetime_index() -> None:
     """Test function async_get_empty_df_with_datetime_index."""
-    result = await async_get_empty_df_with_datetime_index()
-    assert len(result) == 13306
-    assert result.index[0] == datetime(1980, 1, 1, tzinfo=Settings.system_time_zone)
-    assert result.index[-1] == datetime(2030, 12, 31, tzinfo=Settings.system_time_zone)
+    result = await async_get_empty_df_with_datetime_index(
+        start_date=date(2024, 12, 15),
+        end_date=date(2024, 12, 31),
+        market="XNYS",
+    )
+    assert len(result) == 11
+    assert result.index[0] == datetime(2024, 12, 16, tzinfo=Settings.system_time_zone)
+    assert result.index[-1] == datetime(2024, 12, 31, tzinfo=Settings.system_time_zone)
 
 
 @pytest.mark.asyncio

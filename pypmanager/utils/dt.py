@@ -6,6 +6,7 @@ from datetime import date, datetime, timedelta
 from enum import IntEnum
 
 import pandas as pd
+import pandas_market_calendars as mcal
 
 from pypmanager.settings import Settings
 
@@ -74,11 +75,12 @@ async def async_get_last_n_quarters(no_quarters: int) -> list[datetime]:
 async def async_get_empty_df_with_datetime_index(
     start_date: date | None = None,
     end_date: date | None = None,
+    market: str | None = None,
 ) -> pd.DataFrame:
     """
     Return an empty DataFrame with a DatetimeIndex.
 
-    Only weekdays are included in the date range.
+    Adjusts the start and end date to the nearest market open and close.
     """
     if start_date is None:
         start_date = date(1980, 1, 1)
@@ -86,13 +88,23 @@ async def async_get_empty_df_with_datetime_index(
     if end_date is None:
         end_date = date(2030, 12, 31)
 
+    if market is None:
+        market = "XSTO"
+
+    calendar = mcal.get_calendar(market)
+
+    early = calendar.schedule(
+        start_date=start_date,
+        end_date=end_date,
+        tz=Settings.system_time_zone,
+    )
+    new_range = mcal.date_range(
+        early,
+        frequency="1D",
+    ).normalize()  # pylint: disable=no-member
+
     return pd.DataFrame(
-        pd.date_range(
-            start=pd.Timestamp(start_date),
-            end=pd.Timestamp(end_date),
-            freq="B",
-            tz=Settings.system_time_zone,
-        ),
+        new_range,
         columns=["date"],
     ).set_index("date")
 
