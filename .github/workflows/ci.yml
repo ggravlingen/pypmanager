@@ -89,7 +89,7 @@ jobs:
 
       - name: Set up Python ${{ matrix.python-version }}
         id: python
-        uses: actions/setup-python@v5.3.0
+        uses: actions/setup-python@v5.4.0
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -132,7 +132,7 @@ jobs:
           fetch-depth: "2"
       - name: Set up Python ${{ matrix.python-version }}
         id: python
-        uses: actions/setup-python@v5.3.0
+        uses: actions/setup-python@v5.4.0
         with:
           python-version: ${{ matrix.python-version }}
       - name: Restore full Python ${{ steps.python.outputs.python-version }} virtual environment
@@ -179,7 +179,7 @@ jobs:
 
       - name: Set up Python ${{ matrix.python-version }}
         id: python
-        uses: actions/setup-python@v5.3.0
+        uses: actions/setup-python@v5.4.0
         with:
           python-version: ${{ matrix.python-version }}
       - name: Restore full Python ${{ steps.python.outputs.python-version }} virtual environment
@@ -236,7 +236,7 @@ jobs:
         uses: actions/checkout@v4.2.2
 
       - name: Set up Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v4.1.0
+        uses: actions/setup-node@v4.2.0
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -273,7 +273,7 @@ jobs:
         uses: actions/checkout@v4.2.2
 
       - name: Set up Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v4.1.0
+        uses: actions/setup-node@v4.2.0
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -291,7 +291,7 @@ jobs:
         name: Run Playwright tests
         id: playwrightTests
 
-      - uses: actions/upload-artifact@v4.5.0
+      - uses: actions/upload-artifact@v4.6.0
         if: always()
         with:
           path: frontend/test-results/
