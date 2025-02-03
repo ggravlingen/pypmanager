@@ -1829,19 +1829,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/icons-material@npm:6.4.1":
-  version: 6.4.1
-  resolution: "@mui/icons-material@npm:6.4.1"
+"@mui/icons-material@npm:6.4.2":
+  version: 6.4.2
+  resolution: "@mui/icons-material@npm:6.4.2"
   dependencies:
     "@babel/runtime": "npm:^7.26.0"
   peerDependencies:
-    "@mui/material": ^6.4.1
+    "@mui/material": ^6.4.2
     "@types/react": ^17.0.0 || ^18.0.0 || ^19.0.0
     react: ^17.0.0 || ^18.0.0 || ^19.0.0
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 10c0/f551aea11f0c3a6ff0336333e1cf28b69d7965e5984643067e5f8563eabf1434dee910c9b4beb530f785f191b0ec14520d9c41fd8ee6649f4f8d26f831f02ba8
+  checksum: 10c0/b182f0ba58fd400852a4b7e3497f0ad5e6d3051f7a6d1b442e823d04c14f3e1d65958bfe41782573622cb77c4628078fd1f30d262642597c6aa2dca95e1554d7
   languageName: node
   linkType: hard
 
@@ -4683,7 +4683,7 @@ __metadata:
     "@emotion/react": "npm:11.14.0"
     "@emotion/styled": "npm:11.14.0"
     "@eslint/compat": "npm:1.2.6"
-    "@mui/icons-material": "npm:6.4.1"
+    "@mui/icons-material": "npm:6.4.2"
     "@mui/material": "npm:6.4.1"
     "@mui/x-date-pickers": "npm:7.25.0"
     "@playwright/test": "npm:1.50.0"
