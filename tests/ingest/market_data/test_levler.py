@@ -48,7 +48,7 @@ def test_header() -> None:
         lookup_key="535627197",
         name="test",
     )
-    assert loader.headers == {"Content-Type": "application/json"}
+    assert loader.extra_headers == {"Content-Type": "application/json"}
 
 
 @pytest.mark.usefixtures("mock_levler_data_response")

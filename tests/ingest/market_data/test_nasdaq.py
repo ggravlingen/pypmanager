@@ -36,7 +36,9 @@ def test_nasdaq_loader() -> None:
 
         assert loader.raw_response == response_data
         assert loader.source == "Nasdaq"
-        assert loader.headers == {"Content-Type": "application/json; charset=utf-8"}
+        assert loader.extra_headers == {
+            "Content-Type": "application/json; charset=utf-8"
+        }
         assert loader.full_url == (
             "https://api.nasdaq.com/api/nordic/instruments/sample_key/"
             "chart?assetClass=SHARES&lang=en"

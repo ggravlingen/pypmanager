@@ -19,6 +19,8 @@ if TYPE_CHECKING:
 class BaseMarketDataLoader(ABC):
     """Base class for market data loading."""
 
+    TIMEOUT_SECOND = 10
+
     raw_response: dict[str, Any]
     raw_response_io: BytesIO
 
@@ -34,6 +36,25 @@ class BaseMarketDataLoader(ABC):
         self.name = name
 
         self.get_response()
+
+    @property
+    def extra_headers(self: BaseMarketDataLoader) -> dict[str, str] | None:
+        """Return headers."""
+        return None
+
+    @property
+    def headers(self: BaseMarketDataLoader) -> dict[str, str]:
+        """Return headers."""
+        base_headers: dict[str, str] = {
+            "User-Agent": (
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, "
+                "like Gecko) Chrome/58.0.3029.110 Safari/537.3"
+            )
+        }
+        if self.extra_headers:
+            base_headers.update(self.extra_headers)
+
+        return base_headers
 
     def query_endpoint(self: BaseMarketDataLoader) -> dict[str, Any]:
         """Get data endpoint."""
