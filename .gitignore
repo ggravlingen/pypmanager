@@ -137,3 +137,5 @@ dmypy.json
 prof
 
 coverage.json
+
+yfinance.cache

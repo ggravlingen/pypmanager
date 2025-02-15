@@ -9,6 +9,7 @@ from typing import Any
 import requests
 
 from pypmanager.const import HttpStatusCodes
+from pypmanager.error import DataError
 from pypmanager.ingest.market_data.const import LOAD_HISTORY_DAYS
 
 from .base_loader import BaseMarketDataLoader
@@ -62,6 +63,9 @@ class FTLoader(BaseMarketDataLoader):
             data = json.loads(response.text)
 
             self.raw_response = data
+        else:
+            msg = f"Failed to get data {response.text}"
+            raise DataError(msg)
 
     @property
     def source(self: FTLoader) -> str:
