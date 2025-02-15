@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING, Any, Self
 
 import numpy as np
 import pandas as pd
+from requests import HTTPError
 import strawberry
 import yaml
 
@@ -200,7 +201,8 @@ async def async_download_market_data() -> None:
 
             async with UpdateMarketDataCsv(data=data_list, source_name=loader.source):
                 pass
-
+        except HTTPError:
+            LOGGER.exception(f"HTTP error when loading {loader}")
         except AttributeError:
             LOGGER.exception(f"Unable to load {loader}")
 
