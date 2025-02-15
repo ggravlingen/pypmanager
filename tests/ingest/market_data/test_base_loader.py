@@ -35,6 +35,13 @@ class MockMarketDataLoader(BaseMarketDataLoader):
         return []
 
 
+def test_extra_headers() -> None:
+    """Test the extra_headers property."""
+    loader = MockMarketDataLoader(isin_code="test", lookup_key="test")
+
+    assert loader.extra_headers is None
+
+
 @pytest.mark.parametrize(
     ("status_code", "response_text", "expected_result"),
     [

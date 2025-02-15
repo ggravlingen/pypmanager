@@ -17,7 +17,7 @@ class NasdaqLoader(BaseMarketDataLoader):
     )
 
     @property
-    def headers(self: NasdaqLoader) -> dict[str, str]:
+    def extra_headers(self: NasdaqLoader) -> dict[str, str]:
         """Return headers."""
         return {"Content-Type": "application/json; charset=utf-8"}
 

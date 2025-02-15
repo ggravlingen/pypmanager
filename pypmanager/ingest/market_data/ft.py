@@ -21,7 +21,7 @@ class FTLoader(BaseMarketDataLoader):
     full_url = "https://markets.ft.com/data/chartapi/series"
 
     @property
-    def headers(self: FTLoader) -> dict[str, str]:
+    def extra_headers(self: FTLoader) -> dict[str, str] | None:
         """Return headers."""
         return {"Content-Type": "application/json"}
 
@@ -56,7 +56,7 @@ class FTLoader(BaseMarketDataLoader):
             self.full_url,
             data=json.dumps(self.get_payload()),
             headers=self.headers,
-            timeout=10,
+            timeout=self.TIMEOUT_SECOND,
         )
         if response.status_code == HttpStatusCodes.OK:
             data = json.loads(response.text)

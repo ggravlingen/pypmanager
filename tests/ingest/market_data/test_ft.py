@@ -109,7 +109,7 @@ def test_ft_loader__headers() -> None:
         lookup_key="535627197",
         name="test",
     )
-    assert loader.headers == {"Content-Type": "application/json"}
+    assert loader.extra_headers == {"Content-Type": "application/json"}
 
 
 @pytest.mark.usefixtures("mock_ft_data_response")

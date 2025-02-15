@@ -20,7 +20,7 @@ class LevlerLoader(BaseMarketDataLoader):
     full_url = "https://levler.se/api/open/funds/GetFundDetails"
 
     @property
-    def headers(self: LevlerLoader) -> dict[str, str]:
+    def extra_headers(self: LevlerLoader) -> dict[str, str] | None:
         """Return headers."""
         return {"Content-Type": "application/json"}
 
@@ -40,7 +40,7 @@ class LevlerLoader(BaseMarketDataLoader):
             self.full_url,
             data=json.dumps(self.get_payload()),
             headers=self.headers,
-            timeout=10,
+            timeout=self.TIMEOUT_SECOND,
         )
         response.raise_for_status()
         if response.status_code == HttpStatusCodes.OK:
