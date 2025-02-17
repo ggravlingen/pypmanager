@@ -15,9 +15,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.12.11":
-  version: 3.12.11
-  resolution: "@apollo/client@npm:3.12.11"
+"@apollo/client@npm:3.13.1":
+  version: 3.13.1
+  resolution: "@apollo/client@npm:3.13.1"
   dependencies:
     "@graphql-typed-document-node/core": "npm:^3.1.1"
     "@wry/caches": "npm:^1.0.0"
@@ -47,7 +47,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 10c0/405a7a933375d584be76971253d774e521520c553ed0dee7eb8dbd1b95f7db13fdd3f828b63a12143abbaf46fa75a87a6b856c16cd82e36d008fe2b3ec7cc5f2
+  checksum: 10c0/50e65f9b12e82159d50feb6ad356bbc9dc871f04d930954b3fa299d63d0d578f1be95377d2961572907e56aeaa2b7e36c1c8a6d1287ce1a85cf454ee528f1d00
   languageName: node
   linkType: hard
 
@@ -4688,7 +4688,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "frontend-2@workspace:."
   dependencies:
-    "@apollo/client": "npm:3.12.11"
+    "@apollo/client": "npm:3.13.1"
     "@babel/core": "npm:7.26.8"
     "@babel/preset-env": "npm:7.26.8"
     "@babel/preset-react": "npm:7.26.3"
