@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+from asyncio import sleep
 from dataclasses import dataclass
 from datetime import UTC, date, datetime
 import logging
+from random import randint
 from typing import TYPE_CHECKING, Any, Self
 
 import numpy as np
@@ -205,6 +207,10 @@ async def async_download_market_data() -> None:
             LOGGER.exception(f"HTTP error when loading {loader}")
         except AttributeError:
             LOGGER.exception(f"Unable to load {loader}")
+
+        # Sleep for a random amount of time between 1 and 5 seconds to avoid spamming
+        # APIs
+        await sleep(randint(1, 5))  # noqa: S311
 
 
 class UpdateMarketDataCsv:
