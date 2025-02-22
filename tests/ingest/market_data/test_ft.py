@@ -93,7 +93,7 @@ def mock_ft_data_response() -> Generator[None]:
         ],
     }
     with mock.patch(
-        "pypmanager.ingest.market_data.base_loader.requests.post",
+        "pypmanager.ingest.market_data.base_loader.requests.Session.post",
     ) as mock_get:
         mock_response = mock_get.return_value
         mock_response.status_code = HttpStatusCodes.OK
