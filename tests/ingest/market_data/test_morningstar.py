@@ -40,7 +40,7 @@ def mock_morningstar_data_response() -> Generator[None]:
         }
     }
     with mock.patch(
-        "pypmanager.ingest.market_data.base_loader.requests.get",
+        "pypmanager.ingest.market_data.base_loader.requests.Session.get",
     ) as mock_get:
         mock_response = mock_get.return_value
         mock_response.status_code = HttpStatusCodes.OK
@@ -52,7 +52,7 @@ def mock_morningstar_data_response() -> Generator[None]:
 def mock_morningstar_shb_data_response() -> Generator[None]:
     """Mock response."""
     with mock.patch(
-        "pypmanager.ingest.market_data.base_loader.requests.get",
+        "pypmanager.ingest.market_data.base_loader.requests.Session.get",
     ) as mock_get:
         mock_response = mock_get.return_value
         mock_response.status_code = HttpStatusCodes.OK

@@ -55,7 +55,9 @@ def test_query_endpoint(
     """Test the query_endpoint method."""
     loader = MockMarketDataLoader(isin_code="test", lookup_key="test")
 
-    with patch("requests.get") as mock_get:
+    with patch(
+        "pypmanager.ingest.market_data.base_loader.requests.Session.get"
+    ) as mock_get:
         mock_response = Mock()
         mock_response.status_code = status_code
         mock_response.text = response_text
