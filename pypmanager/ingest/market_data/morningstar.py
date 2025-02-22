@@ -6,7 +6,6 @@ from datetime import UTC, datetime, timedelta
 from io import BytesIO
 
 import pandas as pd
-import requests
 
 from pypmanager.const import HttpStatusCodes
 
@@ -84,7 +83,7 @@ class MorningstarLoaderSHB(BaseMarketDataLoader):
 
     def get_response(self: MorningstarLoaderSHB) -> None:
         """Get reqponse."""
-        response = requests.get(self.full_url, timeout=10)
+        response = self.session.get(self.full_url, timeout=self.TIMEOUT_SECOND)
         response.raise_for_status()
 
         if response.status_code == HttpStatusCodes.OK:

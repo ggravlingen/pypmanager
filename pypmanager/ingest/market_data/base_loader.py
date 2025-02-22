@@ -35,6 +35,10 @@ class BaseMarketDataLoader(ABC):
         self.lookup_key = lookup_key
         self.name = name
 
+        # Create a session and add headers
+        self.session = requests.Session()
+        self.session.headers.update(self.headers)
+
         self.get_response()
 
     @property
@@ -58,7 +62,7 @@ class BaseMarketDataLoader(ABC):
 
     def query_endpoint(self: BaseMarketDataLoader) -> dict[str, Any]:
         """Get data endpoint."""
-        response = requests.get(self.full_url, timeout=10)
+        response = self.session.get(self.full_url, timeout=self.TIMEOUT_SECOND)
         response.raise_for_status()
 
         if response.status_code == HttpStatusCodes.OK:
