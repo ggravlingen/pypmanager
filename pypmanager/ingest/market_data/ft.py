@@ -6,8 +6,6 @@ from datetime import datetime
 import json
 from typing import Any
 
-import requests
-
 from pypmanager.const import HttpStatusCodes
 from pypmanager.error import DataError
 from pypmanager.ingest.market_data.const import LOAD_HISTORY_DAYS
@@ -53,10 +51,9 @@ class FTLoader(BaseMarketDataLoader):
 
     def get_response(self: FTLoader) -> None:
         """Get reqponse."""
-        response = requests.post(
+        response = self.session.post(
             self.full_url,
             data=json.dumps(self.get_payload()),
-            headers=self.headers,
             timeout=self.TIMEOUT_SECOND,
         )
         if response.status_code == HttpStatusCodes.OK:

@@ -5,8 +5,7 @@ from __future__ import annotations
 from datetime import datetime
 import json
 from typing import Any
-
-import requests
+from urllib.parse import urlparse
 
 from pypmanager.const import HttpStatusCodes
 
@@ -36,10 +35,14 @@ class LevlerLoader(BaseMarketDataLoader):
 
     def get_response(self: LevlerLoader) -> None:
         """Get reqponse."""
-        response = requests.post(
+        # Make an initial request to set the a session cookie
+        parsed_url = urlparse(self.full_url)
+        base_url: str = f"{parsed_url.scheme}://{parsed_url.netloc}"
+        self.session.get(base_url, timeout=self.TIMEOUT_SECOND)
+
+        response = self.session.post(
             self.full_url,
             data=json.dumps(self.get_payload()),
-            headers=self.headers,
             timeout=self.TIMEOUT_SECOND,
         )
         response.raise_for_status()

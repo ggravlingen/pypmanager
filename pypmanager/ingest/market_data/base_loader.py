@@ -35,6 +35,10 @@ class BaseMarketDataLoader(ABC):
         self.lookup_key = lookup_key
         self.name = name
 
+        # Create a session and add headers
+        self.session = requests.Session()
+        self.session.headers.update(self.headers)
+
         self.get_response()
 
     @property
@@ -49,8 +53,16 @@ class BaseMarketDataLoader(ABC):
             "User-Agent": (
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, "
                 "like Gecko) Chrome/58.0.3029.110 Safari/537.3"
-            )
+            ),
+            "Accept": (
+                "text/html,application/xhtml+xml,application/xml;q=0.9,"
+                "image/webp,*/*;q=0.8"
+            ),
+            "Accept-Language": "en-US,en;q=0.5",
+            "Connection": "keep-alive",
         }
+        # Optional extra headers
+        # Should overwrite base headers if key is the same
         if self.extra_headers:
             base_headers.update(self.extra_headers)
 
@@ -58,7 +70,7 @@ class BaseMarketDataLoader(ABC):
 
     def query_endpoint(self: BaseMarketDataLoader) -> dict[str, Any]:
         """Get data endpoint."""
-        response = requests.get(self.full_url, timeout=10)
+        response = self.session.get(self.full_url, timeout=self.TIMEOUT_SECOND)
         response.raise_for_status()
 
         if response.status_code == HttpStatusCodes.OK:
