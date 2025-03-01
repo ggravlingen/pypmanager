@@ -165,7 +165,7 @@ async def async_get_market_data_overview() -> list[MarketDataOverviewRecord]:
     return sorted(output_data, key=lambda x: x.name if x.name else "")
 
 
-def _class_importer(name: str) -> type | None:
+def _class_importer(name: str) -> type[BaseMarketDataLoader] | None:
     """Load a class from a string representing a fully qualified class name."""
     # Split the class path into its individual components.
     components = name.split(".")
@@ -207,7 +207,7 @@ async def async_download_market_data() -> None:
             continue
 
         try:
-            loader: BaseMarketDataLoader = data_loader_klass(
+            loader = data_loader_klass(
                 lookup_key=source.lookup_key,
                 isin_code=source.isin_code,
                 name=source.name,
