@@ -21,7 +21,7 @@ class Source(BaseModel):
 
     isin_code: str
     loader_class: str
-    lookup_key: str | None = None
+    lookup_key: str
     name: str | None = None
 
 

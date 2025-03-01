@@ -5,9 +5,10 @@ from __future__ import annotations
 from asyncio import sleep
 from dataclasses import dataclass
 from datetime import UTC, date, datetime
+from importlib import import_module
 import logging
 from random import randint
-from typing import TYPE_CHECKING, Any, Self
+from typing import TYPE_CHECKING, Self, cast
 
 import numpy as np
 import pandas as pd
@@ -164,18 +165,22 @@ async def async_get_market_data_overview() -> list[MarketDataOverviewRecord]:
     return sorted(output_data, key=lambda x: x.name if x.name else "")
 
 
-def _class_importer(name: str) -> Any:  # noqa: ANN401
+def _class_importer(name: str) -> type[BaseMarketDataLoader] | None:
     """Load a class from a string representing a fully qualified class name."""
     # Split the class path into its individual components.
     components = name.split(".")
     class_name = components.pop()
     module_name = ".".join(components)
 
-    # Dynamically load the module.
-    module = __import__(module_name, fromlist=[class_name])
+    try:
+        module = import_module(module_name)
+        return cast(type, getattr(module, class_name))
+    except ModuleNotFoundError:
+        LOGGER.exception(f"Module '{module_name}' not found.")
+    except AttributeError:
+        LOGGER.exception(f"Class '{class_name}' not found in module '{module_name}")
 
-    # Get the class from the module.
-    return getattr(module, class_name)
+    return None
 
 
 async def async_download_market_data() -> None:
@@ -183,9 +188,14 @@ async def async_download_market_data() -> None:
     sources = await async_load_market_data_config()
 
     for idx, source in enumerate(sources):
-        LOGGER.info(f"{idx}: Parsing {source.isin_code} using {source.loader_class}")
+        loader_class = source.loader_class
+        LOGGER.info(f"{idx}: Parsing {source.isin_code} using {loader_class}")
 
-        loader_class_full_path = f"pypmanager.ingest.market_data.{source.loader_class}"
+        if "plugin" in loader_class:
+            LOGGER.info(f"Using plugin {loader_class}")
+            loader_class_full_path = loader_class.replace("plugin", "pypmanager_plugin")
+        else:
+            loader_class_full_path = f"pypmanager.ingest.market_data.{loader_class}"
 
         try:
             data_loader_klass = _class_importer(loader_class_full_path)
@@ -193,8 +203,11 @@ async def async_download_market_data() -> None:
             msg = "Unable to load data"
             raise DataError(msg, err) from err
 
+        if data_loader_klass is None:
+            continue
+
         try:
-            loader: BaseMarketDataLoader = data_loader_klass(
+            loader = data_loader_klass(
                 lookup_key=source.lookup_key,
                 isin_code=source.isin_code,
                 name=source.name,

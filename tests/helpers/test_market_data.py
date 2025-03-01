@@ -149,6 +149,28 @@ def test_class_importer() -> None:
     assert isinstance(instance, datetime) is True
 
 
+def test_class_importer_module_not_found() -> None:
+    """Test function _class_importer with a non-existent module."""
+    class_name = "nonexistent.module.ClassName"
+
+    # Use the _class_importer function to load the class
+    loaded_class = _class_importer(class_name)
+
+    # Verify that the loaded class is None
+    assert loaded_class is None
+
+
+def test_class_importer_class_not_found() -> None:
+    """Test function _class_importer with a non-existent class."""
+    class_name = "datetime.NonExistentClass"
+
+    # Use the _class_importer function to load the class
+    loaded_class = _class_importer(class_name)
+
+    # Verify that the loaded class is None
+    assert loaded_class is None
+
+
 @pytest.mark.asyncio
 async def test_async_get_last_market_data_df(
     market_data_factory: type[MarketDataFactory],
