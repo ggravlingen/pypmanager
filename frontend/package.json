@@ -6,7 +6,7 @@
   "type": "module",
   "sideEffects": false,
   "dependencies": {
-    "@apollo/client": "3.13.1",
+    "@apollo/client": "3.13.3",
     "@babel/core": "7.26.9",
     "@babel/preset-env": "7.26.9",
     "@babel/preset-react": "7.26.3",
