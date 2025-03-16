@@ -8,6 +8,7 @@ updates:
     groups:
       github-workflows:
         patterns:
+          - "docker/*"
           - "actions/*"
           - "github/*"
           - "release-drafter/*"
@@ -40,13 +41,18 @@ updates:
       eslint:
         patterns:
           - "@typescript-eslint*"
+          - "@eslint*"
           - "eslint*"
       mui:
         patterns:
           - "@mui*"
       babel:
         patterns:
+          - "babel*"
           - "@babel*"
       webpack:
         patterns:
-          - "@webpack*"
+          - "webpack*"
+      emotion:
+        patterns:
+          - "@emotion*"
