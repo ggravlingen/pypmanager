@@ -40,7 +40,7 @@ class Holding:
     pnl_unrealized: float | None = None
 
 
-async def async_async_get_holdings() -> list[Holding]:
+async def async_get_holdings() -> list[Holding]:
     """Get a list of current holdings, including current market value."""
     output_data: list[Holding] = []
 
