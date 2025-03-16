@@ -3,8 +3,15 @@
 This repository holds the Pypmanager, a Python 3- and React-based application for displaying
 financial portfolio data.
 
+## Software context
+This software ingests a user's portfolio through transactions defined by CSV files. The files
+are parsed in to a transaction registry, which is used to calculate various portfolio metrics.
+
+When suggesting code:
+- Use variable names and logic that makes sense in a trading context.
+
 ## Co-pilot chat
-- When being asked about specific lines, only return the relevant code, not all the code in the file.
+- Unless specifically instructed, when being asked about specific lines, only return the relevant code, not all the code in the file.
 
 ## Backend: Python
 - Python code must be compatible with Python 3.13
@@ -19,6 +26,9 @@ financial portfolio data.
   - Linting: PyLint and Ruff
   - Type checking: MyPy
   - Testing: pytest with plain functions and fixtures
+- Server
+  - We use FastAPI and uvicorn as the server.
+  - We use strawberry to serve a GraphQL API.
 - Inline code documentation:
   - File headers should be short and concise:
     ```python
