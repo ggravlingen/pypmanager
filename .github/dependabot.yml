@@ -8,6 +8,7 @@ updates:
     groups:
       github-workflows:
         patterns:
+          - "docker/*"
           - "actions/*"
           - "github/*"
           - "release-drafter/*"
