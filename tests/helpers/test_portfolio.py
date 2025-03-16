@@ -9,7 +9,7 @@ from unittest.mock import patch
 import pytest
 
 from pypmanager.helpers.portfolio import (
-    async_async_get_holdings,
+    async_get_holdings,
 )
 from pypmanager.settings import Settings
 
@@ -18,11 +18,11 @@ if TYPE_CHECKING:
 
 
 @pytest.mark.asyncio
-async def test_async_async_get_holdings(
+async def test_async_get_holdings(
     data_factory: type[DataFactory],
     market_data_factory: type[MarketDataFactory],
 ) -> None:
-    """Test async_async_get_holdings_v2."""
+    """Test async_get_holdings."""
     factory = data_factory()
     mocked_market_data = (
         market_data_factory().add(
@@ -59,7 +59,7 @@ async def test_async_async_get_holdings(
             return_value=mocked_market_data,
         ),
     ):
-        result = await async_async_get_holdings()
+        result = await async_get_holdings()
         # One security has been sold so there should only be one holding
         assert len(result) == 2
 
