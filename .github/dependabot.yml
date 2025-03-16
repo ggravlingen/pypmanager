@@ -41,6 +41,7 @@ updates:
       eslint:
         patterns:
           - "@typescript-eslint*"
+          - "@eslint*"
           - "eslint*"
       mui:
         patterns:
@@ -51,4 +52,7 @@ updates:
           - "@babel*"
       webpack:
         patterns:
-          - "@webpack*"
+          - "webpack*"
+      emotion:
+        patterns:
+          - "@emotion*"
