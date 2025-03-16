@@ -37,3 +37,16 @@ updates:
           - "react-dom"
           - "@types/react"
           - "@types/react-dom"
+      eslint:
+        patterns:
+          - "@typescript-eslint*"
+          - "eslint*"
+      mui:
+        patterns:
+          - "@mui*"
+      babel:
+        patterns:
+          - "@babel*"
+      webpack:
+        patterns:
+          - "@webpack*"
