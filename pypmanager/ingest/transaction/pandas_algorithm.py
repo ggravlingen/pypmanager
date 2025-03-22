@@ -33,7 +33,7 @@ class PandasAlgorithm:
             and TransactionRegistryColNameValues.SOURCE_OTHER_CASH_FLOW.value in row
         ):
             return cast(
-                float,
+                "float",
                 row[TransactionRegistryColNameValues.SOURCE_OTHER_CASH_FLOW.value],
             )
 
@@ -43,7 +43,7 @@ class PandasAlgorithm:
         ):
             return None
 
-        price = cast(float, row[TransactionRegistryColNameValues.SOURCE_PRICE.value])
+        price = cast("float", row[TransactionRegistryColNameValues.SOURCE_PRICE.value])
 
         # Return turnover for buy transactions (negative cash flow for us)
         if (
@@ -52,7 +52,7 @@ class PandasAlgorithm:
         ):
             return (
                 cast(
-                    float,
+                    "float",
                     abs(row[TransactionRegistryColNameValues.SOURCE_VOLUME.value]),
                 )
                 * -1.0
@@ -62,7 +62,7 @@ class PandasAlgorithm:
         # Sell
         return (
             cast(
-                float,
+                "float",
                 abs(row[TransactionRegistryColNameValues.SOURCE_VOLUME.value]),
             )
             * price
@@ -73,7 +73,7 @@ class PandasAlgorithm:
         """Calculate nominal total cash flow, including fees, for a transaction."""
         if (
             turnover_or_other_cf := cast(
-                float | None,
+                "float | None",
                 row[TransactionRegistryColNameValues.CALC_TURNOVER_OR_OTHER_CF.value],
             )
         ) is None:
@@ -83,7 +83,7 @@ class PandasAlgorithm:
             commission = 0.0
         else:
             commission = cast(
-                float, row[TransactionRegistryColNameValues.SOURCE_FEE.value]
+                "float", row[TransactionRegistryColNameValues.SOURCE_FEE.value]
             )
 
         return turnover_or_other_cf + commission
@@ -93,7 +93,7 @@ class PandasAlgorithm:
         """Calculate nominal total cash flow, excluding fees, for a transaction."""
         if (
             turnover_or_other_cf := cast(
-                float | None,
+                "float | None",
                 row[TransactionRegistryColNameValues.CALC_TURNOVER_OR_OTHER_CF.value],
             )
         ) is None:
@@ -143,7 +143,7 @@ class PandasAlgorithm:
         else:
             amount = abs(amount)
 
-        return cast(float, amount)
+        return cast("float", amount)
 
     @staticmethod
     def normalize_no_traded(row: pd.DataFrame) -> float:
@@ -154,7 +154,7 @@ class PandasAlgorithm:
         the direction of the flow.
         """
         no_traded = cast(
-            float, row[TransactionRegistryColNameValues.SOURCE_VOLUME.value]
+            "float", row[TransactionRegistryColNameValues.SOURCE_VOLUME.value]
         )
 
         return abs(no_traded)
@@ -167,7 +167,7 @@ class PandasAlgorithm:
         ):
             return 1.00
 
-        return cast(float, row[TransactionRegistryColNameValues.SOURCE_FX.value])
+        return cast("float", row[TransactionRegistryColNameValues.SOURCE_FX.value])
 
     @staticmethod
     def calculate_adjusted_price_per_unit(group: pd.DataFrame) -> pd.DataFrame:
@@ -287,7 +287,7 @@ class PandasAlgorithm:
         ):
             return None
 
-        return cast(float, row[TransactionRegistryColNameValues.PRICE_PER_UNIT.value])
+        return cast("float", row[TransactionRegistryColNameValues.PRICE_PER_UNIT.value])
 
     @staticmethod
     def cleanup_quantity_held(row: pd.DataFrame) -> float | None:
@@ -301,7 +301,7 @@ class PandasAlgorithm:
             return None
 
         return cast(
-            float, row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
+            "float", row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value]
         )
 
 
@@ -369,7 +369,7 @@ class PandasAlgorithmPnL:
             pnl_trade = 0.0
         else:
             pnl_trade = cast(
-                float, row[TransactionRegistryColNameValues.CALC_PNL_TRADE.value]
+                "float", row[TransactionRegistryColNameValues.CALC_PNL_TRADE.value]
             )
 
         if (
@@ -379,7 +379,7 @@ class PandasAlgorithmPnL:
             pnl_dividend = 0.0
         else:
             pnl_dividend = cast(
-                float, row[TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value]
+                "float", row[TransactionRegistryColNameValues.CALC_PNL_DIVIDEND.value]
             )
 
         return pnl_dividend + pnl_trade

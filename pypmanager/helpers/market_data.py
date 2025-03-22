@@ -174,7 +174,7 @@ def _class_importer(name: str) -> type[BaseMarketDataLoader] | None:
 
     try:
         module = import_module(module_name)
-        return cast(type, getattr(module, class_name))
+        return cast("type", getattr(module, class_name))
     except ModuleNotFoundError:
         LOGGER.exception(f"Module '{module_name}' not found.")
     except AttributeError:

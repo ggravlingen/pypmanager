@@ -28,7 +28,7 @@ app = FastAPI(lifespan=async_lifespan)
 
 TypeGraphQL = Callable[[Request], Awaitable[Response] | Response]
 
-app.add_route("/graphql", cast(TypeGraphQL, graphql_app))
+app.add_route("/graphql", cast("TypeGraphQL", graphql_app))
 
 app.mount("/static", StaticFiles(directory=Settings.dir_static), name="static")
 

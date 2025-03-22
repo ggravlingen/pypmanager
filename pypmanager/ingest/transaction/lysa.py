@@ -30,7 +30,7 @@ def _replace_fee_name(row: pd.DataFrame) -> str:
     ):
         return "Lysa management fee"
 
-    return cast(str, row[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY])
+    return cast("str", row[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY])
 
 
 class LysaLoader(TransactionLoader):
