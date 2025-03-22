@@ -35,7 +35,7 @@ class SecurityHoldingHistoryPandasAlgorithm:
         """Test."""
         if row[TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value] > 0:
             return cast(
-                float,
+                "float",
                 row[TransactionRegistryColNameValues.PRICE_PER_UNIT.value],
             )
 

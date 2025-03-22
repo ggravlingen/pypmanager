@@ -82,4 +82,4 @@ class Query:
     ) -> SecurityDataResponse | None:
         """Return information about a security."""
         all_security = await async_security_map_isin_to_security()
-        return cast(SecurityDataResponse | None, all_security.get(isin_code))
+        return cast("SecurityDataResponse | None", all_security.get(isin_code))

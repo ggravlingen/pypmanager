@@ -66,7 +66,7 @@ class BaseMarketDataLoader(ABC):
         response.raise_for_status()
 
         if response.status_code == HttpStatusCodes.OK:
-            return cast(dict[str, Any], json.loads(response.text))
+            return cast("dict[str, Any]", json.loads(response.text))
 
         return {}
 

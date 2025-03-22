@@ -20,7 +20,7 @@ def _replace_fee_name(row: pd.Series) -> str:
     ):
         return "SAVR management fee"
 
-    return cast(str, row[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY])
+    return cast("str", row[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY])
 
 
 class GenericLoader(TransactionLoader):
