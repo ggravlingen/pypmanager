@@ -297,7 +297,7 @@ class UpdateMarketDataCsv:
         )
 
         # Convert possible categorical to string for sorting if needed
-        if isinstance(df_final_output["isin_code"], pd.CategoricalDtype):
+        if isinstance(df_final_output["isin_code"].dtype, pd.CategoricalDtype):
             df_final_output["isin_code"] = df_final_output["isin_code"].astype(str)
 
         # Ensure report_date is properly formatted for sorting
