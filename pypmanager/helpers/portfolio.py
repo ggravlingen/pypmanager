@@ -12,7 +12,7 @@ import strawberry
 from pypmanager.ingest.transaction.const import TransactionRegistryColNameValues
 from pypmanager.ingest.transaction.transaction_registry import TransactionRegistry
 
-from .income_statement import async_pnl_map_isin_to_pnl_data
+from .income_statement import PnLData, async_pnl_map_isin_to_pnl_data
 from .market_data import async_get_last_market_data_df
 
 LOGGER = logging.getLogger(__package__)
@@ -40,10 +40,18 @@ class Holding:
     pnl_unrealized: float | None = None
 
 
-async def async_get_holdings() -> list[Holding]:
-    """Get a list of current holdings, including current market value."""
-    output_data: list[Holding] = []
+async def async_get_holdings_base() -> tuple[
+    pd.DataFrame, pd.DataFrame, dict[str, PnLData], pd.DataFrame
+]:
+    """Get base data needed for holdings calculations.
 
+    Returns:
+        Tuple containing:
+        - Full portfolio dataframe
+        - All transactions dataframe
+        - PnL data mapping
+        - Market data dataframe
+    """
     # Fetch transaction data
     async with TransactionRegistry() as registry_obj:
         df_transaction_registry_full_portfolio = (
@@ -51,12 +59,32 @@ async def async_get_holdings() -> list[Holding]:
         )
         df_transaction_registry_all = await registry_obj.async_get_registry()
 
-    # Calculate PnL data
-    pnl_map_isin_to_pnl_data = await async_pnl_map_isin_to_pnl_data(
-        df_transaction_registry_all=df_transaction_registry_all
-    )
+        # Calculate PnL data
+        pnl_map_isin_to_pnl_data = await async_pnl_map_isin_to_pnl_data(
+            df_transaction_registry_all=df_transaction_registry_all
+        )
 
-    df_market_data = await async_get_last_market_data_df()
+        # Get market data
+        df_market_data = await async_get_last_market_data_df()
+
+        return (
+            df_transaction_registry_full_portfolio,
+            df_transaction_registry_all,
+            pnl_map_isin_to_pnl_data,
+            df_market_data,
+        )
+
+
+async def async_get_holdings() -> list[Holding]:
+    """Get a list of current holdings, including current market value."""
+    output_data: list[Holding] = []
+
+    (
+        df_transaction_registry_full_portfolio,
+        _,
+        pnl_map_isin_to_pnl_data,
+        df_market_data,
+    ) = await async_get_holdings_base()
 
     for _, row in df_transaction_registry_full_portfolio.iterrows():
         # We only want to include securities with an ISIN code
