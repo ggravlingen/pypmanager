@@ -181,7 +181,7 @@ async def async_get_holding_by_isin(isin_code: str) -> Holding | None:
     average_cost = None if pd.isna(average_cost) else average_cost
 
     invested_amount = (
-        None if not no_units or not average_cost else no_units * average_cost
+        None if no_units is None or average_cost is None else no_units * average_cost
     )
 
     if filtered_market_data.empty:
