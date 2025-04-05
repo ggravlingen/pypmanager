@@ -169,6 +169,25 @@ async def test_graphql_query__chart_history() -> None:
 
 
 @pytest.mark.asyncio
+@pytest.mark.usefixtures("_mock_transaction_list_graphql")
+@pytest.mark.usefixtures("_mock_market_data_graphql")
+async def test_graphql_query__get_my_holding() -> None:
+    """Test query chartHistory."""
+    query = """
+    query ($isinCode: String!) {
+        getMyHolding(isinCode: $isinCode) {
+            name
+        }
+    }
+    """
+    variables = {"isinCode": "US1234567890"}
+    response = client.post("/graphql", json={"query": query, "variables": variables})
+
+    assert response.status_code == 200
+    assert response.json()["data"]["getMyHolding"] is not None
+
+
+@pytest.mark.asyncio
 @pytest.mark.usefixtures("_mock_market_data_graphql")
 async def test_graphql_query__market_data_overview() -> None:
     """Test query chartHistory."""

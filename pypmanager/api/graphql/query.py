@@ -18,7 +18,11 @@ from pypmanager.helpers.market_data import (
     MarketDataOverviewRecord,
     async_get_market_data_overview,
 )
-from pypmanager.helpers.portfolio import Holding, async_get_holdings
+from pypmanager.helpers.portfolio import (
+    Holding,
+    async_get_holding_by_isin,
+    async_get_holdings,
+)
 from pypmanager.helpers.transaction import TransactionRow, async_get_all_transactions
 from pypmanager.ingest.transaction.transaction_registry import TransactionRegistry
 
@@ -67,6 +71,11 @@ class Query:
             start_date=calc_start_date,
             end_date=calc_end_date,
         )
+
+    @strawberry.field
+    async def get_my_holding(self: Query, isin_code: str) -> Holding | None:
+        """Return a holding by ISIN code."""
+        return await async_get_holding_by_isin(isin_code=isin_code)
 
     @strawberry.field
     async def market_data_overview(
