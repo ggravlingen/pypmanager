@@ -113,3 +113,12 @@ async def test_async_get_holding_by_isin() -> None:
     assert result.market_value_date == date(2021, 1, 1)
     assert result.cost_base_average == 10.0
     assert result.quantity_held == 10.0
+
+
+@pytest.mark.asyncio
+async def test_async_get_holding_by_isin__none() -> None:
+    """Test async_get_holding_by_isin for None."""
+    result = await async_get_holding_by_isin(
+        isin_code="US1234567891",
+    )
+    assert result is None
