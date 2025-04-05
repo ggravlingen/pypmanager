@@ -1,4 +1,4 @@
-export interface PortfolioContentRow {
+export interface Holding {
   name?: string;
   isinCode?: string | null;
   quantityHeld?: number | null;

@@ -1,4 +1,4 @@
-import type { PortfolioContentRow } from "@Api";
+import type { Holding } from "@Api";
 import { LocalApolloClient } from "@Api";
 import type { QueryHookOptions, QueryResult } from "@apollo/client";
 import { useQuery } from "@apollo/client";
@@ -24,7 +24,7 @@ const QUERY = gql`
 `;
 
 interface PortfolioHoldings {
-  currentPortfolio: PortfolioContentRow[];
+  currentPortfolio: Holding[];
 }
 
 /**
