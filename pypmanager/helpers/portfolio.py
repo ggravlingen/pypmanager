@@ -59,20 +59,20 @@ async def async_get_holdings_base() -> tuple[
         )
         df_transaction_registry_all = await registry_obj.async_get_registry()
 
-    # Calculate PnL data
-    pnl_map_isin_to_pnl_data = await async_pnl_map_isin_to_pnl_data(
-        df_transaction_registry_all=df_transaction_registry_all
-    )
+        # Calculate PnL data
+        pnl_map_isin_to_pnl_data = await async_pnl_map_isin_to_pnl_data(
+            df_transaction_registry_all=df_transaction_registry_all
+        )
 
-    # Get market data
-    df_market_data = await async_get_last_market_data_df()
+        # Get market data
+        df_market_data = await async_get_last_market_data_df()
 
-    return (
-        df_transaction_registry_full_portfolio,
-        df_transaction_registry_all,
-        pnl_map_isin_to_pnl_data,
-        df_market_data,
-    )
+        return (
+            df_transaction_registry_full_portfolio,
+            df_transaction_registry_all,
+            pnl_map_isin_to_pnl_data,
+            df_market_data,
+        )
 
 
 async def async_get_holdings() -> list[Holding]:
