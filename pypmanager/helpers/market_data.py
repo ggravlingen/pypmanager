@@ -174,7 +174,7 @@ def _class_importer(name: str) -> type[BaseMarketDataLoader] | None:
 
     try:
         module = import_module(module_name)
-        return cast(type, getattr(module, class_name))
+        return cast("type", getattr(module, class_name))
     except ModuleNotFoundError:
         LOGGER.exception(f"Module '{module_name}' not found.")
     except AttributeError:
@@ -295,6 +295,16 @@ class UpdateMarketDataCsv:
         df_final_output = df_final_output.drop_duplicates(
             subset=["isin_code", "report_date"], keep="last"
         )
+
+        # Convert possible categorical to string for sorting if needed
+        if pd.api.types.is_categorical_dtype(df_final_output["isin_code"]):
+            df_final_output["isin_code"] = df_final_output["isin_code"].astype(str)
+
+        # Ensure report_date is properly formatted for sorting
+        if not pd.api.types.is_datetime64_dtype(df_final_output["report_date"]):
+            df_final_output["report_date"] = pd.to_datetime(
+                df_final_output["report_date"]
+            )
 
         df_final_output = df_final_output.sort_values(["isin_code", "report_date"])
 

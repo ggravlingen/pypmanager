@@ -3,13 +3,15 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import cast
+from typing import TYPE_CHECKING, cast
 
 import numpy as np
-import pandas as pd
 import strawberry
 
 from pypmanager.ingest.transaction.const import TransactionRegistryColNameValues
+
+if TYPE_CHECKING:
+    import pandas as pd
 
 
 @dataclass
@@ -33,7 +35,7 @@ async def async_pnl_map_isin_to_pnl_data(
     """
     # Group data and sum pnl_realized and pnl_unrealized by isin_code
     df_pnl = cast(
-        pd.DataFrame,
+        "pd.DataFrame",
         df_transaction_registry_all.groupby(
             TransactionRegistryColNameValues.SOURCE_ISIN.value
         )

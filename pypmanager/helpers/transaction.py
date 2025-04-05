@@ -67,7 +67,7 @@ async def async_get_all_transactions() -> list[TransactionRow]:
                 broker=row[TransactionRegistryColNameValues.SOURCE_BROKER.value],
                 source=row[TransactionRegistryColNameValues.SOURCE_FILE.value],
                 action=cast(
-                    str,
+                    "str",
                     row[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value],
                 ).capitalize(),
                 name=row[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY.value],

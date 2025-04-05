@@ -9,16 +9,16 @@ dynamic = ['version']
 dependencies    = [
   "apscheduler==3.11.0",
   "colorlog==6.9.0",
-  "fastapi==0.115.11",
+  "fastapi==0.115.12",
   "lxml==5.3.1",
   "openpyxl==3.1.5",
   "pandas==2.2.3",
   "pandas_market_calendars==4.6.1",
   "pyarrow==19.0.1",
-  "pydantic==2.10.6",
+  "pydantic==2.11.1",
   "pydantic-settings==2.8.1",
   "requests==2.32.3",
-  "strawberry_graphql[debug-server]==0.262.5",
+  "strawberry_graphql[debug-server]==0.262.6",
   "uvicorn[standard]==0.34.0",
 ]
 
@@ -27,17 +27,17 @@ test = [
   "asgiref==3.8.1",
   "httpx==0.28.1",
   "mypy_dev==1.16.0a3",
-  "pre-commit==4.1.0",
-  "pylint==3.3.4",
+  "pre-commit==4.2.0",
+  "pylint==3.3.6",
   "pytest==8.3.5",
-  "pytest-asyncio==0.25.3",
+  "pytest-asyncio==0.26.0",
   "pytest-cov==6.0.0",
   "pytest-freezer==0.4.9",
   "pytest-profiling==1.8.1",
   "pytest-timeout==2.3.1",
-  "ruff==0.11.0",
-  "types_PyYAML==6.0.12.20241230",
-  "types_requests==2.32.0.20250306",
+  "ruff==0.11.2",
+  "types_PyYAML==6.0.12.20250326",
+  "types_requests==2.32.0.20250328",
 ]
 
 [tool.setuptools]
