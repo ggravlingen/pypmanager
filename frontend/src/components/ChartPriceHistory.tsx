@@ -1,4 +1,4 @@
-import type { SecurityInfo } from "@Api";
+import type { Holding, SecurityInfo } from "@Api";
 import { QueryLoader, useQueryChartHistory } from "@Api";
 import { LocalStorageKey } from "@Const";
 import { StandardCard } from "@Generic";
@@ -282,6 +282,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
 interface SecurityInfoCardProps {
   securityInfo: SecurityInfo | null;
   isinCode: string;
+  holdingData: Holding;
 }
 
 /**
@@ -291,39 +292,92 @@ interface SecurityInfoCardProps {
  * @param props - The component props.
  * @param props.securityInfo - The security information object containing name and ISIN code.
  * @param props.isinCode - The ISIN code to display if `securityInfo` is not provided.
+ * @param props.holdingData - The holding data object containing information about the user's holdings.
  * @returns The rendered component.
  */
 function SecurityInfoCard({
   securityInfo,
   isinCode,
+  holdingData,
 }: SecurityInfoCardProps): React.JSX.Element {
+  interface InfoItem<T> {
+    label: string;
+    value: T;
+    format: (value: T) => string | null | undefined;
+  }
+
+  const infoItems = securityInfo
+    ? ([
+        {
+          label: "",
+          value: securityInfo.name,
+          format: (value: string) => value,
+        },
+        {
+          label: "",
+          value: securityInfo.isinCode,
+          format: (value: string) => value,
+        },
+        {
+          label: "Invested: ",
+          value: holdingData.investedAmount,
+          format: (value: number | null | undefined) =>
+            value?.toLocaleString("en-US", {
+              style: "currency",
+              currency: securityInfo.currency,
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }),
+        },
+        {
+          label: "Market value: ",
+          value: holdingData.currentMarketValueAmount,
+          format: (value: number | null | undefined) =>
+            value?.toLocaleString("en-US", {
+              style: "currency",
+              currency: securityInfo.currency,
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }),
+        },
+        {
+          label: "Holdings: ",
+          value: holdingData.quantityHeld,
+          format: (value: number | null | undefined) =>
+            value?.toLocaleString("en-US", {
+              style: "decimal",
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }),
+        },
+      ] as InfoItem<any>[])
+    : [];
+
   return (
     <StandardCard
       height={"40px"}
       sx={{ paddingTop: "11px", marginBottom: "3px" }}
     >
       {securityInfo ? (
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <Typography variant="h1" gutterBottom>
-            {securityInfo.name}
-          </Typography>
-          <Divider
-            orientation="vertical"
-            flexItem
-            sx={{
-              mx: 1.5,
-              borderColor: `text.primary`,
-              height: "20px",
-            }}
-          />
-          <Typography variant="h1" gutterBottom>
-            {securityInfo.isinCode}
-          </Typography>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          {infoItems.map((item, index) => (
+            <React.Fragment key={index}>
+              {index > 0 && (
+                <Divider
+                  orientation="vertical"
+                  flexItem
+                  sx={{
+                    mx: 1.5,
+                    borderColor: `text.primary`,
+                    height: "20px",
+                  }}
+                />
+              )}
+              <Typography variant="h1" gutterBottom>
+                {item.label + (item.format(item.value) || "")}
+              </Typography>
+            </React.Fragment>
+          ))}
         </Box>
       ) : (
         <Typography variant="h1" gutterBottom>
@@ -377,6 +431,7 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
           <SecurityInfoCard
             securityInfo={data.securityInfo}
             isinCode={isinCode}
+            holdingData={data.getMyHolding}
           />
           <StandardCard
             height={"560px"}

@@ -1,4 +1,4 @@
-import type { ChartHistoryRow, SecurityInfo } from "@Api";
+import type { ChartHistoryRow, Holding, SecurityInfo } from "@Api";
 import { LocalApolloClient } from "@Api";
 import type { QueryHookOptions, QueryResult } from "@apollo/client";
 import { useQuery } from "@apollo/client";
@@ -10,6 +10,12 @@ const QUERY = gql`
     $startDate: String!
     $endDate: String!
   ) {
+    getMyHolding(isinCode: $isinCode) {
+      quantityHeld
+      costBaseAverage
+      investedAmount
+      currentMarketValueAmount
+    }
     securityInfo(isinCode: $isinCode) {
       isinCode
       name
@@ -31,6 +37,7 @@ const QUERY = gql`
 `;
 
 interface ChartHistoryData {
+  getMyHolding: Holding;
   securityInfo: SecurityInfo;
   chartHistory: ChartHistoryRow[];
 }
