@@ -306,6 +306,9 @@ function SecurityInfoCard({
     format: (value: T) => string | null | undefined;
   }
 
+  // Define a union type for all possible value types
+  type InfoItemValue = string | number | null | undefined;
+
   const infoItems = securityInfo
     ? ([
         {
@@ -350,7 +353,7 @@ function SecurityInfoCard({
               maximumFractionDigits: 0,
             }),
         },
-      ] as InfoItem<any>[])
+      ] as InfoItem<InfoItemValue>[])
     : [];
 
   return (
