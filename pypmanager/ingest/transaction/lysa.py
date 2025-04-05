@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import logging
 from typing import TYPE_CHECKING, cast
 
@@ -65,9 +66,10 @@ class LysaLoader(TransactionLoader):
 
         # The exported CSV data contains special characters like � that we need to
         # replace
-        df_raw[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY] = df_raw[
-            TransactionRegistryColNameValues.SOURCE_NAME_SECURITY
-        ].str.replace("�", "ä")
+        with contextlib.suppress(AttributeError):
+            df_raw[TransactionRegistryColNameValues.SOURCE_NAME_SECURITY] = df_raw[
+                TransactionRegistryColNameValues.SOURCE_NAME_SECURITY
+            ].str.replace("�", "ä")
 
         security_map_name_to_isin = await async_security_map_name_to_isin()
 
