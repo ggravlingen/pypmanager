@@ -116,9 +116,8 @@ async def test_async_get_holding_by_isin() -> None:
 
 
 @pytest.mark.asyncio
+@pytest.mark.usefixtures("transaction_data")
 async def test_async_get_holding_by_isin__none() -> None:
     """Test async_get_holding_by_isin for None."""
-    result = await async_get_holding_by_isin(
-        isin_code="US1234567891",
-    )
+    result = await async_get_holding_by_isin(isin_code="abc123")
     assert result is None
