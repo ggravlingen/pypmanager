@@ -25,7 +25,7 @@ def _mock_settings() -> Generator[Any, Any, Any]:
     with patch.object(
         TypedSettings, "database_local", new_callable=PropertyMock
     ) as mock:
-        mock.return_value = Path("tests/test.sqllite").resolve()
+        mock.return_value = Path("tests/test_database.sqlite").resolve()
         yield
 
 

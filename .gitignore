@@ -140,4 +140,4 @@ coverage.json
 
 yfinance.cache
 
-tests/test.db
+tests/test_database.sqlite
