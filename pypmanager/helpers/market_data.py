@@ -66,7 +66,7 @@ def get_market_data(isin_code: str | None = None) -> pd.DataFrame:
     """
     all_data_frames: list[pd.DataFrame] = []
 
-    for file in Settings.dir_market_data.glob("*.csv"):
+    for file in Settings.dir_market_data_local.glob("*.csv"):
         df_market_data = pd.read_csv(file, sep=";", index_col="report_date")
         all_data_frames.append(df_market_data)
 
@@ -241,7 +241,7 @@ class UpdateMarketDataCsv:
         """Init class."""
         self.data = data
         self.source_name = source_name
-        self.file_market_data = Settings.dir_market_data / f"{source_name}.csv"
+        self.file_market_data = Settings.dir_market_data_local / f"{source_name}.csv"
 
     async def __aenter__(self) -> Self:
         """Enter async context manager."""
