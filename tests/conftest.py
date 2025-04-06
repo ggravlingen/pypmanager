@@ -38,7 +38,7 @@ def mock_file_security_config_local() -> Generator[Any, Any, Any]:
 def _mock_dir_market_data() -> Generator[Any, Any, Any]:
     """Return the path to the market data."""
     with patch.object(
-        TypedSettings, "dir_market_data", new_callable=PropertyMock
+        TypedSettings, "dir_market_data_local", new_callable=PropertyMock
     ) as mock_dir:
         mock_dir.return_value = Path("tests/fixtures/market_data").resolve()
         yield

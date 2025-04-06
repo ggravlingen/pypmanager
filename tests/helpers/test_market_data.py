@@ -71,7 +71,7 @@ def test_get_market_data__filter() -> None:
 def test_get_market_data__no_global() -> None:
     """Test async_get_market_data with empty global data."""
     with patch.object(
-        TypedSettings, "dir_market_data", new_callable=PropertyMock
+        TypedSettings, "dir_market_data_local", new_callable=PropertyMock
     ) as mock_file_market_data_config_local:
         # Disable local market data config
         mock_file_market_data_config_local.return_value = Path("tmp")

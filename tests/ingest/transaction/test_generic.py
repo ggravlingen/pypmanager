@@ -13,7 +13,11 @@ from pypmanager.settings import TypedSettings
 
 
 @pytest.mark.asyncio
-@patch.object(TypedSettings, "dir_transaction_data", "tests/fixtures/transactions")
+@patch.object(
+    TypedSettings,
+    "dir_transaction_data_local",
+    "tests/fixtures/transactions",
+)
 async def test_generic_loader() -> None:
     """Test GenericLoader."""
     async with GenericLoader() as loader:

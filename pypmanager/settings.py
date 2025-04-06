@@ -22,56 +22,55 @@ class TypedSettings(BaseSettings):
 
     debug_name: str | None = None
 
-    @property
-    def dir_data(self: TypedSettings) -> Path:
-        """Return data directory."""
-        return Path("data").resolve()
-
-    dir_config: Path = Path("pypmanager/configuration").resolve()
-    dir_static: Path = Path("frontend/static").resolve()
-    dir_templates: Path = Path("frontend/templates").resolve()
+    dir_config: Path = Path("pypmanager/configuration")
+    dir_static: Path = Path("frontend/static")
+    dir_templates: Path = Path("frontend/templates")
 
     system_time_zone: ZoneInfo = ZoneInfo("Europe/Stockholm")
 
     @property
-    def dir_market_data(self: TypedSettings) -> Path:
-        """Return folder path for market data."""
-        folder_path = Path(self.dir_data)
-        return folder_path / "market_data"
-
-    @property
-    def dir_transaction_data(self: TypedSettings) -> Path:
-        """Return folder path for transaction data."""
-        folder_path = Path(self.dir_data)
-        return folder_path / "transactions"
-
-    @property
     def file_market_data_config(self: TypedSettings) -> Path:
         """Return market data file."""
-        folder_path = Path(self.dir_config)
-        return folder_path / "market_data.yaml"
+        return self.dir_config / "market_data.yaml"
+
+    @property
+    def security_config(self: TypedSettings) -> Path:
+        """Return security configuration file."""
+        return self.dir_config / "security.yaml"
+
+    @property
+    def dir_data_local(self: TypedSettings) -> Path:
+        """Return data directory."""
+        return Path("data")
+
+    @property
+    def dir_configuration_local(self: TypedSettings) -> Path:
+        """Return local configuration path."""
+        return self.dir_data_local / "configuration"
+
+    @property
+    def dir_market_data_local(self: TypedSettings) -> Path:
+        """Return folder path for market data."""
+        return self.dir_data_local / "market_data"
+
+    @property
+    def dir_transaction_data_local(self: TypedSettings) -> Path:
+        """Return folder path for transaction data."""
+        return self.dir_data_local / "transactions"
 
     @property
     def file_market_data_config_local(self: TypedSettings) -> Path | None:
         """Return local market data file."""
-        folder_path = Path(self.dir_data)
-        local_market_data = folder_path / "configuration" / "market_data.yaml"
+        local_market_data = self.dir_configuration_local / "market_data.yaml"
         if local_market_data.exists():
             return local_market_data
 
         return None
 
     @property
-    def security_config(self: TypedSettings) -> Path:
-        """Return security configuration file."""
-        folder_path = Path(self.dir_config)
-        return folder_path / "security.yaml"
-
-    @property
     def security_config_local(self: TypedSettings) -> Path | None:
         """Return local security configuration file."""
-        folder_path = Path(self.dir_data)
-        local_market_data = folder_path / "configuration" / "security.yaml"
+        local_market_data = self.dir_configuration_local / "security.yaml"
         if local_market_data.exists():
             return local_market_data
 
