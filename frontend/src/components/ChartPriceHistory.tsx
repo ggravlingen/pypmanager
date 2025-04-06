@@ -376,8 +376,9 @@ function SecurityInfoCard({
                   }}
                 />
               )}
-              <Typography variant="h1" gutterBottom>
-                {item.label + (item.format(item.value) || "")}
+              <Typography variant="body1" gutterBottom>
+                {item.label}
+                <strong>{item.format(item.value) || ""}</strong>
               </Typography>
             </React.Fragment>
           ))}
