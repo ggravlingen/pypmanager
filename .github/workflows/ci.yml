@@ -209,8 +209,9 @@ jobs:
           parallel: true
 
   finish:
+    needs:
+      - backend-pytest
     name: "Backend: post result to coveralls"
-    needs: backend-pytest
     if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:

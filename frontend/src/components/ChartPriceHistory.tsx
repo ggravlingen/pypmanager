@@ -377,7 +377,8 @@ function SecurityInfoCard({
                 />
               )}
               <Typography variant="body1" gutterBottom>
-                {item.label}<strong>{(item.format(item.value) || "")}</strong>
+                {item.label}
+                <strong>{item.format(item.value) || ""}</strong>
               </Typography>
             </React.Fragment>
           ))}
