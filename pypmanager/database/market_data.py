@@ -64,6 +64,7 @@ class AsyncMarketDataDB:
         tb: TracebackType | None,
     ) -> None:
         """Exit context manager."""
+        await self.engine.dispose()
 
     async def store_market_data(self, data: list[MarketDataModel]) -> None:
         """Store market data in the database."""
