@@ -139,3 +139,5 @@ prof
 coverage.json
 
 yfinance.cache
+
+tests/test.db

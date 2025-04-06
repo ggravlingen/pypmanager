@@ -79,7 +79,7 @@ class TypedSettings(BaseSettings):
     @property
     def database_local(self: TypedSettings) -> Path | None:
         """Return path to local SQL lite database."""
-        _file = self.dir_configuration_local / "database.sqlite"
+        _file = self.dir_configuration_local / "database.db"
         if _file.exists():
             return _file
 
