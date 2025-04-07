@@ -24,11 +24,19 @@ DB_NAME_TEST = "test_database.sqllite"
 @pytest.fixture(scope="session", autouse=True)
 def _mock_settings() -> Generator[Any, Any, Any]:
     """Fixture for mocking settings."""
+    db_path = Path("tests") / DB_NAME_TEST
+
     with patch.object(
-        TypedSettings, "database_local", new_callable=PropertyMock
+        TypedSettings,
+        "database_local",
+        new_callable=PropertyMock,
     ) as mock:
-        mock.return_value = Path("tests") / DB_NAME_TEST
+        mock.return_value = db_path
+
         yield
+
+        # Cleanup after tests
+        db_path.unlink(missing_ok=True)
 
 
 @pytest.fixture(name="sample_market_data")

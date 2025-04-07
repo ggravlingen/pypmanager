@@ -1,26 +1,19 @@
 """Database for market data."""
 
 from datetime import UTC, date, datetime
-import logging
 from types import TracebackType
 from typing import Self
 
 from sqlalchemy.ext.asyncio import (
-    AsyncAttrs,
     AsyncSession,
     async_sessionmaker,
     create_async_engine,
 )
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column
 
-from pypmanager.database.utils import check_table_exists
 from pypmanager.settings import Settings
 
-_LOGGER = logging.getLogger(__name__)
-
-
-class Base(AsyncAttrs, DeclarativeBase):
-    """Base class for SQLAlchemy models."""
+from .utils import LOGGER, Base, async_upsert_data, check_table_exists
 
 
 class MarketDataModel(Base):
@@ -60,7 +53,7 @@ class AsyncMarketDataDB:
 
             if not table_exists:
                 await conn.run_sync(Base.metadata.create_all)
-                _LOGGER.info("Market data database schema created")
+                LOGGER.info("Market data database schema created")
 
         return self
 
@@ -87,13 +80,4 @@ class AsyncMarketDataDB:
         ]
 
         async with self.async_session() as session, session.begin():
-            for item in models:
-                if not await session.merge(item):
-                    session.add(item)
-                    try:
-                        await session.commit()
-                        _LOGGER.info(f"Stored {len(data)} market data records")
-                    except Exception:
-                        await session.rollback()
-                        _LOGGER.exception("Failed to store market data")
-                        raise
+            await async_upsert_data(session=session, data_list=models)
