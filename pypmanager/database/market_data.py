@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 from datetime import UTC, date, datetime
-from typing import TYPE_CHECKING, Self
+from typing import TYPE_CHECKING, Any, Self
 
+from sqlalchemy import Row, text
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
     async_sessionmaker,
@@ -17,6 +18,7 @@ from pypmanager.settings import Settings
 from .utils import LOGGER, Base, async_upsert_data, check_table_exists
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
     from types import TracebackType
 
 
@@ -25,7 +27,7 @@ class MarketDataModel(Base):
 
     __tablename__ = "market_data"
 
-    isin: Mapped[str] = mapped_column(primary_key=True)
+    isin_code: Mapped[str] = mapped_column(primary_key=True)
     report_date: Mapped[date] = mapped_column(primary_key=True)
     close_price: Mapped[float]
     currency: Mapped[float | None] = mapped_column(default=None)
@@ -70,11 +72,11 @@ class AsyncMarketDataDB:
         """Exit context manager."""
         await self.engine.dispose()
 
-    async def store_market_data(self, data: list[MarketDataModel]) -> None:
+    async def async_store_market_data(self, data: list[MarketDataModel]) -> None:
         """Store market data in the database."""
         models = [
             MarketDataModel(
-                isin=item.isin,
+                isin_code=item.isin_code,
                 close_price=item.close_price,
                 report_date=item.report_date,
                 date_added=datetime.now(tz=UTC).date(),
@@ -86,14 +88,14 @@ class AsyncMarketDataDB:
         async with self.async_session() as session, session.begin():
             await async_upsert_data(session=session, data_list=models)
 
-    async def get_market_data(
-        self, isin: str, report_date: date
+    async def async_get_market_data(
+        self, isin_code: str, report_date: date
     ) -> MarketDataModel | None:
         """Return market data for a specific day."""
         async with self.async_session() as session, session.begin():
-            if data := await session.get(MarketDataModel, (isin, report_date)):
+            if data := await session.get(MarketDataModel, (isin_code, report_date)):
                 return MarketDataModel(
-                    isin=data.isin,
+                    isin_code=data.isin_code,
                     close_price=data.close_price,
                     report_date=data.report_date,
                     date_added=data.date_added,
@@ -101,3 +103,37 @@ class AsyncMarketDataDB:
                 )
 
             return None
+
+    async def async_get_last_close_price_by_isin(self) -> Sequence[Row[Any]]:
+        """
+        Return the last close price data on ISIN code level.
+
+        Example:
+        report date | isin_code | price
+        2023-01-01 | US0378331005 | 150.25
+        2023-01-01 | US0378331003 | 150.00
+        """
+        async with self.async_session() as session, session.begin():
+            result = await session.execute(
+                text("""
+                        SELECT
+                            md.isin_code,
+                            md.report_date,
+                            md.close_price
+                        FROM
+                            market_data md
+                        JOIN (
+                            SELECT
+                                isin_code,
+                                MAX(report_date) AS latest_date
+                            FROM
+                                market_data
+                            GROUP BY
+                                isin_code
+                        ) latest_dates
+                            ON md.isin_code = latest_dates.isin_code
+                            AND md.report_date = latest_dates.latest_date;
+                        """)
+            )
+
+            return result.fetchall()

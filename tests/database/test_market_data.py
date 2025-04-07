@@ -44,7 +44,7 @@ def _sample_market_data() -> list[MarketDataModel]:
     """Fixture providing sample market data for testing."""
     return [
         MarketDataModel(
-            isin="US0378331005",  # Apple
+            isin_code="US0378331005",  # Apple
             report_date=date(2023, 1, 1),
             close_price=150.25,
             currency=None,
@@ -52,7 +52,7 @@ def _sample_market_data() -> list[MarketDataModel]:
             source="test",
         ),
         MarketDataModel(
-            isin="US0231351067",  # Amazon
+            isin_code="US0231351067",  # Amazon
             report_date=date(2023, 1, 1),
             close_price=102.75,
             currency=None,
@@ -76,7 +76,7 @@ async def test_store_market_data(
 ) -> None:
     """Test inserting data into the table."""
     async with AsyncMarketDataDB() as db:
-        await db.store_market_data(data=sample_market_data)
+        await db.async_store_market_data(data=sample_market_data)
         assert "Stored 2 market data records" in caplog.text
 
 
@@ -87,16 +87,46 @@ async def test_get_market_data(
 ) -> None:
     """Test method get_market_data."""
     async with AsyncMarketDataDB() as db:
-        await db.store_market_data(data=sample_market_data)
+        await db.async_store_market_data(data=sample_market_data)
         assert "Stored 2 market data records" in caplog.text
 
-        data = await db.get_market_data(
-            isin="US0378331005",
+        data = await db.async_get_market_data(
+            isin_code="US0378331005",
             report_date=date(2023, 1, 1),
         )
 
         assert data is not None
-        assert data.isin == "US0378331005"
+        assert data.isin_code == "US0378331005"
         assert data.close_price == 150.25
         assert data.report_date == date(2023, 1, 1)
         assert data.source == "test"
+
+
+@pytest.mark.asyncio
+async def test_get_market_data__none() -> None:
+    """Test method get_market_data for None return."""
+    async with AsyncMarketDataDB() as db:
+        data = await db.async_get_market_data(
+            isin_code="abc123",
+            report_date=date(2023, 1, 1),
+        )
+        assert data is None
+
+
+@pytest.mark.asyncio
+async def test_async_get_last_close_price_by_isin(
+    sample_market_data: list[MarketDataModel],
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    """Test method async_get_last_close_price_by_isin."""
+    async with AsyncMarketDataDB() as db:
+        await db.async_store_market_data(data=sample_market_data)
+        assert "Stored 2 market data records" in caplog.text
+
+        data = await db.async_get_last_close_price_by_isin()
+
+        assert data == [
+            ("US0231351067", "2023-01-01", 102.75),
+            ("US0378331005", "2023-01-01", 150.25),
+        ]
+        assert len(data) == 2
