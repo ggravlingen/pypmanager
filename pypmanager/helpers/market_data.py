@@ -93,23 +93,15 @@ def get_market_data(isin_code: str | None = None) -> pd.DataFrame:
 
 async def async_get_last_market_data_df() -> pd.DataFrame:
     """Return a DataFrame with the last found value per ISIN code."""
-    df_market_data = get_market_data()
+    async with AsyncMarketDataDB() as db:
+        # Get the last market data for all ISIN codes
+        data = await db.async_get_last_close_price_by_isin()
 
-    df_market_data_clean = df_market_data[["isin_code", "price"]]
-
-    # Transform df_market_data so that only the last record per isin is kept
-    df_market_data_clean = df_market_data_clean.sort_index(ascending=True)
-
-    # Keep only the last record per isin
-    df_filtered = df_market_data_clean.drop_duplicates(
-        subset=["isin_code"], keep="last"
-    )
-
-    df_filtered.index = pd.to_datetime(df_filtered.index).tz_localize(
+    df_data = pd.DataFrame(data, columns=["isin_code", "report_date", "price"])
+    df_data["report_date"] = pd.to_datetime(df_data["report_date"]).dt.tz_localize(
         Settings.system_time_zone
     )
-
-    return df_filtered
+    return df_data.set_index("report_date")
 
 
 @strawberry.type
