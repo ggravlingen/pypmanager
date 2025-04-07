@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -79,7 +80,12 @@ class TypedSettings(BaseSettings):
     @property
     def database_local(self: TypedSettings) -> Path:
         """Return path to local SQL lite database."""
-        return self.dir_configuration_local / "database.sqlite"
+        return self.dir_data_local / "database" / "database.sqlite"
 
 
 Settings = TypedSettings()
+
+logging.basicConfig(level=logging.INFO)
+
+for _module in ("aiosqlite",):
+    logging.getLogger(_module).setLevel(logging.INFO)

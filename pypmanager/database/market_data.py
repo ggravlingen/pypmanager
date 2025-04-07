@@ -1,25 +1,19 @@
 """Database for market data."""
 
 from datetime import UTC, date, datetime
-import logging
 from types import TracebackType
 from typing import Self
 
 from sqlalchemy.ext.asyncio import (
-    AsyncAttrs,
     AsyncSession,
     async_sessionmaker,
     create_async_engine,
 )
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column
 
 from pypmanager.settings import Settings
 
-_LOGGER = logging.getLogger(__name__)
-
-
-class Base(AsyncAttrs, DeclarativeBase):
-    """Base class for SQLAlchemy models."""
+from .utils import LOGGER, Base, async_upsert_data, check_table_exists
 
 
 class MarketDataModel(Base):
@@ -52,10 +46,16 @@ class AsyncMarketDataDB:
     async def __aenter__(self) -> Self:
         """Enter context manager."""
         async with self.engine.begin() as conn:
-            await conn.run_sync(Base.metadata.create_all)
-            _LOGGER.info("Market data database schema created")
+            table_exists = await conn.run_sync(
+                check_table_exists,
+                MarketDataModel.__tablename__,
+            )
 
-            return self
+            if not table_exists:
+                await conn.run_sync(Base.metadata.create_all)
+                LOGGER.info("Market data database schema created")
+
+        return self
 
     async def __aexit__(
         self: Self,
@@ -80,12 +80,4 @@ class AsyncMarketDataDB:
         ]
 
         async with self.async_session() as session, session.begin():
-            try:
-                # SQLAlchemy 2.0 style: merge models to handle "upsert" behavior
-                for model in models:
-                    await session.merge(model)
-
-                _LOGGER.info(f"Stored {len(data)} market data records")
-            except Exception:
-                _LOGGER.exception("Failed to store market data")
-                raise
+            await async_upsert_data(session=session, data_list=models)
