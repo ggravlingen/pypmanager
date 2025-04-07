@@ -30,7 +30,7 @@ class MarketDataModel(Base):
     isin: Mapped[str] = mapped_column(primary_key=True)
     report_date: Mapped[date] = mapped_column(primary_key=True)
     close_price: Mapped[float]
-    currency: Mapped[float | None]
+    currency: Mapped[float | None] = mapped_column(default=None)
     date_added: Mapped[date] = mapped_column()
     source: Mapped[str] = mapped_column()
 
@@ -72,7 +72,6 @@ class AsyncMarketDataDB:
             MarketDataModel(
                 isin=item.isin,
                 close_price=item.close_price,
-                currency=item.currency,
                 report_date=item.report_date,
                 date_added=datetime.now(tz=UTC).date(),
                 source=item.source,
