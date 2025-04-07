@@ -89,7 +89,7 @@ class AsyncMarketDataDB:
     async def get_market_data(
         self, isin: str, report_date: date
     ) -> MarketDataModel | None:
-        """Get market data from the database."""
+        """Return market data for a specific day."""
         async with self.async_session() as session, session.begin():
             if data := await session.get(MarketDataModel, (isin, report_date)):
                 return MarketDataModel(
