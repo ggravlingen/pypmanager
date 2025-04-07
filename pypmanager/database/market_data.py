@@ -1,8 +1,9 @@
 """Database for market data."""
 
+from __future__ import annotations
+
 from datetime import UTC, date, datetime
-from types import TracebackType
-from typing import Self
+from typing import TYPE_CHECKING, Self
 
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
@@ -14,6 +15,9 @@ from sqlalchemy.orm import Mapped, mapped_column
 from pypmanager.settings import Settings
 
 from .utils import LOGGER, Base, async_upsert_data, check_table_exists
+
+if TYPE_CHECKING:
+    from types import TracebackType
 
 
 class MarketDataModel(Base):
@@ -81,3 +85,19 @@ class AsyncMarketDataDB:
 
         async with self.async_session() as session, session.begin():
             await async_upsert_data(session=session, data_list=models)
+
+    async def get_market_data(
+        self, isin: str, report_date: date
+    ) -> MarketDataModel | None:
+        """Return market data for a specific day."""
+        async with self.async_session() as session, session.begin():
+            if data := await session.get(MarketDataModel, (isin, report_date)):
+                return MarketDataModel(
+                    isin=data.isin,
+                    close_price=data.close_price,
+                    report_date=data.report_date,
+                    date_added=data.date_added,
+                    source=data.source,
+                )
+
+            return None
