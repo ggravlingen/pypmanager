@@ -16,6 +16,7 @@ from requests import HTTPError
 import strawberry
 import yaml
 
+from pypmanager.database.market_data import AsyncMarketDataDB, MarketDataModel
 from pypmanager.error import DataError
 from pypmanager.helpers.security import async_security_map_isin_to_security
 from pypmanager.ingest.market_data.models import Source, SourceData, Sources
@@ -216,6 +217,19 @@ async def async_download_market_data() -> None:
 
             async with UpdateMarketDataCsv(data=data_list, source_name=loader.source):
                 pass
+            async with AsyncMarketDataDB() as db:
+                db_data_list: list[MarketDataModel] = []
+                db_data_list = [
+                    MarketDataModel(
+                        isin=record.isin_code,
+                        report_date=record.report_date,
+                        close_price=record.price,
+                        date_added=datetime.now(UTC),
+                        source=loader.source,
+                    )
+                    for record in data_list
+                ]
+                await db.store_market_data(db_data_list)
         except HTTPError:
             LOGGER.exception(f"HTTP error when loading {loader}")
         except AttributeError:

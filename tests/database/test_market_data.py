@@ -18,6 +18,8 @@ from pypmanager.settings import TypedSettings
 if TYPE_CHECKING:
     from collections.abc import Generator
 
+DB_NAME_TEST = "test_database.sqllite"
+
 
 @pytest.fixture(scope="session", autouse=True)
 def _mock_settings() -> Generator[Any, Any, Any]:
@@ -25,7 +27,7 @@ def _mock_settings() -> Generator[Any, Any, Any]:
     with patch.object(
         TypedSettings, "database_local", new_callable=PropertyMock
     ) as mock:
-        mock.return_value = Path("tests/test_database.sqlite").resolve()
+        mock.return_value = Path("tests") / DB_NAME_TEST
         yield
 
 
@@ -56,7 +58,7 @@ def _sample_market_data() -> list[MarketDataModel]:
 async def test_create_database() -> None:
     """Test the creation of the database."""
     async with AsyncMarketDataDB():
-        assert Path("tests/test.sqllite").exists()
+        assert Path("tests") / DB_NAME_TEST
 
 
 @pytest.mark.asyncio
