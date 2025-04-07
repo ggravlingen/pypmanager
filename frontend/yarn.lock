@@ -2188,9 +2188,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/x-date-pickers@npm:7.28.2":
-  version: 7.28.2
-  resolution: "@mui/x-date-pickers@npm:7.28.2"
+"@mui/x-date-pickers@npm:7.28.3":
+  version: 7.28.3
+  resolution: "@mui/x-date-pickers@npm:7.28.3"
   dependencies:
     "@babel/runtime": "npm:^7.25.7"
     "@mui/utils": "npm:^5.16.6 || ^6.0.0 || ^7.0.0 || ^7.0.0-beta"
@@ -2232,7 +2232,7 @@ __metadata:
       optional: true
     moment-jalaali:
       optional: true
-  checksum: 10c0/a175e4da10657b18d4dcc59f906734bd7af88f3bfe120fcff428bd47ff50331b9904b42198e4173d1b5de25fb5004374d1f45ab197b48ce307e350db85b52ee1
+  checksum: 10c0/55392e788408f497d8604bfff5e4cb28ed8f0ddc0e697a0034827bdc000ec55bb839b201b1cbfe1f4bca124b1e7c75716ba780b64c7b89a37b12b9961f423266
   languageName: node
   linkType: hard
 
@@ -4755,7 +4755,7 @@ __metadata:
     "@eslint/compat": "npm:1.2.7"
     "@mui/icons-material": "npm:7.0.1"
     "@mui/material": "npm:7.0.1"
-    "@mui/x-date-pickers": "npm:7.28.2"
+    "@mui/x-date-pickers": "npm:7.28.3"
     "@playwright/test": "npm:1.51.1"
     "@types/node": "npm:22.13.14"
     "@types/react": "npm:19.0.12"
