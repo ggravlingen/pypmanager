@@ -221,7 +221,7 @@ async def async_download_market_data() -> None:
                 db_data_list: list[MarketDataModel] = []
                 db_data_list = [
                     MarketDataModel(
-                        isin=record.isin_code,
+                        isin_code=record.isin_code,
                         report_date=record.report_date,
                         close_price=record.price,
                         date_added=datetime.now(UTC),
@@ -229,7 +229,7 @@ async def async_download_market_data() -> None:
                     )
                     for record in data_list
                 ]
-                await db.store_market_data(db_data_list)
+                await db.async_store_market_data(db_data_list)
         except HTTPError:
             LOGGER.exception(f"HTTP error when loading {loader}")
         except AttributeError:
