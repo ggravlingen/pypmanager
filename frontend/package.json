@@ -16,7 +16,7 @@
     "@emotion/styled": "11.14.0",
     "@mui/icons-material": "7.0.1",
     "@mui/material": "7.0.1",
-    "@mui/x-date-pickers": "7.28.2",
+    "@mui/x-date-pickers": "7.28.3",
     "babel-loader": "10.0.0",
     "chart.js": "4.4.8",
     "dayjs": "1.11.13",
