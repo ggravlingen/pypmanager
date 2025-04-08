@@ -83,3 +83,19 @@ async def test_async_get_last_close_price_by_isin(
             ("US0378331005", "2023-01-01", 150.25),
         ]
         assert len(data) == 2
+
+
+@pytest.mark.asyncio
+async def test_async_get_all_data(
+    sample_market_data: list[MarketDataModel],
+) -> None:
+    """Test method get_market_data."""
+    async with AsyncMarketDataDB() as db:
+        await db.async_store_market_data(data=sample_market_data)
+        data = await db.async_filter_all()
+        assert len(data) == 2
+
+        assert data[0].isin_code == "US0378331005"
+        assert data[0].close_price == 150.25
+        assert data[0].report_date == "2023-01-01"
+        assert data[0].source == "test"

@@ -88,6 +88,48 @@ class AsyncMarketDataDB:
         async with self.async_session() as session, session.begin():
             await async_upsert_data(session=session, data_list=models)
 
+    async def async_filter_all(
+        self,
+        isin_code: str | None = None,
+        start_date: date | None = None,
+        end_date: date | None = None,
+    ) -> list[MarketDataModel]:
+        """Return all market data."""
+        async with self.async_session() as session, session.begin():
+            query = "SELECT * FROM market_data WHERE 1=1"
+            params: dict[str, Any] = {}
+
+            # Add filters dynamically
+            if isin_code:
+                query += " AND isin_code = :isin_code"
+                params["isin_code"] = isin_code
+            if start_date:
+                query += " AND report_date >= :start_date"
+                params["start_date"] = start_date
+            if end_date:
+                query += " AND report_date <= :end_date"
+                params["end_date"] = end_date
+
+            # Add ordering
+            query += " ORDER BY report_date DESC"
+
+            # Execute query
+            result = await session.execute(text(query), params)
+            rows = result.fetchall()
+
+            # Map rows to MarketDataModel objects
+            return [
+                MarketDataModel(
+                    isin_code=row.isin_code,
+                    report_date=row.report_date,
+                    close_price=row.close_price,
+                    currency=row.currency,
+                    date_added=row.date_added,
+                    source=row.source,
+                )
+                for row in rows
+            ]
+
     async def async_get_market_data(
         self, isin_code: str, report_date: date
     ) -> MarketDataModel | None:
