@@ -10,6 +10,7 @@ from unittest.mock import PropertyMock, patch
 import pandas as pd
 import pytest
 
+from pypmanager.database.market_data import MarketDataModel
 from pypmanager.ingest.transaction.const import (
     TransactionRegistryColNameValues,
     TransactionTypeValues,
@@ -18,6 +19,55 @@ from pypmanager.settings import Settings, TypedSettings
 
 if TYPE_CHECKING:
     from collections.abc import Generator
+
+DB_NAME_TEST = "test_database.sqllite"
+
+
+@pytest.fixture(autouse=True)
+def db_file_location() -> Generator[Any, Any, Any]:
+    """
+    Fixture for mocking location of database.
+
+    Deleted after each test.
+
+    Maybe purge table instead?
+    """
+    db_path = Path("tests") / DB_NAME_TEST
+
+    with patch.object(
+        TypedSettings,
+        "database_local",
+        new_callable=PropertyMock,
+    ) as mock:
+        mock.return_value = db_path
+
+        yield
+
+        # Cleanup after tests
+        db_path.unlink(missing_ok=True)
+
+
+@pytest.fixture(name="sample_market_data")
+def sample_market_data_fixture() -> list[MarketDataModel]:
+    """Fixture providing sample market data for testing."""
+    return [
+        MarketDataModel(
+            isin_code="US0378331005",  # Apple
+            report_date=date(2023, 1, 1),
+            close_price=150.25,
+            currency=None,
+            date_added=date(2023, 1, 2),
+            source="test",
+        ),
+        MarketDataModel(
+            isin_code="US0231351067",  # Amazon
+            report_date=date(2023, 1, 1),
+            close_price=102.75,
+            currency=None,
+            date_added=date(2023, 1, 2),
+            source="test",
+        ),
+    ]
 
 
 @pytest.fixture
