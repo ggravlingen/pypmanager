@@ -9,14 +9,16 @@ from unittest.mock import PropertyMock, patch
 
 from fastapi.testclient import TestClient
 import pytest
+import pytest_asyncio
 
 from pypmanager.api import app
+from pypmanager.database.market_data import AsyncMarketDataDB, MarketDataModel
 from pypmanager.settings import Settings, TypedSettings
 
 if TYPE_CHECKING:
     from collections.abc import Generator
 
-    from tests.conftest import DataFactory, MarketDataFactory
+    from tests.conftest import DataFactory
 
 client = TestClient(app)
 
@@ -44,27 +46,30 @@ def _mock_transaction_list_graphql(
         yield
 
 
-@pytest.fixture(scope="module")
-def _mock_market_data_graphql(
-    market_data_factory: type[MarketDataFactory],
-) -> Generator[Any, Any, Any]:
+@pytest_asyncio.fixture(name="_mock_market_data_graphql")
+async def async_market_data_graphql_fixture() -> None:
     """Mock market data."""
-    mocked_market_data = (
-        market_data_factory()
-        .add(isin_code="US1234567890", report_date=date(2022, 11, 1), price=100.0)
-        .add(
+    sample_market_data = [
+        MarketDataModel(
+            isin_code="US1234567890",
+            report_date=date(2022, 11, 1),
+            close_price=100.0,
+            currency=None,
+            date_added=date(2023, 1, 2),
+            source="test",
+        ),
+        MarketDataModel(
             isin_code="US1234567890",
             report_date=date(2022, 11, 2),
-            price=90.0,
-        )
-    ).df_market_data_list
-    with (
-        patch(
-            "pypmanager.helpers.market_data.get_market_data",
-            return_value=mocked_market_data,
+            close_price=90.0,
+            currency=None,
+            date_added=date(2023, 1, 2),
+            source="test",
         ),
-    ):
-        yield
+    ]
+
+    async with AsyncMarketDataDB() as db:
+        await db.async_store_market_data(data=sample_market_data)
 
 
 @pytest.mark.asyncio

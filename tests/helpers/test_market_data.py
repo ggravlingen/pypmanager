@@ -25,8 +25,6 @@ from pypmanager.settings import Settings, TypedSettings
 if TYPE_CHECKING:
     from collections.abc import Generator
 
-    from tests.conftest import MarketDataFactory
-
 
 @pytest.mark.asyncio
 async def test_async_load_market_data_config() -> None:
@@ -85,24 +83,25 @@ def test_get_market_data__no_global() -> None:
 
 @pytest.mark.asyncio
 @pytest.mark.usefixtures("mock_file_security_config_local")
-async def test_async_get_market_data_overview(
-    market_data_factory: type[MarketDataFactory],
-) -> None:
+async def test_async_get_market_data_overview() -> None:
     """Test async_get_market_data_overview."""
-    mocked_market_data = (
-        market_data_factory().add(
-            isin_code="SE0003788587", report_date=date(2022, 11, 1), price=100.0
+    async with AsyncMarketDataDB() as db:
+        await db.async_store_market_data(
+            data=[
+                MarketDataModel(
+                    isin_code="SE0003788587",
+                    report_date=date(2022, 11, 1),
+                    close_price=100.0,
+                    date_added=datetime(2022, 11, 1, tzinfo=UTC),
+                    source="testabc",
+                )
+            ]
         )
-    ).df_market_data_list
 
     with (
         patch.object(
             TypedSettings, "file_market_data_config_local", new_callable=PropertyMock
         ) as mock_file_market_data_config_local,
-        patch(
-            "pypmanager.helpers.market_data.get_market_data",
-            return_value=mocked_market_data,
-        ),
     ):
         mock_file_market_data_config_local.return_value = Path("foo.yaml")
 
