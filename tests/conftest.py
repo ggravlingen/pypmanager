@@ -9,8 +9,9 @@ from unittest.mock import PropertyMock, patch
 
 import pandas as pd
 import pytest
+import pytest_asyncio
 
-from pypmanager.database.market_data import MarketDataModel
+from pypmanager.database.market_data import AsyncMarketDataDB, MarketDataModel
 from pypmanager.ingest.transaction.const import (
     TransactionRegistryColNameValues,
     TransactionTypeValues,
@@ -18,13 +19,13 @@ from pypmanager.ingest.transaction.const import (
 from pypmanager.settings import Settings, TypedSettings
 
 if TYPE_CHECKING:
-    from collections.abc import Generator
+    from collections.abc import AsyncGenerator, Generator
 
 DB_NAME_TEST = "test_database.sqllite"
 
 
-@pytest.fixture(autouse=True)
-def db_file_location() -> Generator[Any, Any, Any]:
+@pytest.fixture(scope="session", autouse=True)
+def mock_db_file_location() -> Generator[Any, Any, Any]:
     """
     Fixture for mocking location of database.
 
@@ -45,6 +46,14 @@ def db_file_location() -> Generator[Any, Any, Any]:
 
         # Cleanup after tests
         db_path.unlink(missing_ok=True)
+
+
+@pytest_asyncio.fixture(autouse=True)
+async def async_cleanup_db() -> AsyncGenerator[None]:
+    """Cleanup table after each test."""
+    async with AsyncMarketDataDB() as db:
+        yield
+        await db._async_purge_table()  # pylint: disable=protected-access # noqa: SLF001
 
 
 @pytest.fixture(name="sample_market_data")

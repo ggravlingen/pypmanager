@@ -137,3 +137,13 @@ class AsyncMarketDataDB:
             )
 
             return result.fetchall()
+
+    async def _async_purge_table(self) -> None:
+        """
+        Cleanup the database.
+
+        Only to be used in tests!
+        """
+        async with self.async_session() as session, session.begin():
+            await session.execute(text("DELETE FROM market_data"))
+            await session.commit()
