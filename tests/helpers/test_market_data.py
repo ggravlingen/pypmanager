@@ -10,6 +10,7 @@ from unittest.mock import MagicMock, PropertyMock, patch
 import pandas as pd
 import pytest
 
+from pypmanager.database.market_data import AsyncMarketDataDB, MarketDataModel
 from pypmanager.helpers.market_data import (
     UpdateMarketDataCsv,
     _class_importer,
@@ -173,32 +174,19 @@ def test_class_importer_class_not_found() -> None:
 
 @pytest.mark.asyncio
 async def test_async_get_last_market_data_df(
-    market_data_factory: type[MarketDataFactory],
+    sample_market_data: list[MarketDataModel],
 ) -> None:
     """Test function async_get_last_market_data_df."""
-    mocked_market_data = (
-        market_data_factory()
-        .add(isin_code="US1234567890", report_date=date(2022, 11, 1), price=100.0)
-        .add(
-            isin_code="US1234567890",
-            report_date=date(2022, 11, 2),
-            price=90.0,
-        )
-        .add(isin_code="US1234567891", report_date=date(2022, 11, 1), price=100.0)
-    ).df_market_data_list
-    with (
-        patch(
-            "pypmanager.helpers.market_data.get_market_data",
-            return_value=mocked_market_data,
-        ),
-    ):
-        result = await async_get_last_market_data_df()
-        assert len(result) == 2
-        assert result.iloc[0].isin_code == "US1234567891"
-        assert result.iloc[0].price == 100.0
+    async with AsyncMarketDataDB() as db:
+        await db.async_store_market_data(data=sample_market_data)
 
-        assert result.iloc[1].isin_code == "US1234567890"
-        assert result.iloc[1].price == 90.0
+    result = await async_get_last_market_data_df()
+    assert len(result) == 2
+    assert result.iloc[0].isin_code == "US0231351067"
+    assert result.iloc[0].price == 102.75
+
+    assert result.iloc[1].isin_code == "US0378331005"
+    assert result.iloc[1].price == 150.25
 
 
 @pytest.fixture(name="mock_source_data")
