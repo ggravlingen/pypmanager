@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 import strawberry
 
-from pypmanager.helpers.market_data import get_market_data
+from pypmanager.helpers.market_data import async_get_market_data
 from pypmanager.helpers.security_holding_history import SecurityHoldingHistory
 from pypmanager.ingest.transaction.const import (
     TransactionRegistryColNameValues,
@@ -85,7 +85,7 @@ async def async_get_market_data_and_transaction(
     )
 
     # Get all market data for the ISIN
-    df_market_data = get_market_data(isin_code=isin_code)
+    df_market_data = await async_get_market_data(isin_code=isin_code)
 
     # Merge the resulting DataFrame with df_market_data on the date index
     df_transaction_with_market_data = df_transaction_with_date.join(

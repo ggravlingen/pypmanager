@@ -53,7 +53,8 @@ async def test_async_get_market_data_and_transaction(
 
     factory = data_factory()
     mocked_transactions = factory.buy(
-        transaction_date=datetime(2022, 11, 2, tzinfo=Settings.system_time_zone)
+        isin_code="US0378331005",
+        transaction_date=datetime(2022, 11, 2, tzinfo=Settings.system_time_zone),
     ).df_transaction_list
 
     with (
@@ -63,7 +64,7 @@ async def test_async_get_market_data_and_transaction(
         ),
     ):
         result = await async_get_market_data_and_transaction(
-            isin_code="US1234567890",
+            isin_code="US0378331005",
             start_date=date(2022, 11, 1),
             end_date=date(2022, 11, 30),
         )

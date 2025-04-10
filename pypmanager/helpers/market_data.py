@@ -9,9 +9,7 @@ from importlib import import_module
 import logging
 from random import randint
 from typing import TYPE_CHECKING, Self, cast
-import warnings
 
-import numpy as np
 import pandas as pd
 from requests import HTTPError
 import strawberry
@@ -55,47 +53,6 @@ async def async_load_market_data_config() -> list[Source]:
             output_data.extend(local_sources)
 
     return output_data
-
-
-def get_market_data(isin_code: str | None = None) -> pd.DataFrame:
-    """
-    Load all market data from CSV files and concatenate them into a single DataFrame.
-
-    Returns:
-        pd.DataFrame: A DataFrame containing all the market data concatenated together,
-        indexed by 'report_date'. If isin_code is provided, only the data for that
-        isin_code will be returned. In that case, the index is a datetime index.
-    """
-    warnings.warn(
-        "deprecated_function is deprecated and will be removed in a future release",
-        DeprecationWarning,
-        stacklevel=2,  # Ensures the warning points to the caller
-    )
-
-    all_data_frames: list[pd.DataFrame] = []
-
-    for file in Settings.dir_market_data_local.glob("*.csv"):
-        df_market_data = pd.read_csv(file, sep=";", index_col="report_date")
-        all_data_frames.append(df_market_data)
-
-    if not all_data_frames:
-        return pd.DataFrame()
-
-    merged_df = pd.concat(all_data_frames, ignore_index=False)
-
-    merged_df = merged_df.replace("nan", np.nan)
-    merged_df = merged_df.replace({np.nan: None})
-
-    if isin_code:
-        df_queried = merged_df.query(f"isin_code == '{isin_code}'")
-        # We want to merge the date range DataFrame with df_market_data on the date
-        # index so we need to convert the index to datetime
-        df_queried.index = pd.to_datetime(df_queried.index).tz_localize(
-            Settings.system_time_zone
-        )
-        return df_queried
-
-    return merged_df
 
 
 async def async_get_market_data(isin_code: str | None = None) -> pd.DataFrame:
