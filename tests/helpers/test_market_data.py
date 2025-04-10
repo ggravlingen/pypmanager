@@ -89,7 +89,7 @@ async def test_async_get_market_data_overview() -> None:
         await db.async_store_market_data(
             data=[
                 MarketDataModel(
-                    isin_code="SE0003788587",
+                    isin_code="SE0000671919",
                     report_date=date(2022, 11, 1),
                     close_price=100.0,
                     date_added=datetime(2022, 11, 1, tzinfo=UTC),
@@ -108,10 +108,10 @@ async def test_async_get_market_data_overview() -> None:
         result = await async_get_market_data_overview()
 
         assert len(result) == 3
-        assert result[0].isin_code == "SE0003788587"
-        assert result[0].name is None
-        assert result[0].first_date == date(2022, 11, 1)
-        assert result[0].last_date == date(2022, 11, 1)
+        assert result[2].isin_code == "SE0000671919"
+        assert result[2].name == "Storebrand Global All Countries A SEK"
+        assert result[2].first_date == date(2022, 11, 1)
+        assert result[2].last_date == date(2022, 11, 1)
 
 
 @pytest.mark.asyncio

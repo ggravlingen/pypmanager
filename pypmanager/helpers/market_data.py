@@ -9,6 +9,7 @@ from importlib import import_module
 import logging
 from random import randint
 from typing import TYPE_CHECKING, Self, cast
+import warnings
 
 import numpy as np
 import pandas as pd
@@ -65,6 +66,12 @@ def get_market_data(isin_code: str | None = None) -> pd.DataFrame:
         indexed by 'report_date'. If isin_code is provided, only the data for that
         isin_code will be returned. In that case, the index is a datetime index.
     """
+    warnings.warn(
+        "deprecated_function is deprecated and will be removed in a future release",
+        DeprecationWarning,
+        stacklevel=2,  # Ensures the warning points to the caller
+    )
+
     all_data_frames: list[pd.DataFrame] = []
 
     for file in Settings.dir_market_data_local.glob("*.csv"):
@@ -89,6 +96,39 @@ def get_market_data(isin_code: str | None = None) -> pd.DataFrame:
         return df_queried
 
     return merged_df
+
+
+async def async_get_market_data(isin_code: str | None = None) -> pd.DataFrame:
+    """
+    Get market data from database.
+
+    Returns df with columns isin_code, price, date_added_utc, source.
+    """
+    async with AsyncMarketDataDB() as db:
+        data = await db.async_filter_all(isin_code=isin_code)
+
+        if not data:
+            return pd.DataFrame()
+
+        data_as_dict = [
+            {
+                "isin_code": record.isin_code,
+                "price": record.close_price,
+                "report_date": record.report_date,
+                "date_added_utc": record.date_added,
+                "source": record.source,
+            }
+            for record in data
+        ]
+
+        # Convert the data to a DataFrame
+        df_data = pd.DataFrame(data_as_dict)
+
+        # Convert the 'report_date' column to datetime and set it as the index
+        df_data["report_date"] = pd.to_datetime(df_data["report_date"]).dt.tz_localize(
+            Settings.system_time_zone
+        )
+        return df_data.set_index("report_date")
 
 
 async def async_get_last_market_data_df() -> pd.DataFrame:
@@ -125,7 +165,7 @@ async def async_get_market_data_overview() -> list[MarketDataOverviewRecord]:
 
     # For each source, get first and last date or market data
     for source in sources:
-        df_market_data = get_market_data(isin_code=source.isin_code)
+        df_market_data = await async_get_market_data(isin_code=source.isin_code)
 
         # Add the name of the security to the source
         security_obj = all_security.get(source.isin_code)
