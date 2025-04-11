@@ -12,6 +12,7 @@ from typing import TYPE_CHECKING, Self, cast
 
 import pandas as pd
 from requests import HTTPError
+from sqlalchemy.exc import IntegrityError
 import strawberry
 import yaml
 
@@ -27,6 +28,45 @@ if TYPE_CHECKING:
     from types import TracebackType
 
     from pypmanager.ingest.market_data.base_loader import BaseMarketDataLoader
+
+
+async def async_sync_csv_to_db() -> None:
+    """Sync CSV data to database.
+
+    This function reads market data from CSV files and stores it in the market data
+    database.
+    """
+    all_data: list[MarketDataModel] = []
+
+    for file in Settings.dir_market_data_local.glob("*.csv"):
+        df_market_data = pd.read_csv(file, sep=";")
+        # set report_date as index
+        df_market_data["report_date"] = pd.to_datetime(
+            df_market_data["report_date"]
+        ).dt.tz_localize(Settings.system_time_zone)
+        df_market_data = df_market_data.set_index("report_date")
+
+        # Loop over each row in df_market_data
+        for index, row in df_market_data.iterrows():
+            all_data.append(
+                MarketDataModel(
+                    isin_code=row["isin_code"],
+                    report_date=index,
+                    close_price=row["price"],
+                    date_added=datetime.now(UTC),
+                    source=row["source"],
+                )
+            )
+
+        async with AsyncMarketDataDB() as db:
+            # Store the data in the database
+            try:
+                await db.async_store_market_data(all_data)
+            except IntegrityError:
+                LOGGER.warning(f"Error parsing {file}. Skipping.")
+                continue
+
+    LOGGER.info(f"Stored {len(all_data)} records from CSV files to the database")
 
 
 async def async_load_market_data_config() -> list[Source]:

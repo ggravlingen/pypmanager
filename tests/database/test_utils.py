@@ -62,16 +62,16 @@ async def test_async_upsert_data_success() -> None:
 
 
 @pytest.mark.asyncio
-async def test_async_upsert_data_failure() -> None:
+async def test_async_upsert_data_failure(caplog: pytest.LogCaptureFixture) -> None:
     """Test async_upsert_data rolls back on failure."""
     # Arrange
     mock_session = AsyncMock(spec=AsyncSession)
     mock_data_list = [MockModel()]
     mock_session.merge.side_effect = Exception("Mock exception")
 
-    # Act & Assert
-    with pytest.raises(Exception, match="Mock exception"):
-        await async_upsert_data(session=mock_session, data_list=mock_data_list)
+    await async_upsert_data(session=mock_session, data_list=mock_data_list)
+
+    assert "No successful merges to commit, all 1 items failed" in caplog.text
 
     mock_session.rollback.assert_called_once()
     mock_session.commit.assert_not_called()
