@@ -11,6 +11,10 @@ import pandas as pd
 import pytest
 import pytest_asyncio
 
+from pypmanager.database.daily_portfolio_holding import (
+    AsyncDbDailyPortfolioHolding,
+    DailyPortfolioMoldingModel,
+)
 from pypmanager.database.market_data import AsyncMarketDataDB, MarketDataModel
 from pypmanager.ingest.transaction.const import (
     TransactionRegistryColNameValues,
@@ -51,8 +55,11 @@ def mock_db_file_location() -> Generator[Any, Any, Any]:
 @pytest_asyncio.fixture(autouse=True)
 async def async_cleanup_db() -> AsyncGenerator[None]:
     """Cleanup table after each test."""
+    yield
     async with AsyncMarketDataDB() as db:
-        yield
+        await db._async_purge_table()  # pylint: disable=protected-access # noqa: SLF001
+
+    async with AsyncDbDailyPortfolioHolding() as db:
         await db._async_purge_table()  # pylint: disable=protected-access # noqa: SLF001
 
 
@@ -75,6 +82,18 @@ def sample_market_data_fixture() -> list[MarketDataModel]:
             currency=None,
             date_added=date(2023, 1, 2),
             source="test",
+        ),
+    ]
+
+
+@pytest.fixture(name="sample_daily_portfolio_holding")
+def sample_daily_portfolio_holding_fixture() -> list[DailyPortfolioMoldingModel]:
+    """Fixture providing sample data for a daily portfolio holding."""
+    return [
+        DailyPortfolioMoldingModel(
+            isin_code="US0378331005",
+            report_date=date(2023, 1, 1),
+            no_held=10.0,
         ),
     ]
 

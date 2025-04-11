@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import UTC, date, datetime
 from typing import TYPE_CHECKING, Any, Self
 
-from sqlalchemy import Row, text
+from sqlalchemy import Row, delete, text
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
     async_sessionmaker,
@@ -194,5 +194,6 @@ class AsyncMarketDataDB:
         Only to be used in tests!
         """
         async with self.async_session() as session, session.begin():
-            await session.execute(text("DELETE FROM market_data"))
+            stmt = delete(MarketDataModel)
+            await session.execute(stmt)
             await session.commit()
