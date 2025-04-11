@@ -34,6 +34,13 @@ class MarketDataModel(Base):
     date_added: Mapped[date] = mapped_column()
     source: Mapped[str] = mapped_column()
 
+    def __repr__(self) -> str:
+        """Return a string representation of the model."""
+        return (
+            f"<MarketDataModel(isin_code={self.isin_code}, "
+            f"report_date={self.report_date}, close_price={self.close_price})>"
+        )
+
 
 class AsyncMarketDataDB:
     """Database operations for market data."""

@@ -32,19 +32,25 @@ if TYPE_CHECKING:
 async def async_sync_csv_to_db() -> None:
     """Sync CSV data to database.
 
-    This function reads market data from CSV files and stores it in the database.
+    This function reads market data from CSV files and stores it in the market data
+    database.
     """
     all_data_frames: list[MarketDataModel] = []
 
     for file in Settings.dir_market_data_local.glob("*.csv"):
-        df_market_data = pd.read_csv(file, sep=";", index_col="report_date")
+        df_market_data = pd.read_csv(file, sep=";")
+        # set report_date as index
+        df_market_data["report_date"] = pd.to_datetime(
+            df_market_data["report_date"]
+        ).dt.tz_localize(Settings.system_time_zone)
+        df_market_data = df_market_data.set_index("report_date")
 
         # Loop over each row in df_market_data
-        for _, row in df_market_data.iterrows():
+        for index, row in df_market_data.iterrows():
             all_data_frames.append(
                 MarketDataModel(
                     isin_code=row["isin_code"],
-                    report_date=row.index,
+                    report_date=index,
                     close_price=row["price"],
                     date_added=datetime.now(UTC),
                     source=row["source"],
