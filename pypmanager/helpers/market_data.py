@@ -29,6 +29,33 @@ if TYPE_CHECKING:
     from pypmanager.ingest.market_data.base_loader import BaseMarketDataLoader
 
 
+async def async_sync_csv_to_db() -> None:
+    """Sync CSV data to database.
+
+    This function reads market data from CSV files and stores it in the database.
+    """
+    all_data_frames: list[MarketDataModel] = []
+
+    for file in Settings.dir_market_data_local.glob("*.csv"):
+        df_market_data = pd.read_csv(file, sep=";", index_col="report_date")
+
+        # Loop over each row in df_market_data
+        for _, row in df_market_data.iterrows():
+            all_data_frames.append(
+                MarketDataModel(
+                    isin_code=row["isin_code"],
+                    report_date=row.index,
+                    close_price=row["price"],
+                    date_added=datetime.now(UTC),
+                    source=row["source"],
+                )
+            )
+
+    async with AsyncMarketDataDB() as db:
+        # Store the data in the database
+        await db.async_store_market_data(all_data_frames)
+
+
 async def async_load_market_data_config() -> list[Source]:
     """Load market data settings files."""
     output_data: list[Source] = []

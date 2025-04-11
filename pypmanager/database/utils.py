@@ -30,12 +30,10 @@ def check_table_exists(connection: Connection, table_name: str) -> bool:
 
 async def async_upsert_data(*, session: AsyncSession, data_list: list[T]) -> None:
     """;erge (upsert) or insert data."""
-    try:
-        for item in data_list:
+    for item in data_list:
+        try:
             await session.merge(item)  # Merge (upsert)
+        except ValueError:
+            LOGGER.exception("Failed to merge item")
+
         await session.commit()  # Commit after processing all items
-        LOGGER.info(f"Stored {len(data_list)} market data records")
-    except Exception:
-        await session.rollback()
-        LOGGER.exception("Failed to store market data")
-        raise
