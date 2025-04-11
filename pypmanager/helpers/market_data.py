@@ -12,6 +12,7 @@ from typing import TYPE_CHECKING, Self, cast
 
 import pandas as pd
 from requests import HTTPError
+from sqlalchemy.exc import IntegrityError
 import strawberry
 import yaml
 
@@ -35,7 +36,7 @@ async def async_sync_csv_to_db() -> None:
     This function reads market data from CSV files and stores it in the market data
     database.
     """
-    all_data_frames: list[MarketDataModel] = []
+    all_data: list[MarketDataModel] = []
 
     for file in Settings.dir_market_data_local.glob("*.csv"):
         df_market_data = pd.read_csv(file, sep=";")
@@ -47,7 +48,7 @@ async def async_sync_csv_to_db() -> None:
 
         # Loop over each row in df_market_data
         for index, row in df_market_data.iterrows():
-            all_data_frames.append(
+            all_data.append(
                 MarketDataModel(
                     isin_code=row["isin_code"],
                     report_date=index,
@@ -57,9 +58,15 @@ async def async_sync_csv_to_db() -> None:
                 )
             )
 
-    async with AsyncMarketDataDB() as db:
-        # Store the data in the database
-        await db.async_store_market_data(all_data_frames)
+        async with AsyncMarketDataDB() as db:
+            # Store the data in the database
+            try:
+                await db.async_store_market_data(all_data)
+            except IntegrityError:
+                LOGGER.warning(f"Error parsing {file}. Skipping.")
+                continue
+
+    LOGGER.info(f"Stored {len(all_data)} records from CSV files to the database")
 
 
 async def async_load_market_data_config() -> list[Source]:

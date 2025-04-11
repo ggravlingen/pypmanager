@@ -11,6 +11,7 @@ from pypmanager.database.market_data import (
     AsyncMarketDataDB,
     MarketDataModel,
 )
+from pypmanager.helpers.market_data import async_sync_csv_to_db
 
 from tests.conftest import DB_NAME_TEST
 
@@ -113,3 +114,10 @@ async def test_async_get_all_data(
         assert data[0].close_price == 150.25
         assert data[0].report_date == "2023-01-01"
         assert data[0].source == "test"
+
+
+@pytest.mark.asyncio
+async def test_async_sync_csv_to_db(caplog: pytest.LogCaptureFixture) -> None:
+    """Test method async_sync_csv_to_db."""
+    await async_sync_csv_to_db()
+    assert "Stored 1 records from CSV files to the database" in caplog.text
