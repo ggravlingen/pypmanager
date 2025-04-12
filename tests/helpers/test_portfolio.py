@@ -31,7 +31,6 @@ async def transaction_data_v2_fixture() -> Generator[None]:
             report_date=date(2021, 1, 1),
             close_price=100.0,
             currency=None,
-            date_added=date(2023, 1, 2),
             source="test",
         )
     ]

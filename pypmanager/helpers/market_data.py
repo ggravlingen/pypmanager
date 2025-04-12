@@ -35,6 +35,7 @@ async def async_sync_csv_to_db() -> None:
     database.
     """
     all_data: list[MarketDataModel] = []
+    all_security = await async_security_map_isin_to_security()
 
     for file in Settings.dir_market_data_local.glob("*.csv"):
         df_market_data = pd.read_csv(file, sep=";")
@@ -46,23 +47,25 @@ async def async_sync_csv_to_db() -> None:
 
         # Loop over each row in df_market_data
         for index, row in df_market_data.iterrows():
+            isin_code = row["isin_code"]
+
+            security_obj = all_security.get(isin_code)
             all_data.append(
                 MarketDataModel(
-                    isin_code=row["isin_code"],
+                    isin_code=isin_code,
                     report_date=index,
                     close_price=row["price"],
-                    date_added=datetime.now(UTC),
                     source=row["source"],
+                    currency=security_obj.currency if security_obj else None,
                 )
             )
 
-        async with AsyncMarketDataDB() as db:
-            # Store the data in the database
-            try:
-                await db.async_store_market_data(all_data)
-            except IntegrityError:
-                LOGGER.warning(f"Error parsing {file}. Skipping.")
-                continue
+    async with AsyncMarketDataDB() as db:
+        # Store the data in the database
+        try:
+            await db.async_store_market_data(all_data)
+        except IntegrityError:
+            LOGGER.warning(f"Error parsing {file}. Skipping.")
 
     LOGGER.info(f"Stored {len(all_data)} records from CSV files to the database")
 
@@ -234,6 +237,8 @@ async def async_download_market_data() -> None:
         if data_loader_klass is None:
             continue
 
+        all_security = await async_security_map_isin_to_security()
+
         try:
             loader = data_loader_klass(
                 lookup_key=source.lookup_key,
@@ -241,24 +246,28 @@ async def async_download_market_data() -> None:
                 name=source.name,
             )
             data_list = loader.to_source_data()
-
-            async with AsyncMarketDataDB() as db:
-                db_data_list: list[MarketDataModel] = []
-                db_data_list = [
-                    MarketDataModel(
-                        isin_code=record.isin_code,
-                        report_date=record.report_date,
-                        close_price=record.price,
-                        date_added=datetime.now(UTC),
-                        source=loader.source,
-                    )
-                    for record in data_list
-                ]
-                await db.async_store_market_data(db_data_list)
         except HTTPError:
             LOGGER.exception(f"HTTP error when loading {loader}")
         except AttributeError:
             LOGGER.exception(f"Unable to load {loader}")
+
+        db_data_list: list[MarketDataModel] = []
+        for record in data_list:
+            security_obj = all_security.get(record.isin_code)
+
+            db_data_list.append(
+                MarketDataModel(
+                    isin_code=record.isin_code,
+                    report_date=record.report_date,
+                    close_price=record.price,
+                    date_added=datetime.now(UTC),
+                    source=loader.source,
+                    currency=security_obj.currency if security_obj else None,
+                )
+            )
+
+        async with AsyncMarketDataDB() as db:
+            await db.async_store_market_data(db_data_list)
 
         # Sleep for a random amount of time between 1 and 5 seconds to avoid spamming
         # APIs

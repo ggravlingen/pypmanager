@@ -30,8 +30,11 @@ class MarketDataModel(Base):
     isin_code: Mapped[str] = mapped_column(primary_key=True)
     report_date: Mapped[date] = mapped_column(primary_key=True)
     close_price: Mapped[float]
-    currency: Mapped[float | None] = mapped_column(default=None)
-    date_added: Mapped[date] = mapped_column()
+    currency: Mapped[str | None] = mapped_column(default=None)
+    date_added: Mapped[date] = mapped_column(
+        default=lambda: datetime.now(tz=UTC).date()
+    )
+    """The date of adding or updating the record."""
     source: Mapped[str] = mapped_column()
 
     def __repr__(self) -> str:
@@ -81,19 +84,8 @@ class AsyncMarketDataDB:
 
     async def async_store_market_data(self, data: list[MarketDataModel]) -> None:
         """Store market data in the database."""
-        models = [
-            MarketDataModel(
-                isin_code=item.isin_code,
-                close_price=item.close_price,
-                report_date=item.report_date,
-                date_added=datetime.now(tz=UTC).date(),
-                source=item.source,
-            )
-            for item in data
-        ]
-
         async with self.async_session() as session, session.begin():
-            await async_upsert_data(session=session, data_list=models)
+            await async_upsert_data(session=session, data_list=data)
 
     async def async_filter_all(
         self,
