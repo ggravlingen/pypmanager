@@ -36,6 +36,7 @@ async def test_async_get_all_data(
 
 
 @pytest.mark.asyncio
+@pytest.mark.usefixtures("load_security_data")
 async def test_sync_files_to_db(
     caplog: pytest.LogCaptureFixture,
 ) -> None:
