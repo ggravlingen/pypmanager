@@ -6,6 +6,7 @@ from pydantic import BaseModel
 from strawberry.experimental.pydantic import type as pydantic_type
 import yaml
 
+from pypmanager.database.security import AsyncDbSecurity, SecurityModel
 from pypmanager.settings import Settings
 
 LOGGER = logging.getLogger(__name__)
@@ -50,3 +51,19 @@ async def async_security_map_name_to_isin() -> dict[str, str]:
     """Return a dict to get the ISIN code from a security name."""
     security_data = await async_security_map_isin_to_security()
     return {security.name: isin for isin, security in security_data.items()}
+
+
+async def sync_files_to_db() -> None:
+    """Sync the security files to the database."""
+    all_security = await async_security_map_isin_to_security()
+    data = [
+        SecurityModel(
+            isin_code=security.isin_code,
+            name=security.name,
+            currency=security.currency,
+        )
+        for security in all_security.values()
+    ]
+
+    async with AsyncDbSecurity() as db:
+        await db.async_store_data(data=data)
