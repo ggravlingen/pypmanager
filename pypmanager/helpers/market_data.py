@@ -8,7 +8,7 @@ from datetime import UTC, date, datetime
 from importlib import import_module
 import logging
 from random import randint
-from typing import TYPE_CHECKING, Self, cast
+from typing import TYPE_CHECKING, cast
 
 import pandas as pd
 from requests import HTTPError
@@ -19,14 +19,12 @@ import yaml
 from pypmanager.database.market_data import AsyncMarketDataDB, MarketDataModel
 from pypmanager.error import DataError
 from pypmanager.helpers.security import async_security_map_isin_to_security
-from pypmanager.ingest.market_data.models import Source, SourceData, Sources
+from pypmanager.ingest.market_data.models import Source, Sources
 from pypmanager.settings import Settings
 
 LOGGER = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
-    from types import TracebackType
-
     from pypmanager.ingest.market_data.base_loader import BaseMarketDataLoader
 
 
@@ -244,8 +242,6 @@ async def async_download_market_data() -> None:
             )
             data_list = loader.to_source_data()
 
-            async with UpdateMarketDataCsv(data=data_list, source_name=loader.source):
-                pass
             async with AsyncMarketDataDB() as db:
                 db_data_list: list[MarketDataModel] = []
                 db_data_list = [
@@ -267,89 +263,3 @@ async def async_download_market_data() -> None:
         # Sleep for a random amount of time between 1 and 5 seconds to avoid spamming
         # APIs
         await sleep(randint(1, 5))  # noqa: S311
-
-
-class UpdateMarketDataCsv:
-    """Helper class to update a CSV file containing market data."""
-
-    df_all_data: pd.DataFrame
-    df_existing_file: pd.DataFrame
-    df_source_data: pd.DataFrame
-
-    def __init__(
-        self: UpdateMarketDataCsv,
-        data: list[SourceData],
-        source_name: str,
-    ) -> None:
-        """Init class."""
-        self.data = data
-        self.source_name = source_name
-        self.file_market_data = Settings.dir_market_data_local / f"{source_name}.csv"
-
-    async def __aenter__(self) -> Self:
-        """Enter async context manager."""
-        self.prepare_source_data()
-        self.concat_data()
-        self.save_to_csv()
-        return self
-
-    async def __aexit__(
-        self: UpdateMarketDataCsv,
-        exc_type: type[BaseException] | None,
-        exc: BaseException | None,
-        tb: TracebackType | None,
-    ) -> None:
-        """Exit context manager."""
-
-    @property
-    def target_file_exists(self: UpdateMarketDataCsv) -> bool:
-        """Check if the target file exists."""
-        return self.file_market_data.exists()
-
-    def prepare_source_data(self: UpdateMarketDataCsv) -> None:
-        """Convert source data to a data frame."""
-        self.df_source_data = pd.DataFrame([vars(s) for s in self.data])
-
-        # Add a timestamp for when we added the date
-        self.df_source_data["date_added_utc"] = datetime.now(UTC)
-        self.df_source_data["source"] = self.source_name
-
-    def concat_data(self: UpdateMarketDataCsv) -> None:
-        """Merge existing data, if existing, with new data."""
-        if self.target_file_exists:
-            existing_df = pd.read_csv(
-                self.file_market_data,
-                sep=";",
-                parse_dates=["report_date"],
-            )
-        else:
-            existing_df = pd.DataFrame(
-                data=[],
-                columns=["isin_code", "price", "report_date", "name", "date_added_utc"],
-            )
-
-        self.df_all_data = pd.concat([existing_df, self.df_source_data])
-
-    def save_to_csv(self: UpdateMarketDataCsv) -> None:
-        """Save data to CSV."""
-        df_final_output = self.df_all_data.copy()
-
-        # Remove duplicates
-        df_final_output = df_final_output.drop_duplicates(
-            subset=["isin_code", "report_date"], keep="last"
-        )
-
-        # Convert possible categorical to string for sorting if needed
-        if isinstance(df_final_output["isin_code"].dtype, pd.CategoricalDtype):
-            df_final_output["isin_code"] = df_final_output["isin_code"].astype(str)
-
-        # Ensure report_date is properly formatted for sorting
-        if not pd.api.types.is_datetime64_dtype(df_final_output["report_date"]):
-            df_final_output["report_date"] = pd.to_datetime(
-                df_final_output["report_date"]
-            )
-
-        df_final_output = df_final_output.sort_values(["isin_code", "report_date"])
-
-        # Write the merged DataFrame back to the CSV file
-        df_final_output.to_csv(self.file_market_data, index=False, sep=";")
