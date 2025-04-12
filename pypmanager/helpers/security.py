@@ -4,10 +4,8 @@ import logging
 
 from pydantic import BaseModel
 from strawberry.experimental.pydantic import type as pydantic_type
-import yaml
 
 from pypmanager.database.security import AsyncDbSecurity, SecurityModel
-from pypmanager.settings import Settings
 
 LOGGER = logging.getLogger(__name__)
 
@@ -30,21 +28,18 @@ class SecurityDataResponse:
 
 async def async_security_map_isin_to_security() -> dict[str, SecurityData]:
     """Return a dict to get security information from an ISIN."""
-    with Settings.security_config.open(encoding="UTF-8") as file:
-        yaml_data = yaml.safe_load(file)
+    async with AsyncDbSecurity() as db:
+        if db_data := await db.async_filter_all():
+            return {
+                security.isin_code: SecurityData(
+                    name=security.name,
+                    isin_code=security.isin_code,
+                    currency=security.currency,
+                )
+                for security in db_data
+            }
 
-        security_data = {item["isin_code"]: SecurityData(**item) for item in yaml_data}
-
-    if Settings.security_config_local and Settings.security_config_local.exists():
-        with Settings.security_config_local.open(encoding="UTF-8") as file:
-            yaml_data = yaml.safe_load(file)
-
-            # Append security_data with local security data
-            security_data.update(
-                {item["isin_code"]: SecurityData(**item) for item in yaml_data}
-            )
-
-    return security_data
+    return {}
 
 
 async def async_security_map_name_to_isin() -> dict[str, str]:
