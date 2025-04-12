@@ -12,7 +12,6 @@ import pytest
 
 from pypmanager.database.market_data import AsyncMarketDataDB, MarketDataModel
 from pypmanager.helpers.market_data import (
-    UpdateMarketDataCsv,
     _class_importer,
     async_get_last_market_data_df,
     async_get_market_data_overview,
@@ -174,39 +173,3 @@ def _mock_dont_save_csv() -> Generator[MagicMock]:
     mock = MagicMock()
     with patch.object(pd.DataFrame, "to_csv", mock):
         yield mock
-
-
-@pytest.mark.asyncio
-@pytest.mark.usefixtures("mock_dont_save_csv")
-async def test_update_market_data_csv__prepare_source_data(
-    mock_source_data: list[SourceData],
-) -> None:
-    """Test UpdateMarketDataCsv.prepare_source_data."""
-    async with UpdateMarketDataCsv(
-        data=mock_source_data, source_name="test_source"
-    ) as update_market_data_csv_obj:
-        assert not update_market_data_csv_obj.df_source_data.empty
-        assert "date_added_utc" in update_market_data_csv_obj.df_source_data.columns
-        assert "source" in update_market_data_csv_obj.df_source_data.columns
-
-
-@pytest.mark.asyncio
-@pytest.mark.usefixtures("mock_dont_save_csv")
-async def test_update_market_data_csv__concat_data(
-    mock_source_data: list[SourceData],
-) -> None:
-    """Test UpdateMarketDataCsv.concat_data."""
-    with patch("pandas.read_csv", return_value=pd.DataFrame()):
-        async with UpdateMarketDataCsv(
-            data=mock_source_data, source_name="test_source"
-        ) as update_market_data_csv_obj:
-            assert not update_market_data_csv_obj.df_all_data.empty
-
-
-@pytest.mark.asyncio
-async def test_update_market_data_csv__save_to_csv(
-    mock_source_data: list[SourceData], mock_dont_save_csv: MagicMock
-) -> None:
-    """Test UpdateMarketDataCsv.to_csv."""
-    async with UpdateMarketDataCsv(data=mock_source_data, source_name="test_source"):
-        mock_dont_save_csv.assert_called_once()
