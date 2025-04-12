@@ -16,6 +16,7 @@ from pypmanager.database.daily_portfolio_holding import (
     DailyPortfolioMoldingModel,
 )
 from pypmanager.database.market_data import AsyncMarketDataDB, MarketDataModel
+from pypmanager.database.security import AsyncDbSecurity, SecurityModel
 from pypmanager.ingest.transaction.const import (
     TransactionRegistryColNameValues,
     TransactionTypeValues,
@@ -62,6 +63,9 @@ async def async_cleanup_db() -> AsyncGenerator[None]:
     async with AsyncDbDailyPortfolioHolding() as db:
         await db._async_purge_table()  # pylint: disable=protected-access # noqa: SLF001
 
+    async with AsyncDbSecurity() as db:
+        await db._async_purge_table()  # pylint: disable=protected-access # noqa: SLF001
+
 
 @pytest.fixture(name="sample_market_data")
 def sample_market_data_fixture() -> list[MarketDataModel]:
@@ -95,6 +99,14 @@ def sample_daily_portfolio_holding_fixture() -> list[DailyPortfolioMoldingModel]
             report_date=date(2023, 1, 1),
             no_held=10.0,
         ),
+    ]
+
+
+@pytest.fixture(name="sample_security", autouse=True)
+def sample_security_fixture() -> list[SecurityModel]:
+    """Sample fixture for security data."""
+    return [
+        SecurityModel(isin_code="US0378331005", name="Apple Inc.", currency="USD"),
     ]
 
 
