@@ -34,6 +34,7 @@ class MarketDataModel(Base):
     date_added: Mapped[date] = mapped_column(
         default=lambda: datetime.now(tz=UTC).date()
     )
+    """The date of adding or updating the record."""
     source: Mapped[str] = mapped_column()
 
     def __repr__(self) -> str:
