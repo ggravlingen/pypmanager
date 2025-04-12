@@ -10,6 +10,7 @@ from fastapi import FastAPI, Request, Response
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
+from pypmanager.helpers.security import sync_files_to_db
 from pypmanager.settings import Settings
 
 from .graphql import graphql_app
@@ -20,6 +21,7 @@ from .scheduler import scheduler
 async def async_lifespan(_: FastAPI) -> AsyncGenerator[None]:
     """Start and shutdown the scheduler."""
     scheduler.start()
+    await sync_files_to_db()
     yield
     scheduler.shutdown()
 
