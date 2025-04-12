@@ -90,6 +90,21 @@ def sample_market_data_fixture() -> list[MarketDataModel]:
     ]
 
 
+@pytest_asyncio.fixture(name="load_security_data")
+async def load_security_data_fixture() -> list[dict[str, str]]:
+    """Security data fixture."""
+    async with AsyncDbSecurity() as db:
+        await db.async_store_data(
+            data=[
+                SecurityModel(
+                    isin_code="SE0005188836",
+                    name="Länsförsäkringar Global Index",
+                    currency="SEK",
+                ),
+            ]
+        )
+
+
 @pytest.fixture(name="sample_daily_portfolio_holding")
 def sample_daily_portfolio_holding_fixture() -> list[DailyPortfolioMoldingModel]:
     """Fixture providing sample data for a daily portfolio holding."""

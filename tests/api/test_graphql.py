@@ -219,6 +219,7 @@ async def test_graphql_query__market_data_overview() -> None:
 
 
 @pytest.mark.asyncio
+@pytest.mark.usefixtures("load_security_data")
 async def test_graphql_query__security_info() -> None:
     """Test query security_info."""
     query = """

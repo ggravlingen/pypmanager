@@ -3,28 +3,11 @@
 from __future__ import annotations
 
 import pytest
-import pytest_asyncio
 
-from pypmanager.database.security import AsyncDbSecurity, SecurityModel
 from pypmanager.helpers import (
     async_security_map_isin_to_security,
 )
 from pypmanager.helpers.security import async_security_map_name_to_isin
-
-
-@pytest_asyncio.fixture(name="load_security_data")
-async def load_security_data_fixture() -> list[dict[str, str]]:
-    """Security data fixture."""
-    async with AsyncDbSecurity() as db:
-        await db.async_store_data(
-            data=[
-                SecurityModel(
-                    isin_code="SE0005188836",
-                    name="Länsförsäkringar Global Index",
-                    currency="SEK",
-                ),
-            ]
-        )
 
 
 @pytest.mark.asyncio
