@@ -3,14 +3,19 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import date  # noqa: TC003
+from datetime import date, datetime
 import logging
 
 import pandas as pd
 import strawberry
 
+from pypmanager.database.daily_portfolio_holding import (
+    AsyncDbDailyPortfolioHolding,
+    DailyPortfolioMoldingModel,
+)
 from pypmanager.ingest.transaction.const import TransactionRegistryColNameValues
 from pypmanager.ingest.transaction.transaction_registry import TransactionRegistry
+from pypmanager.settings import Settings
 
 from .income_statement import PnLData, async_pnl_map_isin_to_pnl_data
 from .market_data import async_get_last_market_data_df
@@ -216,3 +221,78 @@ async def async_get_holding_by_isin(isin_code: str) -> Holding | None:
         market_value_date=market_value_date,
         market_value_price=market_value_price,
     )
+
+
+async def async_store_daily_holding() -> None:
+    """
+    Store daily holding data.
+
+    Args:
+        lookback_days: Number of days to look back from today for daily holdings.
+            If None, store all available data.
+    """
+    async with TransactionRegistry() as registry_obj:
+        df_transaction_registry_all = await registry_obj.async_get_registry()
+
+    # example first_date = df_transaction_registry_all.index.min().date()
+    # first date should be two years before datetime.now()
+    first_date = (
+        datetime.now(tz=Settings.system_time_zone) - pd.DateOffset(years=2)
+    ).date()
+    last_date = (
+        datetime.now(tz=Settings.system_time_zone) - pd.DateOffset(days=1)
+    ).date()
+
+    # Create a list of timezone awayre datetime from first_date until last_date
+    date_range = pd.date_range(
+        start=first_date, end=last_date, tz=Settings.system_time_zone
+    ).to_list()
+
+    # Loop over each date in the range
+    store_data: list[DailyPortfolioMoldingModel] = []
+    for idx, date_ in enumerate(date_range):
+        # Get the portfolio for that date
+        async with TransactionRegistry(report_date=date_) as filtered_registry_obj:
+            df_transaction_registry_all = (
+                await filtered_registry_obj.async_get_full_portfolio()
+            )
+
+            for isin_code in df_transaction_registry_all[
+                TransactionRegistryColNameValues.SOURCE_ISIN.value
+            ].to_numpy():
+                filtered_df = df_transaction_registry_all[
+                    df_transaction_registry_all[
+                        TransactionRegistryColNameValues.SOURCE_ISIN.value
+                    ]
+                    == isin_code
+                ]
+                if filtered_df.empty:
+                    continue
+
+                no_held = filtered_df[
+                    TransactionRegistryColNameValues.ADJUSTED_QUANTITY_HELD.value
+                ].to_numpy()[0]
+
+                if (
+                    pd.isna(no_held)
+                    or pd.isna(isin_code)
+                    or no_held == 0
+                    or isin_code == "0"
+                ):
+                    continue
+
+                store_data.append(
+                    DailyPortfolioMoldingModel(
+                        report_date=date_,
+                        isin_code=isin_code,
+                        no_held=no_held,
+                    )
+                )
+
+        # Log and commit every 100 rows
+        # Also make sure we store the last batch that may be less than 100 rows
+        if idx % 100 == 0 or (idx == len(date_range) - 1 and store_data):
+            LOGGER.debug(f"Storing {len(store_data)} rows for date {date_}")
+            async_db_daily_portfolio_holding = AsyncDbDailyPortfolioHolding()
+            await async_db_daily_portfolio_holding.async_store_data(store_data)
+            store_data = []
