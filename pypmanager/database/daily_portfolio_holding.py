@@ -141,3 +141,6 @@ class AsyncDbDailyPortfolioHolding:
             stmt = delete(DailyPortfolioMoldingModel)
             await session.execute(stmt)
             await session.commit()
+
+            msg = f"Purged {DailyPortfolioMoldingModel.__tablename__} table"
+            LOGGER.info(msg)
