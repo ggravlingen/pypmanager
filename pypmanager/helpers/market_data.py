@@ -12,7 +12,6 @@ from typing import TYPE_CHECKING, cast
 
 import pandas as pd
 from requests import HTTPError
-from sqlalchemy.exc import IntegrityError
 import strawberry
 import yaml
 
@@ -61,11 +60,7 @@ async def async_sync_csv_to_db() -> None:
             )
 
     async with AsyncMarketDataDB() as db:
-        # Store the data in the database
-        try:
-            await db.async_store_market_data(all_data)
-        except IntegrityError:
-            LOGGER.warning(f"Error parsing {file}. Skipping.")
+        await db.async_store_market_data(all_data)
 
     LOGGER.info(f"Stored {len(all_data)} records from CSV files to the database")
 
