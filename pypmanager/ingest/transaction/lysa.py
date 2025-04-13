@@ -6,7 +6,7 @@ import contextlib
 import logging
 from typing import TYPE_CHECKING, cast
 
-from pypmanager.helpers.security import async_security_map_name_to_isin
+from pypmanager.helpers import async_security_map_name_to_isin
 
 from .base_loader import TransactionLoader
 from .const import (
