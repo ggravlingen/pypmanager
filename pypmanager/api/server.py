@@ -10,7 +10,7 @@ from fastapi import FastAPI, Request, Response
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
-from pypmanager.helpers.security import sync_files_to_db
+from pypmanager.database.helpers import sync_files_to_db
 from pypmanager.settings import Settings
 
 from .graphql import graphql_app
