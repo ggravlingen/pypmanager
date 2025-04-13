@@ -12,7 +12,7 @@ from pypmanager.settings import Settings
 from .security import AsyncDbSecurity, SecurityModel
 
 
-async def sync_files_to_db() -> None:
+async def sync_security_files_to_db() -> None:
     """Sync the security YAML files to the database."""
     with Settings.security_config.open(encoding="UTF-8") as file:
         yaml_data = yaml.safe_load(file)
