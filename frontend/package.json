@@ -18,7 +18,7 @@
     "@mui/material": "7.0.2",
     "@mui/x-date-pickers": "8.0.0",
     "babel-loader": "10.0.0",
-    "chart.js": "4.4.8",
+    "chart.js": "4.4.9",
     "dayjs": "1.11.13",
     "dotenv-webpack": "8.1.0",
     "graphql": "16.10.0",
