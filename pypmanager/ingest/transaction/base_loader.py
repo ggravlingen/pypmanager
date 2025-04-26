@@ -74,11 +74,14 @@ class TransactionLoader(ABC):
 
     Example: Buy, Sell.
     """
+    drop_cols: ClassVar[list[str] | None] = None
+    """A list of columns to drop from the data frame."""
 
     async def __aenter__(self) -> Self:
         """Enter context manager."""
         self.load_data_files()
         self.normalise_column_name()
+        await self.async_drop_columns()
         await self.async_pre_process_df()
         await self.async_filter_transaction_type()
         self.normalize_transaction_date()
@@ -115,6 +118,19 @@ class TransactionLoader(ABC):
 
         # Cleanup whitespace in columns
         df_raw = df_raw.map(lambda x: x.strip() if isinstance(x, str) else x)
+
+        self.df_final = df_raw
+
+    async def async_drop_columns(self: TransactionLoader) -> None:
+        """Drop columns that are not needed."""
+        if self.drop_cols is None:
+            return
+
+        df_raw = self.df_final.copy()
+
+        for drop_col in self.drop_cols:
+            if drop_col in df_raw.columns:
+                df_raw = df_raw.drop(columns=drop_col)
 
         self.df_final = df_raw
 

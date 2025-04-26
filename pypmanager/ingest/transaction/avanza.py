@@ -68,19 +68,16 @@ class AvanzaLoader(TransactionLoader):
         "Övrigt",
     ]
 
+    drop_cols: ClassVar = [
+        "Resultat",
+        TransactionRegistryColNameValues.SOURCE_CURRENCY_NOMINAL.value,
+    ]
+
     async def async_pre_process_df(self: AvanzaLoader) -> None:
         """Broker specific manipulation of the data frame."""
         df_raw = self.df_final
 
         df_raw[TransactionRegistryColNameValues.SOURCE_BROKER.value] = "Avanza"
-
-        # We don't need this column as we calculate it in this library
-        for drop_col in [
-            "Resultat",
-            TransactionRegistryColNameValues.SOURCE_CURRENCY_NOMINAL.value,
-        ]:
-            if drop_col in df_raw.columns:
-                df_raw = df_raw.drop(columns=[drop_col])
 
         df_raw[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE] = df_raw.apply(
             _transaction_type,
