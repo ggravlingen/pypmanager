@@ -40,14 +40,13 @@ def _get_filename(file_path: Path) -> str:
 EMPTY_DF = pd.DataFrame(
     columns=[
         TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE,
-        ColumnNameValues.ACCOUNT,
         TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE,
         TransactionRegistryColNameValues.SOURCE_NAME_SECURITY,
         TransactionRegistryColNameValues.SOURCE_VOLUME,
         TransactionRegistryColNameValues.SOURCE_PRICE,
         ColumnNameValues.AMOUNT,
         TransactionRegistryColNameValues.SOURCE_FEE,
-        TransactionRegistryColNameValues.SOURCE_CURRENCY.value,
+        TransactionRegistryColNameValues.SOURCE_CURRENCY,
         TransactionRegistryColNameValues.SOURCE_ISIN,
     ],
 )
@@ -60,8 +59,6 @@ class TransactionLoader(ABC):
     The transaction loader is responsible for loading transaction data from CSV files
     and processing it into a DataFrame. It handles the loading, renaming, filtering,
     and validation of the data, as well as any broker-specific pre-processing.
-
-    If also aggregates the data by date and calculates total amount and average price.
     """
 
     csv_separator: str = CSVSeparator.SEMI_COLON
