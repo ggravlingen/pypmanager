@@ -5,7 +5,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 import logging
 from pathlib import Path
-from typing import TYPE_CHECKING, Self
+from typing import TYPE_CHECKING, ClassVar, Self
 
 import pandas as pd
 
@@ -53,18 +53,33 @@ EMPTY_DF = pd.DataFrame(
 
 
 class TransactionLoader(ABC):
-    """Base data loader."""
+    """
+    Base data loader.
+
+    The transaction loader is responsible for loading transaction data from CSV files
+    and processing it into a DataFrame. It handles the loading, renaming, filtering,
+    and validation of the data, as well as any broker-specific pre-processing.
+
+    If also aggregates the data by date and calculates total amount and average price.
+    """
 
     csv_separator: str = CSVSeparator.SEMI_COLON
     col_map: dict[str, str] | None = None
     df_final: pd.DataFrame
     file_pattern: str
     date_format_pattern: str
+    include_transaction_type: ClassVar[list[str] | None] = None
+    """
+    A list of transaction types, using the source data names, to import.
+
+    Example: Buy, Sell.
+    """
 
     async def __aenter__(self) -> Self:
         """Enter context manager."""
         self.load_data_files()
-        self.rename_and_filter()
+        self.normalise_column_name()
+        await self.async_filter_transaction_type()
         await self.async_pre_process_df()
         self.normalize_transaction_date()
         self.validate()
@@ -103,7 +118,7 @@ class TransactionLoader(ABC):
 
         self.df_final = df_raw
 
-    def rename_and_filter(self: TransactionLoader) -> None:
+    def normalise_column_name(self: TransactionLoader) -> None:
         """Set index."""
         df_raw = self.df_final.copy()
 
@@ -112,8 +127,27 @@ class TransactionLoader(ABC):
 
         self.df_final = df_raw
 
+    async def async_filter_transaction_type(self: TransactionLoader) -> None:
+        """Filter transaction types."""
+        if self.include_transaction_type is None:
+            return
+
+        df_raw = self.df_final.copy()
+
+        df_raw = df_raw[
+            df_raw[TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE].isin(
+                self.include_transaction_type
+            )
+        ]
+
+        self.df_final = df_raw
+
     def normalize_transaction_date(self: TransactionLoader) -> None:
-        """Make sure transaction date is in the correct format."""
+        """
+        Make sure transaction date is in the correct format.
+
+        We expect 2024-06-27 00:00:00+02:00.
+        """
         df_raw = self.df_final
 
         df_raw[TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE] = (

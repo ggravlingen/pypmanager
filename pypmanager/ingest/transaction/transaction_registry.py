@@ -148,7 +148,10 @@ COLUMN_CLEANUP: tuple[ColumnAppendConfig, ...] = (
 
 class TransactionRegistry:
     """
-    Create a normalised registry for all transactions.
+    Create a registry for all transactions.
+
+    The transaction registry is responsible for loading transaction data from CSV files
+    and processing it into a normalised DataFrame.
 
     This registry is the basis for all other calculations.
     """

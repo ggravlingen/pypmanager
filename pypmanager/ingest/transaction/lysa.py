@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import contextlib
 import logging
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, ClassVar, cast
 
 from pypmanager.helpers.security import async_security_map_name_to_isin
 
@@ -50,6 +50,14 @@ class LysaLoader(TransactionLoader):
     file_pattern = "lysa*.csv"
     date_format_pattern = "%Y-%m-%dT%H:%M:%S.%fZ"
 
+    include_transaction_type: ClassVar = [
+        "Buy",
+        "Sell",
+        "Fee",
+        "Switch sell",
+        "Switch buy",
+    ]
+
     async def async_pre_process_df(self: LysaLoader) -> None:
         """Load CSV."""
         df_raw = self.df_final
@@ -77,12 +85,12 @@ class LysaLoader(TransactionLoader):
             TransactionRegistryColNameValues.SOURCE_NAME_SECURITY
         ].map(security_map_name_to_isin)
 
-        # Validate that ISIN exists for all relewant rows
-        await self.async_validate_isin()
-
         self.df_final = df_raw
 
-    async def async_validate_isin(self: LysaLoader) -> None:
+        # Validate that ISIN exists for all relewant rows
+        await self._async_validate_isin()
+
+    async def _async_validate_isin(self: LysaLoader) -> None:
         """Validate that an ISIN exists for all buy and sell transactions."""
         df_raw = self.df_final.copy()
 
