@@ -41,6 +41,7 @@ class GenericLoader(TransactionLoader):
         for col in [
             TransactionRegistryColNameValues.SOURCE_FX,
             TransactionRegistryColNameValues.SOURCE_ACCOUNT_NAME,
+            TransactionRegistryColNameValues.SOURCE_BROKER,
         ]:
             if col.value not in df_raw.columns:
                 df_raw[col.value] = None
