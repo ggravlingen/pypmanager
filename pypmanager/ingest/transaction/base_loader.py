@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING, ClassVar, Self
 
 import pandas as pd
 
+from pypmanager.error import DataIntegrityError
 from pypmanager.settings import Settings
 
 from .const import (
@@ -86,6 +87,7 @@ class TransactionLoader(ABC):
         await self.async_filter_transaction_type()
         self.normalize_transaction_date()
         self.validate()
+        await self._async_validate_columns()
         return self
 
     async def __aexit__(  # noqa: B027
@@ -183,6 +185,42 @@ class TransactionLoader(ABC):
         ):
             msg = f"ISIN column is missing in {self.file_pattern}"
             _LOGGER.error(msg)
+
+    async def _async_validate_columns(self: TransactionLoader) -> None:
+        """
+        Validate columns.
+
+        Makes sure the final data frame has the expected columns.
+        """
+        expected_columns = [
+            ColumnNameValues.AMOUNT,
+            TransactionRegistryColNameValues.SOURCE_ACCOUNT_NAME,
+            TransactionRegistryColNameValues.SOURCE_BROKER,
+            TransactionRegistryColNameValues.SOURCE_CURRENCY,
+            TransactionRegistryColNameValues.SOURCE_FEE,
+            TransactionRegistryColNameValues.SOURCE_FILE,
+            TransactionRegistryColNameValues.SOURCE_FX,
+            TransactionRegistryColNameValues.SOURCE_ISIN,
+            TransactionRegistryColNameValues.SOURCE_NAME_SECURITY,
+            TransactionRegistryColNameValues.SOURCE_PRICE,
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE,
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE,
+            TransactionRegistryColNameValues.SOURCE_VOLUME,
+        ]
+
+        actual_columns = self.df_final.columns.tolist()
+
+        # Find columns that are in actual_columns but not in expected_columns
+        missing_columns = set(expected_columns) - set(actual_columns)
+        extra_columns = set(actual_columns) - set(expected_columns)
+
+        if missing_columns:
+            msg = f"Missing columns: {missing_columns}. In {self.__class__.__name__}."
+            raise DataIntegrityError(msg)
+
+        if extra_columns:
+            msg = f"Extra columns found: {extra_columns}. In {self.__class__.__name__}."
+            raise DataIntegrityError(msg)
 
     @abstractmethod
     async def async_pre_process_df(self: TransactionLoader) -> None:
