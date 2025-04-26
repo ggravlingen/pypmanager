@@ -85,6 +85,14 @@ class LysaLoader(TransactionLoader):
             TransactionRegistryColNameValues.SOURCE_NAME_SECURITY
         ].map(security_map_name_to_isin)
 
+        # Append missing columns
+        for col in [
+            TransactionRegistryColNameValues.SOURCE_FX,
+            TransactionRegistryColNameValues.SOURCE_ACCOUNT_NAME,
+        ]:
+            if col.value not in df_raw.columns:
+                df_raw[col.value] = None
+
         self.df_final = df_raw
 
         # Validate that ISIN exists for all relewant rows

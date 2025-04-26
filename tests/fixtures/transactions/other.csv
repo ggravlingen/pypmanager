@@ -1,2 +1,2 @@
-source_transaction_date;source_transaction_type;source_name;source_isin;source_volume;source_price;amount;source_fee;source_currency
+source_transaction_date;source_transaction_type;source_name;source_isin_code;source_volume;source_price;amount;source_fee;source_currency
 2022-01-11;buy;Länsförsäkringar Global Index;SE0005188836;1,909738;4345,60;;0;SEK

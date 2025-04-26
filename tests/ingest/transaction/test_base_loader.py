@@ -14,7 +14,9 @@ from pypmanager.ingest.transaction.base_loader import (
     TransactionLoader,
     _get_filename,
 )
-from pypmanager.ingest.transaction.const import TransactionRegistryColNameValues
+from pypmanager.ingest.transaction.const import (
+    TransactionRegistryColNameValues,
+)
 
 
 class MockLoader(TransactionLoader):
@@ -25,6 +27,19 @@ class MockLoader(TransactionLoader):
 
     async def async_pre_process_df(self: MockLoader) -> None:
         """Mock method."""
+        df_raw = self.df_final
+
+        # Append missing columns
+        for col in [
+            TransactionRegistryColNameValues.SOURCE_FX,
+            TransactionRegistryColNameValues.SOURCE_ACCOUNT_NAME,
+            TransactionRegistryColNameValues.SOURCE_BROKER,
+            TransactionRegistryColNameValues.SOURCE_FILE,
+        ]:
+            if col.value not in df_raw.columns:
+                df_raw[col.value] = None
+
+        self.df_final = df_raw
 
 
 @pytest.mark.parametrize(

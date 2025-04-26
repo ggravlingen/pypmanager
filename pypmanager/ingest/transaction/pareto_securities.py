@@ -76,4 +76,12 @@ class ParetoSecuritiesLoader(TransactionLoader):
 
         df_raw[TransactionRegistryColNameValues.SOURCE_BROKER.value] = "Pareto"
 
+        # Append missing columns
+        for col in [
+            TransactionRegistryColNameValues.SOURCE_FX,
+            TransactionRegistryColNameValues.SOURCE_ACCOUNT_NAME,
+        ]:
+            if col.value not in df_raw.columns:
+                df_raw[col.value] = None
+
         self.df_final = df_raw
