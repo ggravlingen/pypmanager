@@ -88,9 +88,9 @@ class LysaLoader(TransactionLoader):
         self.df_final = df_raw
 
         # Validate that ISIN exists for all relewant rows
-        await self._async_validate_isin()
+        await self.async_validate_isin()
 
-    async def _async_validate_isin(self: LysaLoader) -> None:
+    async def async_validate_isin(self: LysaLoader) -> None:
         """Validate that an ISIN exists for all buy and sell transactions."""
         df_raw = self.df_final.copy()
 
