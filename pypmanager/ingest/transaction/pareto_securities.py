@@ -58,25 +58,22 @@ class ParetoSecuritiesLoader(TransactionLoader):
         "Sell",
     ]
 
+    drop_cols: ClassVar = [
+        "Likviddag",
+        "Ticker",
+        "Belopp",
+        "Avräkningsnota",
+        "exportToCsv_contractnotes_header_valRate",
+        "exportToCsv_contractnotes_header_documentId",
+        "exportToCsv_contractnotes_header_downloadHash",
+        "exportToCsv_contractnotes_header_rowId",
+        "exportToCsv_contractnotes_header_hashSum",
+    ]
+
     async def async_pre_process_df(self: ParetoSecuritiesLoader) -> None:
         """Load CSV."""
         df_raw = self.df_final
 
         df_raw[TransactionRegistryColNameValues.SOURCE_BROKER.value] = "Pareto"
-
-        # We don't need this column as we calculate it in this library
-        for drop_col in [
-            "Likviddag",
-            "Ticker",
-            "Belopp",
-            "Avräkningsnota",
-            "exportToCsv_contractnotes_header_valRate",
-            "exportToCsv_contractnotes_header_documentId",
-            "exportToCsv_contractnotes_header_downloadHash",
-            "exportToCsv_contractnotes_header_rowId",
-            "exportToCsv_contractnotes_header_hashSum",
-        ]:
-            if drop_col in df_raw.columns:
-                df_raw = df_raw.drop(columns=[drop_col])
 
         self.df_final = df_raw
