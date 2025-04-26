@@ -4,6 +4,13 @@
 
 Summarize transactions in securities into a portfolio report tool.
 
+Supports loading CSV files exported from:
+- Avanza (Sweden)
+- Lysa (Sweden)
+- Pareto Securities (Sweden and Norway)
+- Your broker (feel free to add a PR)
+- A generic format for all other brokers (feel free to add yours)
+
 Available features:
 
 - Holdings overview: a table of your current holdings, and the market value of the positions.
