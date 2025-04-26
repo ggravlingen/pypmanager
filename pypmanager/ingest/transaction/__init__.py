@@ -9,6 +9,7 @@ from .const import (
 )
 from .generic import GenericLoader
 from .lysa import LysaLoader
+from .pareto_securities import ParetoSecuritiesLoader
 from .transaction_registry import (
     TransactionRegistry,
 )
@@ -19,6 +20,7 @@ __all__ = [
     "ColumnNameValues",
     "GenericLoader",
     "LysaLoader",
+    "ParetoSecuritiesLoader",
     "TransactionRegistry",
     "TransactionRegistryColNameValues",
     "TransactionTypeValues",

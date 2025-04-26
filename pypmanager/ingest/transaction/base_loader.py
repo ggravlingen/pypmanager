@@ -64,7 +64,7 @@ class TransactionLoader(ABC):
     """
 
     csv_separator: str = CSVSeparator.SEMI_COLON
-    col_map: dict[str, str] | None = None
+    col_map: ClassVar[dict[str, str] | None] = None
     df_final: pd.DataFrame
     file_pattern: str
     date_format_pattern: str
@@ -79,8 +79,8 @@ class TransactionLoader(ABC):
         """Enter context manager."""
         self.load_data_files()
         self.normalise_column_name()
-        await self.async_filter_transaction_type()
         await self.async_pre_process_df()
+        await self.async_filter_transaction_type()
         self.normalize_transaction_date()
         self.validate()
         return self
