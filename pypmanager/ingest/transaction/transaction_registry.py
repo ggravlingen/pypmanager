@@ -146,6 +146,109 @@ COLUMN_CLEANUP: tuple[ColumnAppendConfig, ...] = (
 )
 
 
+async def async_group_by_date(ungrouped_df: pd.DataFrame) -> pd.DataFrame:
+    """Group transactions by date and calculate total amount and average price."""
+    # Filter for Buy and Sell transactions
+    df_filtered = ungrouped_df[
+        ungrouped_df[
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value
+        ].isin(
+            [
+                TransactionTypeValues.BUY.value,
+                TransactionTypeValues.SELL.value,
+                TransactionTypeValues.DIVIDEND.value,
+            ]
+        )
+    ]
+
+    df_filtered = df_filtered.copy()
+
+    attr_tmp_date = "tmp_date"
+
+    # Normalize the date column to YYYY-MM-DD format
+    df_filtered[attr_tmp_date] = pd.to_datetime(
+        df_filtered[TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value]
+    ).dt.date
+
+    # Group by ISIN and transaction date
+    grouped = df_filtered.groupby(
+        [
+            attr_tmp_date,
+            TransactionRegistryColNameValues.SOURCE_ISIN.value,
+            TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value,
+            TransactionRegistryColNameValues.SOURCE_CURRENCY.value,
+            TransactionRegistryColNameValues.SOURCE_BROKER.value,
+            TransactionRegistryColNameValues.SOURCE_FILE.value,
+            TransactionRegistryColNameValues.SOURCE_ACCOUNT_NAME.value,
+            TransactionRegistryColNameValues.SOURCE_NAME_SECURITY.value,
+        ]
+    )
+
+    # Calculate total amount and volume-weighted average price
+    new_dataframe = grouped.agg(
+        total_volume=pd.NamedAgg(
+            column=TransactionRegistryColNameValues.SOURCE_VOLUME.value, aggfunc="sum"
+        ),
+        total_fee=pd.NamedAgg(
+            column=TransactionRegistryColNameValues.SOURCE_FEE.value, aggfunc="sum"
+        ),
+        avg_fx=pd.NamedAgg(
+            column=TransactionRegistryColNameValues.SOURCE_FX.value,
+            aggfunc=lambda x: (
+                x
+                * df_filtered.loc[
+                    x.index, TransactionRegistryColNameValues.SOURCE_VOLUME.value
+                ]
+            ).sum()
+            / df_filtered.loc[
+                x.index, TransactionRegistryColNameValues.SOURCE_VOLUME.value
+            ].sum(),
+        ),
+        vwap=pd.NamedAgg(
+            column=TransactionRegistryColNameValues.SOURCE_PRICE.value,
+            aggfunc=lambda x: (
+                x
+                * df_filtered.loc[
+                    x.index, TransactionRegistryColNameValues.SOURCE_VOLUME.value
+                ]
+            ).sum()
+            / df_filtered.loc[
+                x.index, TransactionRegistryColNameValues.SOURCE_VOLUME.value
+            ].sum(),
+        ),
+    ).reset_index()
+
+    # Rename columns
+    new_dataframe = new_dataframe.rename(
+        columns={
+            attr_tmp_date: TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE,
+            "vwap": TransactionRegistryColNameValues.SOURCE_PRICE,
+            "avg_fx": TransactionRegistryColNameValues.SOURCE_FX,
+            "total_volume": TransactionRegistryColNameValues.SOURCE_VOLUME,
+            "total_fee": TransactionRegistryColNameValues.SOURCE_FEE,
+        },
+    )
+
+    # Add the amount column
+    new_dataframe[ColumnNameValues.AMOUNT.value] = new_dataframe.apply(
+        lambda x: (
+            x[TransactionRegistryColNameValues.SOURCE_VOLUME.value]
+            * x[TransactionRegistryColNameValues.SOURCE_PRICE.value]
+            + (x[TransactionRegistryColNameValues.SOURCE_FEE.value] or 0)
+        ),
+        axis=1,
+    )
+
+    new_dataframe[TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value] = (
+        pd.to_datetime(
+            new_dataframe[
+                TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value
+            ],
+        )
+    )
+    return new_dataframe
+
+
 class TransactionRegistry:
     """
     Create a registry for all transactions.
@@ -185,9 +288,10 @@ class TransactionRegistry:
 
         # Run the first sequence of normalisation
         self._200_normalize_and_filter_transaction_type()
-        self._201_normalise_transaction_date()
+        await self.async_201_convert_data_types()
         self._202_normalize_data()
         self._203_convert_data_types()
+        self._204_normalise_transaction_date()
 
         # There are no transactions to process so we can return
         if self.df_all_transactions.empty:
@@ -279,18 +383,31 @@ class TransactionRegistry:
 
         self.df_all_transactions = df_raw
 
-    def _201_normalise_transaction_date(self: TransactionRegistry) -> None:
-        """Make transaction date aware using system time zone."""
+    async def async_201_convert_data_types(self: TransactionRegistry) -> None:
+        """Group by date and calculate averages."""
         df_raw = self.df_all_transactions.copy()
 
-        # Convert all datetime objects to UTC
-        df_raw[TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value] = (
-            df_raw[TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value]
-            .dt.tz_localize(None)
-            .dt.tz_localize(Settings.system_time_zone)
-        )
+        # Drop all "Buy" and "Sell" transactions from df_raw
+        df_raw = df_raw[
+            ~df_raw[
+                TransactionRegistryColNameValues.SOURCE_TRANSACTION_TYPE.value
+            ].isin(
+                [
+                    TransactionTypeValues.BUY.value,
+                    TransactionTypeValues.SELL.value,
+                    TransactionTypeValues.DIVIDEND.value,
+                ]
+            )
+        ]
 
-        self.df_all_transactions = df_raw
+        # Group by date and calculate averages
+        df_grouped_by_date = await async_group_by_date(self.df_all_transactions)
+
+        # Append the result of res to df_raw
+        df_combined = pd.concat([df_raw, df_grouped_by_date], ignore_index=True)
+
+        # Set the combined DataFrame as the new transaction registry
+        self.df_all_transactions = df_combined
 
     def _202_normalize_data(self: TransactionRegistry) -> None:
         """Make sure data is calculated in the same way."""
@@ -318,6 +435,19 @@ class TransactionRegistry:
                 except ValueError as err:
                     msg = f"Unable to parse {key}"
                     raise ValueError(msg) from err
+
+        self.df_all_transactions = df_raw
+
+    def _204_normalise_transaction_date(self: TransactionRegistry) -> None:
+        """Make transaction date aware using system time zone."""
+        df_raw = self.df_all_transactions.copy()
+
+        # Convert all datetime objects to UTC
+        df_raw[TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value] = (
+            df_raw[TransactionRegistryColNameValues.SOURCE_TRANSACTION_DATE.value]
+            .dt.tz_localize(None)
+            .dt.tz_localize(Settings.system_time_zone)
+        )
 
         self.df_all_transactions = df_raw
 
