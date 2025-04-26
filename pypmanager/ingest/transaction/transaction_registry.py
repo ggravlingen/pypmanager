@@ -22,6 +22,7 @@ from .const import LOGGER
 from .generic import GenericLoader
 from .lysa import LysaLoader
 from .pandas_algorithm import PandasAlgorithm, PandasAlgorithmPnL
+from .pareto_securities import ParetoSecuritiesLoader
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -226,7 +227,7 @@ class TransactionRegistry:
     async def _async_load_transaction_files(self: TransactionRegistry) -> pd.DataFrame:
         """Load transaction files and return a sorted DataFrame."""
         df_data_list: list[pd.DataFrame] = []
-        for klass in (GenericLoader, AvanzaLoader, LysaLoader):
+        for klass in (AvanzaLoader, GenericLoader, LysaLoader, ParetoSecuritiesLoader):
             async with klass() as loader:
                 df_data_list.append(loader.df_final)
 
