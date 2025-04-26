@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import ClassVar
+
 import pandas as pd
 
 from .base_loader import TransactionLoader
@@ -57,6 +59,14 @@ class AvanzaLoader(TransactionLoader):
 
     file_pattern = "avanza*.csv"
     date_format_pattern = "%Y-%m-%d"
+
+    include_transaction_type: ClassVar = [
+        "Köp",
+        "Sälj",
+        "Utdelning",
+        "Ränta",
+        "Övrigt",
+    ]
 
     async def async_pre_process_df(self: AvanzaLoader) -> None:
         """Broker specific manipulation of the data frame."""

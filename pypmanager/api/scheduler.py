@@ -10,8 +10,8 @@ from apscheduler.events import EVENT_JOB_ERROR, EVENT_JOB_EXECUTED, JobExecution
 from apscheduler.executors.pool import ThreadPoolExecutor
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
+from pypmanager.database.helpers import sync_security_files_to_db
 from pypmanager.helpers.market_data import async_download_market_data
-from pypmanager.helpers.security import sync_files_to_db
 from pypmanager.settings import Settings
 
 if TYPE_CHECKING:
@@ -57,8 +57,8 @@ scheduler.add_job(
 )
 scheduler.add_job(
     run_async_job,
-    id="sync_files_to_db",
-    args=[sync_files_to_db],
+    id="sync_security_files_to_db",
+    args=[sync_security_files_to_db],
     # Run every four hours
     trigger="interval",
     hours=1,

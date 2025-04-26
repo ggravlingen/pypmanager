@@ -1,0 +1,2 @@
+ISIN,Affärsdag,Likviddag,Ticker,Transaktionstyp,Antal,Kurs,Belopp,Valuta,Avräkningsnota,Totalt,Courtage,exportToCsv_contractnotes_header_valRate,exportToCsv_contractnotes_header_documentId,exportToCsv_contractnotes_header_downloadHash,exportToCsv_contractnotes_header_rowId,exportToCsv_contractnotes_header_hashSum
+"SE0005188836","2025-04-25","2025-04-28","","Buy",1,1.00,-1.00,"SEK","1234567",-2,-1,"","abc123","abc123","abc123","abc123"

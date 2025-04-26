@@ -22,6 +22,7 @@ from .const import LOGGER
 from .generic import GenericLoader
 from .lysa import LysaLoader
 from .pandas_algorithm import PandasAlgorithm, PandasAlgorithmPnL
+from .pareto_securities import ParetoSecuritiesLoader
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -148,7 +149,10 @@ COLUMN_CLEANUP: tuple[ColumnAppendConfig, ...] = (
 
 class TransactionRegistry:
     """
-    Create a normalised registry for all transactions.
+    Create a registry for all transactions.
+
+    The transaction registry is responsible for loading transaction data from CSV files
+    and processing it into a normalised DataFrame.
 
     This registry is the basis for all other calculations.
     """
@@ -223,7 +227,7 @@ class TransactionRegistry:
     async def _async_load_transaction_files(self: TransactionRegistry) -> pd.DataFrame:
         """Load transaction files and return a sorted DataFrame."""
         df_data_list: list[pd.DataFrame] = []
-        for klass in (GenericLoader, AvanzaLoader, LysaLoader):
+        for klass in (AvanzaLoader, GenericLoader, LysaLoader, ParetoSecuritiesLoader):
             async with klass() as loader:
                 df_data_list.append(loader.df_final)
 

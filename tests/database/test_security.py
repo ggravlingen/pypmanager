@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
+from pypmanager.database.helpers import sync_security_files_to_db
 from pypmanager.database.security import AsyncDbSecurity, SecurityModel
-from pypmanager.helpers.security import sync_files_to_db
 
 
 @pytest.mark.asyncio
@@ -41,6 +41,6 @@ async def test_sync_files_to_db(
     caplog: pytest.LogCaptureFixture,
 ) -> None:
     """Test function sync_files_to_db."""
-    await sync_files_to_db()
+    await sync_security_files_to_db()
 
     assert "Committed " in caplog.text
