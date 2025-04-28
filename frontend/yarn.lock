@@ -2188,9 +2188,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/x-date-pickers@npm:8.0.0":
-  version: 8.0.0
-  resolution: "@mui/x-date-pickers@npm:8.0.0"
+"@mui/x-date-pickers@npm:8.1.0":
+  version: 8.1.0
+  resolution: "@mui/x-date-pickers@npm:8.1.0"
   dependencies:
     "@babel/runtime": "npm:^7.27.0"
     "@mui/utils": "npm:^7.0.2"
@@ -2232,7 +2232,7 @@ __metadata:
       optional: true
     moment-jalaali:
       optional: true
-  checksum: 10c0/9e66fa4dc3b557d5f618c6b240866ef5aee75e9e9a7325b9e71804063e95c1a8166ea3cdd32b538abf86b856a2829372fa9b8d1a3bfc5da59cf4b81e87f5418a
+  checksum: 10c0/7937859657e700fe3c9d8c9d50f2ed7621bcf7d8edf8060c2a7c1a37d5e0dec6c6f6355aac79fc5ba910f9c7ce1266caa49af3a41dc71b1032a05d8a57c35a3f
   languageName: node
   linkType: hard
 
@@ -2424,12 +2424,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:22.14.1":
-  version: 22.14.1
-  resolution: "@types/node@npm:22.14.1"
+"@types/node@npm:22.15.3":
+  version: 22.15.3
+  resolution: "@types/node@npm:22.15.3"
   dependencies:
     undici-types: "npm:~6.21.0"
-  checksum: 10c0/d49c4d00403b1c2348cf0701b505fd636d80aabe18102105998dc62fdd36dcaf911e73c7a868c48c21c1022b825c67b475b65b1222d84b704d8244d152bb7f86
+  checksum: 10c0/2879f012d1aeba0bfdb5fed80d165f4f2cb3d1f2e1f98a24b18d4a211b4ace7d64bf2622784c78355982ffc1081ba79d0934efc2fb8353913e5871a63609661f
   languageName: node
   linkType: hard
 
@@ -4776,9 +4776,9 @@ __metadata:
     "@eslint/compat": "npm:1.2.8"
     "@mui/icons-material": "npm:7.0.2"
     "@mui/material": "npm:7.0.2"
-    "@mui/x-date-pickers": "npm:8.0.0"
+    "@mui/x-date-pickers": "npm:8.1.0"
     "@playwright/test": "npm:1.52.0"
-    "@types/node": "npm:22.14.1"
+    "@types/node": "npm:22.15.3"
     "@types/react": "npm:19.1.2"
     "@types/react-dom": "npm:19.1.2"
     "@typescript-eslint/eslint-plugin": "npm:8.31.0"
@@ -4798,7 +4798,7 @@ __metadata:
     eslint-plugin-unused-imports: "npm:4.1.4"
     express: "npm:5.1.0"
     express-rate-limit: "npm:7.5.0"
-    graphql: "npm:16.10.0"
+    graphql: "npm:16.11.0"
     graphql-tag: "npm:2.12.6"
     html-webpack-plugin: "npm:5.6.3"
     jiti: "npm:2.4.2"
@@ -4812,7 +4812,7 @@ __metadata:
     ts-loader: "npm:9.5.2"
     typescript: "npm:5.8.3"
     typescript-strict-plugin: "npm:2.4.4"
-    webpack: "npm:5.99.6"
+    webpack: "npm:5.99.7"
     webpack-cli: "npm:6.0.1"
     webpack-merge: "npm:6.0.1"
   languageName: unknown
@@ -5051,7 +5051,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:16.10.0, graphql@npm:^16.8.1":
+"graphql@npm:16.11.0":
+  version: 16.11.0
+  resolution: "graphql@npm:16.11.0"
+  checksum: 10c0/124da7860a2292e9acf2fed0c71fc0f6a9b9ca865d390d112bdd563c1f474357141501c12891f4164fe984315764736ad67f705219c62f7580681d431a85db88
+  languageName: node
+  linkType: hard
+
+"graphql@npm:^16.8.1":
   version: 16.10.0
   resolution: "graphql@npm:16.10.0"
   checksum: 10c0/303730675538c8bd6c76b447dc6f03e61242e2d2596b408c34759666ec4877409e5593a7a0467d590ac5407b8c663b093b599556a77f24f281abea69ddc53de6
@@ -7353,6 +7360,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"schema-utils@npm:^4.3.2":
+  version: 4.3.2
+  resolution: "schema-utils@npm:4.3.2"
+  dependencies:
+    "@types/json-schema": "npm:^7.0.9"
+    ajv: "npm:^8.9.0"
+    ajv-formats: "npm:^2.1.1"
+    ajv-keywords: "npm:^5.1.0"
+  checksum: 10c0/981632f9bf59f35b15a9bcdac671dd183f4946fe4b055ae71a301e66a9797b95e5dd450de581eb6cca56fb6583ce8f24d67b2d9f8e1b2936612209697f6c277e
+  languageName: node
+  linkType: hard
+
 "semver@npm:^5.6.0":
   version: 5.7.2
   resolution: "semver@npm:5.7.2"
@@ -8342,12 +8361,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:5.99.6":
-  version: 5.99.6
-  resolution: "webpack@npm:5.99.6"
+"webpack@npm:5.99.7":
+  version: 5.99.7
+  resolution: "webpack@npm:5.99.7"
   dependencies:
     "@types/eslint-scope": "npm:^3.7.7"
     "@types/estree": "npm:^1.0.6"
+    "@types/json-schema": "npm:^7.0.15"
     "@webassemblyjs/ast": "npm:^1.14.1"
     "@webassemblyjs/wasm-edit": "npm:^1.14.1"
     "@webassemblyjs/wasm-parser": "npm:^1.14.1"
@@ -8364,7 +8384,7 @@ __metadata:
     loader-runner: "npm:^4.2.0"
     mime-types: "npm:^2.1.27"
     neo-async: "npm:^2.6.2"
-    schema-utils: "npm:^4.3.0"
+    schema-utils: "npm:^4.3.2"
     tapable: "npm:^2.1.1"
     terser-webpack-plugin: "npm:^5.3.11"
     watchpack: "npm:^2.4.1"
@@ -8374,7 +8394,7 @@ __metadata:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 10c0/b8b44b16933a0dd83e185ad42f292bbdfa9c47e245cbe786c48520d681556ece9af6ea7fff33059fafdf3d2cd62674715308d70a6f15eda6c6de7e03ef01842a
+  checksum: 10c0/e121880d921d5500e9dd61c3428f5d8dca4786c559e7f37488173186447cd22079be677d470a4db1643febf8031b9be900f501c9b95ba94ffe3d2065ad486d31
   languageName: node
   linkType: hard
 
