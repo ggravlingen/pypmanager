@@ -2149,13 +2149,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/x-date-pickers@npm:8.3.0":
-  version: 8.3.0
-  resolution: "@mui/x-date-pickers@npm:8.3.0"
+"@mui/x-date-pickers@npm:8.4.0":
+  version: 8.4.0
+  resolution: "@mui/x-date-pickers@npm:8.4.0"
   dependencies:
     "@babel/runtime": "npm:^7.27.1"
     "@mui/utils": "npm:^7.0.2"
-    "@mui/x-internals": "npm:8.3.0"
+    "@mui/x-internals": "npm:8.4.0"
     "@types/react-transition-group": "npm:^4.4.12"
     clsx: "npm:^2.1.1"
     prop-types: "npm:^15.8.1"
@@ -2193,19 +2193,19 @@ __metadata:
       optional: true
     moment-jalaali:
       optional: true
-  checksum: 10c0/19675e41be8ba38ca29955b3e4e98abd7b5ef96277c827773ef4420d8f20e8f69484f25421bb736e168e34f83766e9430de082e0447b87c8d1729f0a4700677f
+  checksum: 10c0/e9b49b8ab51958a54f87f736375669e282c9159b7129f915c4c65463bfc550ab9b68143640bb733038fd0b1035843bd8516f86aaf7d8150f1b49cd4e52747e68
   languageName: node
   linkType: hard
 
-"@mui/x-internals@npm:8.3.0":
-  version: 8.3.0
-  resolution: "@mui/x-internals@npm:8.3.0"
+"@mui/x-internals@npm:8.4.0":
+  version: 8.4.0
+  resolution: "@mui/x-internals@npm:8.4.0"
   dependencies:
     "@babel/runtime": "npm:^7.27.1"
     "@mui/utils": "npm:^7.0.2"
   peerDependencies:
     react: ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/330e7d8b5a5d35b4327e905739526bc0ff3485c47e89886858baab5666436c537eff4df3b18e2506d079938ad032a7345a6490f4655fb40da76d137a8f5eca57
+  checksum: 10c0/40a7e0c611650efc67586e86a306d094bbf3a260336e580bfa3e2949140322a5cc1dc5d7e400938fd7e91299bfbc5520306e5094b4a208dcfe5d966642eeb344
   languageName: node
   linkType: hard
 
@@ -4737,7 +4737,7 @@ __metadata:
     "@eslint/compat": "npm:1.2.9"
     "@mui/icons-material": "npm:7.1.0"
     "@mui/material": "npm:7.1.0"
-    "@mui/x-date-pickers": "npm:8.3.0"
+    "@mui/x-date-pickers": "npm:8.4.0"
     "@playwright/test": "npm:1.52.0"
     "@types/node": "npm:22.15.19"
     "@types/react": "npm:19.1.4"
