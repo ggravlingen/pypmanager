@@ -18,7 +18,7 @@ dependencies    = [
   "pyarrow==20.0.0",
   "pydantic==2.11.5",
   "pydantic-settings==2.9.1",
-  "requests==2.32.3",
+  "requests==2.32.4",
   "strawberry_graphql[debug-server]==0.271.1",
   "sqlalchemy[asyncio]==2.0.41",
   "uvicorn[standard]==0.34.3",
