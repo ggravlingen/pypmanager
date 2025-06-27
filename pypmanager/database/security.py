@@ -14,13 +14,13 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from pypmanager.settings import Settings
 
-from .utils import LOGGER, Base, async_upsert_data, check_table_exists
+from .utils import LOGGER, AsyncBase, async_upsert_data, check_table_exists
 
 if TYPE_CHECKING:
     from types import TracebackType
 
 
-class SecurityModel(Base):
+class SecurityModel(AsyncBase):
     """SQLAlchemy model for securities."""
 
     __tablename__ = "security"
@@ -60,7 +60,7 @@ class AsyncDbSecurity:
             )
 
             if not table_exists:
-                await conn.run_sync(Base.metadata.create_all)
+                await conn.run_sync(AsyncBase.metadata.create_all)
                 LOGGER.info("Security database created")
 
         return self

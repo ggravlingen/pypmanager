@@ -15,14 +15,14 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from pypmanager.settings import Settings
 
-from .utils import LOGGER, Base, async_upsert_data, check_table_exists
+from .utils import LOGGER, AsyncBase, async_upsert_data, check_table_exists
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
     from types import TracebackType
 
 
-class MarketDataModel(Base):
+class MarketDataModel(AsyncBase):
     """SQLAlchemy model for market data."""
 
     __tablename__ = "market_data"
@@ -68,7 +68,7 @@ class AsyncMarketDataDB:
             )
 
             if not table_exists:
-                await conn.run_sync(Base.metadata.create_all)
+                await conn.run_sync(AsyncBase.metadata.create_all)
                 LOGGER.info("Market data database schema created")
 
         return self
