@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.orm import Mapped, mapped_column
 
-from pypmanager.database.utils import Base, async_upsert_data, check_table_exists
+from pypmanager.database.utils import AsyncBase, async_upsert_data, check_table_exists
 
 
 @pytest.mark.parametrize(
@@ -36,7 +36,7 @@ def test_check_table_exists(
     assert result == expected_result
 
 
-class MockModel(Base):
+class MockModel(AsyncBase):
     """Mock SQLAlchemy model for testing."""
 
     __tablename__ = "mock_table"

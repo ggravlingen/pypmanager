@@ -15,11 +15,11 @@ from sqlalchemy.orm import DeclarativeBase
 LOGGER = logging.getLogger(__name__)
 
 
-class Base(AsyncAttrs, DeclarativeBase):
+class AsyncBase(AsyncAttrs, DeclarativeBase):
     """Base class for SQLAlchemy models."""
 
 
-T = TypeVar("T", bound=Base)
+T = TypeVar("T", bound=AsyncBase)
 
 
 def check_table_exists(connection: Connection, table_name: str) -> bool:
@@ -28,7 +28,11 @@ def check_table_exists(connection: Connection, table_name: str) -> bool:
     return table_name in inspector.get_table_names()
 
 
-async def async_upsert_data(*, session: AsyncSession, data_list: list[T]) -> None:
+async def async_upsert_data[T: AsyncBase](
+    *,
+    session: AsyncSession,
+    data_list: list[T],
+) -> None:
     """Merge (upsert) or insert data."""
     successful_merges = 0
     failed_merges = 0
