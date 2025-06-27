@@ -15,13 +15,13 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from pypmanager.settings import Settings
 
-from .utils import LOGGER, Base, async_upsert_data, check_table_exists
+from .utils import LOGGER, AsyncBase, async_upsert_data, check_table_exists
 
 if TYPE_CHECKING:
     from types import TracebackType
 
 
-class DailyPortfolioMoldingModel(Base):
+class DailyPortfolioMoldingModel(AsyncBase):
     """SQLAlchemy model for daily portfolio holdings."""
 
     __tablename__ = "daily_portfolio_holdings"
@@ -61,7 +61,7 @@ class AsyncDbDailyPortfolioHolding:
             )
 
             if not table_exists:
-                await conn.run_sync(Base.metadata.create_all)
+                await conn.run_sync(AsyncBase.metadata.create_all)
                 LOGGER.info("Daily portfolio holdings database schema created")
 
         return self
