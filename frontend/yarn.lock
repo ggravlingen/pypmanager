@@ -3950,14 +3950,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv-webpack@npm:8.1.0":
-  version: 8.1.0
-  resolution: "dotenv-webpack@npm:8.1.0"
+"dotenv-webpack@npm:8.1.1":
+  version: 8.1.1
+  resolution: "dotenv-webpack@npm:8.1.1"
   dependencies:
     dotenv-defaults: "npm:^2.0.2"
   peerDependencies:
     webpack: ^4 || ^5
-  checksum: 10c0/7a64587fc96eba8e4ffccf56d6af09606611a32bc5cf04a37057b8c2881bcd11bf43c3395404581be734ae7fd2788471ceac76cb3d0ba1283e675223f98e5816
+  checksum: 10c0/6eec6e89e7e972941b0ac2ce9e2c27ecf3d32880215e5c4c2e429d6be437508819643d34988859c13e07c0f18958443fd37fb609cbfb532eb037f0c4c38c600c
   languageName: node
   linkType: hard
 
@@ -4965,7 +4965,7 @@ __metadata:
     chart.js: "npm:4.5.0"
     concurrently: "npm:9.2.0"
     dayjs: "npm:1.11.13"
-    dotenv-webpack: "npm:8.1.0"
+    dotenv-webpack: "npm:8.1.1"
     eslint: "npm:9.29.0"
     eslint-plugin-import: "npm:2.32.0"
     eslint-plugin-jsdoc: "npm:51.2.1"
