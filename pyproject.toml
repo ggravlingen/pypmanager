@@ -28,7 +28,7 @@ dependencies    = [
 test = [
   "asgiref==3.8.1",
   "httpx==0.28.1",
-  "mypy_dev==1.17.0a3",
+  "mypy_dev==1.17.0a4",
   "pre-commit==4.2.0",
   "pylint==3.3.7",
   "pytest==8.4.1",
