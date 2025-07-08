@@ -19,7 +19,7 @@ APP_ROOT = ROOT_FOLDER / "pypmanager"
 """E.g. /app/pypmanager."""
 APP_DATA = Path(os.getenv("PYP_APP_DATA", ROOT_FOLDER / "data")).resolve()
 """E.g. /app/data."""
-APP_FRONTEND = Path(os.getenv("PYP_APP_FRONTEND", ROOT_FOLDER / "frontend")).resolve()
+APP_FRONTEND = ROOT_FOLDER / "frontend"
 """E.g. /app/frontend."""
 
 
