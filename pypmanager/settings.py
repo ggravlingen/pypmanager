@@ -3,29 +3,32 @@
 from __future__ import annotations
 
 import logging
+import os
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from dotenv import load_dotenv
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings
 
 load_dotenv()
+
+
+ROOT_FOLDER = Path(os.getenv("PYP_APP_ROOT", Path.cwd())).resolve()
+"""E.g. /app."""
+APP_ROOT = ROOT_FOLDER / "pypmanager"
+"""E.g. /app/pypmanager."""
+APP_DATA = Path(os.getenv("PYP_APP_DATA", ROOT_FOLDER / "data")).resolve()
+"""E.g. /app/data."""
+APP_FRONTEND = Path(os.getenv("PYP_APP_FRONTEND", ROOT_FOLDER / "frontend")).resolve()
+"""E.g. /app/frontend."""
 
 
 class TypedSettings(BaseSettings):
     """Settings."""
 
-    model_config = SettingsConfigDict(
-        env_file=".env",
-        env_file_encoding="utf-8",
-        extra="ignore",
-    )
-
-    debug_name: str | None = None
-
-    dir_config: Path = Path("pypmanager/configuration")
-    dir_static: Path = Path("frontend/static")
-    dir_templates: Path = Path("frontend/templates")
+    dir_config: Path = APP_ROOT / "configuration"
+    dir_static: Path = APP_FRONTEND / "static"
+    dir_templates: Path = APP_FRONTEND / "templates"
 
     system_time_zone: ZoneInfo = ZoneInfo("Europe/Stockholm")
 
@@ -42,7 +45,7 @@ class TypedSettings(BaseSettings):
     @property
     def dir_data_local(self: TypedSettings) -> Path:
         """Return data directory."""
-        return Path("data")
+        return APP_DATA
 
     @property
     def dir_configuration_local(self: TypedSettings) -> Path:
