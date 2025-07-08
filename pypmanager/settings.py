@@ -31,8 +31,8 @@ class TypedSettings(BaseSettings):
     APP_DATA: Path = Path(os.getenv("APP_DATA", APP_ROOT / "data")).resolve()
 
     dir_config: Path = APP_ROOT / "configuration"
-    dir_static: Path = APP_ROOT / "frontend/static"
-    dir_templates: Path = APP_ROOT / "frontend/templates"
+    dir_static: Path = APP_ROOT / "../frontend/static"
+    dir_templates: Path = APP_ROOT / "../frontend/templates"
 
     system_time_zone: ZoneInfo = ZoneInfo("Europe/Stockholm")
 
