@@ -83,7 +83,9 @@ class TypedSettings(BaseSettings):
     @property
     def database_local(self: TypedSettings) -> Path:
         """Return path to local SQL lite database."""
-        return self.dir_data_local / "database" / "database.sqlite"
+        db_dir = self.dir_data_local / "database"
+        db_dir.mkdir(parents=True, exist_ok=True)
+        return db_dir / "database.sqlite"
 
 
 Settings = TypedSettings()
