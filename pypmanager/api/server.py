@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import AsyncGenerator, Awaitable, Callable
 from contextlib import asynccontextmanager
+import logging
 from typing import cast
 
 from fastapi import FastAPI, Request, Response
@@ -11,15 +12,27 @@ from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
 from pypmanager.database.helpers import sync_security_files_to_db
-from pypmanager.settings import Settings
+from pypmanager.settings import APP_DATA, APP_FRONTEND, APP_ROOT, Settings
 
 from .graphql import graphql_app
 from .scheduler import scheduler
+
+_LOGGER = logging.getLogger("pypmanager.startup")
 
 
 @asynccontextmanager
 async def async_lifespan(_: FastAPI) -> AsyncGenerator[None]:
     """Start and shutdown the scheduler."""
+    for folder, name in [
+        (APP_ROOT, "App folder"),
+        (APP_DATA, "User data folder"),
+        (APP_FRONTEND, "Frontend folder"),
+    ]:
+        if folder.exists():
+            _LOGGER.info(f"{name} exists at {folder}")
+        else:
+            _LOGGER.info(f"{name} is missing at {folder}")
+
     scheduler.start()
     await sync_security_files_to_db()
     yield
