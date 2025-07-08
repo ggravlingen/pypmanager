@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import os
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -23,9 +24,15 @@ class TypedSettings(BaseSettings):
 
     debug_name: str | None = None
 
-    dir_config: Path = Path("pypmanager/configuration")
-    dir_static: Path = Path("frontend/static")
-    dir_templates: Path = Path("frontend/templates")
+    # Set APP_ROOT and APP_DATA, allowing override via environment variable
+    APP_ROOT: Path = Path(
+        os.getenv("APP_ROOT", "/workspaces/pypmanager/pypmanager")
+    ).resolve()
+    APP_DATA: Path = Path(os.getenv("APP_DATA", APP_ROOT / "data")).resolve()
+
+    dir_config: Path = APP_ROOT / "configuration"
+    dir_static: Path = APP_ROOT / "../frontend/static"
+    dir_templates: Path = APP_ROOT / "../frontend/templates"
 
     system_time_zone: ZoneInfo = ZoneInfo("Europe/Stockholm")
 
@@ -42,7 +49,7 @@ class TypedSettings(BaseSettings):
     @property
     def dir_data_local(self: TypedSettings) -> Path:
         """Return data directory."""
-        return Path("data")
+        return self.APP_DATA
 
     @property
     def dir_configuration_local(self: TypedSettings) -> Path:
