@@ -132,4 +132,4 @@ const DarkPalette: PaletteOptions = {
   },
 };
 
-export { LightPalette, DarkPalette };
+export { DarkPalette, LightPalette };
