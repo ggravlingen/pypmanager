@@ -63,6 +63,7 @@
     "run-dev-ssr": "webpack --config webpack/config.dev.watch.tsx",
     "build-test": "webpack --config webpack/playwright.tsx",
     "build-prod": "find ./static -name '*.js' -exec rm -f {} + && webpack --config webpack/config.production.tsx",
+    "build-hass-addon": "find ./static -name '*.js' -exec rm -f {} + && webpack --config webpack/config.production.hass-addon.tsx",
     "test-ci": "jest --ci --reporters=default --reporters=jest-junit --coverage",
     "cicd-lint": "eslint",
     "cicd-typecheck": "tsc-strict --project tsconfig.json --noEmit",
