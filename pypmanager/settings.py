@@ -13,11 +13,11 @@ from pydantic_settings import BaseSettings
 load_dotenv()
 
 
-ROOT_FOLDER = Path(os.getenv("PYP_APP_ROOT", Path.cwd())).resolve()
+ROOT_FOLDER = Path(os.getenv("ROOT_FOLDER", Path.cwd())).resolve()
 """E.g. /app."""
 APP_ROOT = ROOT_FOLDER / "pypmanager"
 """E.g. /app/pypmanager."""
-APP_DATA = Path(os.getenv("PYP_APP_DATA", ROOT_FOLDER / "data")).resolve()
+APP_DATA = Path(os.getenv("APP_DATA", ROOT_FOLDER / "data")).resolve()
 """E.g. /app/data."""
 APP_FRONTEND = ROOT_FOLDER / "frontend"
 """E.g. /app/frontend."""
