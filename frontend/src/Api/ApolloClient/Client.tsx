@@ -40,8 +40,13 @@ const _networkErrorLink = onError(({ networkError }: ErrorResponse) => {
   }
 });
 
+/* 1. Build the URL from window.location */
+const graphqlUri = new URL("./graphql", window.location.href).pathname;
+// → "/api/hassio_ingress/<token>/graphql" in HA
+// → "http://localhost:5173/graphql" in dev-server
+
 const _httpLink = new HttpLink({
-  uri: "http://localhost:8001/graphql",
+  uri: graphqlUri,
   credentials: "same-origin",
 });
 
