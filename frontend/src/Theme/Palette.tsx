@@ -26,15 +26,11 @@ interface PaletteOptions extends _PaletteOptions {
    * Defines the primary color of the palette.
    * The type for defining the primary color, including main, light, dark, and contrastText shades.
    */
-  // common: CommonColors;
   primary: _PaletteColor;
   secondary: _PaletteColor;
   background: {
     default: string;
     paper: string;
-  };
-  surface: {
-    default: string;
   };
   text: {
     primary: string;
@@ -44,72 +40,56 @@ interface PaletteOptions extends _PaletteOptions {
   };
 }
 
-export const LightPalette: PaletteOptions = {
+const LightPalette: PaletteOptions = {
   mode: "light",
   primary: {
-    main: "#005f99",
-    light: "#3a7bc1",
-    dark: "#003f66",
+    main: "#1976d2", // Material-UI default blue
+    light: "#42a5f5",
+    dark: "#1565c0",
     contrastText: "#ffffff",
   },
   secondary: {
-    main: "#adb5bd",
-    light: "#d3d9df",
-    dark: "#7b838b",
-    contrastText: "#000000",
-  },
-  background: {
-    default: "#f8f9fa",
-    paper: "#ffffff",
-  },
-  surface: {
-    default: "#ffffff",
-  },
-  error: {
-    main: "#d00000",
-    light: "#ff5f5f",
-    dark: "#9b0000",
+    main: "#dc004e", // Material-UI default pink
+    light: "#f06292",
+    dark: "#c2185b",
     contrastText: "#ffffff",
   },
+  background: {
+    default: "#ffffff",
+    paper: "#ffffff",
+  },
   text: {
-    primary: "#000000",
-    secondary: "#495057",
-    disabled: "#adb5bd",
-    hint: "#6c757d",
+    primary: "rgba(0, 0, 0, 0.87)",
+    secondary: "rgba(0, 0, 0, 0.6)",
+    disabled: "rgba(0, 0, 0, 0.38)",
+    hint: "rgba(0, 0, 0, 0.38)",
   },
 };
 
-export const DarkPalette: PaletteOptions = {
+const DarkPalette: PaletteOptions = {
   mode: "dark",
   primary: {
-    main: "#2d6a4f", // Dark Green
-    light: "#52b788", // Lighter Green for hover states
-    dark: "#1b4332", // Darker Green for depth
-    contrastText: "#ffffff",
+    main: "#90caf9", // Material-UI default light blue for dark mode
+    light: "#e3f2fd",
+    dark: "#42a5f5",
+    contrastText: "rgba(0, 0, 0, 0.87)",
   },
   secondary: {
-    main: "#7b838b",
-    light: "#a1a9b0",
-    dark: "#52575d",
-    contrastText: "#ffffff",
+    main: "#f48fb1", // Material-UI default light pink for dark mode
+    light: "#fce4ec",
+    dark: "#f06292",
+    contrastText: "rgba(0, 0, 0, 0.87)",
   },
   background: {
     default: "#121212",
     paper: "#1e1e1e",
   },
-  surface: {
-    default: "#1e1e1e",
-  },
-  error: {
-    main: "#ff5f5f",
-    light: "#ff9d9d",
-    dark: "#d00000",
-    contrastText: "#000000",
-  },
   text: {
     primary: "#ffffff",
-    secondary: "#b0b0b0",
-    disabled: "#757575",
-    hint: "#9e9e9e",
+    secondary: "rgba(255, 255, 255, 0.7)",
+    disabled: "rgba(255, 255, 255, 0.5)",
+    hint: "rgba(255, 255, 255, 0.5)",
   },
 };
+
+export { LightPalette, DarkPalette };
