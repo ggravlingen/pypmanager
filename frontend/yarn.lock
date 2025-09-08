@@ -4825,14 +4825,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"express-rate-limit@npm:8.0.1":
-  version: 8.0.1
-  resolution: "express-rate-limit@npm:8.0.1"
+"express-rate-limit@npm:8.1.0":
+  version: 8.1.0
+  resolution: "express-rate-limit@npm:8.1.0"
   dependencies:
     ip-address: "npm:10.0.1"
   peerDependencies:
     express: ">= 4.11"
-  checksum: 10c0/c3cca4a87c6839e3ed94617405091e80ecbcc7200e34495aeedc48c819ce1ca7073d522706e46369cc252b8df0364ae5ff181f4ae75e75cbbe9adf3f19ec6666
+  checksum: 10c0/3bb7aa646f9b79ce4e8e0a683d1c200b5d393fed60c3ecda13748fc351a9ee822436e9eeb2cbb2f5da4aae2f94fe4aafad9b679468861a8cc2bb9cd812bc102b
   languageName: node
   linkType: hard
 
@@ -5118,7 +5118,7 @@ __metadata:
     eslint-plugin-simple-import-sort: "npm:12.1.1"
     eslint-plugin-unused-imports: "npm:4.2.0"
     express: "npm:5.1.0"
-    express-rate-limit: "npm:8.0.1"
+    express-rate-limit: "npm:8.1.0"
     graphql: "npm:16.11.0"
     graphql-tag: "npm:2.12.6"
     html-webpack-plugin: "npm:5.6.4"
