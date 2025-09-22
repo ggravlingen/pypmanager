@@ -21,7 +21,7 @@ dependencies    = [
   "requests==2.32.5",
   "strawberry_graphql[debug-server]==0.282.0",
   "sqlalchemy[asyncio]==2.0.43",
-  "uvicorn[standard]==0.35.0",
+  "uvicorn[standard]==0.36.0",
 ]
 
 [project.optional-dependencies]
