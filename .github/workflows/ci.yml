@@ -39,7 +39,7 @@ jobs:
       node_versions: ${{ steps.info.outputs.node_versions }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v5.0.0
 
       - name: Filter for core changes
         uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36
@@ -85,17 +85,17 @@ jobs:
         python-version: ${{ fromJSON(needs.info.outputs.python_versions) }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v5.0.0
 
       - name: Set up Python ${{ matrix.python-version }}
         id: python
-        uses: actions/setup-python@v5.6.0
+        uses: actions/setup-python@v6.0.0
         with:
           python-version: ${{ matrix.python-version }}
 
       - name: Restore base Python virtual environment
         id: cache-venv
-        uses: actions/cache@v4.2.3
+        uses: actions/cache@v4.3.0
         with:
           path: .venv
           lookup-only: true
@@ -127,17 +127,17 @@ jobs:
     if: needs.info.outputs.run_pipeline == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v5.0.0
         with:
           fetch-depth: "2"
       - name: Set up Python ${{ matrix.python-version }}
         id: python
-        uses: actions/setup-python@v5.6.0
+        uses: actions/setup-python@v6.0.0
         with:
           python-version: ${{ matrix.python-version }}
       - name: Restore full Python ${{ steps.python.outputs.python-version }} virtual environment
         id: cache-venv
-        uses: actions/cache/restore@v4.2.3
+        uses: actions/cache/restore@v4.3.0
         with:
           path: .venv
           fail-on-cache-miss: true
@@ -175,16 +175,16 @@ jobs:
     if: needs.info.outputs.run_pipeline == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v5.0.0
 
       - name: Set up Python ${{ matrix.python-version }}
         id: python
-        uses: actions/setup-python@v5.6.0
+        uses: actions/setup-python@v6.0.0
         with:
           python-version: ${{ matrix.python-version }}
       - name: Restore full Python ${{ steps.python.outputs.python-version }} virtual environment
         id: cache-venv
-        uses: actions/cache/restore@v4.2.3
+        uses: actions/cache/restore@v4.3.0
         with:
           path: .venv
           fail-on-cache-miss: true
@@ -234,10 +234,10 @@ jobs:
     if: needs.info.outputs.run_pipeline_frontend == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v5.0.0
 
       - name: Set up Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v4.4.0
+        uses: actions/setup-node@v5.0.0
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -271,10 +271,10 @@ jobs:
     if: needs.info.outputs.run_pipeline_frontend == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v5.0.0
 
       - name: Set up Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v4.4.0
+        uses: actions/setup-node@v5.0.0
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -316,7 +316,7 @@ jobs:
             # - linux/arm/v7
       steps:
         - name: Checkout code
-          uses: actions/checkout@v4.2.2
+          uses: actions/checkout@v5.0.0
 
         - name: Set up QEMU
           uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392

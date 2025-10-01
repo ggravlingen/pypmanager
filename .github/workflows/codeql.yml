@@ -32,15 +32,15 @@ jobs:
 
     steps:
       - name: Check out code from GitHub
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v5.0.0
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3.29.5
+        uses: github/codeql-action/init@v3.30.5
         with:
           languages: "${{ matrix.language }}"
 
       - name: Perform Python CodeQL Analysis
-        uses: github/codeql-action/analyze@v3.29.5
+        uses: github/codeql-action/analyze@v3.30.5
         id: code-analysis
         with:
           category: "/language:${{ matrix.language }}"
