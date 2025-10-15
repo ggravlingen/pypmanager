@@ -37,7 +37,7 @@
   "devDependencies": {
     "@eslint/compat": "1.4.0",
     "@playwright/test": "1.56.0",
-    "@types/node": "24.5.2",
+    "@types/node": "24.7.2",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
     "@typescript-eslint/eslint-plugin": "8.44.1",
