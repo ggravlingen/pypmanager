@@ -123,6 +123,38 @@ interface DateRangePickerProps {
   onEndDateChange: (date: string) => void;
 }
 
+/**
+ * A button component with a label.
+ * @param props - The component props.
+ * @param props.label - The label for the button.
+ * @param props.handleClick - The function to call when the button is clicked.
+ * @returns The rendered button component.
+ */
+function ButtonWithLabel({
+  label,
+  handleClick,
+}: {
+  label: string;
+  handleClick: () => void;
+}): React.JSX.Element {
+  return (
+    <Button
+      variant="contained"
+      onClick={handleClick}
+      sx={{
+        height: "46px",
+        display: "flex",
+        alignItems: "flex-start",
+        justifyContent: "center",
+      }}
+    >
+      <Typography variant="button" sx={{ display: "flex" }}>
+        {label}
+      </Typography>
+    </Button>
+  );
+}
+
 const DateRangePicker: React.FC<DateRangePickerProps> = ({
   startDate,
   endDate,
@@ -190,38 +222,6 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
     onStartDateChange(fiveYearsAgo.format("YYYY-MM-DD"));
     onEndDateChange(today.format("YYYY-MM-DD"));
   };
-
-  /**
-   * A button component with a label.
-   * @param props - The component props.
-   * @param props.label - The label for the button.
-   * @param props.handleClick - The function to call when the button is clicked.
-   * @returns The rendered button component.
-   */
-  function ButtonWithLabel({
-    label,
-    handleClick,
-  }: {
-    label: string;
-    handleClick: () => void;
-  }): React.JSX.Element {
-    return (
-      <Button
-        variant="contained"
-        onClick={handleClick}
-        sx={{
-          height: "46px",
-          display: "flex",
-          alignItems: "flex-start",
-          justifyContent: "center",
-        }}
-      >
-        <Typography variant="button" sx={{ display: "flex" }}>
-          {label}
-        </Typography>
-      </Button>
-    );
-  }
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
