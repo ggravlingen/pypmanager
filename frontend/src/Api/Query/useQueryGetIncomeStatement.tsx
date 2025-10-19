@@ -1,7 +1,6 @@
 import type { ResultStatementRow } from "@Api";
 import { LocalApolloClient } from "@Api";
-import type { QueryHookOptions, QueryResult } from "@apollo/client";
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import gql from "graphql-tag";
 
 const QUERY = gql`
@@ -23,9 +22,9 @@ interface ResultStatementData {
  * Custom hook for querying the income statement data.
  * @returns The query result containing the income statement data.
  */
-export default function useQueryGetIncomeStatement(): QueryResult<ResultStatementData> {
-  const options: QueryHookOptions<ResultStatementData> = {
-    fetchPolicy: "network-only",
+export default function useQueryGetIncomeStatement(): useQuery.Result<ResultStatementData> {
+  const options = {
+    fetchPolicy: "network-only" as const,
     client: LocalApolloClient,
   };
 
