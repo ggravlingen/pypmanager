@@ -1,7 +1,6 @@
 import type { MarketDataOverviewRecord } from "@Api";
 import { LocalApolloClient } from "@Api";
-import type { QueryHookOptions, QueryResult } from "@apollo/client";
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import gql from "graphql-tag";
 
 const QUERY = gql`
@@ -27,9 +26,9 @@ interface Output {
  * from the server and not from the cache.
  * @returns The result of the query, including loading state, error, and data.
  */
-export default function useQueryMarketDataOverview(): QueryResult<Output> {
-  const options: QueryHookOptions<Output> = {
-    fetchPolicy: "network-only",
+export default function useQueryMarketDataOverview(): useQuery.Result<Output> {
+  const options = {
+    fetchPolicy: "network-only" as const,
     client: LocalApolloClient,
   };
 

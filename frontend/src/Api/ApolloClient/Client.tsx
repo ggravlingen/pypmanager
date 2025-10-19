@@ -3,39 +3,103 @@ import {
   ApolloLink,
   HttpLink,
   InMemoryCache,
-  type NormalizedCacheObject,
-  type ServerError,
 } from "@apollo/client";
-import { type ErrorResponse, onError } from "@apollo/client/link/error";
+import {
+  CombinedGraphQLErrors,
+  CombinedProtocolErrors,
+} from "@apollo/client/errors";
+import { ErrorLink } from "@apollo/client/link/error";
+
+// Define interfaces for better type safety
+interface NetworkErrorWithStatus {
+  statusCode?: number;
+  status?: number;
+  message?: string;
+  response?: {
+    status?: number;
+  };
+}
+
+interface ExtensionsWithStatus {
+  response?: {
+    status?: number;
+  };
+  code?: number;
+  status?: number;
+  [key: string]: unknown;
+}
 
 /**
  * Error handling for network errors in Apollo Client.
- * If a network error occurs, this function checks the error status code
- * and performs specific actions based on the code.
- * @param networkError - The network error object.
+ * If a network error occurs, this function checks the error type
+ * and performs specific actions based on the error.
+ * @param error - The error object from Apollo Client v4.
  * @returns Returns nothing.
  */
-const _networkErrorLink = onError(({ networkError }: ErrorResponse) => {
-  if (networkError) {
-    // Cast networkError to ServerError for more precise typing
-    const netError = networkError as ServerError;
-    if ("statusCode" in netError) {
-      // Ensure statusCode exists on netError
-      switch (netError.statusCode) {
-        case 401:
-        case 403:
-          // Handle unauthorized or forbidden responses
-          // eslint-disable-next-line no-console
-          console.warn("Apollo network error: Authentication issue", {
-            errorMsg: networkError.message,
-          });
-          break;
-        default:
-          // eslint-disable-next-line no-console
-          console.warn("Apollo network error", {
-            errorMsg: networkError.message,
-          });
+const _networkErrorLink = new ErrorLink(({ error, operation }) => {
+  // Handle GraphQL errors using v4 API
+  if (CombinedGraphQLErrors.is(error)) {
+    error.errors.forEach(({ message, locations, path }) =>
+      // eslint-disable-next-line no-console
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+      ),
+    );
+  }
+  // Handle protocol errors using v4 API
+  else if (CombinedProtocolErrors.is(error)) {
+    error.errors.forEach(({ message, extensions }) => {
+      // Check for HTTP status codes in protocol errors
+      const typedExtensions = extensions as ExtensionsWithStatus;
+      const statusCode =
+        typedExtensions?.response?.status ||
+        typedExtensions?.code ||
+        typedExtensions?.status;
+
+      if (statusCode === 401 || statusCode === 403) {
+        // eslint-disable-next-line no-console
+        console.warn("Apollo network error: Authentication issue", {
+          errorMsg: message,
+          statusCode,
+        });
+      } else {
+        // eslint-disable-next-line no-console
+        console.warn("Apollo protocol error", {
+          errorMsg: message,
+          extensions,
+        });
       }
+    });
+  }
+  // Handle other network errors
+  else {
+    // Check if it's a network error with status information
+    const networkError = error as NetworkErrorWithStatus;
+    if (networkError && typeof networkError === "object") {
+      const statusCode =
+        networkError.statusCode ||
+        networkError.status ||
+        networkError.response?.status;
+
+      if (statusCode === 401 || statusCode === 403) {
+        // eslint-disable-next-line no-console
+        console.warn("Apollo network error: Authentication issue", {
+          errorMsg: networkError.message || String(error),
+          statusCode,
+        });
+      } else {
+        // eslint-disable-next-line no-console
+        console.warn("Apollo network error", {
+          errorMsg: networkError.message || String(error),
+          operation: operation.operationName,
+        });
+      }
+    } else {
+      // eslint-disable-next-line no-console
+      console.warn("Apollo network error", {
+        errorMsg: String(error),
+        operation: operation.operationName,
+      });
     }
   }
 });
@@ -57,9 +121,9 @@ const _httpLink = new HttpLink({
  * that includes both error handling and HTTP communication functionalities.
  * The `_networkErrorLink` handles network errors globally, while the `_httpLink`
  * manages HTTP requests to the GraphQL server.
- * @returns {_ApolloClient<NormalizedCacheObject>} The configured Apollo Client instance.
+ * @returns The configured Apollo Client instance.
  */
-const ApolloClient: _ApolloClient<NormalizedCacheObject> = new _ApolloClient({
+const ApolloClient = new _ApolloClient({
   cache: new InMemoryCache(),
   link: ApolloLink.from([_networkErrorLink, _httpLink]),
 });

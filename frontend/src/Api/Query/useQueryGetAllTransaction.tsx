@@ -1,7 +1,6 @@
 import type { TransactionRow } from "@Api";
 import { LocalApolloClient } from "@Api";
-import type { QueryHookOptions, QueryResult } from "@apollo/client";
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import gql from "graphql-tag";
 
 const QUERY = gql`
@@ -39,9 +38,9 @@ interface AllTransactions {
  * that includes the transaction data along with metadata such as loading status and errors.
  * @returns An object containing the transactions data, loading status, and any errors encountered during the query.
  */
-export default function useQueryGetAllTransaction(): QueryResult<AllTransactions> {
-  const options: QueryHookOptions<AllTransactions> = {
-    fetchPolicy: "network-only",
+export default function useQueryGetAllTransaction(): useQuery.Result<AllTransactions> {
+  const options = {
+    fetchPolicy: "network-only" as const,
     client: LocalApolloClient,
   };
 

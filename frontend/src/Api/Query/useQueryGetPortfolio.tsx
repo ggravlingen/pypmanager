@@ -1,7 +1,6 @@
 import type { Holding } from "@Api";
 import { LocalApolloClient } from "@Api";
-import type { QueryHookOptions, QueryResult } from "@apollo/client";
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import gql from "graphql-tag";
 
 const QUERY = gql`
@@ -35,9 +34,9 @@ interface PortfolioHoldings {
  * is up-to-date. It uses a predefined GraphQL query and a local Apollo client instance for the request.
  * @returns The query result object containing loading state, error information, and the fetched data.
  */
-export default function useQueryGetPortfolio(): QueryResult<PortfolioHoldings> {
-  const options: QueryHookOptions<PortfolioHoldings> = {
-    fetchPolicy: "network-only",
+export default function useQueryGetPortfolio(): useQuery.Result<PortfolioHoldings> {
+  const options = {
+    fetchPolicy: "network-only" as const,
     client: LocalApolloClient,
   };
 

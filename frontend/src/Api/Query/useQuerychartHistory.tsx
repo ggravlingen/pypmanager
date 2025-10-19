@@ -1,7 +1,6 @@
 import type { ChartHistoryRow, Holding, SecurityInfo } from "@Api";
 import { LocalApolloClient } from "@Api";
-import type { QueryHookOptions, QueryResult } from "@apollo/client";
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import gql from "graphql-tag";
 
 const QUERY = gql`
@@ -58,9 +57,9 @@ interface ChartHistoryVariables {
  */
 export default function useQueryChartHistory(
   variables: ChartHistoryVariables,
-): QueryResult<ChartHistoryData> {
-  const options: QueryHookOptions<ChartHistoryData> = {
-    fetchPolicy: "network-only",
+): useQuery.Result<ChartHistoryData> {
+  const options = {
+    fetchPolicy: "network-only" as const,
     client: LocalApolloClient,
     variables,
   };

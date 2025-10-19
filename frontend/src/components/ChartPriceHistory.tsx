@@ -1,4 +1,4 @@
-import type { Holding, SecurityInfo } from "@Api";
+import type { ChartHistoryRow, Holding, SecurityInfo } from "@Api";
 import { QueryLoader, useQueryChartHistory } from "@Api";
 import { LocalStorageKey } from "@Const";
 import { StandardCard } from "@Generic";
@@ -280,9 +280,9 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
 };
 
 interface SecurityInfoCardProps {
-  securityInfo: SecurityInfo | null;
+  securityInfo: SecurityInfo | undefined;
   isinCode: string;
-  holdingData: Holding;
+  holdingData: Holding | undefined;
 }
 
 /**
@@ -323,7 +323,7 @@ function SecurityInfoCard({
         },
         {
           label: "Invested: ",
-          value: holdingData.investedAmount,
+          value: holdingData?.investedAmount,
           format: (value: number | null | undefined) =>
             value?.toLocaleString("en-US", {
               style: "currency",
@@ -334,7 +334,7 @@ function SecurityInfoCard({
         },
         {
           label: "Market value: ",
-          value: holdingData.currentMarketValueAmount,
+          value: holdingData?.currentMarketValueAmount,
           format: (value: number | null | undefined) =>
             value?.toLocaleString("en-US", {
               style: "currency",
@@ -345,7 +345,7 @@ function SecurityInfoCard({
         },
         {
           label: "Holdings: ",
-          value: holdingData.quantityHeld,
+          value: holdingData?.quantityHeld,
           format: (value: number | null | undefined) =>
             value?.toLocaleString("en-US", {
               style: "decimal",
@@ -428,6 +428,8 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
 
   const { loading, error, data } = useQueryChartHistory(variables);
 
+  const chartHistory = data?.chartHistory as ChartHistoryRow[] | undefined;
+
   return (
     <QueryLoader loading={loading} data={data} error={error}>
       {data && (
@@ -443,11 +445,11 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
           >
             <Line
               data={{
-                labels: data.chartHistory.map((item) => item.xVal),
+                labels: chartHistory?.map((item) => item.xVal),
                 datasets: [
                   {
                     label: "Average cost",
-                    data: data.chartHistory.map((item) => ({
+                    data: chartHistory?.map((item) => ({
                       x: item.xVal,
                       y:
                         item.costPriceAverage !== 0 && item.costPriceAverage
@@ -461,7 +463,7 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
                   },
                   {
                     label: "Close",
-                    data: data.chartHistory.map((item) => ({
+                    data: chartHistory?.map((item) => ({
                       x: item.xVal,
                       y: item.yVal ? parseFloat(item.yVal.toFixed(4)) : null,
                       volumeBuy: item.volumeBuy,
@@ -471,14 +473,14 @@ function ChartPriceHistory({ isinCode }: { isinCode: string }) {
                     fill: false,
                     borderColor: theme.palette.text.primary, // Use theme color
                     borderWidth: 1, // Make the line thinner
-                    pointRadius: data.chartHistory.map((item) =>
+                    pointRadius: chartHistory?.map((item) =>
                       (item.volumeBuy ?? 0) > 0 ||
                       (item.volumeSell ?? 0) > 0 ||
                       (item.dividendPerSecurity ?? 0) > 0
                         ? 9
                         : 0,
                     ), // Add marker if volumeBuy > 0 or volumeSell > 0
-                    pointBackgroundColor: data.chartHistory.map(
+                    pointBackgroundColor: chartHistory?.map(
                       (item) =>
                         (item.volumeBuy ?? 0) > 0
                           ? theme.palette.info.main // Use theme color for buy

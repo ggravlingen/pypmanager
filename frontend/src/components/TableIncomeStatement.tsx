@@ -1,4 +1,8 @@
-import { QueryLoader, useQueryGetIncomeStatement } from "@Api";
+import {
+  QueryLoader,
+  type ResultStatementRow,
+  useQueryGetIncomeStatement,
+} from "@Api";
 import {
   Paper,
   Table,
@@ -36,6 +40,12 @@ const SX_SUBTOTAL = {
 export default function TableIncomeStatement(): React.JSX.Element {
   const { data, loading, error } = useQueryGetIncomeStatement();
 
+  const resultStatement = data?.resultStatement as
+    | ResultStatementRow[]
+    | undefined;
+
+  const headerYearList = resultStatement?.[0]?.yearList ?? [];
+
   return (
     <QueryLoader loading={loading} data={data} error={error}>
       <TableContainer component={Paper} style={{ maxHeight: "100vh" }}>
@@ -43,7 +53,7 @@ export default function TableIncomeStatement(): React.JSX.Element {
           <TableHead>
             <TableRow>
               <TableCell />
-              {data?.resultStatement[0].yearList
+              {headerYearList
                 .slice()
                 .reverse()
                 .map((year) => (
@@ -54,7 +64,7 @@ export default function TableIncomeStatement(): React.JSX.Element {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data?.resultStatement.map(
+            {resultStatement?.map(
               ({ itemName, yearList, amountList, isTotal }) => (
                 <TableRow key={itemName}>
                   <TableCell sx={isTotal ? SX_SUBTOTAL : {}}>

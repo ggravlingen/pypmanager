@@ -1,7 +1,6 @@
 import type { SecurityInfo } from "@Api";
 import { LocalApolloClient } from "@Api";
-import type { QueryHookOptions, QueryResult } from "@apollo/client";
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import gql from "graphql-tag";
 
 const QUERY = gql`
@@ -23,9 +22,9 @@ interface SecurityInfoData {
  * @returns The result of the Apollo useQuery hook, providing loading state, error information,
  * and the data as `SecurityInfo`.
  */
-export default function useQuerySecurityInfo(): QueryResult<SecurityInfoData> {
-  const options: QueryHookOptions<SecurityInfoData> = {
-    fetchPolicy: "network-only",
+export default function useQuerySecurityInfo(): useQuery.Result<SecurityInfoData> {
+  const options = {
+    fetchPolicy: "network-only" as const,
     client: LocalApolloClient,
   };
 
