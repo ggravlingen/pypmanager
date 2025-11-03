@@ -35,7 +35,7 @@
     "webpack-merge": "6.0.1"
   },
   "devDependencies": {
-    "@eslint/compat": "1.4.0",
+    "@eslint/compat": "1.4.1",
     "@playwright/test": "1.56.1",
     "@types/node": "24.9.1",
     "@types/react": "19.2.2",
@@ -43,9 +43,9 @@
     "@typescript-eslint/eslint-plugin": "8.46.2",
     "@typescript-eslint/parser": "8.46.2",
     "concurrently": "9.2.1",
-    "eslint": "9.38.0",
+    "eslint": "9.39.0",
     "eslint-plugin-import": "2.32.0",
-    "eslint-plugin-jsdoc": "61.1.9",
+    "eslint-plugin-jsdoc": "61.1.12",
     "eslint-plugin-prettier": "5.5.4",
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-react-hooks": "7.0.1",
