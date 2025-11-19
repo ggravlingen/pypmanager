@@ -54,7 +54,7 @@
     "express": "5.1.0",
     "express-rate-limit": "8.2.1",
     "jiti": "2.6.1",
-    "msw": "2.12.1",
+    "msw": "2.12.2",
     "playwright-msw": "3.0.1",
     "prettier": "3.6.2",
     "typescript-strict-plugin": "2.4.4"
