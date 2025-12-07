@@ -1,7 +1,7 @@
+import react from "@vitejs/plugin-react";
 import fs from "fs";
 import path from "path";
-import { defineConfig, Plugin } from "vite";
-import react from "@vitejs/plugin-react";
+import { defineConfig, type Plugin } from "vite";
 
 /**
  * Plugin to move index.html from static/ to templates/ after build.
