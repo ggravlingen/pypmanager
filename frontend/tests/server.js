@@ -42,7 +42,7 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(TEMPLATE_DIR, "index.html"), (error) => {
+  res.sendFile(path.join(FRONTEND_DIR, "index.html"), (error) => {
     if (error) {
       console.error("Error sending file:", error);
     }
