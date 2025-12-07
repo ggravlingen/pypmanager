@@ -28,7 +28,7 @@ html-report
 test-results
 tests/logs
 
-static/*.js
+static/assets/*.json
 static/*.html
 templates/index.html
 
