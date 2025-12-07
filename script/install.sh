@@ -6,10 +6,10 @@ set -e
 
 cd "$(dirname "$0")/../"
 
-# Install backend
-echo "Installing backend"
-python3 -m pip install -e .'[test]'
+# Install backend using uv with lockfile
+echo "Installing backend with uv"
+uv sync --all-extras
 
-# Instasll frontend
+# Install frontend
 echo "Installing frontend"
 script/install-frontend.sh

@@ -7,4 +7,4 @@ set -e
 cd "$(dirname "$0")/../"
 
 ./script/install.sh
-./script/setup-playwright.sh
+./script/playwright-setup.sh

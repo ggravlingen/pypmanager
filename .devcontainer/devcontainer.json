@@ -10,7 +10,9 @@
   ],
   "postCreateCommand": "script/setup.sh",
   "containerEnv": {
-    "DEVCONTAINER": "1"
+    "DEVCONTAINER": "1",
+    "VIRTUAL_ENV": "/workspaces/pypmanager/.venv",
+    "PATH": "/workspaces/pypmanager/.venv/bin:${localEnv:PATH}"
   },
   "features": {
     "ghcr.io/devcontainers/features/node:1": {}
@@ -18,7 +20,8 @@
   "customizations": {
     "vscode": {
       "settings": {
-        "python.pythonPath": "/usr/local/bin/python",
+        "python.pythonPath": "/workspaces/pypmanager/.venv/bin/python",
+        "python.defaultInterpreterPath": "/workspaces/pypmanager/.venv/bin/python",
         "python.languageServer": "Pylance",
         "python.analysis.extraPaths": [
           "/workspaces/pypmanager"
@@ -37,7 +40,8 @@
         "files.trimTrailingWhitespace": true,
         "terminal.integrated.profiles.linux": {
           "zsh": {
-            "path": "/usr/bin/zsh"
+            "path": "/usr/bin/zsh",
+            "args": ["-c", "source /workspaces/pypmanager/.venv/bin/activate && exec zsh"]
           }
         },
         "terminal.integrated.defaultProfile.linux": "zsh"
