@@ -1,11 +1,11 @@
 [build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "pylocalpmanager"
 requires-python = ">=3.13"
-dynamic = ['version']
+version = "0.0.1"
 dependencies    = [
   "aiosqlite==0.21.0",
   "apscheduler==3.11.1",
@@ -42,15 +42,8 @@ test = [
   "types_requests==2.32.4.20250913",
 ]
 
-[tool.setuptools]
-platforms = ["any"]
-zip-safe = false
-
-[tool.setuptools.dynamic]
-version = {file = "pypmanager/VERSION"}
-
-[tool.setuptools.packages.find]
-exclude = ["tests", "tests*"]
+[tool.hatch.build.targets.wheel]
+packages = ["pypmanager"]
 
 [tool.pytest.ini_options]
 asyncio_default_fixture_loop_scope = "function"
@@ -156,6 +149,16 @@ lint.ignore = [# One of these is to be disabled..
           "ISC001",  # Recommended disable
           "G004",  # Logging statement uses f-string
           "COM812",  # Trailing comma missing
+]
+
+extend-exclude = [
+    ".git",
+    "__pycache__",
+    "build",
+    "dist",
+    ".venv",
+    ".mypy_cache",
+    ".pytest_cache",
 ]
 
 [tool.ruff.lint.flake8-pytest-style]

@@ -34,10 +34,13 @@ RUN apt-get update && \
 # Copy code dir
 COPY . /code/app
 
-# Install backend dependencies
-RUN pip install --upgrade pip wheel \
-    && cd /code/app \
-    && pip install --no-cache-dir -e .
+# Install uv
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+ENV PATH="/root/.local/bin:$PATH"
+
+# Install backend dependencies using uv with lockfile
+RUN cd /code/app \
+    && uv sync --frozen --no-dev
 
 # Build frontend
 RUN cd /code/app/ && \
