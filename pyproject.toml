@@ -7,7 +7,7 @@ name = "pylocalpmanager"
 requires-python = ">=3.13"
 version = "0.0.1"
 dependencies    = [
-  "aiosqlite==0.21.0",
+  "aiosqlite==0.22.0",
   "apscheduler==3.11.1",
   "colorlog==6.10.1",
   "fastapi==0.124.0",
