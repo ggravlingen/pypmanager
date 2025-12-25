@@ -39,7 +39,7 @@ jobs:
       node_versions: ${{ steps.info.outputs.node_versions }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v6.0.1
 
       - name: Filter for core changes
         uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36
@@ -85,17 +85,17 @@ jobs:
         python-version: ${{ fromJSON(needs.info.outputs.python_versions) }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v6.0.1
 
       - name: Set up Python ${{ matrix.python-version }}
         id: python
-        uses: actions/setup-python@v6.0.0
+        uses: actions/setup-python@v6.1.0
         with:
           python-version: ${{ matrix.python-version }}
 
       - name: Restore base Python virtual environment
         id: cache-venv
-        uses: actions/cache@v4.3.0
+        uses: actions/cache@v5.0.1
         with:
           path: .venv
           lookup-only: true
@@ -123,17 +123,17 @@ jobs:
     if: needs.info.outputs.run_pipeline == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v6.0.1
         with:
           fetch-depth: "2"
       - name: Set up Python ${{ matrix.python-version }}
         id: python
-        uses: actions/setup-python@v6.0.0
+        uses: actions/setup-python@v6.1.0
         with:
           python-version: ${{ matrix.python-version }}
       - name: Restore full Python ${{ steps.python.outputs.python-version }} virtual environment
         id: cache-venv
-        uses: actions/cache/restore@v4.3.0
+        uses: actions/cache/restore@v5.0.1
         with:
           path: .venv
           fail-on-cache-miss: true
@@ -171,16 +171,16 @@ jobs:
     if: needs.info.outputs.run_pipeline == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v6.0.1
 
       - name: Set up Python ${{ matrix.python-version }}
         id: python
-        uses: actions/setup-python@v6.0.0
+        uses: actions/setup-python@v6.1.0
         with:
           python-version: ${{ matrix.python-version }}
       - name: Restore full Python ${{ steps.python.outputs.python-version }} virtual environment
         id: cache-venv
-        uses: actions/cache/restore@v4.3.0
+        uses: actions/cache/restore@v5.0.1
         with:
           path: .venv
           fail-on-cache-miss: true
@@ -230,10 +230,10 @@ jobs:
     if: needs.info.outputs.run_pipeline_frontend == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v6.0.1
 
       - name: Set up Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v6.0.0
+        uses: actions/setup-node@v6.1.0
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -267,10 +267,10 @@ jobs:
     if: needs.info.outputs.run_pipeline_frontend == 'true'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v6.0.1
 
       - name: Set up Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v6.0.0
+        uses: actions/setup-node@v6.1.0
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -288,7 +288,7 @@ jobs:
         name: Run Playwright tests
         id: playwrightTests
 
-      - uses: actions/upload-artifact@v5.0.0
+      - uses: actions/upload-artifact@v6.0.0
         if: always()
         with:
           path: frontend/test-results/
@@ -312,14 +312,14 @@ jobs:
             # - linux/arm/v7
       steps:
         - name: Checkout code
-          uses: actions/checkout@v5.0.0
+          uses: actions/checkout@v6.0.1
 
         - name: Set up QEMU
-          uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392
+          uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130
 
         - name: Set up Docker Buildx
           id: buildx
-          uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435
+          uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f
 
         - name: Build docker image
           id: docker_build
