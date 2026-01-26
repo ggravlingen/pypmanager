@@ -7,7 +7,7 @@ repos:
       - id: ruff-format
         files: ^((pypmanager|script|tests)/.+)?[^/]+\.(py|pyi)$
     repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.14.11
+    rev: v0.14.14
   - hooks:
       - id: requirements-txt-fixer
       - id: check-executables-have-shebangs
@@ -24,7 +24,7 @@ repos:
           - '-d relaxed'
         id: yamllint
     repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.37.1
+    rev: v1.38.0
   - hooks:
       # Run mypy through our wrapper script in order to get the possible
       # pyenv and/or virtualenv activated; it may not have been e.g. if
