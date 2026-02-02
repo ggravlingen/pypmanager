@@ -13,7 +13,7 @@ dependencies    = [
   "fastapi==0.128.0",
   "lxml==6.0.2",
   "openpyxl==3.1.5",
-  "pandas==2.3.3",
+  "pandas==3.0.0",
   "pandas_market_calendars==5.3.0",
   "pyarrow==23.0.0",
   "pydantic==2.12.5",
