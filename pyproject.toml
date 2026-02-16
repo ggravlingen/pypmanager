@@ -17,7 +17,7 @@ dependencies    = [
   "pandas_market_calendars==5.3.0",
   "pyarrow==23.0.0",
   "pydantic==2.12.5",
-  "pydantic-settings==2.12.0",
+  "pydantic-settings==2.13.0",
   "requests==2.32.5",
   "strawberry_graphql[debug-server]==0.291.0",
   "sqlalchemy[asyncio]==2.0.46",
