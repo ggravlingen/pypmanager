@@ -288,7 +288,7 @@ jobs:
         name: Run Playwright tests
         id: playwrightTests
 
-      - uses: actions/upload-artifact@v6.0.0
+      - uses: actions/upload-artifact@v7.0.0
         if: always()
         with:
           path: frontend/test-results/
