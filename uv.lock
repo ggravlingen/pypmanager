@@ -810,15 +810,15 @@ wheels = [
 
 [[package]]
 name = "pandas-market-calendars"
-version = "5.3.0"
+version = "5.3.1.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "exchange-calendars" },
     { name = "pandas" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/7e/73/3e6dcdf9928a9d85d93e8235d99a516e7c010f24193888aa9cbcd12176e6/pandas_market_calendars-5.3.0.tar.gz", hash = "sha256:9f8196c5684b4340b5fc0e3fe1094c145544e85062386ad7aa298d39f04b5548", size = 170252, upload-time = "2026-01-25T22:02:42.984Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/eb/2e/3973c8c5140b4d8932352727c2077f90a135a26a2c1282cb68b77a78a6c4/pandas_market_calendars-5.3.1.2.tar.gz", hash = "sha256:3600e61c763f195768c4c7152c6c594ff43d0c74c407b7a6a0392e72f83742a7", size = 169365, upload-time = "2026-03-12T13:36:44.277Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/78/30/87e23c9fad369ca7b0e72a88a79e7109f11a0d3f77c589a31405715177d2/pandas_market_calendars-5.3.0-py3-none-any.whl", hash = "sha256:882e34076c1fa4501939ce3fef671cd0840407e6861443cdfb4debb78e10bf8a", size = 131385, upload-time = "2026-01-25T22:02:41.393Z" },
+    { url = "https://files.pythonhosted.org/packages/68/39/8e9244af7a7623025c388599bd330faeeec3fdfbd06926b86251ba099f08/pandas_market_calendars-5.3.1.2-py3-none-any.whl", hash = "sha256:d6c767f65567410d6b626a33d4bb0cc4c3f0d7a4fecfafb98ea0b2c8c4e041c4", size = 130929, upload-time = "2026-03-12T13:36:45.55Z" },
 ]
 
 [[package]]
@@ -1061,7 +1061,7 @@ requires-dist = [
     { name = "mypy", marker = "extra == 'test'", specifier = "==1.19.1" },
     { name = "openpyxl", specifier = "==3.1.5" },
     { name = "pandas", specifier = "==2.3.3" },
-    { name = "pandas-market-calendars", specifier = "==5.3.0" },
+    { name = "pandas-market-calendars", specifier = "==5.3.1.2" },
     { name = "pre-commit", marker = "extra == 'test'", specifier = "==4.5.1" },
     { name = "pyarrow", specifier = "==23.0.0" },
     { name = "pydantic", specifier = "==2.12.5" },
