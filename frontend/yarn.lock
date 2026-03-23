@@ -5464,7 +5464,7 @@ __metadata:
     react: "npm:19.2.4"
     react-chartjs-2: "npm:5.3.1"
     react-dom: "npm:19.2.4"
-    react-router-dom: "npm:7.13.0"
+    react-router-dom: "npm:7.13.2"
     ts-loader: "npm:9.5.4"
     typescript: "npm:5.9.3"
     typescript-strict-plugin: "npm:2.4.4"
@@ -7650,21 +7650,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:7.13.0":
-  version: 7.13.0
-  resolution: "react-router-dom@npm:7.13.0"
+"react-router-dom@npm:7.13.2":
+  version: 7.13.2
+  resolution: "react-router-dom@npm:7.13.2"
   dependencies:
-    react-router: "npm:7.13.0"
+    react-router: "npm:7.13.2"
   peerDependencies:
     react: ">=18"
     react-dom: ">=18"
-  checksum: 10c0/759bd5e7fe7b5baba50a0264724188707682d217cad8eac702a55e0b1abebf295be014dd3bfaff8e3c2def9dfaa23e6ded3f908feab84df766e9b82cc3774e98
+  checksum: 10c0/ce9e5d47ba8accb7aa40272f83a98c3372634d0216ec92c8b20d52765ca62db06b4fde5284a4bd37cef2279b9767a45927f3b074e74e2c9b462c8599427bbfef
   languageName: node
   linkType: hard
 
-"react-router@npm:7.13.0":
-  version: 7.13.0
-  resolution: "react-router@npm:7.13.0"
+"react-router@npm:7.13.2":
+  version: 7.13.2
+  resolution: "react-router@npm:7.13.2"
   dependencies:
     cookie: "npm:^1.0.1"
     set-cookie-parser: "npm:^2.6.0"
@@ -7674,7 +7674,7 @@ __metadata:
   peerDependenciesMeta:
     react-dom:
       optional: true
-  checksum: 10c0/397cb009bc83d071269c8f9323bbfe1f856721fde75e39b29fe0ddfe7564ebdc3b8bbb85768321cae92ec28b406e8fac7eab7e232d0738b3b1c092e2764e4307
+  checksum: 10c0/c7620565df0b444507cfceb76733adbd26e28a72fc4d52d344190bcb2e6483427313a3b6076c53d362e2682ccdb1262731bcaa6c3577cbbeea130291a38715f1
   languageName: node
   linkType: hard
 
