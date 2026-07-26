@@ -810,15 +810,15 @@ wheels = [
 
 [[package]]
 name = "pandas-market-calendars"
-version = "5.3.0"
+version = "5.3.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "exchange-calendars" },
     { name = "pandas" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/7e/73/3e6dcdf9928a9d85d93e8235d99a516e7c010f24193888aa9cbcd12176e6/pandas_market_calendars-5.3.0.tar.gz", hash = "sha256:9f8196c5684b4340b5fc0e3fe1094c145544e85062386ad7aa298d39f04b5548", size = 170252, upload-time = "2026-01-25T22:02:42.984Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ac/f5/bfac92571b427ca521ce2a136396ba8462ad07e22b37a0976fe273dec8e1/pandas_market_calendars-5.3.2.tar.gz", hash = "sha256:6a77fa6f8e90a79908d96ca0e6c66841b12371080233390afc3d96e346ae2414", size = 169525, upload-time = "2026-04-05T02:19:24.23Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/78/30/87e23c9fad369ca7b0e72a88a79e7109f11a0d3f77c589a31405715177d2/pandas_market_calendars-5.3.0-py3-none-any.whl", hash = "sha256:882e34076c1fa4501939ce3fef671cd0840407e6861443cdfb4debb78e10bf8a", size = 131385, upload-time = "2026-01-25T22:02:41.393Z" },
+    { url = "https://files.pythonhosted.org/packages/e1/8b/8b9628d02db7df3e1f1e507ca131e6665a0fde07537b9a93b64e9cef544f/pandas_market_calendars-5.3.2-py3-none-any.whl", hash = "sha256:ca84094f68eccf4864ba5ea0254134cb0352b36c1861dd1d6cf7bf17952971b1", size = 130987, upload-time = "2026-04-05T02:19:22.895Z" },
 ]
 
 [[package]]
@@ -1061,7 +1061,7 @@ requires-dist = [
     { name = "mypy", marker = "extra == 'test'", specifier = "==1.19.1" },
     { name = "openpyxl", specifier = "==3.1.5" },
     { name = "pandas", specifier = "==2.3.3" },
-    { name = "pandas-market-calendars", specifier = "==5.3.0" },
+    { name = "pandas-market-calendars", specifier = "==5.3.2" },
     { name = "pre-commit", marker = "extra == 'test'", specifier = "==4.5.1" },
     { name = "pyarrow", specifier = "==23.0.0" },
     { name = "pydantic", specifier = "==2.12.5" },
