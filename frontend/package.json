@@ -30,8 +30,8 @@
     "react-router-dom": "7.13.0",
     "ts-loader": "9.5.4",
     "typescript": "5.9.3",
-    "webpack": "5.104.1",
-    "webpack-cli": "6.0.1",
+    "webpack": "5.105.4",
+    "webpack-cli": "7.0.0",
     "webpack-merge": "6.0.1"
   },
   "devDependencies": {
