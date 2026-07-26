@@ -15,7 +15,7 @@ dependencies    = [
   "openpyxl==3.1.5",
   "pandas==2.3.3",
   "pandas_market_calendars==5.3.0",
-  "pyarrow==23.0.0",
+  "pyarrow==23.0.1",
   "pydantic==2.12.5",
   "pydantic-settings==2.12.0",
   "requests==2.32.5",
